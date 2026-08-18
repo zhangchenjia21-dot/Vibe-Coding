@@ -142,44 +142,128 @@ G10 再建立受支持模型 registry / selector / connection-probe / restart se
 
 ---
 
-## 6. 对 G9 的传播
+## 6. UX-05｜【人物】应是长期已知角色目录，而不是当前场景可见人物
 
-这 4 项不会新增 G9-01 前置任务。
+### 观察
 
-但传播两个真实约束：
+Owner 指出当前【人物】Surface 只显示当前 Scene 中可见角色，这与【物品】的“当前可见”语义混淆。正确产品语义应是：玩家已经见过、认识或明确得知身份的角色，应长期保留在【人物】资料中，离开当前场景后也不消失。
 
-### G9-01 Compatibility Audit
+### 当前代码事实
 
-新增检查：
-
-1. Objective / Task 类长期记录未来能够成为 Game-local Canonical Asset / Extension，而不被当前协议结构封死；
-2. Item / Character / Place 等已存在 Game-local asset 的“已知描述 / public definition evolution”属于正式 mutable-field compatibility 范围。
-
-### G9-02 Runtime Asset Binding + Game-local Layer
-
-把本次信件 UAT 固定为 Existing Asset Mutation Reference Case：
+截至 G8 final code：
 
 ```text
-existing Item
-→ inspection reveals durable public/known detail
-→ typed local asset patch
-→ Program commit
-→ Product refresh
-→ Save/Restore
-→ source unchanged
+projectPlayerSession()
+→ visibleCharactersInCurrentScene()
+→ PlayerSession.visibleCharacters
+→ Product People Surface
 ```
 
-不要求在 G9-02 同时实现完整 Objective Engine、Game Delete 或 Provider model selector。
+因此当前实现确实把 `Current Visible Characters` 与 `Player-known Character Directory` 合并了。
+
+### 裁定
+
+```text
+Priority: P2 / Product-architecture semantics
+G8 blocker: NO
+Current G9-02A impact: NO / DO NOT INTERRUPT
+G9-02B: REQUIRED Runtime owner/projection seam
+G9-02C: REQUIRED bounded-context proof
+G11: classification/search/filter/pagination product maturity
+```
+
+正式产品/架构裁定：
+
+`17_酒馆游戏_PlayerKnownEntityDirectory与长期资料表面信息架构裁定_v1.0_2026-08-18.md`
+
+核心：
+
+```text
+Current Scene Visible Characters
+!=
+Player-known Character Directory
+```
+
+People Surface 只显示玩家合法已知角色，而不是所有 Game-local Character；未认识 NPC 不得泄露。当前在场只作为 Directory entry 的 presence 状态之一。
+
+长期玩家可能认识数十/数百角色，因此：
+
+```text
+Known Characters ↑↑↑
+ordinary Turn Prompt Characters ≈ bounded
+```
+
+不得因为 People Directory 变大而线性扩大模型上下文。
 
 ---
 
-## 7. 最终阶段状态
+## 7. 长期资料 Surface 分类整理规则
+
+Owner 同时提出：如果【人物】【目标】及其它资料 Surface 长期堆叠信息，应提供分类整理能力。
+
+正式路由：
+
+```text
+G9
+→ 保留 stable ID / status / source / player-safe facet metadata seam
+→ 不冻结具体 UI taxonomy
+
+G11 Product maturity
+→ grouping / filter / sort / search / active-history separation
+→ scale needed 时 pagination / virtualization
+```
+
+当前明确重点：
+- People：长期 Character Directory，未来分类；
+- Objective：按 active/paused/completed/failed 等状态组织；
+- Information：长期 Knowledge 分类，但仍禁止混入 generic event journal；
+- Items：继续是 inventory/current visible semantics，不自动做历史物品目录；库存量大时再做分类/搜索。
+
+---
+
+## 8. 对 G9 的传播
+
+这些 UAT 项不 reopen G8。
+
+### G9-02A
+
+继续原已发任务，不插入 People Directory 实现。
+
+### G9-02B
+
+新增：
+1. Player-known Entity / Character Directory Runtime owner / projection seam；
+2. current scene presence 与长期 player-known lifecycle 分离；
+3. 未知/hidden Character 不得因 canonical existence 出现在 People Surface。
+
+### G9-02C
+
+新增压力验证：
+
+```text
+Known Character Directory size ↑↑↑
+ordinary unrelated Turn context ≈ bounded
+```
+
+current-scene characters 与 referenced/relevant known characters 分开选取。
+
+### G9-03
+
+禁止：
+- 把 Player-known Directory 做成 Source Character Card 字段；
+- 把 current visibility 与 long-term acquaintance lifecycle 混合；
+- 提前冻结 People/Objective/Information UI 分类 taxonomy。
+
+---
+
+## 9. 最终阶段状态
 
 ```text
 G1–G8      PASS / CLOSED
 G9         ACTIVE
-Current    G9-01 Compatibility Audit
-G9-02      BLOCKED BY G9-01
+Current    G9-02A
+G9-02B     BLOCKED BY G9-02A
+G9-02C     BLOCKED BY G9-02B
 G9-03+     BLOCKED BY UPSTREAM DAG
 ```
 
