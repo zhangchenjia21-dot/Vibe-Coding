@@ -96,6 +96,25 @@ GitHub 最新版优先不意味着通用规范可以覆盖项目自身已经冻�
 
 不要求在同一原子任务的每个小步骤重复查询；一次任务开始时完成版本核验即可，除非执行过程中发现上游刚发生变化或用户要求重新核验。
 
+### 5.1 Pre-push Freshness Revalidation
+
+正式写回 authoritative `main` 前，再检查一次当前 HEAD。
+
+Agent 不需要知道其它 Agent 是否正在运行，只需要判断：
+
+```text
+Task Base HEAD
+!= Current HEAD ?
+```
+
+若 HEAD 未变，正常写回；若 HEAD 已变，先审计 `Base → Current` 增量：
+
+- 与当前任务无关：吸收 / rebase 后回归验证；
+- 改变当前依赖、Architecture、Roadmap、Skill、Schema、Owner、Stage 或目标文件：重新执行 Decision Propagation 后再写；
+- 不允许旧 Base 静默覆盖新 current。
+
+> 原则：**不调度其它 Agent 的实时行为；治理共享事实源的读写一致性。**
+
 ## 6. 仓库职责边界
 
 ### `zhangchenjia21-dot/Skill`
@@ -118,30 +137,71 @@ GitHub 最新版优先不意味着通用规范可以覆盖项目自身已经冻�
 
 不得把 Skill 正式源长期复制到 `Vibe-Coding`，也不得把 `Vibe-Coding` 的开发治理规则误当成 Skill 仓库的替代品。
 
-## 7. 执行摘要
+## 7. Current-only / Archive 治理
 
-任何读取本文件的 AI，在需要 Skill 或核心开发规则时，默认执行：
+active 目录用于当前事实入口，不用于堆积版本历史。
+
+### 7.1 同文档族只保留一个 current
+
+同一个 Roadmap / Plan / Decision / Master Spec / Maintenance 文档族：
 
 ```text
-需要 Skill？
-→ 先查 zhangchenjia21-dot/Skill main
-→ 有对应 Skill：使用最新版
-→ 无对应 Skill：再使用当前可用正式能力
-
-需要项目治理 / Lifecycle / Harness / 开发核心文件？
-→ 先查 zhangchenjia21-dot/Vibe-Coding main
-→ GitHub 有更新版本：以最新版为准
-→ GitHub 无法核验：明确披露后再使用当前副本
-
-若与项目正式裁定冲突？
-→ 项目最新正式裁定优先
-→ 不静默混用
+new current created
+→ old current superseded
+→ old version moves to 99_归档/
 ```
 
-## 8. 生效结论
+不得让多个 superseded 版本继续平铺在 active 目录，让 Agent 靠文件名猜最新版。
 
-自本文件进入 `main` 起：
+### 7.2 不误归档独立核心
+
+独立、仍有效的编号核心裁定不因为日期较早而归档。只有明确被同一核心的新版本 supersede 时才移动旧版。
+
+### 7.3 Rolling current 优先固定路径
+
+高频滚动解释层，例如项目综合总纲、current index、current state summary，优先使用：
+
+`*_CURRENT.md`
+
+后续直接更新固定路径；Git history + `99_归档/` 承担历史。
+
+### 7.4 阶段过程资料
+
+已关闭的 Task Spec、Exit checklist、阶段更新 Ledger、阶段复盘默认进入 `99_归档/` 对应分类，不与 current 架构文件平铺。
+
+## 8. 人类治理文档版本号
+
+本仓库的人类可读治理 / 规划 / 裁定文档**不采用 SemVer 多位 minor 习惯**，使用一位小版本序列：
+
+```text
+v1.0 → ... → v1.8 → v1.9 → v2.0 → v2.1
+```
+
+强制规则：
+
+- `vM.N` 中 `N` 只允许 `0–9`；
+- `vM.9` 的下一版本为 `v(M+1).0`；
+- 禁止新建 `v1.10 / v1.11 / v1.12` 等文档版本；
+- 版本号只表达演进顺序，不表达 SemVer breaking-change；重大变化使用 `status / supersedes / change_class / ADR` 显式说明；
+- 已存在的 `v1.10 / v1.11 / v1.12` 作为历史原名进入归档，不追溯改写历史正文；当前继承版本从 `v2.0` 继续。
+
+## 9. 执行摘要
+
+任何读取本文件的 AI 默认执行：
+
+```text
+任务开始
+→ 查 GitHub current / Skill current
+→ 使用 active current，不把 99_归档 当现行事实
+→ 实施 / 审核
+→ pre-push HEAD revalidation
+→ new current + old current archive in same delivery
+```
+
+## 10. 生效结论
 
 > **聊天上下文不再被视为 Skill 或开发核心文件的最高版本来源。**
 >
-> **凡需要使用 Skill 或 Vibe-Coding 核心开发规则，应优先回到对应 GitHub 仓库核验最新版；有更新版本时，以最新正式版本执行。**
+> **active 目录只保留 current；历史集中归档。**
+>
+> **文档版本从 `.9` 进入下一主版本 `.0`，不再生成 `.10/.11/.12`。**
