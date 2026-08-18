@@ -1,242 +1,162 @@
 # G8-UAT-02｜Independent Review 阻塞发现 v1.0
 
-状态：`CURRENT REVIEW FINDING / RETURN REQUIRED`
+状态：`CURRENT REVIEW FINDING / NARROW RETURN REQUIRED`
 日期：2026-08-18
-代码对象：`sillytavern@2c7e6a4cd85e1f3c52350c1b85ae70c99864b940`
+当前代码对象：`sillytavern@ce6c05ffc89f31a39400f7069c9e7503e4c86d9a`
 上游规格：`G8-UAT-02_GameLocalSemanticMaterialization与活世界收口规格_v1.0_2026-08-18.md`
 
-## 1. 结论
+## 1. Review Rerun 结论
 
 ```text
-G8-UAT-02 Implementation = REVIEWED / RETURN REQUIRED
-Independent Review       = FAIL
-P0                        = 0 confirmed
-P1                        = 5
-Stage UAT                 = NOT AUTHORIZED
-G8                        = ACTIVE / UAT FIX
-G9                        = NOT AUTHORIZED
+G8-UAT-02 Narrow Return        REVIEWED / RETURN REQUIRED
+Independent Review Rerun      FAIL
+P0                             0 confirmed
+Original P1                    5
+Closed P1                      4
+Remaining P1                   1
+Stage UAT                      NOT AUTHORIZED
+G8                             ACTIVE / UAT FIX
+G9                             NOT AUTHORIZED
 ```
 
-本次实现主方向正确，不要求推翻重做。已真实建立：Creation Field Semantic Audit、typed Creation Materialization、configured AI semantic materialization、concrete opening entities、Product Player Profile、Information/Journal 分离、Runtime JIT Place/NPC、Game-local provenance 与 Formal Turn 内原子 materialization。
+`ce6c05f...` 已实质关闭原 5 个 P1 中的 4 个：
 
-但以下 5 个 P1 会破坏已冻结的 Save/Restore、Narrative Authority、Context Activation 或 Semantic Fidelity，因此必须返修后重新 Independent Review。
+- Save / Restore 已纳入 Game-local topology / provenance / typed Item placement，并可回滚 future-only entity；
+- Materialization Need 已由每 Turn Semantic AI 判断，World Materializer 只在 typed need 成立时调用；Program 不做关键词 / 正则 / 通用 NLP；
+- Creation public materialization 与 private seed raw source 已形成输入隔离，private marker 不进入 public provider path；
+- Item 已支持 player / character / scene typed placement，并贯通 Runtime / SQLite / Product。
+
+Opening Beat 也已从 Creation Materializer final prose 改为 structured beat → independent Opening Narrative Realizer → persisted narrative；当前没有确认新的 P0/P1 authority failure。
 
 ---
 
-## 2. P1-01｜Save / Restore 没有跨 Game-local topology revision
+## 2. Remaining P1｜Scene-present Item 在最终 Narrative-safe projection 中被过滤
 
 ### 现状
 
-Runtime 已能在 Turn 中新增 Place / Scene / Connection / Character，但 Canonical Save Snapshot 仍主要保存旧式位置、持有、状态、连续性数据，并在 Restore 时要求 snapshot refs 与当前实体 refs `exactRefs`。
-
-因此存在：
+当前三条链不一致：
 
 ```text
-Save at revision N
-↓
-revision N+1 materialize Tavern / NPC
-↓
-Restore revision N
+Runtime / Product item visibility
+→ 支持 scene-present Item
+
+ContinuityContext initial projection
+→ 支持 scene-present Item
+
+projectNarrativeSafeCurrentContext final projection
+→ 仍只把 holderRef 属于 player / visible Character 的 Item 纳入 current.items
+→ 没有把 placementKind=scene && holderRef=finalSceneRef 纳入
 ```
 
-旧 snapshot 与当前实体集合不再一致；旧存档可能失败，或即使部分恢复，后来 materialize 的 world topology 仍残留。
+因此合法的场景物品（例如学院庭院里的“学院公告”）可以：
+
+- 存在于 authoritative Runtime；
+- 出现在 Product 【物品】Surface；
+- 被 Semantic Candidate Directory 看见；
+
+但在正式 Narrative realization 前的最终 `NarrativeSafeContext.current.items` 中消失。
+
+随后 `compileNarrativeSafeFormalOutcome()` 又从该 final context 生成 `interactableAuthority.itemNames`，于是 Narrative Authority 与 Runtime / Product 对同一个 scene-present Item 产生不一致。
+
+这违反 G8-UAT-02 要求的：
+
+```text
+Runtime authoritative item
+== Product visible item
+== Narrative-safe current item
+```
 
 ### 必修
 
-Save/Restore 必须把 Game-local topology / asset revision 纳入 canonical snapshot 语义。
-
-至少证明：
-
-1. Save BEFORE materialization → materialize Tavern/NPC → Restore old save → Tavern/NPC 不再存在；
-2. Save AFTER materialization → 后续移动/变化 → Restore → 同一 stable refs 恢复；
-3. Restore old save 后产生新 Branch，可 materialize 不同未来，不产生 identity collision；
-4. `game_local_asset` provenance ledger 与恢复后的实体集合一致，不残留 orphan provenance；
-5. 整个 Restore 仍是 G6 atomic transaction。
-
----
-
-## 3. P1-02｜World Materializer 被错误做成每 Turn 前置模型调用
-
-### 现状
-
-当前 FormalTurn Flow 在 configured world materializer 可用时，先调用 World Materializer，再调用 Semantic Provider。
-
-后果：
-
-- 普通 observe/dialogue/inner/read-only 等也会先调用 materializer；
-- materializer transport/structure failure 会让本来不需要物化的普通 Turn 返回 `MODEL_UNAVAILABLE`；
-- ordinary model-call count 随 materializer 固定增加；
-- 违反 #15 v1.2 的 `Runtime Relevant != Model Visible` 与 outcome/need-gated activation。
-
-### 必修
-
-改为显式 need-gated activation：
+修正 `projectNarrativeSafeCurrentContext()` 的 Item 投影，使 final Scene 下：
 
 ```text
-Player Input
-→ Semantic / Router detects bounded unresolved local materialization need
-→ only then World Materializer
-→ Program validates/materializes
-→ exact action candidate resolve / bounded semantic continuation if required
+public scene-present Item
+→ placementKind = scene
+→ holderRef = finalSceneRef
+→ included
 ```
 
-要求：
-
-- ordinary observe/dialogue/inner/read-only/wait 在无需未知实体时 World Materializer calls = 0；
-- materializer failure 不得污染 unrelated Turn；
-- 不要用 Program 新造通用中文 NLP parser 判断 materialization need；
-- materializer 仍只接 bounded current-local context。
-
----
-
-## 4. P1-03｜Opening Beat 绕过 Narrative Authority，重新引入 Phantom
-
-### 现状
-
-Creation Materializer 直接输出 `openingBeat.narrative`，Player Session 把它原样作为 Turn 0 玩家可见 Narrative。
-
-Program 当前只验证 openingBeat 声明的 Scene/Character/Item refs 合法，不验证 prose 中是否出现未 materialize 的 concrete interactable。
-
-当前测试 fixture 已出现：
+同时继续包括：
 
 ```text
-“导师手里攥着一封被雨水打湿的信”
+player-held Item
+visible current-participant-held Item
 ```
 
-但 `itemLocalRefs = []`，canonical items 中没有这封信。
+并保证移动后使用 **finalSceneRef**，旧 Scene 的 scene-present Item 不得残留。
 
-这就是 opening-turn Narrative-only phantom。
+优先复用 / 抽取统一的 current-scene Item visibility helper，避免 `visibleItemsInCurrentScene`、`compileContinuityContext`、`projectNarrativeSafeCurrentContext` 三份规则再次漂移。
 
-### 必修
+---
 
-推荐改为：
+## 3. Required Proof
+
+必须新增 focused regression：
 
 ```text
-Creation Materializer
-→ structured OpeningBeat semantic plan
-  - hook/summary
-  - openingSceneRef
-  - characterRefs
-  - itemRefs
-  - optional player-safe situation facts
-→ Program validation
-→ Narrative Provider realizes Turn 0
-  under location/interactable authority + Player Agency + disclosure rules
+Scene A:
+  Item = 学院公告 (scene-present)
+
+Player at Scene A
+→ PlayerSession.visibleItems contains 学院公告
+→ ContinuityContext.current.items contains 学院公告
+→ final NarrativeSafeContext.current.items contains 学院公告
+→ Narrative Formal Outcome interactableAuthority.itemNames contains 学院公告
+
+Player moves A → B
+→ final Narrative-safe context no longer contains Scene A 学院公告
+→ Scene B scene-present Item（如有）正确出现
 ```
 
-Materializer 不再直接拥有 final player-visible prose authority。
-
-Turn 0 必须遵守 G8-UAT-01：
-- No Phantom Interactable；
-- Player Agency；
-- hidden/private disclosure boundary；
-- concrete entity must resolve to canonical ref。
+再增加至少一个 Narrative fixture / Provider-boundary test：玩家观察或查看 scene-present Item 时，Narrative 可以使用该 canonical Item，不需要 phantom fallback，也不会把它当作玩家持有物。
 
 ---
 
-## 5. P1-04｜Creation private/public semantic class 未形成真正信息边界
+## 4. 已关闭项目不要重做
 
-### 现状
-
-字段审计已把 `important_relationships` 等分类为 `private_seed`，但 configured Creation Materializer 仍收到一个扁平 `creatorAuthoredContext: Record<string,string>`。
-
-因此 semantic class 只是审计 metadata，并未约束 Provider：private-only 原文理论上可以被模型复制进 publicDescription / openingBeat / public Place/Character 内容。
-
-当前 hidden disclosure smoke 只检查生成后的 `privateSeed` 不进入 Product，没有证明 Creation private source marker 不被 public output echo。
-
-### 必修
-
-Materializer 输入必须成为 purpose-built typed/partitioned context：
+以下原 P1 在 `ce6c05f...` 独立复核中已通过，继续保持：
 
 ```text
-public authoring context
-private seed context
-world constraints
-materialization briefs
+P1-01 Save/Restore topology          CLOSED
+P1-02 AI Semantic-gated materialize  CLOSED
+P1-03 Opening Beat authority         CLOSED
+P1-04 Public/private boundary        CLOSED
+P1-05 typed Item placement core      CLOSED except final Narrative projection seam
 ```
 
-至少保证：
-- public output path 不直接暴露 private-only raw source；
-- private seed 只进入 private canonical field；
-- public Narrative / Product / publicDescription 不可回显 private marker。
-
-新增 unique private marker regression：放入 private Creation field，断言 marker 不出现在任何 public materialization / opening / Product / Narrative。
+当前只修 final Narrative scene-item projection，不重新设计 Creation、Save、Semantic Router、Opening、Product 或 Item persistence。
 
 ---
 
-## 6. P1-05｜Creation Item 缺少 holder / placement 语义
+## 5. Gate
 
-### 现状
-
-`CreationMaterializedItemCandidate` 只有 name/description，没有 holder/location。
-
-Adapter 因而把所有 materialized Item 都写成：
+返修后至少运行：
 
 ```text
-initialHolderRef = playerRef
+focused scene-item Narrative tests
+G5
+G6
+G7
+G8
+G8-UAT-01
+G8-UAT-02
+full
+Typecheck
+Lint
+Product build
+Launcher smoke
+Disclosure
+Diff-check
+Targeted Real DeepSeek UAT2 smoke
 ```
 
-于是无法表达：
-- NPC 手里的物品；
-- Scene 中可见物品；
-- 开场 hook 中属于别人或环境的物品。
-
-这也直接诱发 P1-03 的“导师手里的信”无法 canonicalize。
-
-### 必修
-
-给 internal Creation Item plan 增加 typed placement/holder semantics，例如：
-
-```text
-holderKind = player | character | scene
-holderLocalRef?
-```
-
-或等价的现有 Runtime 可表达结构。
-
-Program 必须验证 holder ref；Adapter 正确绑定；Inventory 只显示 player-held items；Narrative opening 只能引用正确 holder/location 的 canonical Item。
+Real Provider Gate 必须增加或明确证明：scene-present Item 在普通正式 Turn Narrative 中可被正确引用，且移动离场后不再出现在 Narrative working set。
 
 ---
 
-## 7. 已确认可保留，不要重做
+## 6. Current Next
 
-以下实现方向已通过独立检查，可在返修中保持：
+> `scene-present Item Narrative projection narrow fix → Independent Review rerun`。
 
-- Creation Field Semantic Audit；
-- bounded strict Creation Semantic Materializer；
-- Program stable identity allocation；
-- generic placeholder rejection；
-- multi-role / multi-item cardinality方向；
-- manual/no-key 不伪造 generic NPC/Place/Item；
-- Product Player Profile 结构化投影；
-- Information Surface 只显示 Knowledge；
-- Game-local provenance ledger；
-- Runtime materialization 与 Formal Turn 同 transaction；
-- JIT Place / Character stable identity 基本纵向；
-- G8-UAT-01 的 location/interactable authority、No Phantom、Player Agency、exactly-five suggestions；
-- G7 durable semantic artifact / recovery seam。
-
----
-
-## 8. 返修 Gate
-
-返修完成前至少新增并通过：
-
-1. save-before-materialization → materialize → restore-old → topology rollback；
-2. save-after-materialization → restore → same stable identity；
-3. old-save branch → different future materialization；
-4. ordinary observe/dialogue/inner/read-only → World Materializer call count = 0；
-5. materializer failure on unrelated input does not block Turn；
-6. structured OpeningBeat → Narrative realization，禁止 unreferenced concrete entity；
-7. unique private Creation marker zero public disclosure；
-8. NPC-held / scene-held / player-held Item placement；
-9. G5/G6/G7/G8/full/typecheck/lint/build/launcher/disclosure/diff-check；
-10. targeted Real DeepSeek Gate rerun。
-
----
-
-## 9. 当前下一步
-
-> `G8-UAT-02 narrow return fix → Independent Review rerun`。
-
-未通过 Independent Review 前，不授权 Project Owner Stage UAT，不启动 G9。
+修复通过前不授权 Project Owner Stage UAT，不启动 G9。
