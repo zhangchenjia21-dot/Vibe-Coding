@@ -15,17 +15,19 @@ supersedes: 酒馆游戏项目开发核心总纲_Obsidian整合版_2026-08-18_�
 
 ```text
 G1–G7                   PASS / CLOSED
-G8                       ACTIVE / UAT FIX
+G8                       ACTIVE / STAGE UAT
 WEB-04 Host              PASS / CLOSED
 WEB-05 Migration         PASS / CLOSED
 WEB-08 Multi-action      PASS / CLOSED
 Engineering Exit Gate    historical PASS
-Stage UAT                FAIL / BLOCKED
-Current Next             G8-UAT-01 implementation
+G8-UAT-01 Implementation PASS / CLOSED
+Independent Review       PASS
+Stage UAT                AUTHORIZED / NEXT
+Current Code Baseline    52d0421bc58449ac8763681816bc7a84de93b385
 G9                       NOT AUTHORIZED
 ```
 
-当前实现基线仍由 `G8-UAT-01 v1.1` 约束；本次仓库整理与版本治理不扩展其工程 Scope。
+`G8-UAT-01 v1.1` 已在 exact SHA `52d0421bc58449ac8763681816bc7a84de93b385` 完成独立审核。当前不再有 P0 / P1 engineering blocker；只有项目所有者 Stage UAT 通过后，G8 才可正式 `PASS / CLOSED`。
 
 ---
 
@@ -132,28 +134,64 @@ Authoritative Runtime State
 
 ---
 
-## 3. 当前 G8 blocker cluster
+## 3. G8-UAT-01 独立审核结论
 
-当前任务：
+Exact SHA：`52d0421bc58449ac8763681816bc7a84de93b385`
 
-`G8-UAT-01｜Playable Runtime Seed + Narrative Authority + Dynamic Five Suggested Inputs`
+结论：
 
-必须收口：
+```text
+G8-UAT-01 Implementation = PASS / CLOSED
+P0 = 0
+P1 = 0
+Stage UAT = AUTHORIZED / NEXT
+```
 
-1. P0 Narrative Authority；
-2. Minimum Playable Runtime T0；
-3. No Phantom Interactable；
-4. Bounded Rich Narrative Context；
-5. Ephemeral conversational freedom without durable unauthorized mutation；
-6. exactly 5 context-sensitive SuggestedPlayerInput；
-7. suggestion click only prefills composer；
-8. suggestion provider failure non-blocking；
-9. Real DeepSeek targeted Gate；
-10. Project Owner Stage UAT re-run。
+已独立确认：
+
+1. non-world-changing Candidate 不再吞掉模型已报告的 world-changing intent；
+2. Narrative Formal Outcome 强制携带 location / interactable authority；
+3. 正式 Creation compiler 生成 Minimum Playable T0：真实 NPC、相邻 Scene、Connection，以及有资源语义时的真实 Item；
+4. Narrative Context 恢复 player-safe 背景 / 目标 / 经历 / 人格 / 语言风格与 NPC public description；
+5. 五推荐不再等于 `availableMoves.map(...)`，而是 server-side grounded Player Assistance；
+6. 点击建议只 prefill，正式发送后才进入 Player Input；
+7. Exact UAT 语料与 Real DeepSeek smoke 均有 production-equivalent vertical evidence；
+8. 未启动 G9 / WEB-06 / WEB-07 / general JIT world generation。
+
+当前非阻塞事项：
+
+- **P2**：`manual / modified_suggestion / verbatim_suggestion` 的分类、传输与 best-effort hook 已实现，但正式 Launcher 尚未注入持久 Player Assistance evidence sidecar；当前人格分析未依赖该数据，因此不阻塞 Stage UAT。
+- **P2**：Recommendation Provider 在成功与 throw-fallback 路径会缓存，但部分“结构错误但未抛异常”的 fallback 分支未写 cache，可能在相同上下文重复产生 Provider 费用；不影响正确性或可玩性。
+- **P3**：`人格与快捷输入契约.ts` 顶部仍保留旧阶段“不实现建议生成”的注释，属于过时注释清理。
 
 ---
 
-## 4. G9 当前 DAG
+## 4. 当前 Stage UAT Gate
+
+项目所有者只需验证产品体验，不承担内部技术 QA。
+
+重点：
+
+- 正式 Creation 创建的新世界首次进入 Session 时，不再是空壳；
+- 输入框上方稳定出现 5 个与当前场景相关的建议；
+- 建议点击只填入输入框，可原样发送或修改后发送；
+- 与真实 NPC 普通对话能得到自然口头回应；
+- 玩家主动回忆经历 / 目标时能使用真实 Creation 内容；
+- 不存在的具体地点不会被 Narrative 假装已进入；
+- 前往真实可达 destination 后，Header / Narrative / 后续推荐都反映新的 authoritative Scene；
+- 不再出现具体但不可交互的 Narrative-only phantom entity。
+
+Stage UAT 若无 blocker：
+
+```text
+G8 PASS / CLOSED
+→ G9 前架构缺口审计
+→ G9-01 Compatibility Audit
+```
+
+---
+
+## 5. G9 当前 DAG
 
 ```text
 G9-01 Compatibility Audit
@@ -170,23 +208,21 @@ G9-02 必须先用内部 / handwritten runtime profiles 证明真实能力，再
 
 ---
 
-## 5. 当前 Next
+## 6. 当前 Next
 
 ```text
-G8-UAT-01 implementation
-↓
-GitHub-first Independent Review
-↓
 Project Owner Stage UAT re-run
 ↓
-G8 PASS / CLOSED
+G8 PASS / CLOSED（若 UAT PASS）
+↓
+G8 UAT 暴露问题总复盘 + G9 架构缺口审计
 ↓
 G9-01 Compatibility Audit
 ```
 
 ---
 
-## 6. 文档治理与版本规则
+## 7. 文档治理与版本规则
 
 ### Active-only
 
