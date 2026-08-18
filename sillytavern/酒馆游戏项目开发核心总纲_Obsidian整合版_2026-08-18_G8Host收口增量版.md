@@ -26,7 +26,7 @@ WEB-04 Host    PASS / CLOSED
 G9             NOT STARTED / blocked by G8 Exit Gate
 ```
 
-当前真人主路径已成立：
+当前真人主路径：
 
 ```text
 Launcher
@@ -37,7 +37,7 @@ Launcher
 → Product Session
 ```
 
-当前 Host 正式纵向也已成立：
+当前 Host 正式纵向：
 
 ```text
 handwritten typed Runtime UI Definition
@@ -47,6 +47,8 @@ handwritten typed Runtime UI Definition
 → materialized declarative UI DTO
 → Formal Product UI consumer
 ```
+
+---
 
 ## 1. 当前 15 份核心来源
 
@@ -68,7 +70,7 @@ handwritten typed Runtime UI Definition
 - pre-game unique Owner conflict；
 - secondary View / safe component vocabulary；
 - controlled Action Intent；
-- Declarative Structure ≠ Live Data；
+- Declarative Structure != Live Data；
 - player-safe live contribution materialization；
 - current Creation Contribution；
 - sourceDefinitionId / ownerGameplayId；
@@ -77,29 +79,51 @@ handwritten typed Runtime UI Definition
 
 正式实现基线：
 
-`zhangchenjia21-dot/sillytavern@5c76f4302152a7598b54d7f9d5774616b1fd618d`
+`sillytavern@5c76f4302152a7598b54d7f9d5774616b1fd618d`
 
 ### 15｜Runtime Context Orchestration 与模块化复杂度控制裁定
 
-`15_酒馆游戏_RuntimeContextOrchestration与模块化复杂度控制裁定_v1.0_2026-08-18.md`
+当前版本：
 
-冻结：
+`15_酒馆游戏_RuntimeContextOrchestration与模块化复杂度控制裁定_v1.1_2026-08-18.md`
+
+v1.1 当前冻结：
 
 ```text
 Asset Library
 != Game Enabled Asset Set
-!= Current Runtime Relevant Set
-!= Current Model Visible Working Set
+!= Runtime Relevant
+!= Model Visible Working Set
 ```
 
-以及：
+对于大型 Feature / Module Package：
+
+```text
+Package Included
+!= Feature Enabled
+!= Module Enabled
+!= Runtime Relevant
+!= Model Visible
+```
+
+并冻结：
 
 - Enabled Expansion 不自动进入 Prompt；
+- Full Asset Definition != Model Prompt Payload；
 - Dependency Graph != Context Inclusion Graph；
 - Model-first Semantic Routing；
 - Program structural validation + state-mandatory augmentation；
+- Router 只判断 immediate relevance；
+- typed Handoff 是 Ownership + Context Complexity Boundary；
 - bounded JIT Runtime Projection；
-- typed Handoff 同时是 Context Complexity Boundary。
+- Router Directory 只暴露当前真正 Enabled 的 Feature / Module profile；
+- `Background deterministic progression != Model Activation`；
+- timer / need / cooldown / routine automation 等 deterministic progression 可 Program-only；
+- 长期状态 / enabled asset / Package capability 数量增长不得自动造成普通 Turn Prompt / model-call 数线性增长。
+
+Wave 2 的 Survival / Traveler-System 是上述两条增量规则的真实资产证据。
+
+---
 
 ## 2. 当前权威顺序
 
@@ -110,12 +134,11 @@ Asset Library
 5. 历史版本 / Legacy Reference；
 6. 聊天记忆 / 旧附件。
 
-动态事实源：
+动态事实源：治理/路线/核心裁定 → Vibe-Coding；实现 → sillytavern；资产 → sillytavern-assets；Skill → Skill。
 
-- 治理 / 路线 /核心裁定 → `Vibe-Coding/main`
-- 当前实现 → `sillytavern/main`
-- 资产 → `sillytavern-assets/main`
-- Skill → `Skill/main`
+多聊天正式任务前执行 Freshness；发现新 current decision 后继续做 Decision Propagation，不得只读到新文件却沿用旧 Task DAG。
+
+---
 
 ## 3. G8 当前解释
 
@@ -131,45 +154,29 @@ PASS / CLOSED。
 ### WEB-04 Final Host Convergence
 **PASS / CLOSED。**
 
-独立审核确认：
-
-- production typed composition root；
-- default Core-only behavior；
-- player-safe materializer；
-- no arbitrary state path / selector / expression；
-- live public state after Formal Turn 自动更新 Contribution；
-- Creation bridge 已对齐 `expansion_settings / character / opening`；
-- Host source / gameplay owner identity 显式；
-- gameplay disable/enable dormant preservation；
-- durable UI Preference 跨 application restart；
-- Restore 不回滚 UI Preference；
-- invalid definitions fail closed。
+已证明 production typed composition root、Core-only default、player-safe materializer、no arbitrary state path / selector / expression、live contribution、Creation bridge、source identity、gameplay dormant preservation、durable UI preference 与 fail-closed invalid definition。
 
 ### WEB-05
 玩家主路径 PASS；当前只剩 **Technical Migration Closure**。
 
-目标：
+最终：
 
 ```text
-Creation Project
-=
-唯一 production New Game authority
+Creation Project = 唯一 production New Game authority
 ```
 
 退休 legacy One Draft / Five Sections production path。
 
 ### WEB-06 / WEB-07
-**DEFERRED / NON-BLOCKING FOR G9**。
-
-G6/G7 authority 已 PASS；Alpha/G11 前重新拉回。
+**DEFERRED / NON-BLOCKING FOR G9**；G6/G7 authority 已 PASS，Alpha/G11 前重新拉回。
 
 ### WEB-08
-**REQUIRED Core Slice**。
-
-只冻结会影响未来 Expansion Action Intent / Resolution 的最小 multi-action semantics。
+**REQUIRED Core Slice**；只冻结会影响未来 Expansion Action Intent / Resolution 的最小 multi-action semantics。
 
 ### G8 Exit Gate
 WEB-05 与 WEB-08 后直接进行 regression / E2E / narrow / keyboard / Stage UAT；只有 P0/P1 再开修复任务。
+
+---
 
 ## 4. G8 当前最短关键路径
 
@@ -184,6 +191,8 @@ G8 Exit Gate
 ↓
 G8 PASS / CLOSED
 ```
+
+---
 
 ## 5. Declarative UI 当前权威模型
 
@@ -201,13 +210,9 @@ Player
 → Surface order preference
 ```
 
-禁止：
+禁止 arbitrary JS / React / DOM / CSS / eval、arbitrary state path、general expression/query DSL、direct Game State mutation、hidden/private state 进入 browser DTO。
 
-- arbitrary JS / React / DOM / CSS / eval；
-- arbitrary state path；
-- general expression / query DSL；
-- direct Game State mutation；
-- hidden/private state 进入 browser DTO。
+---
 
 ## 6. Creation Project 当前权威
 
@@ -221,21 +226,17 @@ Creation Project
 → Game Instance
 ```
 
-Host Creation Contribution 当前合法 placement：
-
-- `expansion_settings`；
-- `character`；
-- `opening`。
+Host Creation Contribution placement：`expansion_settings / character / opening`。
 
 AI Fill values, never invent schema。
 
+---
+
 ## 7. G8 → G9 边界
 
-G8 必须先证明 Game Host / Creation / Core Action semantics。
+G8 先证明 Game Host / Creation / Core Action semantics；G9 才做 External Asset machine protocol。
 
-G9 才做 External Asset machine protocol。
-
-当前 Decision Propagation 后的 G9 顺序：
+当前 G9 顺序：
 
 ```text
 G9-01 Compatibility Audit
@@ -255,46 +256,62 @@ Golden Asset Family migration
 
 > **Runtime Context Orchestrator Before Asset Context Schema。**
 
-G9-02 先用 handwritten/internal Expansion runtime profiles 证明：
+G9-02 必须先用 handwritten/internal runtime profiles 证明：
 
 ```text
 Player Input
-+ Enabled Expansion Directory
++ pruned Enabled Expansion / Feature / Module Directory
 + minimal scene summary
 → Router Model
-→ relevant Expansion / Intent IDs
+→ immediate relevant Expansion / Intent IDs
 → Program mechanical validation
 → state-mandatory augmentation
 → Current Relevant Set
 → bounded JIT Runtime Projection
 ```
 
-然后 asset-spec 才声明这些已被证明的能力。
+同时证明：
+
+```text
+background deterministic progression
+→ Program only
+→ no model call
+```
+
+以及：
+
+```text
+Module OFF
+→ no routing profile
+→ no conditional dependency
+→ no module state/surface
+```
+
+再由 asset-spec 声明这些已经被 Runtime 证明的能力。
+
+---
 
 ## 8. 延后 Backlog
 
-不阻塞当前 G9：
+不阻塞当前 G9：Save Center / Recovery Product UX、Undo / Re-input、Creation Preview、完整 DeepSeek Creation Semantic Review、完整 Gameplay Recommendation、UI polish、深度 mobile / WCAG、advanced Timeline / Archive / multi-device Recovery。
 
-- Save Center / Recovery Product UX；
-- Undo / Re-input Product UX；
-- Creation Preview；
-- Real DeepSeek Creation Semantic Review 完整接线；
-- 完整 Gameplay Recommendation；
-- UI copy / preset / chip polish；
-- 深度 mobile / WCAG；
-- advanced Timeline / Archive GC / multi-device Recovery。
+这些不是取消，Alpha / G11 前重新拉回。
 
-这些不是取消，进入 Alpha / G11 前重新拉回。
+---
 
 ## 9. 当前正式文件
 
 - 第 14 号核心：`14_酒馆游戏_G8_RuntimeExtensibleUI产品架构裁定_v1.2_2026-08-18.md`
-- 第 15 号核心：`15_酒馆游戏_RuntimeContextOrchestration与模块化复杂度控制裁定_v1.0_2026-08-18.md`
+- 第 15 号核心：`15_酒馆游戏_RuntimeContextOrchestration与模块化复杂度控制裁定_v1.1_2026-08-18.md`
 - G8 规划：`G8网页产品化启动规划_v1.4_2026-08-18.md`
 - 当前总路线：`酒馆游戏新版主体重建总路线 v1.8.md`
+
+---
 
 ## 10. 当前 Next
 
 > **G8-WEB-05｜Technical Migration Closure**
 
 当前不得开始正式 G9 machine schema / Creator / Asset Adapter 实现。
+
+资产侧 Semantic Context Retrofit 可以并行继续，为 G9-02 提供真实 handwritten requirements corpus；但不得反向发明 Host 能力。
