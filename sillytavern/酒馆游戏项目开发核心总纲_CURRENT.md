@@ -26,6 +26,8 @@ Current Next                   G9-02A Source Binding + Game-local Revision Found
 
 G9-01 已完成对现有 Semantic Assets、G8 Runtime、#15 Context Orchestration 与 #16 Game-local Asset 模型的兼容性审计。结论不是“资产需要推倒重做”，而是：**现有资产语义总体兼容；当前 Runtime 的资产承接层不足以直接冻结 external asset-spec。**
 
+新增 #17 裁定进一步冻结：**Current Scene Visible Characters != Player-known Character Directory**。People Surface 必须是长期玩家已知人物目录，而不是当前场景 presence 列表；该裁定不打断正在执行的 G9-02A，传播到 G9-02B/C 与后续 Product maturity。
+
 ---
 
 ## 1. 当前 active 正式来源
@@ -33,6 +35,7 @@ G9-01 已完成对现有 Semantic Assets、G8 Runtime、#15 Context Orchestratio
 - `G9-01_资产兼容性审计与G9-02基础门禁_v1.0_2026-08-18.md`
 - `G9阶段启动与G9-02实施切片裁定_v1.0_2026-08-18.md`
 - `G9-02A_SourceBinding与GameLocalRevisionFoundation规格_v1.0_2026-08-18.md`
+- `17_酒馆游戏_PlayerKnownEntityDirectory与长期资料表面信息架构裁定_v1.0_2026-08-18.md`
 - `G8_StageUAT_最终收口与体验Backlog_v1.0_2026-08-18.md`
 - `15_酒馆游戏_RuntimeContextOrchestration与模块化复杂度控制裁定_v1.2_2026-08-18.md`
 - `16_酒馆游戏_RuntimeWorldMaterialization与当局游戏资产演化裁定_v1.1_2026-08-18.md`
@@ -67,7 +70,7 @@ G9-03 Schema Freeze               BLOCKED BY G9-02
 
 ## 3. G9-02 Mandatory Runtime Gaps
 
-G9-01 确认当前 Runtime 在 G9-03 前必须补齐：
+G9-01 + #17 当前确认 G9-03 前必须补齐：
 
 1. **Source lineage / binding**：source stable identity / type / version / hash / bind ancestry；
 2. **Game-local definition revision / typed mutation**：已有 Character / Item / Place/Scene 等定义字段可按 owner-policy 演化；
@@ -77,13 +80,12 @@ G9-01 确认当前 Runtime 在 G9-03 前必须补齐：
 6. **Runtime Domain Extension seam**：typed candidate / event / handoff / projection，资产不上传任意代码；
 7. **Generic Context Orchestrator**；
 8. **Save / Restore / Branch** 覆盖 source bindings、definition revisions、extension records/domain state；
-9. **Objective architecture guard**：不实现完整 Objective Engine，但不能把未来 Objective owner 封死。
+9. **Objective architecture guard**：不实现完整 Objective Engine，但不能把未来 Objective owner 封死；
+10. **Player-known Entity Directory**：长期已知人物目录与 current-scene visible/interactable set 分离，只投影 player-known / last-known safe facts。
 
 ---
 
 ## 4. G9-02 内部实施顺序
-
-为避免 persistence、domain host、router 同轮大改，G9-02 内部拆为：
 
 ```text
 G9-02A Source Binding + Game-local Revision Foundation
@@ -98,6 +100,27 @@ G9-03 asset-spec vNext Machine Contract
 ```
 
 这是同一 G9-02 阶段内的 implementation slicing，不新增生命周期阶段。
+
+### G9-02B 新增 #17 Gate
+
+必须使：
+
+```text
+Current Scene Visible Characters
+!=
+Player-known Character Directory
+```
+
+People Surface 只消费长期 player-known character projection；未认识 NPC 不因 Game-local existence 被泄露；角色离场不从目录删除。
+
+### G9-02C 新增 #17 Stress Gate
+
+```text
+Known Character Directory size ↑↑↑
+ordinary unrelated Turn context ≈ bounded
+```
+
+current-scene characters 与 referenced/relevant known characters 分开选取，People Directory 不直接等于 Prompt inclusion。
 
 ---
 
@@ -115,7 +138,7 @@ Game-local Definition Revision
 ↓ Save / Restore / Branch / Recovery
 ```
 
-关键 Reference Case 来自 G8 Owner UAT：
+关键 Reference Case：
 
 ```text
 已有“重要信件”
@@ -129,6 +152,8 @@ Game-local Definition Revision
 ```
 
 G9-02A 只使用 handwritten normalized fixtures，不解析 external Markdown，不冻结 asset-spec。
+
+#17 对当前已经发出的 G9-02A Codex 任务：`NO CHANGE / DO NOT INTERRUPT`。
 
 ---
 
@@ -149,6 +174,14 @@ G9-02A 只使用 handwritten normalized fixtures，不解析 external Markdown�
 - Dependency Graph != Context Inclusion Graph；
 - Bounded != Starved。
 
+新增：
+
+```text
+Canonical Character Truth
+!= Player-known Character Directory
+!= Current Scene Visible Character Set
+```
+
 ---
 
 ## 7. Owner UAT 非阻塞 Backlog 路由
@@ -156,6 +189,10 @@ G9-02A 只使用 handwritten normalized fixtures，不解析 external Markdown�
 ```text
 Item durable known-description evolution
 → G9-02A reference case
+
+People persistent known-character directory
+→ G9-02B Runtime/Product semantic correction
+→ G9-02C bounded-context proof
 
 DeepSeek model selector
 → G10 Provider Expansion
@@ -166,13 +203,31 @@ Game delete lifecycle
 carried Item description display polish
 → G11 Product polish
 
+People / Information / Objective classification/search/filter/history organization
+→ G11 Product information architecture maturity
+
 full Objective / Task vertical
 → dedicated later vertical，最迟 G11 前
 ```
 
 ---
 
-## 8. 当前 Next
+## 8. 长期资料 Surface 信息架构原则
+
+会长期累积的资料 Surface 不得通过“只保留当前可见项”规避规模问题。
+
+```text
+People
+Information / Knowledge
+Objective / Task
+future long-lived dossier surfaces
+```
+
+G9 保留 stable identity、status/source/player-safe facet metadata 与正确 owner；G11 再实现具体 grouping / filter / sort / search / active-history separation / pagination 等交互。
+
+---
+
+## 9. 当前 Next
 
 > **G9-02A｜Source Binding + Game-local Revision Foundation implementation。**
 
