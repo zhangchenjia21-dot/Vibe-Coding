@@ -1,6 +1,6 @@
 # G8-UAT-02｜Independent Review 阻塞发现 v1.0
 
-状态：`RESOLVED / INDEPENDENT REVIEW PASS`
+状态：`RESOLVED / INDEPENDENT REVIEW PASS / OWNER UAT PASS`
 日期：2026-08-18
 最终代码对象：`sillytavern@cdbd9cd7ff0b5b9a5672156066478b57f732307c`
 上游规格：`G8-UAT-02_GameLocalSemanticMaterialization与活世界收口规格_v1.0_2026-08-18.md`
@@ -9,14 +9,13 @@
 
 ```text
 G8-UAT-02 Implementation       PASS / CLOSED
-Independent Review            PASS
-P0                            0
+Independent Review            PASS / CLOSED
 Original P1                   5
 Closed P1                     5
 Remaining P1                  0
-Project Owner Stage UAT       AUTHORIZED / NEXT
-G8                            ACTIVE / AWAITING OWNER UAT
-G9                            NOT AUTHORIZED
+Project Owner Stage UAT       PASS WITH NON-BLOCKING UX FINDINGS
+G8                            PASS / CLOSED
+G9-01                         AUTHORIZED / NEXT
 ```
 
 `ce6c05f...` 已关闭 Save/Restore topology、AI Semantic-gated Materialization、Opening Beat authority、Creation public/private boundary 与 typed Item placement 主体；最后的 `cdbd9cd...` 关闭 scene-present Item final Narrative-safe projection seam。
@@ -71,39 +70,35 @@ Runtime current/final Scene visibility
 == interactableAuthority.itemNames
 ```
 
-并正确处理：
-
-- current Scene public scene-present Item included；
-- player-held Item preserved；
-- current visible NPC-held Item preserved；
-- hidden Item excluded；
-- Move A → B 后旧 Scene Item removed、新 Scene Item included；
-- final projection 使用 action/delta 后的 `finalSceneRef`；
-- scene Item observation 不触发 World Materializer。
-
-Focused regression 明确覆盖“学院公告”贯通 Session / Continuity / Narrative working set / Formal Outcome，并覆盖 A→B 场景切换。
+并正确处理 current Scene public Item、player-held、visible NPC-held、hidden exclusion 与 Move A→B 后的 finalSceneRef 切换。
 
 Real DeepSeek targeted smoke 报告：`sceneItemNarrativeWorkingSet=true`、`sceneItemGroundedNarrative=true`、学院公告观察 World Materializer=0、No Phantom PASS、hidden disclosure=0。
 
 ---
 
-## 4. Independent Review 证据边界
+## 4. Owner UAT 最终结果
 
-GitHub 对 `cdbd9cd...` 没有独立 CI status；`673/673`、G5/G6/G7/G8、typecheck/lint/build/launcher/disclosure 等数字属于 Codex 本地 Gate 报告。
+Owner 确认游戏已经可以持续运行。后续发现均不属于本 Review blocker cluster：
 
-Independent Review 的 PASS 来自：
+- Item dossier 即时展示 / inspection-driven description evolution；
+- Objective / Goal 产品引导；
+- Game Library 删除；
+- DeepSeek selectable model。
 
-- exact-SHA diff；
-- production visibility helper；
-- final Narrative-safe projection；
-- focused tests；
-- Real DeepSeek smoke 实现与检查逻辑；
-- no new P0/P1 found。
+这些已路由到：
+
+`G8_StageUAT_最终收口与体验Backlog_v1.0_2026-08-18.md`
+
+因此不 reopen G8。
 
 ---
 
-## 5. 当前下一步
+## 5. Independent Review 证据边界
 
-> **Project Owner Stage UAT。**
+GitHub 对 `cdbd9cd...` 没有独立 CI status；阶段测试数字属于 Codex 本地 Gate 报告。Independent Review 的 PASS 来自 exact-SHA diff、production authority/path、focused tests 与 Real DeepSeek smoke 实现检查。
 
-G8 尚未 CLOSED；只有 Project Owner 真实 UAT PASS 后才可关闭 G8 并授权 G9-01。
+---
+
+## 6. 当前下一步
+
+> **G9-01 Compatibility Audit。**
