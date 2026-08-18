@@ -10,19 +10,23 @@ current_path: sillytavern/酒馆游戏项目开发核心总纲_CURRENT.md
 ## 0. 当前状态
 
 ```text
-G1–G7                   PASS / CLOSED
-G8                       ACTIVE / UAT FIX
-WEB-04 Host              PASS / CLOSED
-WEB-05 Migration         PASS / CLOSED
-WEB-08 Multi-action      PASS / CLOSED
-G8-UAT-01                PASS / CLOSED
-Stage UAT rerun          FAIL / BLOCKED
-Current Code Baseline    52d0421bc58449ac8763681816bc7a84de93b385
-Current Next             G8-UAT-02
-G9                       NOT AUTHORIZED
+G1–G7                         PASS / CLOSED
+G8                             ACTIVE / UAT FIX
+WEB-04 Host                    PASS / CLOSED
+WEB-05 Migration               PASS / CLOSED
+WEB-08 Multi-action            PASS / CLOSED
+G8-UAT-01                      PASS / CLOSED
+Stage UAT rerun                FAIL / BLOCKED
+G8-UAT-02 implementation SHA   2c7e6a4cd85e1f3c52350c1b85ae70c99864b940
+G8-UAT-02 Independent Review   FAIL / RETURN REQUIRED
+P0                             0 confirmed
+P1                             5
+Stage UAT                      NOT AUTHORIZED
+Current Next                   G8-UAT-02 narrow return fix
+G9                             NOT AUTHORIZED
 ```
 
-项目所有者在 `52d0421...` 的第二轮真实 Stage UAT 证明：G8-UAT-01 已关闭 Narrative Authority / Phantom / Dynamic Five 第一层问题，但 Creation → Runtime 仍使用 generic deterministic placeholder 冒充 semantic materialization。
+`2c7e6a4...` 已完成 G8-UAT-02 主体实现，并正确建立 Creation Semantic Audit、typed materialization、concrete Game-local seed、Product Profile / Information IA 与 Runtime JIT Place/NPC 的主要纵向；但 Independent Review 发现 5 个 P1，会破坏 Save/Restore、Narrative Authority、Context Activation 或 Creation 信息边界，因此当前不能进入 Project Owner Stage UAT。
 
 ---
 
@@ -34,6 +38,7 @@ G9                       NOT AUTHORIZED
 - `G8-UAT-01_PlayableRuntimeSeed与NarrativeAuthority收口规格_v1.1_2026-08-18.md`
 - `G8_StageUAT_语义物化与活世界阻塞发现_v1.0_2026-08-18.md`
 - `G8-UAT-02_GameLocalSemanticMaterialization与活世界收口规格_v1.0_2026-08-18.md`
+- `G8-UAT-02_IndependentReview_阻塞发现_v1.0_2026-08-18.md`
 - `G8阶段收口与G9前置裁定_v1.8_2026-08-18.md`
 - `酒馆游戏新版主体重建总路线 v2.0.md`
 
@@ -54,90 +59,76 @@ G9                       NOT AUTHORIZED
 
 ---
 
-## 2. 本轮新确认的根因
+## 2. 已确认正确并保留的 G8-UAT-02 主干
 
-### 2.1 Minimum Count != Semantic Fidelity
-
-G8-UAT-01 证明了：
-
-```text
-NPC >= 1
-Destination >= 1
-optional Item >= 1
-```
-
-但没有证明这些实体正确对应 Creation 语义。
-
-当前 production compiler 实际可把：
-
-```text
-导师 / 同行者 / 对手
-→ 1 个“附近的人”
-
-多个工具 / 日用品 / 钱币
-→ 1 个“随身物品”
-
-需要可探索地点
-→ 1 个“附近区域”
-```
-
-因此数量 Gate 通过，但真实玩家世界仍是语义占位壳。
-
-### 2.2 Creation Field != Entity Record
-
-Creation 自由文本必须先区分：scalar definition、structured list、semantic guidance、world constraint、materialization brief、runtime state seed、product metadata。
-
-禁止继续：
-
-```text
-free-text string
-→ 截取第一段
-→ 创建一个 Character / Item / Scene
-```
-
-### 2.3 AI-assisted Creation 的 zero-call 约束重新解释
-
-Manual / no-key path 继续允许 deterministic Final Create。
-
-但 configured AI-assisted Creation 可以使用 bounded typed semantic materialization call；不能为了保持零调用而生成语义错误 placeholder。
-
-### 2.4 Living World 已成为 G8 Stage Playability prerequisite
-
-完整 Asset Ecosystem 仍留 G9；但以下最小能力必须提前：
-
-```text
-Creation semantic brief
-→ concrete Game-local opening assets
-→ proactive opening beat
-→ plausible unknown local NPC/Place materialization
-→ stable identity / atomic commit
-→ Narrative / Product projection
-```
-
-否则 AI RPG 仍然是静态世界 + 文本描写。
-
----
-
-## 3. 当前 P1 blocker cluster｜G8-UAT-02
-
-必须一次性关闭：
+`2c7e6a4...` 已经真实完成以下上游改造，返修时不整体重做：
 
 1. Creation Field Semantic Audit；
-2. typed Creation Materialization Plan；
-3. concrete opening NPC / Place / Item cardinality；
-4. minimal Game-local canonical seed；
-5. proactive opening beat；
-6. bounded JIT local Character / Place materialization；
-7. Inventory semantic fidelity；
-8. Information Surface 只显示 information / knowledge，不显示 generic action ledger；
-9. Player Profile 完整投影 identity/background/goals/past/personality/language style；
-10. Dynamic Five 改为消费新的 concrete materialized world。
+2. configured AI strict Creation Semantic Materializer；
+3. Program-side cardinality / ref / placeholder / identity validation；
+4. manual / no-key path 不再伪造 `附近的人 / 附近区域 / 随身物品`；
+5. concrete multi-role / multi-item / place materialization；
+6. Product Player Profile 结构化投影；
+7. Information Surface 与 Journal/Event 分离；
+8. Runtime Game-local provenance；
+9. JIT Place / NPC stable identity 基本纵向；
+10. Runtime materialization 已进入 Formal Turn SQLite transaction。
+
+因此当前是 narrow return，不是 G8-UAT-02 推倒重做。
 
 ---
 
-## 4. 继续保留的 G8-UAT-01 成果
+## 3. Independent Review P1 blocker cluster
 
-不得回滚：
+### P1-01｜Save / Restore 必须覆盖 Game-local topology revision
+
+当前动态 Character / Place / Scene / Connection 会改变实体集合，但旧 Canonical Save Snapshot / Restore 仍按当前实体集合做 exact-ref 校验，且旧存档无法语义上删除“存档之后才 materialize”的世界内容。
+
+必须证明：
+
+```text
+Save before materialization
+→ materialize Tavern/NPC
+→ Restore old save
+→ later-created topology disappears
+```
+
+以及 save-after-materialization restore、branch divergence、provenance ledger 一致性。
+
+### P1-02｜World Materializer 必须 need-gated，不得每 Turn 前置调用
+
+当前 configured Runtime 会在普通输入先调用 World Materializer，再调用 Semantic。必须改为：
+
+```text
+Semantic / Router detects unresolved local materialization need
+→ only then World Materializer
+→ Program validation
+→ bounded continuation
+```
+
+普通 observe / dialogue / inner / read-only / wait 不需要未知实体时，World Materializer calls 必须为 0；materializer failure 不得阻塞 unrelated Turn。
+
+这与 #15 v1.2 的 `Runtime Relevant != Model Visible` / outcome-gated activation 一致。
+
+### P1-03｜Opening Beat 不得绕过 Narrative Authority
+
+当前 Creation Materializer 可直接生成 `openingBeat.narrative` 并作为 Turn 0 显示；测试自身已经出现 narrative 提到“导师手里的信”，但没有对应 canonical Item。
+
+必须改为 structured Opening Beat semantic plan → Program refs validation → Narrative Provider realization；Turn 0 同样遵守 No Phantom / Player Agency / disclosure / interactable authority。
+
+### P1-04｜Creation private/public semantic class 必须成为真正信息边界
+
+当前 `private_seed` 只是 audit metadata，Materializer 仍收到 flat raw `creatorAuthoredContext`。必须改成 purpose-built / partitioned materialization context，使 private-only source 不得被 publicDescription / opening / Product / Narrative 回显。
+
+### P1-05｜Creation Item 必须有 holder / placement 语义
+
+当前 materialized Item 没有 holder/location，Adapter 把全部 Item 都写给 player。必须支持至少 player / character / scene（或等价现有 Runtime 可表达结构），Program 验证 ref，Inventory 只显示 player-held items。
+
+---
+
+## 4. G8-UAT-01 authority 继续不可回滚
+
+必须继续保持：
 
 - Program Final Outcome authority；
 - non-world-changing downgrade fail-closed；
@@ -147,57 +138,41 @@ Creation semantic brief
 - Ephemeral NPC Dialogue Freedom；
 - Player Agency；
 - server-side grounded exactly-five suggestions；
-- controlled multi-action / Save / Restore / Recovery。
+- controlled multi-action；
+- G6 Save / Restore；
+- G7 Crash / Recovery / idempotency。
 
-新世界内容必须先 materialize + commit，再 Narrative realization。
+新的 Game-local world growth 不能以破坏这些 CLOSED 能力为代价。
 
 ---
 
-## 5. Product IA 修复
+## 5. G8-UAT-02 返修 Gate
 
-### Information
+至少新增并通过：
 
-```text
-Information Surface
-!= Formal Event Journal
-```
-
-不得显示 generic：
-
-- `行动已完成`
-- `你前往XX`
-
-Timeline / Journal 可以保留行动记录。
-
-### Player Profile
-
-Player Detail 至少显示：
-
-- identity / calling
-- public background
-- goals / attachments
-- important past
-- personality
-- language style
-
-左侧摘要可以精简，但不能只剩一个名字和一句背景。
-
-### Inventory
-
-Narrative 中列出的具体随身物品必须与 authoritative inventory / Product Items Surface 一致。
+1. save-before-materialization → materialize → restore-old → topology rollback；
+2. save-after-materialization → restore → same stable identity；
+3. old-save branch → different future materialization；
+4. ordinary non-materialization turns → World Materializer call count 0；
+5. materializer failure does not poison unrelated turn；
+6. structured Opening Beat → authority-safe Turn 0 Narrative；
+7. unique private Creation marker → zero public disclosure；
+8. player-held / NPC-held / scene-held Item placement；
+9. G5/G6/G7/G8/full + typecheck/lint/build/launcher/disclosure/diff-check；
+10. targeted Real DeepSeek rerun。
 
 ---
 
 ## 6. 当前关键路径
 
 ```text
-G8-UAT-01                 PASS / CLOSED
+G8-UAT-01                       PASS / CLOSED
+Stage UAT rerun                 FAIL
+G8-UAT-02 implementation        REVIEWED / RETURN REQUIRED
 ↓
-Stage UAT rerun           FAIL
+G8-UAT-02 narrow return fix
 ↓
-G8-UAT-02                 ACTIVE / REQUIRED
-↓
-Independent Review
+Independent Review rerun
 ↓
 Project Owner Stage UAT
 ↓
@@ -212,7 +187,7 @@ G9 external asset-spec / Creator / Adapter 仍未授权。
 
 ## 7. G9 DAG 传播
 
-G8-UAT-02 会提前证明第 16 号裁定的最小 internal production vertical；G9-02 后续仍负责把该能力扩展到 Source Asset bind / external asset ecosystem，并与第 15 号 Context Orchestration 汇合。
+G8-UAT-02 继续只证明第 16 号裁定的最小 internal production vertical；G9-02 后续负责 Source Asset bind / full Game-local layer，并与 #15 v1.2 Context Orchestration 汇合。
 
 ```text
 G9-01 Compatibility Audit
@@ -225,22 +200,18 @@ G9-01 Compatibility Audit
 → G9-05 Creator
 ```
 
-### 7.1 Wave 4 Context Requirements Propagation
-
-第 15 号核心现升级到 v1.2，并新增 G9-02 必证：
+Wave 4 继续冻结：
 
 ```text
 Hard Dependency != Transitive Prompt Inclusion
-Theme / Composite → owner-preserving bounded projection join
+Runtime Relevant != Model Visible
 Formal upstream Outcome / Trigger → downstream continuation activation
 ```
-
-Combat Magic 是当前真实资产 Reference Case；这些要求不扩大正在执行的 G8-UAT-02 Scope。
 
 ---
 
 ## 8. 当前 Next
 
-> **G8-UAT-02 implementation。**
+> **G8-UAT-02 narrow return fix at/after `2c7e6a4...`，随后重新 Independent Review。**
 
-当前版本不再继续 Stage UAT；项目所有者无需重复测试同一个 placeholder 世界。
+当前不授权 Project Owner Stage UAT；用户无需继续测试该实现。
