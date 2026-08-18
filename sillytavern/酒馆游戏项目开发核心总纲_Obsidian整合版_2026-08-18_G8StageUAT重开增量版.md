@@ -1,15 +1,27 @@
 ---
 title: 酒馆游戏项目开发核心总纲
-status: current-integrated
+status: superseded
 updated: 2026-08-18
 scope: G8-Stage-UAT-reopen
+superseded_by: 酒馆游戏项目开发核心总纲_Obsidian整合版_2026-08-18_第二版经验复盘增量版.md
 ---
 
 # 酒馆游戏项目开发核心总纲｜2026-08-18 G8 Stage UAT 重开增量版
 
-> 当前最新解释层：Engineering Exit Gate 曾在 `sillytavern@3ad5b419...` PASS，但项目所有者真实 Stage UAT 随后发现 P0/P1 blocker，因此 G8 已正式 REOPENED，G9 未授权。
+> [!warning] 已被覆盖
+> 本文件保留为 G8 Stage UAT 首次重开时的历史解释层。
+>
+> 当前请使用：
+>
+> `酒馆游戏项目开发核心总纲_Obsidian整合版_2026-08-18_第二版经验复盘增量版.md`
+>
+> 新文件继续保留本文件的 G8 重开事实，并增加 G8-UAT-01 v1.1、动态五推荐、第二版开发经验、Game-local Canonical Assets 与 G9-02 新成功标准。
 
-## 0. 当前状态
+---
+
+> 历史解释：Engineering Exit Gate 曾在 `sillytavern@3ad5b419...` PASS，但项目所有者真实 Stage UAT 随后发现 P0/P1 blocker，因此 G8 正式 REOPENED，G9 未授权。
+
+## 0. 当时状态
 
 ```text
 G1–G7              PASS / CLOSED
@@ -23,7 +35,7 @@ Current Next        G8-UAT-01
 G9                  NOT AUTHORIZED
 ```
 
-## 1. 当前新增正式来源
+## 1. 当时新增正式来源
 
 - `G8_StageUAT_交互响应性与空壳世界阻塞发现_v1.1_2026-08-18.md`
 - `G8-UAT-01_PlayableRuntimeSeed与NarrativeAuthority收口规格_v1.0_2026-08-18.md`
@@ -31,7 +43,7 @@ G9                  NOT AUTHORIZED
 - `G8网页产品化启动规划_v1.7_2026-08-18.md`
 - `酒馆游戏新版主体重建总路线 v1.11.md`
 
-## 2. 新冻结事实
+## 2. 当时冻结事实
 
 ### 2.1 Narrative Authority
 
@@ -41,51 +53,31 @@ Program Final Outcome
 唯一正式世界变化权威
 ```
 
-Narrative 不得写出未提交的：Location、Entity、Item、Time、Relationship、Knowledge、Commitment、Formal Event。
-
-特别禁止：
-
-```text
-Player: 进入不存在的酒馆
-→ Semantic 降级成 non-world-changing
-→ Program 无 move
-→ Narrative 写“你已经进入酒馆”
-```
-
-这是 P0 authority violation。
+Narrative 不得写出未提交的 Location、Entity、Item、Time、Relationship、Knowledge、Commitment 或 Formal Event。
 
 ### 2.2 Minimum Playable T0
 
-AI-assisted Creation 不得再只生成：
+AI-assisted Creation 不得只生成：
 
 ```text
 1 Region + 1 Place + 1 Scene + Player
 ```
 
-G8 exit minimum：
-
-```text
-current Scene
-+ visible non-player Character
-+ public reachable destination / Connection
-+ optional Item when Creation provides resource semantics
-```
+G8 exit minimum：current Scene + visible non-player Character + public reachable destination / Connection + optional Item。
 
 ### 2.3 No Phantom Interactable
 
-具体可交互的人物、物品、地点必须有 authoritative Runtime ref。
+具体可交互人物、物品、地点必须有 authoritative Runtime ref。
 
 ### 2.4 Bounded != Starved
 
-Narrative 当前任务需要的 player-safe：玩家身份/背景/目标/经历/语言风格、NPC public description 等必须进入 bounded working context；不能为了防泄露把回答所需信息一起裁掉。
+当前任务需要的 player-safe 玩家身份、背景、目标、经历、语言风格、NPC public description 等必须进入 bounded working context。
 
 ### 2.5 Narrative Freedom Envelope
 
-允许 ephemeral NPC dialogue / tone / refusal / banter；不自动形成 durable Relationship/Commitment/Knowledge/state change。
+允许 ephemeral NPC dialogue / tone / refusal / banter；不自动形成 durable Relationship / Commitment / Knowledge / state change。Player Agency 继续严格。
 
-Player Agency 继续严格：不替玩家新增未表达内心事实。
-
-## 3. 当前关键路径
+## 3. 当时关键路径
 
 ```text
 G8-UAT-01
@@ -99,11 +91,11 @@ G8 PASS/CLOSED
 G9-01 Compatibility Audit
 ```
 
-## 4. 仍然延期
+## 4. 延期
 
-WEB-06 / WEB-07 继续 DEFERRED；本次 UAT fix 不把它们重新塞回 G9 前关键路径。
+WEB-06 / WEB-07 继续 DEFERRED。
 
-## 5. G9 路线不变
+## 5. 当时 G9 路线
 
 ```text
 G9-01 Compatibility Audit
@@ -113,4 +105,4 @@ G9-01 Compatibility Audit
 → G9-05 Creator rebuild
 ```
 
-第 15 号 Runtime Context Orchestration v1.1 继续有效。
+第 15 号 Runtime Context Orchestration v1.1 继续有效；后续由当前替代文件补充 Game-local Canonical Assets 与 Runtime World Materialization。
