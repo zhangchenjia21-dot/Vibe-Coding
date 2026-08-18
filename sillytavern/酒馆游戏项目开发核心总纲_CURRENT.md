@@ -43,7 +43,7 @@ G9                       NOT AUTHORIZED
 - `12_酒馆游戏_G6_SaveContinueRestore收口裁定_v1.0_2026-08-15.md`
 - `13_酒馆游戏_G7_CrashResumeRecovery收口裁定_v1.0_2026-08-16.md`
 - `14_酒馆游戏_G8_RuntimeExtensibleUI产品架构裁定_v1.2_2026-08-18.md`
-- `15_酒馆游戏_RuntimeContextOrchestration与模块化复杂度控制裁定_v1.1_2026-08-18.md`
+- `15_酒馆游戏_RuntimeContextOrchestration与模块化复杂度控制裁定_v1.2_2026-08-18.md`
 - `16_酒馆游戏_RuntimeWorldMaterialization与当局游戏资产演化裁定_v1.1_2026-08-18.md`
 
 ### 通用治理
@@ -224,6 +224,18 @@ G9-01 Compatibility Audit
 → G9-04 Adapter / Compiler
 → G9-05 Creator
 ```
+
+### 7.1 Wave 4 Context Requirements Propagation
+
+第 15 号核心现升级到 v1.2，并新增 G9-02 必证：
+
+```text
+Hard Dependency != Transitive Prompt Inclusion
+Theme / Composite → owner-preserving bounded projection join
+Formal upstream Outcome / Trigger → downstream continuation activation
+```
+
+Combat Magic 是当前真实资产 Reference Case；这些要求不扩大正在执行的 G8-UAT-02 Scope。
 
 ---
 
