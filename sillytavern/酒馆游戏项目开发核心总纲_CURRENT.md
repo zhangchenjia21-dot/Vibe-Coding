@@ -10,135 +10,145 @@ current_path: sillytavern/酒馆游戏项目开发核心总纲_CURRENT.md
 ## 0. 当前状态
 
 ```text
-G1–G7                         PASS / CLOSED
-G8                             ACTIVE / AWAITING OWNER UAT
+G1–G8                         PASS / CLOSED
 WEB-04 Host                    PASS / CLOSED
 WEB-05 Migration               PASS / CLOSED
 WEB-08 Multi-action            PASS / CLOSED
 G8-UAT-01                      PASS / CLOSED
-G8-UAT-02 current SHA          cdbd9cd7ff0b5b9a5672156066478b57f732307c
+G8-UAT-02 final SHA            cdbd9cd7ff0b5b9a5672156066478b57f732307c
 G8-UAT-02 Independent Review   PASS / CLOSED
+Project Owner Stage UAT        PASS WITH NON-BLOCKING UX FINDINGS
 P0                             0
-Remaining P1                   0
-Project Owner Stage UAT        AUTHORIZED / NEXT
-Current Next                   Project Owner Stage UAT
-G9                             NOT AUTHORIZED
+P1                             0
+G9                             ACTIVE / G9-01
+Current Next                   G9-01 Compatibility Audit
 ```
 
-G8-UAT-02 已完成 Creation semantic materialization、Game-local concrete seed、bounded JIT Place/NPC、dynamic topology Save/Restore、Semantic-gated World Materialization、Opening Narrative authority、Creation private/public boundary、typed Item placement、Player Profile、Information IA，以及 Runtime/Product/Narrative scene-item visibility 收口。
+Project Owner 最终 UAT 确认：游戏已经可以持续运行；剩余问题属于体验、后续 Runtime capability 或产品管理，不再构成 G8 blocker。G8 正式 PASS / CLOSED，G9-01 Compatibility Audit 获授权。
 
 ---
 
 ## 1. 当前 active 正式来源
 
-- `G8-UAT-02_GameLocalSemanticMaterialization与活世界收口规格_v1.0_2026-08-18.md`
-- `G8-UAT-02_IndependentReview_阻塞发现_v1.0_2026-08-18.md`（已 RESOLVED / PASS）
+- `G8_StageUAT_最终收口与体验Backlog_v1.0_2026-08-18.md`
+- `G8-UAT-02_IndependentReview_阻塞发现_v1.0_2026-08-18.md`（RESOLVED / PASS）
 - `G8阶段收口与G9前置裁定_v1.8_2026-08-18.md`
-- `G8网页产品化启动规划_v1.8_2026-08-18.md`
 - `酒馆游戏新版主体重建总路线 v2.0.md`
 - `15_酒馆游戏_RuntimeContextOrchestration与模块化复杂度控制裁定_v1.2_2026-08-18.md`
 - `16_酒馆游戏_RuntimeWorldMaterialization与当局游戏资产演化裁定_v1.1_2026-08-18.md`
 
 ---
 
-## 2. G8-UAT-02 已证明
+## 2. G8 最终完成能力
 
-### Creation Semantic Materialization
+### Creation / Playability
 
 - Creation Field Semantic Audit；
 - configured AI strict typed materialization；
-- multi-role / multi-item semantic cardinality；
-- generic placeholder rejection；
-- manual / no-key 不伪造 `附近的人 / 附近区域 / 随身物品`；
-- Player Profile 完整 player-safe projection。
+- concrete opening NPC / Place / Item；
+- proactive authority-safe Opening Narrative；
+- Player Profile；
+- Dynamic Five；
+- manual/no-key 不伪造 generic placeholder。
 
-### Living World
+### Runtime / Living World
 
 ```text
 Player Input
-→ Semantic AI judges existing target / optional Materialization Need
-→ need only: World Materializer
+→ Semantic AI judges intent + optional Materialization Need
+→ need only: bounded World Materializer
 → Program validation / stable identity
 → atomic canonical commit
 → Narrative / Product / Suggestions
 ```
 
-Program 不做开放式 NLP；World Materializer 不成为所有 Turn 固定前置调用。
+Program 不做开放式 NLP；World Materializer 不成为普通 Turn 固定前置调用。
 
-### Durable World
+### Durable World / Authority
 
-Save / Restore 覆盖动态 Game-local topology / provenance / typed Item placement：
-
-- save-before-growth → restore-old → future entities disappear；
-- save-after-growth → restore → stable refs preserved；
-- branch divergence / rollback / provenance consistency maintained。
-
-### Narrative / Information Boundary
-
-- Structured Opening Beat → independent authority-safe Opening Narrative；
-- public materialization input 与 private raw seed 隔离；
-- No Phantom / Player Agency / location & interactable authority 保留；
-- Information Surface 只显示 Knowledge，不混入 generic event bookkeeping。
-
-### Item placement / visibility
-
-Item 支持：
-
-```text
-player-held
-character-held
-scene-present
-```
-
-并统一：
-
-```text
-Runtime current/final Scene items
-== Product
-== Continuity
-== final NarrativeSafeContext
-== interactableAuthority
-```
-
-`cdbd9cd...` 关闭了最后一个 scene-present Item final Narrative projection seam。
-
----
-
-## 3. 不可回滚的既有 Authority
-
-继续保持：
-
+- dynamic topology Save / Restore / Branch；
+- G7 Crash / Recovery / Idempotency；
 - Program Final Outcome authority；
 - No Phantom Interactable；
 - Player Agency；
-- Bounded != Starved；
-- exactly-five grounded suggestions；
-- G6 Save / Restore / Branch；
-- G7 Crash / Recovery / Idempotency；
-- WEB-08 Controlled Multi-action。
+- location / interactable authority；
+- Creation public/private boundary；
+- typed Item player / character / scene placement；
+- Runtime / Product / Continuity / Narrative scene-item consistency；
+- Information Surface = Knowledge，不混入 generic event bookkeeping。
 
 ---
 
-## 4. 当前关键路径
+## 3. Owner UAT 非阻塞体验发现
+
+正式记录于：
+
+`G8_StageUAT_最终收口与体验Backlog_v1.0_2026-08-18.md`
+
+### UX-01 Item dossier evolution
+
+拆分为：
 
 ```text
-G8-UAT-01                 PASS / CLOSED
-G8-UAT-02                 PASS / CLOSED
-Independent Review        PASS
-↓
-Project Owner Stage UAT   AUTHORIZED / NEXT
-↓
-G8 PASS / CLOSED
-↓
-G9-01 Compatibility Audit
+carried Item publicDescription 展示遗漏
+→ P3 / G11 Product polish
+
+inspection/discovery → durable Item known/public description patch
+→ P2 / G9-02 Existing Game-local Asset Mutation Reference Case
 ```
 
-G9 external asset-spec / Creator / Adapter 仍未授权。
+第 16 号裁定已经冻结 `Item known description` 等为 Evolvable Definition Fields；G9-02 应证明 existing local asset typed patch → Product refresh → Save/Restore → source unchanged。
+
+### UX-02 Objective / Goal
+
+当前 Objective Surface 刻意等待未来 Runtime Objective authority，不从 Narrative / Commitment 伪造目标。
+
+```text
+G9-01：检查 Objective 未来可作为 Game-local canonical record / extension
+完整 Objective Engine：后续 dedicated vertical，最迟 Alpha/G11 前
+```
+
+### UX-03 Game deletion
+
+`G11 Alpha / Game Library lifecycle management`。
+
+### UX-04 DeepSeek model selection
+
+`G10 Provider Expansion`；当前 fixed model / `modelEditable=false` 不阻塞 G9。
+
+---
+
+## 4. 当前 G9 DAG
+
+```text
+G9-01 Compatibility Audit
+↓
+G9-02 Runtime Asset Binding
+      + Context Orchestration Foundation
+      + full Game-local Canonical Asset Layer
+      + Runtime World Materialization Foundation
+↓
+G9-03 asset-spec vNext Machine Contract
+↓
+G9-04 Game Asset Adapter / Compiler
+↓
+G9-05 Creator rebuild
+```
+
+### G9-01 新增真实 UAT 输入
+
+Compatibility Audit 必须显式检查：
+
+1. `Objective / Task` 等长期记录未来可进入 Game-local canonical extensibility，不被 Source / Runtime schema 提前封死；
+2. Existing Game-local Item / Character / Place 的 evolvable definition field patch 具备明确 ownership / provenance / persistence / visibility 边界；
+3. Item inspection 后的 durable known-description evolution 可作为 G9-02 reference case。
+
+不把 Game Delete、Provider model selector 或完整 Objective Engine 提前塞入 G9-01/02。
 
 ---
 
 ## 5. 当前 Next
 
-> **Project Owner 使用真实新建游戏重新执行 Stage UAT。**
+> **G9-01 Compatibility Audit。**
 
-用户只做产品体验验收，不承担技术 QA；发现任何“不像正常 AI RPG”的现象，按真实玩家体验记录即可。
+G8 不因上述非阻塞体验问题再次 reopen；只有 G9-01 若发现会导致错误 asset protocol / Game-local ownership / Context boundary 的 P0/P1 架构缺口，才调整 G9 DAG。
