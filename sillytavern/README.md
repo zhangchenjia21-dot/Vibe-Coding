@@ -19,7 +19,8 @@ Grok Build / Codex 等代码 Agent 的具体施工任务包，不再存放在本
 - `G9-02BC_SharedRuntimeFoundationConvergence规格_v1.0_2026-08-19.md`
 - `G9-02BC_IndependentReview_共享运行时基础_v1.0_2026-08-19.md`
 - `G9-02B_RuntimeDomainBreadth与PlayerKnownDirectory规格_v1.0_2026-08-19.md`
-- `G9-02B_IndependentReview_玩家已知人物目录阻塞发现_v1.0_2026-08-19.md`：当前 Review Authority；`FAIL / CORRECTION REQUIRED`。
+- `G9-02B_IndependentReview_玩家已知人物目录阻塞发现_v1.0_2026-08-19.md`
+- `G9-02B_Correction01_IndependentReview_剩余阻塞_v1.0_2026-08-19.md`：**当前 Review Authority；FAIL / CORRECTION-02 REQUIRED。**
 
 ### 当前 AI / Agent 长期治理
 
@@ -40,21 +41,19 @@ zhangchenjia21-dot/sillytavern/grok build
 = Execution Packet / Correction Packet / 临时实现交接
 ```
 
-当前 G9-02B 仍在任务分支施工，因此执行材料当前位于：
+当前 G9-02B 仍在任务分支施工：
 
 ```text
-zhangchenjia21-dot/sillytavern
+repo:   zhangchenjia21-dot/sillytavern
 branch: agent/g9-02b
 folder: grok build/
 ```
 
 当前主要执行文件：
 
-`grok build/G9-02B_GrokBuild_Correction01_Worktree任务包_v1.0_2026-08-19.md`
+`grok build/G9-02B_GrokBuild_Correction02_Worktree任务包_v1.0_2026-08-19.md`
 
-初始执行任务包也已迁入同目录，作为本任务施工追溯材料。
-
-**Vibe-Coding 不再保存 Grok Build 执行任务包副本。**
+**Vibe-Coding 不保存 Grok Build 执行任务包副本。**
 
 ## 3. 默认代码 Agent 工作模式
 
@@ -84,8 +83,6 @@ GPT exact-SHA Review PASS
 - `16_酒馆游戏_RuntimeWorldMaterialization与当局游戏资产演化裁定_v1.1_2026-08-18.md`
 - `17_酒馆游戏_PlayerKnownEntityDirectory与长期资料表面信息架构裁定_v1.0_2026-08-18.md`
 
-编号核心不会因为日期较早自动失效；只有出现明确 superseding current 才归档旧版。
-
 ## 5. Discussion-only
 
 - `G9_世界包OpeningScenario与Creator首轮创作验证_DRAFT_v0.4_2026-08-19.md`
@@ -99,9 +96,10 @@ G1–G8                     PASS / CLOSED
 G9-01                      PASS / CLOSED
 G9-02A                     PASS / CLOSED
 G9-02BC Shared Foundation  PASS / CLOSED
-G9-02B implementation      REVIEW FAIL / CORRECTION REQUIRED
+G9-02B Correction-01       REVIEW FAIL
 P0                         0
-P1                         4
+P1                         3
+G9-02B Correction-02       ACTIVE / NEXT
 G9-02C                     BLOCKED BY G9-02B
 G9-03                      NOT AUTHORIZED
 ```
@@ -112,11 +110,11 @@ G9-03                      NOT AUTHORIZED
 sillytavern/main
 08f9dcf0a2f9e30b29d6d8391fa91701e57b6e23
 
-G9-02B reviewed implementation SHA
-6368bd12a7ca84463fec112d21c8fb6a97ef75a5
+Correction-01 reviewed SHA
+76c7440e38a7ccdffd5c2dae4cf24012435e995c
 
 agent/g9-02b
-继续用于 Correction-01
+继续用于 Correction-02
 
 Main integration
 NOT AUTHORIZED
@@ -124,7 +122,7 @@ NOT AUTHORIZED
 
 当前下一项：
 
-> **G9-02B Correction-01：Grok Build 在现有 `agent/g9-02b` worktree 修复 Independent Review 的 4 个 P1；不得另开分支，不得修改 main。**
+> **G9-02B Correction-02：继续由 Grok Build 在同一 `agent/g9-02b` worktree 修复 3 个 P1；不得另开分支，不得修改 main。**
 
 最后约一次 Sol 深任务继续保留给 G9-02C 的模型路由与上下文编排核心。
 
