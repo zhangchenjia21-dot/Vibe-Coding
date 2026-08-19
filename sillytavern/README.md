@@ -21,14 +21,15 @@ Grok Build / Codex 等代码 Agent 的具体施工任务包，不再存放在本
 - `G9-02B_RuntimeDomainBreadth与PlayerKnownDirectory规格_v1.0_2026-08-19.md`
 - `G9-02B_IndependentReview_玩家已知人物目录阻塞发现_v1.0_2026-08-19.md`：历史第一轮阻塞审核。
 - `G9-02B_Correction01_IndependentReview_剩余阻塞_v1.0_2026-08-19.md`：历史第二轮阻塞审核。
-- `G9-02B_IndependentReview_PlayerKnownDirectory最终收口_v1.0_2026-08-19.md`：**当前 02B 最终 Review Authority；PASS / CLOSED。**
+- `G9-02B_IndependentReview_PlayerKnownDirectory最终收口_v1.0_2026-08-19.md`：02B 最终 Review Authority；`PASS / CLOSED`。
+- `G9-02C_ModelFirstRouting与ContextOrchestration核心规格_v1.0_2026-08-19.md`：**当前 02C Core Authority；CORE DESIGN FROZEN / IMPLEMENTATION NEXT。**
 
 ### 当前 AI / Agent 长期治理
 
 - `G9及后续阶段_Agent资源分配与GrokBuild代码协作裁定_v1.0_2026-08-19.md`
 - `代码Agent_Worktree隔离与Main合并治理_v1.0_2026-08-19.md`
 
-## 2. Grok Build 执行材料位置
+## 2. 代码 Agent 执行材料位置
 
 正式分工：
 
@@ -37,14 +38,15 @@ Vibe-Coding/main/sillytavern
 = 核心项目事实源
 = 架构裁定 / 阶段规格 / Independent Review / 长期治理
 
-zhangchenjia21-dot/sillytavern/grok build
-= Grok Build 施工材料
-= Execution Packet / Correction Packet / 临时实现交接
+zhangchenjia21-dot/sillytavern
+= 实现与施工材料
 ```
 
-G9-02B 执行材料已经随最终实现进入 `sillytavern/main/grok build/`，仅作为施工历史；后续 G9-02C 新任务继续在实现仓库该目录下创建。
+Grok Build 施工任务继续放在 `sillytavern/grok build/`。
 
-**Vibe-Coding 不保存 Grok Build 执行任务包副本。**
+02C Core 当前只完成正式规格设计，**尚未创建新的代码 worktree / agent branch**。Sol 执行包在正式启动时必须遵守同一 worktree 隔离治理，不直接写 main。
+
+**Vibe-Coding 不保存代码 Agent 的具体执行任务包副本。**
 
 ## 3. 默认代码 Agent 工作模式
 
@@ -88,7 +90,8 @@ G9-01                      PASS / CLOSED
 G9-02A                     PASS / CLOSED
 G9-02BC Shared Foundation  PASS / CLOSED
 G9-02B                     PASS / CLOSED
-G9-02C                     ACTIVE / NEXT
+G9-02C Core Design         FROZEN / IMPLEMENTATION NEXT
+G9-02C Breadth             BLOCKED BY CORE REVIEW
 G9-02 Integrated Closure   BLOCKED BY G9-02C
 G9-03                      NOT AUTHORIZED
 ```
@@ -99,16 +102,29 @@ G9-03                      NOT AUTHORIZED
 sillytavern/main
 0ee847e1173ae8d17e643d5b838d238cf889031e
 
+active agent/* branches
+0
+
 G9-02B Independent Review
 PASS / CLOSED
+```
 
-P0  0
-P1  0
+当前 Skill freshness：
+
+```text
+Skill/main
+ac48934beae20a938ce126014cfee6a20642c1b2
+
+lifecycle-dev-process
+v2.1
+
+agent-task-packet
+v1.0
 ```
 
 当前下一项：
 
-> **G9-02C｜Context Orchestration breadth。最后约一次 Sol 深任务优先用于模型路由与上下文编排核心，其余 breadth 默认由 Grok Build 在冻结轨道上执行。**
+> **G9-02C Core｜由 Sol 在隔离 worktree 中实现 Model-first Routing / bounded routing working set / state-mandatory augmentation / authorized context anchors / outcome-gated continuation context boundary。完成后由 GPT exact-SHA Independent Review；PASS 后再开放 Grok Build breadth。**
 
 ## 7. 文档版本规则
 
