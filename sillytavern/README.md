@@ -77,6 +77,7 @@ GPT exact-SHA Review PASS
 - `16_酒馆游戏_RuntimeWorldMaterialization与当局游戏资产演化裁定_v1.1_2026-08-18.md`
 - `17_酒馆游戏_PlayerKnownEntityDirectory与长期资料表面信息架构裁定_v1.0_2026-08-18.md`
 - `18_酒馆游戏_资料库资源层与世界创作集成裁定_v1.2_2026-08-19.md`：**资料库协议与三类主资产同批冻结；资料库 Creator / 我的资产库 / 创建游戏绑定 / Runtime 检索等产品功能后置。**
+- `18A_酒馆游戏_资料库资源层协议护栏增量裁定_v1.0_2026-08-19.md`：**补充资料库版本锁定、Reference Projection 与多层资料可见性边界；与 #18 v1.2 共同构成当前资料库 Authority。**
 
 ## 5. #18｜资料库资源层
 
@@ -122,6 +123,25 @@ G9-04 可以做资料库协议样本的最小解析、校验和往返验证，�
 全部 PASS 后，才进入资料库增量产品阶段；阶段编号到时再定。
 
 长期产品方向仍保持：创建游戏以世界包为入口，Creator 中资料入口靠近世界包，Runtime 只按当前职责检索最小充分资料切片，禁止整库 Prompt。
+
+G9-03 额外必须遵守 #18A：
+
+```text
+Library Source Update
+!= Existing Game Silent Update
+
+Retrieved Library Slice
+= Reference Projection
+!= Game-local Truth
+!= Runtime Truth
+
+Creator Reference
+!= Model Worldbuilding Reference
+!= Player-visible Knowledge
+!= Character-known Knowledge
+```
+
+协议应冻结资料身份、版本、来源、引用和 audience / disclosure 扩展挂点，但不提前冻结 embedding、chunk size、向量维度、排名算法、任意查询 DSL 或具体 RAG Provider API。
 
 ## 6. Discussion-only
 
@@ -173,7 +193,7 @@ v1.0
 
 > **G9-02C Core｜由 Sol 在隔离 worktree 中实现 Model-first Routing / bounded routing working set / state-mandatory augmentation / authorized context anchors / outcome-gated continuation context boundary。完成后由 GPT exact-SHA Independent Review；PASS 后再开放 Grok Build breadth。**
 
-#18 v1.2 不改变当前 02C 执行 DAG。G9-03 将统一冻结三类主资产与资料库协议；资料库产品功能继续后置。
+#18 v1.2 + #18A 不改变当前 02C 执行 DAG。G9-03 将统一冻结三类主资产与资料库协议；资料库产品功能继续后置。
 
 ## 8. 文档版本规则
 
