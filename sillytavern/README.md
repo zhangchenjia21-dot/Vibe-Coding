@@ -143,11 +143,14 @@ Creator Reference
 
 协议应冻结资料身份、版本、来源、引用和 audience / disclosure 扩展挂点，但不提前冻结 embedding、chunk size、向量维度、排名算法、任意查询 DSL 或具体 RAG Provider API。
 
-## 6. Discussion-only
+## 6. Discussion-only / Deferred optional
 
 - `G9_世界包OpeningScenario与Creator首轮创作验证_DRAFT_v0.4_2026-08-19.md`
+- `Creator_AI后续可选增量备忘录_v1.0_2026-08-19.md`：**只记录跨多资产大规模自主操作、长时间自主 Agent、自动联网研究等未来可能性；不是当前产品目标、Roadmap 承诺或 G9-05 完成条件。**
 
-该文件不是实现 authority；Opening Scenario 玩家端 Runtime 当前仍延后。
+Opening Scenario 文件不是实现 authority；玩家端 Runtime 当前仍延后。
+
+Creator AI 可选增量备忘录也不是实现 authority；只有真实 Creator UAT 后出现明确需求，才重新进入 Product Definition / Architecture Gate。当前不得因此预造 autonomous-agent runtime、跨资产万能事务、联网抓取平台或相关 external schema。
 
 ## 7. 当前阶段
 
