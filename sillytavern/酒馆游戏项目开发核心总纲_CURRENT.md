@@ -15,21 +15,22 @@ G8-UAT-02 final SHA            cdbd9cd7ff0b5b9a5672156066478b57f732307c
 Project Owner Stage UAT        PASS WITH NON-BLOCKING UX FINDINGS
 P0                             0
 P1                             0
-G9                             ACTIVE / G9-02BC Shared Foundation
+G9                             ACTIVE / G9-02B breadth
 G9-01 Compatibility Audit      PASS / CLOSED
 G9-02A                         PASS / CLOSED
 G9-02A final SHA               04603e1e4a3270e9f5740b5957cf545a2bd001d0
-G9-02A Independent Review      PASS / CLOSED
-G9-02BC Shared Foundation      ACTIVE / NEXT
-G9-02B breadth                 BLOCKED BY G9-02BC
-G9-02C breadth                 BLOCKED BY G9-02BC + G9-02B breadth
+G9-02BC Shared Foundation      PASS / CLOSED
+G9-02BC final SHA              5962e6f5933f245693e090cbdfd2f79791820ef1
+G9-02BC Independent Review     PASS / CLOSED
+G9-02B breadth                 ACTIVE / NEXT
+G9-02C breadth                 BLOCKED BY G9-02B breadth
 G9-03                          NOT AUTHORIZED
-Current Next                   G9-02BC Shared Runtime Foundation Convergence
+Current Next                   G9-02B breadth implementation
 ```
 
-G9-01 已确认：现有 Semantic Assets 总体兼容，真正缺口在 Runtime 资产承接与 Context Orchestration。
+G9-02A 已完成 Source Binding、Game-local Definition Revision、typed existing-asset mutation、Save / Restore / Branch / Recovery。
 
-G9-02A 已在 exact SHA `04603e1e4a3270e9f5740b5957cf545a2bd001d0` 完成 Source Binding、Game-local Revision、typed existing-asset mutation、Save / Restore / Branch / Recovery，并通过 Independent Review。当前没有 P0/P1 blocker。
+G9-02BC 已完成两条后续 breadth 共用的运行时领域模块宿主、包/功能/模块启用边界、扩展定义记录与运行状态、正式变化、事件/交接、最小路由目录、按需上下文投影和有界上下文组合，并通过 exact-SHA Independent Review。当前没有 P0/P1 blocker。
 
 #17 继续冻结：**Current Scene Visible Characters != Player-known Character Directory**。People Surface 必须是长期玩家已知人物目录，而不是当前场景 presence 列表。
 
@@ -42,6 +43,7 @@ G9-02A 已在 exact SHA `04603e1e4a3270e9f5740b5957cf545a2bd001d0` 完成 Source
 - `G9-02A_SourceBinding与GameLocalRevisionFoundation规格_v1.0_2026-08-18.md`
 - `G9-02A_IndependentReview_SourceBinding与GameLocalRevision_v1.0_2026-08-19.md`
 - `G9-02BC_SharedRuntimeFoundationConvergence规格_v1.0_2026-08-19.md`
+- `G9-02BC_IndependentReview_共享运行时基础_v1.0_2026-08-19.md`
 - `17_酒馆游戏_PlayerKnownEntityDirectory与长期资料表面信息架构裁定_v1.0_2026-08-18.md`
 - `G9及后续阶段_Agent资源分配与GrokBuild代码协作裁定_v1.0_2026-08-19.md`
 - `G8_StageUAT_最终收口与体验Backlog_v1.0_2026-08-18.md`
@@ -59,8 +61,7 @@ Discussion-only, not implementation authority:
 ```text
 Semantic Asset Architecture       COMPATIBLE
 Existing Assets Rewrite           NOT REQUIRED
-Current Runtime Asset Foundation  PARTIAL
-G9-02 Foundation                  REQUIRED
+G9 Runtime Foundation             PARTIAL → continuing
 G9-03 Schema Freeze               BLOCKED BY G9-02
 ```
 
@@ -68,151 +69,165 @@ G9-03 Schema Freeze               BLOCKED BY G9-02
 
 - World Pack / Character Card / Expansion 分权；
 - Source Definition != Game-local Instance != Runtime State；
-- Program-owned RNG / Judge / Formal Outcome / Atomic Commit / Save；
+- Program-owned Formal Outcome / Atomic Commit / Save；
 - Open Attempt；
 - Canonical Owner / typed dependency / handoff / contribution；
 - Package / Feature / Module activation semantics；
-- Runtime Context Contract 18 项语义；
+- Runtime Context Contract；
 - UI Surface Owner / Contributor 语义。
 
 G9 不根据现有 Markdown frontmatter 猜 final machine schema。
 
 ---
 
-## 3. G9-02A 已完成能力
+## 3. G9-02A｜PASS / CLOSED
 
-已正式证明：
-
-```text
-Source Asset Descriptor / Snapshot Identity
-↓ bind
-Game-local Canonical Identity + Lineage
-↓ typed definition mutation
-Game-local Definition Revision
-↓ Runtime / Product projection
-↓ Save / Restore / Branch / Recovery
-```
-
-关键 reference case：
+已证明：
 
 ```text
-已有“重要信件”
-→ 玩家检查并发现长期公开细节
-→ Semantic AI 提出 typed mutation need
-→ bounded Asset Mutator author candidate
-→ Program validation / atomic local revision
-→ Narrative / Product 读取 committed canonical value
-→ Save / Restore / Branch / Recovery 保持一致
-→ Source Asset 不变
+Source Asset
+→ per-game bind + lineage
+→ Game-local typed definition mutation
+→ definition revision
+→ Product canonical projection
+→ Save / Restore / Branch / Recovery
 ```
 
-Independent Review 结论：
-
-```text
-Implementation Review             PASS
-P0                                0
-P1                                0
-Source immutability               PASS
-Two-game isolation                PASS
-Atomic revision                   PASS
-Save / Restore / Branch           PASS
-Recovery exactly-once             PASS
-Hidden disclosure                 PASS
-Ordinary-turn mutation call       0 when no semantic need
-```
+关键“重要信件” reference case、two-game isolation、source immutability、Item/Character/Scene typed mutation、Recovery exactly-once、hidden disclosure 与 ordinary zero mutation call 均通过。
 
 非阻塞历史迁移说明：pre-G9 数据没有 exact `createdRevision`，0011 migration 只能使用既有 `createdTurn` 作为历史回填种子；future consumer 不得将该 legacy 回填值视为可证明的历史 Event revision。
 
 ---
 
-## 4. 当前 G9-02BC Shared Runtime Foundation
+## 4. G9-02BC｜PASS / CLOSED
 
-这是 G9-02B / G9-02C 共同依赖的 cross-slice shared foundation，**不新增生命周期阶段**。
+Final code：`5962e6f5933f245693e090cbdfd2f79791820ef1`
 
-当前必须 production-proof：
+Independent Review：`PASS / CLOSED`。
+
+已正式建立：
 
 ```text
-Program-owned Built-in Domain Module Registry / Host
+程序内置领域模块宿主
 ↓
-Game-local Package / Feature / Module Binding + Activation
+包 / 功能 / 模块绑定与启用
 ↓
-owner-scoped Canonical Record / Runtime State extension seam
+按所有者区分的长期定义记录 / 运行状态
 ↓
-typed Candidate / Change / Event / Handoff / Projection seam
+类型化候选 / 正式变化 / 事件 / 交接
 ↓
-Routing Directory boundary
+最小路由目录
 ↓
-validated selection
+选择校验
 ↓
-JIT Context Projection Host
+只对选中模块按需生成上下文
 ↓
-bounded owner-preserving context join boundary
+保留所有者身份的有界上下文组合
 ```
 
-核心不变量：
+已证明：
 
-- Asset 只提供 data / identity / configuration，不能注入 JS / callback / eval / script / arbitrary query；
-- G9-02A common identity / lineage / revision 是唯一 Game-local metadata seam，不另建第二套 local identity；
-- Domain canonical record 与 Domain runtime state 分离；
-- owner/module identity 必须显式保留；
+- 资产不能注入任意 JS / callback / eval / query / state path；
+- G9-02A Game-local identity / lineage / revision 继续是唯一 common metadata seam；
+- 长期定义记录与运行状态分离；
 - `Package Included != Feature Enabled != Module Enabled`；
-- disabled module 对 candidate/change/router/projection/handoff 全部 fail closed；
-- `Dependency Graph != Context Inclusion Graph`；
-- Handoff 只传 bounded typed payload / refs，不共享 whole state；
-- Routing Directory 只暴露选择模块所需最小 metadata；
-- JIT projection 必须在 validated selection 后发生；
-- Context Projection 是 read-only / bounded / owner-preserving；
-- `Bounded != Starved`。
+- disabled module 对 candidate/change/routing/projection/handoff 全部 fail closed；
+- hard dependency 不自动扩大 Context；
+- Domain change 与 Formal Turn / Event / Narrative / Time / durable checkpoint 原子提交；
+- Save / Restore / Branch / Recovery exactly-once；
+- 100-module fixture 只投影显式选中的 1 个模块；
+- migration 0012 rollback 与 0011 lineage preservation 通过。
 
-本轮只做 shared primitives + one production reference vertical，不扩完所有真实 Domain，不做完整 Router，不冻结 external schema。
+02BC 没有实现完整 Model-first Router，也没有冻结 external schema。
 
 ---
 
-## 5. G9-02B / 02C 后续 breadth
+## 5. G9-02B breadth｜ACTIVE / NEXT
 
-Shared Foundation Independent Review PASS 后，由 Grok Build 默认主导。
+默认执行者：**Grok Build**，按 G9-02BC 已冻结的内部轨道扩展。
 
-### G9-02B breadth
+目标：
 
 - package / feature / module registry breadth；
 - concrete built-in domain modules against frozen Host；
-- Player-known Entity / Character Directory；
-- G8 UI Host contribution binding；
-- persistence / migration / test breadth。
+- definition registry / G8 UI Host contribution binding；
+- **Player-known Entity / Character Directory**；
+- persistence / migration / regression breadth。
 
 必须保持：
 
 ```text
-Current Scene Visible Characters
+Canonical Character Truth
 != Player-known Character Directory
+!= Current Scene Visible Character Set
 ```
 
-People Surface 只消费长期 player-known safe projection；未认识 NPC 不泄露，角色离场不从目录消失。
+People Surface 只消费长期 player-known / last-known safe projection；未认识 NPC 不泄露；角色离场后仍保留；死亡、失踪或远行不因为“不在当前场景”而自动从目录删除。
 
-### G9-02C breadth
-
-- Model-first Router wiring；
-- state-mandatory augmentation；
-- JIT owner projections；
-- bounded owner-preserving join；
-- outcome-gated continuation；
-- disabled fail-closed；
-- deterministic background zero-model-call；
-- large registry bounded projection；
-- People Directory scale stress。
-
-必须证明：
-
-```text
-Known Character Directory size ↑↑↑
-ordinary unrelated Turn context ≈ bounded
-```
+不得在 02B 提前实现完整 Model-first Router，也不得冻结 G9-03 external schema。
 
 ---
 
-## 6. G9-03 Freeze Gate
+## 6. G9-02C breadth｜BLOCKED BY 02B
 
-只有 G9-02 Shared Foundation + 02B breadth + 02C breadth + Integrated Closure 全部 PASS，才能冻结：
+02C 重点：
+
+```text
+玩家输入
++ 已启用且预筛后的最小路由目录
++ 最小当前上下文
+→ 模型判断当前相关领域
+→ Program 校验 + 必要状态补充
+→ 只对选中所有者按需投影
+→ 有界组合
+→ 领域处理 / 正式结果
+→ 结果成立后才激活下游继续处理
+```
+
+必须证明：
+
+- Model-first routing，不用关键词重复 NLP；
+- state-mandatory augmentation；
+- disabled fail-closed；
+- deterministic background zero-model-call；
+- no transitive prompt expansion；
+- Bounded != Starved；
+- Open Attempt；
+- G8 Materialization Need 不回滚；
+- large registry / long session 不导致普通 Turn 上下文线性增长；
+- People Directory scale stress。
+
+02BC Review 明确保留的 02C 深水区：
+
+1. 玩家语义 → 模块选择的授权/evidence 闭环；
+2. 大量 enabled modules 时进一步预筛 routing working set；
+3. outcome-gated downstream continuation。
+
+---
+
+## 7. Sol / Grok Build 资源策略
+
+正式治理：`G9及后续阶段_Agent资源分配与GrokBuild代码协作裁定_v1.0_2026-08-19.md`。
+
+当前新增资源安排：
+
+```text
+G9-02BC                    Sol         PASS / CLOSED
+G9-02B breadth             Grok Build  ACTIVE / NEXT
+GPT                        exact-SHA Independent Review
+最后约一次 Sol 深任务       RESERVED for G9-02C core
+其余 02C breadth           Grok Build
+```
+
+最后一次 Sol **暂不立即消耗在 02B 常规 breadth**。若 02B Grok Build review PASS，优先用于 G9-02C 的模型路由 / 上下文编排核心；若额度因套餐变化提前不可用，02C 仍可由 Grok Build 按 frozen rails 执行，不形成项目 blocker。
+
+同一 repo 默认 serialized writer；Executor != Independent Reviewer。
+
+---
+
+## 8. G9-03 Freeze Gate
+
+只有 02B breadth + 02C breadth + G9-02 Integrated Closure 全部 PASS，才能冻结：
 
 - source asset machine identity/version/hash；
 - source → local binding wire；
@@ -232,43 +247,11 @@ ordinary unrelated Turn context ≈ bounded
 - 把 Player-known Character Directory 做成 Source Character Card 字段；
 - 把 current visibility 与 long-lived acquaintance/knowledge lifecycle 合并；
 - 提前冻结 People / Objective / Information UI taxonomy；
-- 把 Discussion-only Prologue Scenario wire 提前塞进 external schema。
+- 把 Discussion-only Opening Scenario wire 提前塞进 external schema。
 
 ---
 
-## 7. Agent 执行策略｜Sol 稀缺、Grok Build 常态化
-
-正式治理：`G9及后续阶段_Agent资源分配与GrokBuild代码协作裁定_v1.0_2026-08-19.md`。
-
-```text
-GPT
-= Product / Architecture Lead
-+ Freshness / Decision Propagation
-+ Canonical Spec / Task Packet
-+ exact-SHA Independent Review
-
-Sol
-= scarce high-risk shared-foundation executor
-
-Grok Build
-= default bounded implementation executor after contract freeze
-```
-
-当前最后一次高价值 Sol 深任务已正式授权给：
-
-> `G9-02BC Shared Runtime Foundation Convergence`
-
-Sol 只负责冻结并 production-proof shared rails，不负责扩完所有 Domain / UI / Creator / Adapter。
-
-Shared Foundation PASS 后，G9 后续默认 Grok Build 主导 implementation；Grok 可在冻结合同下承担后端、测试、Adapter/Compiler 与 Creator，但不得自行重定义 canonical owner、Save/Restore/Recovery、Context authority 或 external schema。
-
-同一 repo 默认 serialized writer；Executor != Independent Reviewer。
-
----
-
-## 8. 不可回滚 Authority
-
-继续保持：
+## 9. 不可回滚 Authority
 
 - Semantic AI judges open semantics；Program 不重复 NLP；
 - Program Final Outcome authority；
@@ -283,24 +266,16 @@ Shared Foundation PASS 后，G9 后续默认 Grok Build 主导 implementation；
 - Dependency Graph != Context Inclusion Graph；
 - Bounded != Starved。
 
-以及：
-
-```text
-Canonical Character Truth
-!= Player-known Character Directory
-!= Current Scene Visible Character Set
-```
-
 ---
 
-## 9. Owner UAT / Product Backlog 路由
+## 10. Owner UAT / Product Backlog 路由
 
 ```text
 Item durable known-description evolution
 → G9-02A PASS / CLOSED
 
 People persistent known-character directory
-→ G9-02B breadth
+→ G9-02B ACTIVE
 → G9-02C bounded-context proof
 
 DeepSeek model selector
@@ -323,25 +298,12 @@ Opening Scenario 保持 Discussion Draft：玩家端入口与 Prologue Runtime �
 
 ---
 
-## 10. 长期资料 Surface 原则
-
-会长期累积的资料 Surface 不得通过“只保留当前可见项”规避规模问题。
-
-```text
-People
-Information / Knowledge
-Objective / Task
-future long-lived dossier surfaces
-```
-
-G9 保留 stable identity、status/source/player-safe facet metadata 与正确 owner；G11 再实现 grouping / filter / sort / search / active-history separation / pagination 等交互。
-
----
-
 ## 11. 当前 Next
 
-> **G9-02BC｜Shared Runtime Foundation Convergence implementation。**
+> **G9-02B breadth implementation，默认由 Grok Build 执行。**
 
-Base implementation HEAD：`04603e1e4a3270e9f5740b5957cf545a2bd001d0`。
+Implementation Base：`5962e6f5933f245693e090cbdfd2f79791820ef1`。
+
+最后约一次 Sol 深任务保留给 02C core。
 
 G9-03 当前 `NOT AUTHORIZED`。
