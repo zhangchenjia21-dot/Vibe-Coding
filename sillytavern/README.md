@@ -17,8 +17,8 @@ G9-02A                     PASS / CLOSED
 G9-02BC Shared Foundation  PASS / CLOSED
 G9-02B                     PASS / CLOSED
 G9-02C Core                PASS / CLOSED
-G9-02C Breadth             ACTIVE / NEXT
-G9-02 Integrated Closure   BLOCKED BY BREADTH
+G9-02C Breadth             PASS / CLOSED
+G9-02 Integrated Closure   ACTIVE / NEXT
 G9-03                      NOT AUTHORIZED
 ```
 
@@ -26,12 +26,14 @@ G9-03                      NOT AUTHORIZED
 
 ```text
 zhangchenjia21-dot/sillytavern main
-182740801b48c2edc2399e4e4dd8b6ae5a43ccaa
+81bdbb7b321e796d8d623989a8eb1e10a0c11bee
 ```
 
 当前下一项：
 
-> **G9-02C Breadth｜Grok Build：扩大 Routing / Context / Continuation / Recovery / Scale / real-provider evidence，并保持 Core frozen rails。**
+> **G9-02 Integrated Closure｜对 02A / 02BC / 02B / 02C 的组合轨道做最终 Stage Gate，确认 Source→Local→Runtime、Domain ownership、Player-known、Model-first Context、Save/Restore/Branch/Recovery 与真实 Provider 证据在同一实现主线上无回滚。**
+
+G9-03 在 Integrated Closure PASS 前继续 `NOT AUTHORIZED`。
 
 ---
 
@@ -45,7 +47,12 @@ zhangchenjia21-dot/sillytavern main
 - `G9-02B_IndependentReview_PlayerKnownDirectory最终收口_v1.0_2026-08-19.md`
 - `G9-02C_ModelFirstRouting与ContextOrchestration核心规格_v1.0_2026-08-19.md`
 - `G9-02C_Agent资源分配增量裁定_v1.0_2026-08-19.md`
-- `G9-02C_IndependentReview_Core最终收口_v1.0_2026-08-19.md`：**Core PASS Authority；Final code `182740801b48c2edc2399e4e4dd8b6ae5a43ccaa`。**
+- `G9-02C_IndependentReview_Core最终收口_v1.0_2026-08-19.md`
+- `G9-02C_Breadth_IndependentReview_最终收口_v1.0_2026-08-19.md`
+
+历史阻塞记录：
+
+- `G9-02C_Breadth_IndependentReview_真实Provider证据阻塞_v1.0_2026-08-19.md`：已由最终 Breadth Review supersede；保留为 evidence-gate 历史。
 
 仍有效的编号核心：
 
@@ -62,7 +69,7 @@ zhangchenjia21-dot/sillytavern main
 
 ---
 
-## 3. G9-02C Core 当前冻结结果
+## 3. G9-02C 最终冻结结果
 
 ```text
 Enabled Package / Feature / Module
@@ -88,22 +95,30 @@ authorized typed Domain Candidate
 existing Formal Turn authority
 ```
 
-已冻结：
+Scale / real evidence 已证明：
 
-- 每 Working Set count + serialized-size 双上限；
-- fan-out pagination；
-- explicit `capacity_exhausted`，不得伪装 normal miss；
-- Program-owned bounded Package / Feature semantic descriptor；
-- Router = Context Selection，不是 Player Authorization；
-- `model_immediate / state_mandatory / authoritative_continuation` provenance；
-- 1,000 People unrelated dossier no-load；
-- targeted last-known dossier；
-- player-safe bounded relation subgraph；
-- outcome-gated continuation；
-- deterministic background zero model call；
-- semantic-ready Recovery no duplicate authoring。
+```text
+1,000 enabled leaves
+→ 3 real Provider routing calls
+→ max 10 profiles/request
+→ max 4601 serialized chars/request
+→ exact target module
 
-整个 G9-02C 尚未 CLOSED。Breadth + Integrated Closure + real Model-first routing evidence 完成前，G9-03 仍禁止启动。
+1,000 Player-known
+→ unrelated dossier load = 0
+
+10,000 relationship edges
+→ player-safe bounded relevant subgraph
+
+100 deterministic background turns
+→ Router = 0 / Domain Candidate model = 0
+
+100-turn long session
+→ routing context size stable
+→ Save / Restore / Branch / Recovery exactly-once
+```
+
+整个 G9-02C Core + Breadth 已 PASS；当前只剩 G9-02 Integrated Closure。
 
 ---
 
@@ -216,10 +231,10 @@ GPT exact-SHA Review PASS
 
 ```text
 G9-02C Core PASS
++
+G9-02C Breadth PASS
 ↓
-G9-02C Breadth ACTIVE / NEXT
-↓
-G9-02 Integrated Closure
+G9-02 Integrated Closure ACTIVE / NEXT
 ↓
 G9-03
 ```
