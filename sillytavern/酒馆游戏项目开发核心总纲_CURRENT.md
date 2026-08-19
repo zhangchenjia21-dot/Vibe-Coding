@@ -41,7 +41,7 @@ G9-02C Model-first Routing / Context Orchestration 核心设计已冻结，当�
 
 #17 继续冻结：**Current Scene Visible Characters != Player-known Character Directory**。
 
-#18 v1.1 继续冻结：**世界包 / 角色卡 / 拓展包继续是三类主资产；资料库是长期资料资源层，但属于后置增量功能。资料库不得成为 G9 三类主资产首轮协议、Creator 或创建游戏闭环的 blocker。**
+#18 v1.2 最新冻结：**世界包 / 角色卡 / 拓展包继续是三类主资产；资料库是资料资源层。资料库协议与三类主资产在 G9-03 同批完成，但 Creator、我的资产库、创建游戏绑定和 Runtime 资料检索等资料库产品功能后置。**
 
 ---
 
@@ -58,13 +58,13 @@ G9-02C Model-first Routing / Context Orchestration 核心设计已冻结，当�
 - `G9-02C_ModelFirstRouting与ContextOrchestration核心规格_v1.0_2026-08-19.md`
 - `G9-02C_Agent资源分配增量裁定_v1.0_2026-08-19.md`
 - `17_酒馆游戏_PlayerKnownEntityDirectory与长期资料表面信息架构裁定_v1.0_2026-08-18.md`
-- `18_酒馆游戏_资料库资源层与世界创作集成裁定_v1.1_2026-08-19.md`
+- `18_酒馆游戏_资料库资源层与世界创作集成裁定_v1.2_2026-08-19.md`
 - `G9及后续阶段_Agent资源分配与GrokBuild代码协作裁定_v1.0_2026-08-19.md`
 - `代码Agent_Worktree隔离与Main合并治理_v1.0_2026-08-19.md`
 - `G8_StageUAT_最终收口与体验Backlog_v1.0_2026-08-18.md`
 - `15_酒馆游戏_RuntimeContextOrchestration与模块化复杂度控制裁定_v1.2_2026-08-18.md`
 - `16_酒馆游戏_RuntimeWorldMaterialization与当局游戏资产演化裁定_v1.1_2026-08-18.md`
-- `酒馆游戏新版主体重建总路线 v2.1.md`
+- `酒馆游戏新版主体重建总路线 v2.2.md`
 
 Discussion-only, not implementation authority:
 - `G9_世界包OpeningScenario与Creator首轮创作验证_DRAFT_v0.4_2026-08-19.md`
@@ -83,9 +83,9 @@ G9-03 Schema Freeze               BLOCKED BY G9-02
 继续保留：
 
 - World Pack / Character Card / Expansion 三类主资产分权；
-- #18 资料库作为长期资料资源层补充，而不是第四类主资产；
+- #18 资料库作为资料资源层补充，而不是第四类主资产；
 - Source Definition != Game-local Instance != Runtime State；
-- 未来 Source Library != Game-local Canonical Definition != Runtime State；
+- Source Library != Game-local Canonical Definition != Runtime State；
 - Program-owned Formal Outcome / Atomic Commit / Save；
 - Open Attempt；
 - Canonical Owner / typed dependency / handoff / contribution；
@@ -93,7 +93,7 @@ G9-03 Schema Freeze               BLOCKED BY G9-02
 - Runtime Context Contract；
 - UI Surface Owner / Contributor 语义。
 
-当前 G9 首轮只完成三类主资产。资料库不因为产品语义已冻结就提前进入 external schema。
+最新时序：G9-03 对三类主资产与资料库统一设计协议；资料库协议完成不等于资料库产品功能同时实现。
 
 ---
 
@@ -114,7 +114,7 @@ Source Asset
 
 非阻塞历史迁移说明：pre-G9 数据没有 exact `createdRevision`，0011 migration 只能使用既有 `createdTurn` 作为历史回填种子；future consumer 不得将该 legacy 回填值视为可证明的历史 Event revision。
 
-#18 未来资料库同样必须继承 Source 不静默反写现有 Game-local / Runtime truth 的原则，但具体资料库绑定协议等待后置增量阶段。
+#18 资料库协议必须继承 Source 不静默反写现有 Game-local / Runtime truth 的原则；G9-03 冻结资料库源身份与版本语义，真实当局游戏资料库绑定生命周期仍后置。
 
 ---
 
@@ -198,7 +198,7 @@ Player-known
 != Model Visible
 ```
 
-未来资料库沿用同一信息隔离精神：
+资料库沿用同一信息隔离精神：
 
 ```text
 资料库包含某事实
@@ -242,13 +242,16 @@ Player-known
 - Large Relation Graph relevant-subgraph projection；
 - outcome-gated downstream continuation。
 
-### #18 v1.1 对 02C 的 Decision Propagation
+### #18 v1.2 对 02C 的 Decision Propagation
 
 ```text
 资料库长期架构
 = APPROVED
 
-资料库实现
+资料库协议
+= G9-03
+
+资料库产品实现
 = DEFERRED
 
 02C Core Design
@@ -287,17 +290,11 @@ G9-02C high-risk core      Sol         RESERVED / NEXT
 
 ---
 
-## 8. G9-03 Freeze Gate｜三类主资产首轮协议
+## 8. G9-03 Freeze Gate｜统一资产 / 资料资源协议
 
-只有 02C breadth + G9-02 Integrated Closure 全部 PASS，才能冻结三类主资产首轮机器协议。
+只有 02C breadth + G9-02 Integrated Closure 全部 PASS，才能冻结 external asset/resource contract。
 
-首轮范围：
-
-```text
-World Pack
-Character Card
-Expansion Pack
-```
+### 三类主资产
 
 至少覆盖：
 
@@ -314,20 +311,26 @@ Expansion Pack
 - compatibility / migration metadata；
 - Manifest / Bundle relationship。
 
-### #18 v1.1 时序修正
+### #18 v1.2｜资料库协议同批冻结
 
-资料库明确**不进入**本轮 G9-03 Freeze Gate。
+至少处理：
 
-当前禁止为资料库冻结：
+1. 资料库源身份、版本与完整性；
+2. 条目稳定身份与来源；
+3. 世界包 / 角色卡 / 拓展包对资料库的引用；
+4. 世界包绑定 `0..N` 资料库的语义；
+5. 默认 / 推荐 / 可选资料组合；
+6. 独立 / 内嵌 / 引用的机器表达；
+7. 资料可见性与信息边界；
+8. 资料引用与当局游戏正式定义的边界；
+9. Bundle / Manifest / import / export 关系；
+10. 兼容 / 更新 / 迁移基础语义；
+11. 有界检索所需最小声明能力；
+12. 未来 Creator / 游戏实现所需最小协议挂点。
 
-- source identity / version / hash；
-- World Pack → Library 机器绑定；
-- 资料检索 / 投影协议；
-- Creator 资料库字段；
-- 资料库 Bundle / import / export；
-- 资料查询 DSL。
+同时在该批次同步 `tavern-asset` 的资料资源层语义，避免语义治理与机器协议分叉。
 
-这些全部等待“三类主资产纵向闭环门槛”PASS 后的资料库增量阶段。
+G9-03 不冻结任意资料查询 DSL，也不授权资料库 Creator / Runtime 产品功能。
 
 继续禁止：
 
@@ -338,25 +341,21 @@ Expansion Pack
 
 ---
 
-## 9. 不可回滚 Authority
+## 9. G9-04｜三类主资产完整实现 + 资料库协议最小验证
 
-- Semantic AI judges open semantics；Program 不重复 NLP；
-- Program Final Outcome authority；
-- No Phantom Interactable；
-- Player Agency / Open Attempt；
-- World Materializer need-gated；
-- Source 不被 Runtime 反写；
-- Save / Restore / Branch；
-- Crash / Recovery / Idempotency；
-- private / public disclosure boundary；
-- Runtime Relevant != Model Visible；
-- Dependency Graph != Context Inclusion Graph；
-- Bounded != Starved；
-- Whole Relation Graph != Model Prompt；
-- 三类主资产继续是 World Pack / Character Card / Expansion；
-- 资料库是长期资料资源层，不是第四类主资产；
-- 资料库实现属于后置增量；
-- 三类主资产纵向闭环不得被资料库阻塞。
+三类主资产按正常主线完成 parser / adapter / compiler / Game-local Binding。
+
+资料库只做：
+
+```text
+Library sample
+→ parse
+→ validate
+→ serialize / round-trip
+→ cross-reference validation
+```
+
+资料库在 G9-04 不实现“我的资产库”资料页面、新游戏资料选择、当局游戏资料绑定生命周期、运行时索引 / 检索、模型资料 Provider 或 Creator 资料库编辑器。
 
 ---
 
@@ -370,24 +369,29 @@ People persistent known-character directory
 → G9-02B PASS / CLOSED
 → G9-02C bounded-context / scale proof
 
-三类主资产机器协议
+三类主资产 + 资料库统一机器协议
 → G9-03
 
 三类主资产 Adapter / Compiler / Game-local Binding
 → G9-04
+
+资料库协议最小 parse / validate / round-trip proof
+→ G9-04
+→ 不等于资料库产品功能上线
 
 三类主资产 Creator 基础创作链
 → G9-05
 
 “我的资产库 → 创建游戏 → 完整游玩”三类主资产纵向闭环
 → G9 主资产产品闭环门槛
-→ 必须早于资料库增量开发
+→ 必须早于资料库产品功能开发
 
 Reference Library Resource Layer
-→ #18 v1.1 ARCHITECTURE APPROVED
-→ IMPLEMENTATION DEFERRED
+→ #18 v1.2 ARCHITECTURE APPROVED
+→ PROTOCOL IN G9-03
+→ PRODUCT IMPLEMENTATION DEFERRED
 → only after Primary Asset End-to-End Closure Gate PASS
-→ future incremental stage number TBD
+→ future incremental product stage number TBD
 
 DeepSeek model selector
 → G10 Provider Expansion
@@ -409,9 +413,9 @@ Opening Scenario 保持 Discussion Draft：玩家端入口与 Prologue Runtime �
 
 ---
 
-## 11. #18 v1.1｜资料库长期产品语义与开发门槛
+## 11. #18 v1.2｜协议与产品实现分轨
 
-长期产品语义仍冻结：
+正式冻结：
 
 ```text
 三类主资产
@@ -421,41 +425,47 @@ Opening Scenario 保持 Discussion Draft：玩家端入口与 Prologue Runtime �
 = 可复用 / 可绑定 / 可检索的资料资源层
 ```
 
-但当前实现状态：
+协议状态：
 
 ```text
-ARCHITECTURE APPROVED
-IMPLEMENTATION DEFERRED
+世界包 / 角色卡 / 拓展包 / 资料库
+→ G9-03 同批协议冻结
 ```
 
-### 三类主资产纵向闭环门槛
+产品实现状态：
 
-资料库正式开发前必须全部 PASS：
+```text
+三类主资产 Creator / 我的资产库 / 创建游戏 / 完整游玩
+→ 先完成
 
-1. 世界包 / 角色卡 / 拓展包相关 `tavern-asset` 语义与治理规则完成；
-2. 三类主资产首轮机器协议完成；
+资料库 Creator / 我的资产库 / 创建游戏绑定 / Runtime 检索
+→ DEFERRED
+```
+
+### 资料库产品功能开发门槛
+
+必须全部 PASS：
+
+1. 统一资产 / 资料资源协议完成；
+2. 资料库协议最小解析、校验、往返验证完成；
 3. 三类主资产适配 / 编译 / 当局游戏绑定完成；
-4. Creator 三类主资产基础创建、编辑、AI 辅助、校验、保存、导入导出可实际使用；
+4. Creator 三类主资产基础创作链完成；
 5. “我的资产库”可查看、导入、管理三类主资产；
-6. 可从“我的资产库”选择世界包、角色卡、拓展包创建新游戏；
+6. 可从“我的资产库”选择三类资产创建新游戏；
 7. 真实资产组合可以正常初始化并完整游玩；
-8. Save / Continue / Restore / Branch / Recovery 不因资产组合而回滚；
-9. 当前主资产链不存在 P0/P1 blocker。
+8. Save / Continue / Restore / Branch / Recovery 不回滚；
+9. 主资产产品链没有 P0/P1 blocker。
 
-只有上述门槛 PASS，资料库才允许进入正式实现。
+之后才开发：
 
-### 届时才开发
-
-- 世界包绑定 0..N 资料库；
-- 资料库版本 / 更新 / 迁移；
-- 资料检索与有界上下文；
-- Creator“资料与参考”；
 - “我的资产库”资料库管理；
-- 资料库导入导出；
+- 世界包资料绑定 / 推荐 / 可选流程；
+- Creator“资料与参考”；
+- 资料库创建、编辑、导入、AI 整理、提取；
+- 当局游戏资料库绑定生命周期；
+- Runtime 索引 / 检索与信息安全投影；
 - 汉末三国历史与时代资料库；
-- 穿越与系统历史辅助真实消费。
-
-正式阶段编号到时再定，不现在预造。
+- `穿越与系统` 历史辅助真实消费。
 
 ---
 
@@ -467,6 +477,6 @@ Implementation Base：`0ee847e1173ae8d17e643d5b838d238cf889031e`。
 
 当前 02C Core Spec 已冻结；由 Sol 在隔离 worktree 中实现，完成后执行 exact-SHA Independent Review；PASS 后再开放其余 Grok Build breadth。
 
-#18 v1.1 不改变当前 02C Task DAG，也不进入 G9-03/04/05 首轮范围。资料库要等三类主资产“我的资产库 → 创建游戏 → 完整游玩”纵向闭环 PASS 后再启动。
+#18 v1.2 不改变当前 02C Task DAG。G9-03 将统一冻结三类主资产与资料库协议；资料库产品功能继续后置。
 
 G9-03 当前 `NOT AUTHORIZED`。
