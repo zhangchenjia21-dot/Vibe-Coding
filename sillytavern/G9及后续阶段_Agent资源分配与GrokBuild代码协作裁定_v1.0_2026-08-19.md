@@ -283,8 +283,78 @@ Sol 不应被浪费成常规 reviewer；只有发现深层 architecture conflict
 
 ---
 
-## 10. 最终原则
+## 10. 与 Project Owner 的沟通语言规则
 
-> **Use scarce deep reasoning to freeze the rails; use scalable build agents to run the train.**
+Project Owner 不是开发者。GPT 与 Project Owner 的讨论、汇报、阶段说明、风险解释和产品建议必须遵守 **中文优先、技术英文最小化**。
 
-Grok Build 是正式代码执行 Agent，不只是 UI 助手；但它在本项目中的安全扩权条件是：**contract-first、bounded task、serialized writer、exact-SHA review**。
+### 10.1 面向 Project Owner 的默认表达
+
+- 先用中文解释“这是什么、为什么重要、会带来什么影响”；
+- 产品状态、阶段结论、风险、优先级、下一步默认使用中文；
+- 不使用大段中英混杂的技术黑话作为主要说明方式；
+- 同一概念已有自然中文表达时，优先使用中文；
+- 架构图、流程图、状态图若面向 Project Owner，也应优先使用中文节点名称。
+
+例如应优先写：
+
+```text
+运行时领域模块宿主
+→ 模块启用状态
+→ 按需上下文投影
+→ 有界上下文组合
+```
+
+而不是把整段说明写成连续英文架构术语。
+
+### 10.2 允许保留英文的情况
+
+以下情况可以保留英文，但必须让 Project Owner 不依赖英文也能理解：
+
+1. 真实代码字段名、接口名、类型名、类名；
+2. Git commit、文件路径、命令；
+3. 已冻结且需要精确引用的技术协议名；
+4. 中文翻译会造成技术歧义的行业术语。
+
+推荐格式：
+
+> “模块所有者字段，底层字段名为 `ownerNamespace`。”
+
+> “按需上下文投影，代码接口暂称 `ContextProjectionProvider`。”
+
+而不是只写英文名后要求 Project Owner 自行理解。
+
+### 10.3 正式 Agent 技术指令例外
+
+发给 Codex、Grok Build、Reviewer 的正式技术任务包可以使用更多英文代码标识、字段名、接口名和测试术语，因为执行对象是代码 Agent。
+
+但当 GPT 向 Project Owner **解释这份指令为什么这样设计、执行结果意味着什么、是否通过阶段 Gate** 时，仍必须回到中文优先表达。
+
+### 10.4 报告规则
+
+以后 GPT 给 Project Owner 的阶段报告默认采用：
+
+```text
+中文结论
+↓
+中文解释
+↓
+必要时补充精确英文代码字段 / 接口名
+```
+
+而不是：
+
+```text
+大量英文架构术语
+↓
+少量中文连接词
+```
+
+该规则属于长期 AI 协作治理，不只适用于 G9。
+
+---
+
+## 11. 最终原则
+
+> **把稀缺的深度推理能力用于铺设正确轨道，把可扩展的构建 Agent 用于沿轨道实现。**
+
+Grok Build 是正式代码执行 Agent，不只是 UI 助手；但它在本项目中的安全扩权条件是：**先冻结合同、任务边界清晰、写入串行、按精确提交审核**。
