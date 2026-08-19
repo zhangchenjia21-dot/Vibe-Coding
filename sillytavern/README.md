@@ -9,7 +9,7 @@ Grok Build / Codex 等代码 Agent 的具体施工任务包，不再存放在本
 ### Rolling current
 
 - `酒馆游戏项目开发核心总纲_CURRENT.md`：当前项目解释层。
-- `酒馆游戏新版主体重建总路线 v2.1.md`：当前总路线。
+- `酒馆游戏新版主体重建总路线 v2.2.md`：当前总路线。
 - `G9阶段启动与G9-02实施切片裁定_v1.0_2026-08-18.md`：当前 G9 阶段与实施顺序。
 
 ### 当前 G9 正式来源
@@ -76,7 +76,7 @@ GPT exact-SHA Review PASS
 - `15_酒馆游戏_RuntimeContextOrchestration与模块化复杂度控制裁定_v1.2_2026-08-18.md`
 - `16_酒馆游戏_RuntimeWorldMaterialization与当局游戏资产演化裁定_v1.1_2026-08-18.md`
 - `17_酒馆游戏_PlayerKnownEntityDirectory与长期资料表面信息架构裁定_v1.0_2026-08-18.md`
-- `18_酒馆游戏_资料库资源层与世界创作集成裁定_v1.1_2026-08-19.md`：**资料库长期架构已批准，但实现后置；只有三类主资产从协议、Creator、“我的资产库”、创建游戏到完整游玩全部闭环后才允许开工。**
+- `18_酒馆游戏_资料库资源层与世界创作集成裁定_v1.2_2026-08-19.md`：**资料库协议与三类主资产同批冻结；资料库 Creator / 我的资产库 / 创建游戏绑定 / Runtime 检索等产品功能后置。**
 
 ## 5. #18｜资料库资源层
 
@@ -93,28 +93,33 @@ GPT exact-SHA Review PASS
 != Player-known Truth
 ```
 
-当前开发状态：
+最新时序：
 
 ```text
-ARCHITECTURE APPROVED
-IMPLEMENTATION DEFERRED
+协议层
+= 世界包 + 角色卡 + 拓展包 + 资料库
+= G9-03 同批冻结
+
+产品功能层
+= 三类主资产先完成 Creator / 我的资产库 / 创建游戏 / 完整游玩
+= 资料库功能后置增量
 ```
 
-资料库不是 G9-02 / G9-03 / G9-04 / G9-05 首轮 blocker。
+G9-04 可以做资料库协议样本的最小解析、校验和往返验证，但不实现资料库产品 UI 或 Runtime 检索。
 
-正式开工前必须先完成：
+资料库产品功能正式开工前必须先完成：
 
-- 三类主资产 `tavern-asset` 语义 / 治理闭环；
-- 三类主资产首轮机器协议；
+- 统一资产 / 资料资源协议；
+- 资料库协议最小解析 / 校验 / 往返验证；
 - 三类主资产适配 / 编译 / 当局游戏绑定；
 - Creator 三类主资产基础创作链；
 - “我的资产库”对三类主资产的导入 / 管理 / 选择；
 - 从“我的资产库”选择资产创建新游戏；
 - 真实三类资产组合可以初始化并完整游玩；
 - Save / Continue / Restore / Branch / Recovery 保持成立；
-- 主资产链没有 P0/P1 blocker。
+- 主资产产品链没有 P0/P1 blocker。
 
-全部 PASS 后，才进入资料库增量阶段；阶段编号到时再定。
+全部 PASS 后，才进入资料库增量产品阶段；阶段编号到时再定。
 
 长期产品方向仍保持：创建游戏以世界包为入口，Creator 中资料入口靠近世界包，Runtime 只按当前职责检索最小充分资料切片，禁止整库 Prompt。
 
@@ -168,7 +173,7 @@ v1.0
 
 > **G9-02C Core｜由 Sol 在隔离 worktree 中实现 Model-first Routing / bounded routing working set / state-mandatory augmentation / authorized context anchors / outcome-gated continuation context boundary。完成后由 GPT exact-SHA Independent Review；PASS 后再开放 Grok Build breadth。**
 
-#18 v1.1 不改变当前 02C 执行 DAG，也不进入 G9-03/04/05 首轮范围。
+#18 v1.2 不改变当前 02C 执行 DAG。G9-03 将统一冻结三类主资产与资料库协议；资料库产品功能继续后置。
 
 ## 8. 文档版本规则
 
