@@ -76,14 +76,40 @@ GPT exact-SHA Review PASS
 - `15_酒馆游戏_RuntimeContextOrchestration与模块化复杂度控制裁定_v1.2_2026-08-18.md`
 - `16_酒馆游戏_RuntimeWorldMaterialization与当局游戏资产演化裁定_v1.1_2026-08-18.md`
 - `17_酒馆游戏_PlayerKnownEntityDirectory与长期资料表面信息架构裁定_v1.0_2026-08-18.md`
+- `18_酒馆游戏_资料库资源层与世界创作集成裁定_v1.0_2026-08-19.md`：**资料库作为资料资源层，不新增第四类主资产；正式约束 G9-03 / Creator / 创建游戏 / Runtime 按需资料检索。**
 
-## 5. Discussion-only
+## 5. #18｜资料库资源层
+
+当前新增正式资产架构语义：
+
+```text
+三类主资产
+= 世界包 + 角色卡 + 拓展包
+
+资料库
+= 可复用 / 可绑定 / 可检索的资料资源层
+!= 第四类主资产
+!= Runtime State
+!= Player-known Truth
+```
+
+产品入口：
+
+- 创建游戏仍先选择世界包；世界包详情中管理已绑定 / 推荐 / 高级自定义资料库；
+- Creator 主要入口为 `世界包 > 资料与参考`；
+- 作者可创建 / 导入 / 引用资料，规模扩大后可提取成独立资料库；
+- World Pack 语义上可以绑定 `0..N` 个资料库；
+- Runtime 只按当前职责检索最小充分资料切片，禁止整库 Prompt。
+
+G9-02C **不因 #18 扩项**；资料库最终机器协议进入 G9-03 Freeze Gate。
+
+## 6. Discussion-only
 
 - `G9_世界包OpeningScenario与Creator首轮创作验证_DRAFT_v0.4_2026-08-19.md`
 
 该文件不是实现 authority；Opening Scenario 玩家端 Runtime 当前仍延后。
 
-## 6. 当前阶段
+## 7. 当前阶段
 
 ```text
 G1–G8                     PASS / CLOSED
@@ -127,7 +153,9 @@ v1.0
 
 > **G9-02C Core｜由 Sol 在隔离 worktree 中实现 Model-first Routing / bounded routing working set / state-mandatory augmentation / authorized context anchors / outcome-gated continuation context boundary。完成后由 GPT exact-SHA Independent Review；PASS 后再开放 Grok Build breadth。**
 
-## 7. 文档版本规则
+#18 是 G9-03 上游约束，不改变当前 02C 执行 DAG。
+
+## 8. 文档版本规则
 
 ```text
 1.8 → 1.9 → 2.0 → 2.1
