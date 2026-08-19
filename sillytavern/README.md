@@ -9,7 +9,7 @@ Grok Build / Codex 等代码 Agent 的具体施工任务包，不再存放在本
 ### Rolling current
 
 - `酒馆游戏项目开发核心总纲_CURRENT.md`：当前项目解释层。
-- `酒馆游戏新版主体重建总路线 v2.0.md`：当前总路线。
+- `酒馆游戏新版主体重建总路线 v2.1.md`：当前总路线。
 - `G9阶段启动与G9-02实施切片裁定_v1.0_2026-08-18.md`：当前 G9 阶段与实施顺序。
 
 ### 当前 G9 正式来源
@@ -76,11 +76,11 @@ GPT exact-SHA Review PASS
 - `15_酒馆游戏_RuntimeContextOrchestration与模块化复杂度控制裁定_v1.2_2026-08-18.md`
 - `16_酒馆游戏_RuntimeWorldMaterialization与当局游戏资产演化裁定_v1.1_2026-08-18.md`
 - `17_酒馆游戏_PlayerKnownEntityDirectory与长期资料表面信息架构裁定_v1.0_2026-08-18.md`
-- `18_酒馆游戏_资料库资源层与世界创作集成裁定_v1.0_2026-08-19.md`：**资料库作为资料资源层，不新增第四类主资产；正式约束 G9-03 / Creator / 创建游戏 / Runtime 按需资料检索。**
+- `18_酒馆游戏_资料库资源层与世界创作集成裁定_v1.1_2026-08-19.md`：**资料库长期架构已批准，但实现后置；只有三类主资产从协议、Creator、“我的资产库”、创建游戏到完整游玩全部闭环后才允许开工。**
 
 ## 5. #18｜资料库资源层
 
-当前新增正式资产架构语义：
+长期资产架构语义：
 
 ```text
 三类主资产
@@ -93,15 +93,30 @@ GPT exact-SHA Review PASS
 != Player-known Truth
 ```
 
-产品入口：
+当前开发状态：
 
-- 创建游戏仍先选择世界包；世界包详情中管理已绑定 / 推荐 / 高级自定义资料库；
-- Creator 主要入口为 `世界包 > 资料与参考`；
-- 作者可创建 / 导入 / 引用资料，规模扩大后可提取成独立资料库；
-- World Pack 语义上可以绑定 `0..N` 个资料库；
-- Runtime 只按当前职责检索最小充分资料切片，禁止整库 Prompt。
+```text
+ARCHITECTURE APPROVED
+IMPLEMENTATION DEFERRED
+```
 
-G9-02C **不因 #18 扩项**；资料库最终机器协议进入 G9-03 Freeze Gate。
+资料库不是 G9-02 / G9-03 / G9-04 / G9-05 首轮 blocker。
+
+正式开工前必须先完成：
+
+- 三类主资产 `tavern-asset` 语义 / 治理闭环；
+- 三类主资产首轮机器协议；
+- 三类主资产适配 / 编译 / 当局游戏绑定；
+- Creator 三类主资产基础创作链；
+- “我的资产库”对三类主资产的导入 / 管理 / 选择；
+- 从“我的资产库”选择资产创建新游戏；
+- 真实三类资产组合可以初始化并完整游玩；
+- Save / Continue / Restore / Branch / Recovery 保持成立；
+- 主资产链没有 P0/P1 blocker。
+
+全部 PASS 后，才进入资料库增量阶段；阶段编号到时再定。
+
+长期产品方向仍保持：创建游戏以世界包为入口，Creator 中资料入口靠近世界包，Runtime 只按当前职责检索最小充分资料切片，禁止整库 Prompt。
 
 ## 6. Discussion-only
 
@@ -153,7 +168,7 @@ v1.0
 
 > **G9-02C Core｜由 Sol 在隔离 worktree 中实现 Model-first Routing / bounded routing working set / state-mandatory augmentation / authorized context anchors / outcome-gated continuation context boundary。完成后由 GPT exact-SHA Independent Review；PASS 后再开放 Grok Build breadth。**
 
-#18 是 G9-03 上游约束，不改变当前 02C 执行 DAG。
+#18 v1.1 不改变当前 02C 执行 DAG，也不进入 G9-03/04/05 首轮范围。
 
 ## 8. 文档版本规则
 
