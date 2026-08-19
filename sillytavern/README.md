@@ -6,7 +6,7 @@
 
 ### Rolling current
 
-- `酒馆游戏项目开发核心总纲_CURRENT.md`：当前项目解释层，优先读取。
+- `酒馆游戏项目开发核心总纲_CURRENT.md`：当前项目解释层；若其“当前下一项”与最新 G9-02B Review 冲突，以本 README 下方 current review 状态与最新 Review 文件为准。
 - `酒馆游戏新版主体重建总路线 v2.0.md`：当前总路线。
 - `G9阶段启动与G9-02实施切片裁定_v1.0_2026-08-18.md`：当前 G9 阶段与实施顺序。
 
@@ -16,8 +16,10 @@
 - `G9-02A_IndependentReview_SourceBinding与GameLocalRevision_v1.0_2026-08-19.md`
 - `G9-02BC_SharedRuntimeFoundationConvergence规格_v1.0_2026-08-19.md`
 - `G9-02BC_IndependentReview_共享运行时基础_v1.0_2026-08-19.md`
-- `G9-02B_RuntimeDomainBreadth与PlayerKnownDirectory规格_v1.0_2026-08-19.md`：当前实现规格。
-- `G9-02B_GrokBuild_Worktree执行任务包_v1.0_2026-08-19.md`：当前 Grok Build 执行包。
+- `G9-02B_RuntimeDomainBreadth与PlayerKnownDirectory规格_v1.0_2026-08-19.md`
+- `G9-02B_GrokBuild_Worktree执行任务包_v1.0_2026-08-19.md`
+- `G9-02B_IndependentReview_玩家已知人物目录阻塞发现_v1.0_2026-08-19.md`：**当前 Review Authority；FAIL / CORRECTION REQUIRED。**
+- `G9-02B_GrokBuild_Correction01_Worktree任务包_v1.0_2026-08-19.md`：**当前执行包。**
 
 ### 当前 AI / Agent 协作治理
 
@@ -40,7 +42,7 @@ GPT exact-SHA Review PASS
 → 删除 worktree + 临时分支
 ```
 
-原则上任何时刻只保留 `main + 当前任务临时分支`；默认不使用长期 Grok 分支，不使用多层 feature branch，也不要求 PR。
+原则上任何时刻只保留 `main + 当前任务临时分支`；Review FAIL 后继续原任务分支，不新建 fix branch。
 
 ### 仍有效的编号核心
 
@@ -52,8 +54,6 @@ GPT exact-SHA Review PASS
 - `16_酒馆游戏_RuntimeWorldMaterialization与当局游戏资产演化裁定_v1.1_2026-08-18.md`
 - `17_酒馆游戏_PlayerKnownEntityDirectory与长期资料表面信息架构裁定_v1.0_2026-08-18.md`
 
-编号核心不会因为日期较早自动归档；同一核心出现 superseding current 时，旧版进入 `99_归档/sillytavern/版本历史/`。
-
 ### Discussion-only
 
 - `G9_世界包OpeningScenario与Creator首轮创作验证_DRAFT_v0.4_2026-08-19.md`
@@ -63,27 +63,35 @@ GPT exact-SHA Review PASS
 ## 当前阶段
 
 ```text
-G1–G8                  PASS / CLOSED
-G9-01                   PASS / CLOSED
-G9-02A                  PASS / CLOSED
-G9-02BC Shared Foundation PASS / CLOSED
-G9-02B breadth          ACTIVE / NEXT
-G9-02C                  BLOCKED BY G9-02B
-G9-03                   NOT AUTHORIZED
+G1–G8                     PASS / CLOSED
+G9-01                      PASS / CLOSED
+G9-02A                     PASS / CLOSED
+G9-02BC Shared Foundation  PASS / CLOSED
+G9-02B implementation      REVIEW FAIL / CORRECTION REQUIRED
+P0                         0
+P1                         4
+G9-02C                     BLOCKED BY G9-02B
+G9-03                      NOT AUTHORIZED
 ```
 
-当前代码基线：
+当前实现 Git 状态：
 
 ```text
 sillytavern/main
-5962e6f5933f245693e090cbdfd2f79791820ef1
+08f9dcf0a2f9e30b29d6d8391fa91701e57b6e23
+
+agent/g9-02b reviewed SHA
+6368bd12a7ca84463fec112d21c8fb6a97ef75a5
+
+Main integration
+NOT AUTHORIZED
 ```
 
 当前下一项：
 
-> **G9-02B｜Player-known Character Directory，由 Grok Build 在隔离 worktree / 临时任务分支中实现。**
+> **G9-02B Correction-01｜继续由 Grok Build 在现有 `agent/g9-02b` worktree 修复 4 个 P1；不得另开分支，不得修改 main。**
 
-最后约一次 Sol 深任务优先保留给 G9-02C 的模型路由与上下文编排核心。
+最后约一次 Sol 深任务继续保留给 G9-02C 的模型路由与上下文编排核心。
 
 ## 文档版本规则
 
