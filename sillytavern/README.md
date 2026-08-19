@@ -1,14 +1,12 @@
 # SillyTavern 项目治理入口
 
-本目录是 **SillyTavern 的核心治理与项目事实源**。只保存仍有效的正式架构裁定、阶段规格、独立审核、路线与长期协作治理。
-
-代码 Agent 的具体施工任务包不存放在本目录。
+本目录是 **SillyTavern 核心治理与项目事实源**。这里只保存当前有效的正式架构裁定、阶段规格、Independent Review、路线与长期治理；代码 Agent 的具体施工任务包放在实现仓库。
 
 ## 1. Rolling current
 
 - `酒馆游戏项目开发核心总纲_CURRENT.md`：当前项目解释层。
 - `酒馆游戏新版主体重建总路线 v2.3.md`：当前总路线。
-- `G9阶段启动与G9-02实施切片裁定_v1.0_2026-08-18.md`：G9 基础实施顺序。
+- `G9阶段启动与G9-02实施切片裁定_v1.0_2026-08-18.md`：G9 基础阶段顺序。
 
 当前阶段：
 
@@ -18,9 +16,9 @@ G9-01                      PASS / CLOSED
 G9-02A                     PASS / CLOSED
 G9-02BC Shared Foundation  PASS / CLOSED
 G9-02B                     PASS / CLOSED
-G9-02C Core Design         FROZEN / IMPLEMENTATION NEXT
-G9-02C Breadth             BLOCKED BY CORE REVIEW
-G9-02 Integrated Closure   BLOCKED BY G9-02C
+G9-02C Core                PASS / CLOSED
+G9-02C Breadth             ACTIVE / NEXT
+G9-02 Integrated Closure   BLOCKED BY BREADTH
 G9-03                      NOT AUTHORIZED
 ```
 
@@ -28,14 +26,12 @@ G9-03                      NOT AUTHORIZED
 
 ```text
 zhangchenjia21-dot/sillytavern main
-0ee847e1173ae8d17e643d5b838d238cf889031e
+182740801b48c2edc2399e4e4dd8b6ae5a43ccaa
 ```
 
 当前下一项：
 
-> **G9-02C Core｜Model-first Routing / bounded routing working set / state-mandatory augmentation / authorized context anchors / outcome-gated continuation context boundary。**
-
-#18 / #18A / #19 均不回开 G9-02C。
+> **G9-02C Breadth｜Grok Build：扩大 Routing / Context / Continuation / Recovery / Scale / real-provider evidence，并保持 Core frozen rails。**
 
 ---
 
@@ -49,6 +45,7 @@ zhangchenjia21-dot/sillytavern main
 - `G9-02B_IndependentReview_PlayerKnownDirectory最终收口_v1.0_2026-08-19.md`
 - `G9-02C_ModelFirstRouting与ContextOrchestration核心规格_v1.0_2026-08-19.md`
 - `G9-02C_Agent资源分配增量裁定_v1.0_2026-08-19.md`
+- `G9-02C_IndependentReview_Core最终收口_v1.0_2026-08-19.md`：**Core PASS Authority；Final code `182740801b48c2edc2399e4e4dd8b6ae5a43ccaa`。**
 
 仍有效的编号核心：
 
@@ -65,37 +62,70 @@ zhangchenjia21-dot/sillytavern main
 
 ---
 
-## 3. #18 / #18A｜资料库资源层
+## 3. G9-02C Core 当前冻结结果
 
-长期资产架构：
+```text
+Enabled Package / Feature / Module
+↓
+bounded Program-owned Routing Catalog
+↓
+Model-first Package → Feature → Module refinement
+↓
+Program structural validation
++ state_mandatory
++ authoritative_continuation
+↓
+provenance-bearing Selection
+↓
+Authorized Turn Anchors
+↓
+selected-only JIT Projection
+↓
+owner-preserving bounded Context
+↓
+authorized typed Domain Candidate
+↓
+existing Formal Turn authority
+```
+
+已冻结：
+
+- 每 Working Set count + serialized-size 双上限；
+- fan-out pagination；
+- explicit `capacity_exhausted`，不得伪装 normal miss；
+- Program-owned bounded Package / Feature semantic descriptor；
+- Router = Context Selection，不是 Player Authorization；
+- `model_immediate / state_mandatory / authoritative_continuation` provenance；
+- 1,000 People unrelated dossier no-load；
+- targeted last-known dossier；
+- player-safe bounded relation subgraph；
+- outcome-gated continuation；
+- deterministic background zero model call；
+- semantic-ready Recovery no duplicate authoring。
+
+整个 G9-02C 尚未 CLOSED。Breadth + Integrated Closure + real Model-first routing evidence 完成前，G9-03 仍禁止启动。
+
+---
+
+## 4. #18 / #18A｜资料库资源层
 
 ```text
 三类主资产
 = 世界包 + 角色卡 + 拓展包
 
 资料库
-= 独立可复用 / 可绑定 / 可检索的资料资源层
+= 可复用 / 可绑定 / 可检索的资料资源层
 != 第四类主资产
-!= 第二世界包
 != Runtime Truth
 ```
 
-时序：
+时序保持：
 
 ```text
-G9-03
-→ 世界包 + 角色卡 + 拓展包 + 资料库协议同批冻结
-
-G9-04
-→ 三类主资产完整实现
-+ 资料库协议最小 parse / validate / round-trip proof
-
-G9-05
-→ 先完成三类主资产 Creator
-
-主资产端到端完整游玩 PASS
-↓
-资料库产品功能增量
+G9-03  协议同批冻结
+G9-04  三类主资产完整实现 + 资料库最小协议验证
+G9-05  三类主资产 Creator 首轮闭环
+之后   资料库产品功能增量
 ```
 
 关键护栏：
@@ -115,13 +145,11 @@ Creator Reference
 != Character-known Knowledge
 ```
 
-G9-03 不提前冻结 embedding、chunk size、向量维度、排名算法、任意查询 DSL 或具体 RAG Provider API。
-
 ---
 
-## 4. #19｜Creator Conversational Authoring
+## 5. #19｜Creator Conversational Authoring
 
-新版 Creator 已正式从“传统表单 + AI 按钮”升级为：
+新版 Creator 正式定义：
 
 ```text
 Structured Creator Workspace
@@ -129,19 +157,7 @@ Structured Creator Workspace
 Conversational AI Authoring
 ```
 
-### 首版核心
-
-```text
-主工作区 / 设定区
-= 可见、可手工编辑的 Creator Draft
-
-AI 创作对话区
-= 需求理解 / 最少必要追问 / 解释 / 受控编辑入口
-```
-
-AI 必须通过 Program-owned Typed Creator Tools 修改 Draft，不直接操作 DOM。
-
-正式 Authority：
+AI 通过 Program-owned Typed Creator Tools 修改 Draft，不直接操作 DOM。
 
 ```text
 AI Chat
@@ -154,76 +170,30 @@ AI can edit Draft
 != AI can Save / Publish Source Asset
 ```
 
-G9-05 首版必须具备：
+无 Provider 时完整手工 Creator 仍必须可用。
 
-- 世界包 / 角色卡 / 拓展包结构化主工作区；
-- 持续 AI 创作对话区；
-- bounded current asset / section / focus context；
-- 自然语言创作请求 + 最少必要追问；
-- Typed Creator Tool / Patch Contract；
-- AI 受控修改 Draft；
-- 主工作区即时同步；
-- 任务级变更摘要 / Undo；
-- deterministic Validator；
-- AI Review / Validator explanation；
-- 用户显式 Save / Publish；
-- 无 Provider 时完整手工 Creator；
-- 导入 / 导出 / 返回“我的资产库”。
-
-G9-03 只需要让资产字段 / refs 具有稳定可编辑身份；不得把 chat history、prompt、model provider、Creator tool transport 写进 Source Asset schema。
-
-G9-04 parser / compiler 必须完全 AI-independent。
+跨多个资产的大规模自主操作、长时间自主 Agent、自动联网研究仍为 `DEFERRED OPTIONAL`，不是当前 Roadmap 承诺。
 
 ---
 
-## 5. Creator 高级 AI｜Deferred optional
-
-`Creator_AI后续可选增量备忘录_v1.0_2026-08-19.md` 只记录未来可能性：
-
-```text
-跨多个资产的大规模自主操作
-长时间自主 Agent
-自动联网研究
-```
-
-状态：
-
-```text
-DEFERRED OPTIONAL
-NOT CURRENT PRODUCT TARGET
-NOT ROADMAP COMMITMENT
-```
-
-只有真实 Creator UAT 后出现明确需求，才重新进入 Product Definition / Architecture Gate。
-
-当前不得因此提前建设 autonomous-agent runtime、跨资产万能事务、长任务调度器、联网抓取平台、向量数据库或相关 external schema。
-
----
-
-## 6. 代码 Agent 执行治理
+## 6. 执行治理
 
 ```text
 Vibe-Coding/main/sillytavern
 = 核心项目事实源
 
 zhangchenjia21-dot/sillytavern
-= 实现事实源与施工材料
+= 实现事实源与 Grok Build 施工材料
 ```
 
-默认工作模式：
+默认：
 
 ```text
-main
-= protected integration line
-
-agent/<task-id>
-+
-D:\AI\Projects\.worktrees\sillytavern-agent
-= isolated construction line
-
+main = protected integration line
+agent/<task-id> + isolated worktree = construction line
 GPT exact-SHA Review PASS
 → fast-forward main
-→ cleanup branch + worktree
+→ cleanup old task worktree / branch
 ```
 
 长期治理：
@@ -240,14 +210,18 @@ GPT exact-SHA Review PASS
 - `G9_世界包OpeningScenario与Creator首轮创作验证_DRAFT_v0.4_2026-08-19.md`
 - `Creator_AI后续可选增量备忘录_v1.0_2026-08-19.md`
 
-Opening Scenario 玩家端 Runtime 当前仍延后。
-
 ---
 
-## 8. 文档版本规则
+## 8. Current Gate
 
 ```text
-1.8 → 1.9 → 2.0 → 2.1
+G9-02C Core PASS
+↓
+G9-02C Breadth ACTIVE / NEXT
+↓
+G9-02 Integrated Closure
+↓
+G9-03
 ```
 
-不生成 `1.10 / 1.11 / 1.12`；高频滚动解释层优先固定 `*_CURRENT.md`。
+G9-03 当前仍 `NOT AUTHORIZED`。
