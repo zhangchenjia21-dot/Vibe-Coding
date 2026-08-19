@@ -23,6 +23,7 @@ Grok Build / Codex 等代码 Agent 的具体施工任务包，不再存放在本
 - `G9-02B_Correction01_IndependentReview_剩余阻塞_v1.0_2026-08-19.md`：历史第二轮阻塞审核。
 - `G9-02B_IndependentReview_PlayerKnownDirectory最终收口_v1.0_2026-08-19.md`：02B 最终 Review Authority；`PASS / CLOSED`。
 - `G9-02C_ModelFirstRouting与ContextOrchestration核心规格_v1.0_2026-08-19.md`：**当前 02C Core Authority；CORE DESIGN FROZEN / IMPLEMENTATION NEXT。**
+- `G9-02C_Agent资源分配增量裁定_v1.0_2026-08-19.md`：**当前 02C Core / Breadth 执行者分工。**
 
 ### 当前 AI / Agent 长期治理
 
