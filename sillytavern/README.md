@@ -1,32 +1,62 @@
 # SillyTavern 项目治理入口
 
-本目录 active 层只保存**当前仍有效的项目事实源**。历史版本与已关闭过程材料统一进入 `../99_归档/sillytavern/`。
+本目录是 **SillyTavern 的核心治理与项目事实源**。只保存仍有效的正式架构裁定、阶段规格、独立审核、路线与长期协作治理。
 
-## 当前入口
+Grok Build / Codex 等代码 Agent 的具体施工任务包，不再存放在本目录。
+
+## 1. 当前核心入口
 
 ### Rolling current
 
-- `酒馆游戏项目开发核心总纲_CURRENT.md`：当前项目解释层；若其“当前下一项”与最新 G9-02B Review 冲突，以本 README 下方 current review 状态与最新 Review 文件为准。
+- `酒馆游戏项目开发核心总纲_CURRENT.md`：当前项目解释层。
 - `酒馆游戏新版主体重建总路线 v2.0.md`：当前总路线。
 - `G9阶段启动与G9-02实施切片裁定_v1.0_2026-08-18.md`：当前 G9 阶段与实施顺序。
 
-### 当前 G9 实施来源
+### 当前 G9 正式来源
 
 - `G9-02A_SourceBinding与GameLocalRevisionFoundation规格_v1.0_2026-08-18.md`
 - `G9-02A_IndependentReview_SourceBinding与GameLocalRevision_v1.0_2026-08-19.md`
 - `G9-02BC_SharedRuntimeFoundationConvergence规格_v1.0_2026-08-19.md`
 - `G9-02BC_IndependentReview_共享运行时基础_v1.0_2026-08-19.md`
 - `G9-02B_RuntimeDomainBreadth与PlayerKnownDirectory规格_v1.0_2026-08-19.md`
-- `G9-02B_GrokBuild_Worktree执行任务包_v1.0_2026-08-19.md`
-- `G9-02B_IndependentReview_玩家已知人物目录阻塞发现_v1.0_2026-08-19.md`：**当前 Review Authority；FAIL / CORRECTION REQUIRED。**
-- `G9-02B_GrokBuild_Correction01_Worktree任务包_v1.0_2026-08-19.md`：**当前执行包。**
+- `G9-02B_IndependentReview_玩家已知人物目录阻塞发现_v1.0_2026-08-19.md`：当前 Review Authority；`FAIL / CORRECTION REQUIRED`。
 
-### 当前 AI / Agent 协作治理
+### 当前 AI / Agent 长期治理
 
-- `G9及后续阶段_Agent资源分配与GrokBuild代码协作裁定_v1.0_2026-08-19.md`：Sol / Grok Build 风险分工、中文沟通规则。
-- `代码Agent_Worktree隔离与Main合并治理_v1.0_2026-08-19.md`：代码 Agent 的隔离施工、精确提交审核、main 快进集成与临时分支清理规则。
+- `G9及后续阶段_Agent资源分配与GrokBuild代码协作裁定_v1.0_2026-08-19.md`
+- `代码Agent_Worktree隔离与Main合并治理_v1.0_2026-08-19.md`
 
-默认代码 Agent 工作模式：
+## 2. Grok Build 执行材料位置
+
+正式分工：
+
+```text
+Vibe-Coding/main/sillytavern
+= 核心项目事实源
+= 架构裁定 / 阶段规格 / Independent Review / 长期治理
+
+zhangchenjia21-dot/sillytavern/grok build
+= Grok Build 施工材料
+= Execution Packet / Correction Packet / 临时实现交接
+```
+
+当前 G9-02B 仍在任务分支施工，因此执行材料当前位于：
+
+```text
+zhangchenjia21-dot/sillytavern
+branch: agent/g9-02b
+folder: grok build/
+```
+
+当前主要执行文件：
+
+`grok build/G9-02B_GrokBuild_Correction01_Worktree任务包_v1.0_2026-08-19.md`
+
+初始执行任务包也已迁入同目录，作为本任务施工追溯材料。
+
+**Vibe-Coding 不再保存 Grok Build 执行任务包副本。**
+
+## 3. 默认代码 Agent 工作模式
 
 ```text
 main
@@ -44,7 +74,7 @@ GPT exact-SHA Review PASS
 
 原则上任何时刻只保留 `main + 当前任务临时分支`；Review FAIL 后继续原任务分支，不新建 fix branch。
 
-### 仍有效的编号核心
+## 4. 仍有效的编号核心
 
 - `11_酒馆游戏_G5长期连续性与玩家授权收口裁定_v1.0_2026-08-15.md`
 - `12_酒馆游戏_G6_SaveContinueRestore收口裁定_v1.0_2026-08-15.md`
@@ -54,13 +84,15 @@ GPT exact-SHA Review PASS
 - `16_酒馆游戏_RuntimeWorldMaterialization与当局游戏资产演化裁定_v1.1_2026-08-18.md`
 - `17_酒馆游戏_PlayerKnownEntityDirectory与长期资料表面信息架构裁定_v1.0_2026-08-18.md`
 
-### Discussion-only
+编号核心不会因为日期较早自动失效；只有出现明确 superseding current 才归档旧版。
+
+## 5. Discussion-only
 
 - `G9_世界包OpeningScenario与Creator首轮创作验证_DRAFT_v0.4_2026-08-19.md`
 
 该文件不是实现 authority；Opening Scenario 玩家端 Runtime 当前仍延后。
 
-## 当前阶段
+## 6. 当前阶段
 
 ```text
 G1–G8                     PASS / CLOSED
@@ -80,8 +112,11 @@ G9-03                      NOT AUTHORIZED
 sillytavern/main
 08f9dcf0a2f9e30b29d6d8391fa91701e57b6e23
 
-agent/g9-02b reviewed SHA
+G9-02B reviewed implementation SHA
 6368bd12a7ca84463fec112d21c8fb6a97ef75a5
+
+agent/g9-02b
+继续用于 Correction-01
 
 Main integration
 NOT AUTHORIZED
@@ -89,11 +124,11 @@ NOT AUTHORIZED
 
 当前下一项：
 
-> **G9-02B Correction-01｜继续由 Grok Build 在现有 `agent/g9-02b` worktree 修复 4 个 P1；不得另开分支，不得修改 main。**
+> **G9-02B Correction-01：Grok Build 在现有 `agent/g9-02b` worktree 修复 Independent Review 的 4 个 P1；不得另开分支，不得修改 main。**
 
 最后约一次 Sol 深任务继续保留给 G9-02C 的模型路由与上下文编排核心。
 
-## 文档版本规则
+## 7. 文档版本规则
 
 ```text
 1.8 → 1.9 → 2.0 → 2.1
