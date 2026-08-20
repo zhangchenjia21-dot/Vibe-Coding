@@ -1,11 +1,14 @@
 ---
 title: G9-03A Runtime Module Binding 与 Typed Config 增量裁定
-status: current-decision-addendum
+status: current-decision-addendum-satisfied
 version: 1.0
 date: 2026-08-20
 stage: G9-03
 supplements:
   - G9-03_UnifiedAssetReferenceProtocol规格_v1.0_2026-08-20.md
+satisfied_by:
+  - sillytavern@5da2294a9d21585665167e69307d9c693427582d
+  - G9-03_IndependentReview_最终收口_v1.0_2026-08-20.md
 ---
 
 # G9-03A｜Runtime Module Binding 与 Typed Config 增量裁定 v1.0
@@ -15,6 +18,8 @@ supplements:
 G9-03 implementation exact-SHA Independent Review 在 `3f86c6fe0a45ef3c8412dc9a38455ef32098f298` 发现：Source Expansion 的 `moduleRef`、`runtimeModuleRef` 与 G9-02 `RuntimeDomainModuleBinding.moduleRef` 的语义没有被 v1.0 规格写得足够精确，导致实现虽然 DTO 形状通过测试，却无法直接通过真实 `RuntimeDomainModuleHost.validateBindings()`。
 
 本增量不回开 G9-02；它只补齐 G9-03 Source → Runtime Binding 的 identity translation，并强化 frozen typed-config / conditional-dependency gate。
+
+本增量要求已由 correction implementation `5da2294a9d21585665167e69307d9c693427582d` 满足，并通过最终 Independent Review；以下语义继续作为 G9-04+ current authority。
 
 ---
 
@@ -100,7 +105,7 @@ Validator / resolver 必须 fail closed，而不是生成重复 Runtime binding�
 
 G9-03 不允许只证明“对象长得像 RuntimeDomainModuleBinding”。
 
-Independent Review correction 必须新增真实 G9-02 Host 纵向证明：
+正式 vertical proof：
 
 ```text
 validated TavernAssetV1 expansion
@@ -114,7 +119,7 @@ RuntimeDomainModuleHost.validateBindings()
 PASS
 ```
 
-至少证明：
+必须保持：
 
 1. `binding.moduleRef` 命中真实 Program module identity；
 2. Feature 必须在 descriptor.supportedFeatureRefs 中；
@@ -128,15 +133,14 @@ PASS
 
 ## 3. Typed Config Gate 强化
 
-G9-03 v1.0 已冻结：
+正式规则：
 
 ```text
 schemaRef known
-+ Program-owned validator PASS
++ exact Program-owned validator exists
++ validator(value) === true
 → config allowed
 ```
-
-正式补充：
 
 ```text
 schemaRef merely listed as known
@@ -168,7 +172,7 @@ Validator 必须证明：
 5. typo / unknown source scope 必须 fail closed，不能被解释为“当前未启用”；
 6. scope 合法后，才根据 resolved enablement 判断 conditional dependency 是否需要 target。
 
-推荐错误沿用现有：
+推荐错误沿用：
 
 ```text
 INVALID_FEATURE_REF
@@ -197,9 +201,9 @@ config
 
 ---
 
-## 6. Correction Acceptance
+## 6. Correction Acceptance｜SATISFIED
 
-G9-03 correction 至少新增自动测试：
+Final implementation `5da2294a...` 已自动证明：
 
 - Source moduleRef != runtimeModuleRef 时，resolved binding 使用 runtimeModuleRef；
 - resolved binding 能通过真实 `RuntimeDomainModuleHost.validateBindings()`；
@@ -215,25 +219,26 @@ G9-03 correction 至少新增自动测试：
 
 ---
 
-## 7. Decision Propagation
+## 7. Decision Propagation｜CURRENT
 
 ```text
 G9-03 semantic protocol v1.0
-= remains valid
+= PASS / FROZEN
 +
 G9-03A identity/config/scope clarification
-= current mandatory addendum
-
+= SATISFIED / remains mandatory authority
++
 G9-03 implementation
-= CORRECTION REQUIRED
-
-G9-03 CLOSED
-= NOT YET
-
-G9-04
-= NOT AUTHORIZED
+= PASS
++
+G9-03 final Independent Review
+= PASS
+↓
+G9-03 PASS / CLOSED
+↓
+G9-04 AUTHORIZED / NEXT
 ```
 
-本增量不授权新的 Runtime factory platform、plugin execution、Creator、Markdown adapter 或 Library retrieval。
+本增量不授权新的 Runtime factory platform、plugin execution、Creator autonomous agent 或 Library Runtime retrieval。
 
 > **External Source module identity 与 Program Runtime module identity 必须显式分层；协议可以配置 Program capability，但不能借一个同名字段偷渡成 Runtime authority。**
