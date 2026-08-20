@@ -19,22 +19,24 @@ G9-02C Core                   PASS / CLOSED
 G9-02C Breadth                PASS / CLOSED
 G9-02 Integrated Closure      PASS / CLOSED
 G9-02                         PASS / CLOSED
-G9-03 Semantics               FROZEN / PASS
-G9-03 Implementation          ACTIVE / NEXT
+G9-03 Semantics               PASS / FROZEN
+G9-03 Implementation          PASS / CLOSED
+G9-03                         PASS / CLOSED
+G9-04                         AUTHORIZED / NEXT
 ```
 
 当前实现主线：
 
 ```text
 zhangchenjia21-dot/sillytavern main
-ab09c7ce6960a99b062d22fd49c143f9ae876f4e
+5da2294a9d21585665167e69307d9c693427582d
 ```
 
 当前核心路线：`酒馆游戏新版主体重建总路线 v2.3.md`。
 
 当前 Next：
 
-> **G9-03 Unified Asset / Reference Protocol Implementation。** v1 machine semantics 已由 `G9-03_UnifiedAssetReferenceProtocol规格_v1.0_2026-08-20.md` 正式冻结；下一步由 Grok Build 在不重开 G9-02 Runtime authority 的前提下实现 TypeScript contract、validator、canonical serializer/integrity、四类 payload、dependency、Bundle / Game Asset Manifest 与现有 Runtime/UI rails 的 mapping proof。
+> **G9-04 Adapter / Compiler / Binding。** 使用已经冻结并实现的 `TavernAssetV1 / TavernBundleManifestV1 / TavernGameAssetManifestV1`，对现有 World / Character / Expansion canonical Markdown 做 AI-independent adapter / compiler，并把 exact snapshot manifest 接到现有 G9-02 Source Binding / Game-local rails；资料库在本阶段仅做最小 parse / validate / round-trip / cross-reference proof，不实现 Runtime retrieval 或产品 UI。
 
 ---
 
@@ -56,6 +58,8 @@ ab09c7ce6960a99b062d22fd49c143f9ae876f4e
 - `G9-02C_Breadth_IndependentReview_最终收口_v1.0_2026-08-19.md`
 - `G9-02_IntegratedClosure_IndependentReview_最终收口_v1.0_2026-08-20.md`
 - `G9-03_UnifiedAssetReferenceProtocol规格_v1.0_2026-08-20.md`
+- `G9-03A_RuntimeModuleBinding与TypedConfig增量裁定_v1.0_2026-08-20.md`
+- `G9-03_IndependentReview_最终收口_v1.0_2026-08-20.md`
 
 ### Asset / Library / Creator
 
@@ -68,7 +72,7 @@ ab09c7ce6960a99b062d22fd49c143f9ae876f4e
 
 ```text
 zhangchenjia21-dot/sillytavern-assets main
-bed1b4c93d84df2b83723ddeb3ff479203bb6f52
+d2dc31c1b80e514285021a6ed1e37f0c9e733f3a
 ```
 
 G9-03 已吸收 `tavern-asset v1.0`、EP-KINSHIP-CORE / EP-POLITICS-CORE 与 Large Relation Graph / deterministic subgraph projection 结论。
@@ -87,7 +91,7 @@ Discussion / deferred optional：
 
 ---
 
-## 2. 不可回滚 Runtime Authority
+## 2. 不可回滚 Runtime / Asset Authority
 
 ```text
 Source Asset
@@ -118,168 +122,158 @@ Bounded
 
 继续保持 Program Final Outcome、Player Agency / Open Attempt、No Phantom、private/public disclosure、Save / Restore / Branch、Crash / Resume / Recovery / exactly-once、need-gated Materialization 与 Source 不被 Runtime 反写。
 
-G9-03 不得建立第二套 Game-local identity、Runtime state、Router、mutation 或 persistence authority。
+G9-03 / G9-04 不得建立第二套 Game-local identity、Runtime state、Router、mutation 或 persistence authority。
 
 ---
 
-## 3. G9-02A｜PASS / CLOSED
+## 3. G9-02｜PASS / CLOSED
 
-Final code：`04603e1e4a3270e9f5740b5957cf545a2bd001d0`。
-
-已证明：
+Final integrated code before G9-03：
 
 ```text
-Source Asset
-→ per-game binding + lineage
-→ Game-local typed definition mutation
-→ definition revision
-→ Product canonical projection
-→ Save / Restore / Branch / Recovery
+ab09c7ce6960a99b062d22fd49c143f9ae876f4e
 ```
 
-G9-03 必须复用这套 stable identity / version / lineage / revision，不建立第二套 local identity authority。
-
----
-
-## 4. G9-02BC｜PASS / CLOSED
-
-Final code：`5962e6f5933f245693e090cbdfd2f79791820ef1`。
-
-已建立：
+组成：
 
 ```text
-Program-built Domain Module Host
-→ Package / Feature / Module activation
-→ owner-scoped Canonical Record / Runtime State
-→ typed Candidate / Change / Event / Handoff
-→ selected-only JIT Projection
-→ bounded owner-preserving Context
+G9-02A Source Binding / Game-local Revision       PASS / CLOSED
+G9-02BC Shared Runtime Foundation                 PASS / CLOSED
+G9-02B Player-known / Domain Breadth              PASS / CLOSED
+G9-02C Core                                        PASS / CLOSED
+G9-02C Breadth                                     PASS / CLOSED
+G9-02 Integrated Closure                           PASS / CLOSED
 ```
 
-Disabled fail-closed、hard dependency 不递归扩大 Context、Save / Restore / Branch / Recovery 与 migration rollback 已验证。
-
----
-
-## 5. G9-02B｜PASS / CLOSED
-
-Final code：`0ee847e1173ae8d17e643d5b838d238cf889031e`。
-
-正式冻结：
+长期 rails：
 
 ```text
-Canonical Character Truth
-!= Player-known Character Directory
-!= Current Scene Visible Character Set
-```
-
-People Surface 使用长期 player-known / last-known safe projection；未认识人物不泄露，角色离场不删除 membership，off-scene 不读取实时关系或实时角色状态。
-
----
-
-## 6. G9-02C Core｜PASS / CLOSED
-
-Core final code：`182740801b48c2edc2399e4e4dd8b6ae5a43ccaa`。
-
-正式轨道：
-
-```text
-Enabled Package / Feature / Module
-↓
-Program-owned bounded Routing Catalog
-↓
-Model-first Package → Feature → Module refinement
-↓
-Program structural validation
-+ state_mandatory
-+ authoritative_continuation
-↓
-provenance-bearing selection
-↓
-Authorized Turn Anchors
-↓
-selected-only JIT Projection
-↓
-owner-preserving bounded Context
-↓
-authorized typed Domain Candidate
-↓
-existing Formal Turn authority
-```
-
-核心 authority：Router = Context Selection，不是 Player Authorization；Program 不用关键词复制 NLP；routing capacity 不把合法 Core Attempt 判非法；Recovery 不重复 model authoring。
-
----
-
-## 7. G9-02C Breadth｜PASS / CLOSED
-
-Reviewed code：`8a481ef16737e2c36310668b61b40e29b82ee1f7`。
-
-Breadth final evidence：`81bdbb7b321e796d8d623989a8eb1e10a0c11bee`。
-
-已证明：
-
-```text
-1,000 enabled leaves
-→ bounded Package → Feature → Module routing
-
-1,000 Player-known entries
-→ unrelated dossier load = 0
-
-10,000 relationship edges
-→ deterministic player-safe bounded subgraph
-
-4-owner join
-→ selected-only / owner-preserving / < 4,000 chars
-
-100 deterministic background turns
-→ Router = 0 / Candidate model = 0
-
-100-turn long session
-→ context size stable
+Source Asset Descriptor
+→ per-game binding / lineage
+→ Game-local Canonical Instance / definitionRevision
+→ Domain Module Host / owner-scoped records + state
+→ Model-first bounded routing / selected-only projection
+→ Formal Turn / Program Outcome authority
 → Save / Restore / Branch / Recovery exactly-once
 ```
 
-Real Provider Gate：
-
-```text
-model                      deepseek-v4-pro
-enabledLeaves              1000
-providerCalls              3
-maxProfilesPerRequest      10 / limit 16
-maxSerializedChars/request 4601 / limit 8000
-selectedModule             builtin:smoke.inventory-state.v1
-verdict                    PASS
-```
+G9-03 及以后全部复用这套 rails。
 
 ---
 
-## 8. G9-02 Integrated Closure｜PASS / CLOSED
+## 4. G9-03｜PASS / CLOSED
 
-Independent Review：`G9-02_IntegratedClosure_IndependentReview_最终收口_v1.0_2026-08-20.md`。
+正式规格：
+
+- `G9-03_UnifiedAssetReferenceProtocol规格_v1.0_2026-08-20.md`
+- `G9-03A_RuntimeModuleBinding与TypedConfig增量裁定_v1.0_2026-08-20.md`
+- `G9-03_IndependentReview_最终收口_v1.0_2026-08-20.md`
+
+Final implementation / integrated main：
 
 ```text
-Formal Code Base
-81bdbb7b321e796d8d623989a8eb1e10a0c11bee
-
-Tested composition implementation
-c705ee240da70a77e804cca49821162c573f9bad
-
-Final Evidence / integrated main
-ab09c7ce6960a99b062d22fd49c143f9ae876f4e
+5da2294a9d21585665167e69307d9c693427582d
 ```
+
+Final Review：
 
 ```text
 P0 = 0
 P1 = 0
-AC-01～AC-12 = PASS
-Runtime production implementation changed = NO
+G9-03 = PASS / CLOSED
 ```
 
-因此：`G9-02 PASS / CLOSED`。
+### 4.1 Frozen Source protocol
+
+```text
+TavernAssetV1
+= one Source Envelope
++ world | character | expansion | library typed payload
+```
+
+Source Snapshot identity：
+
+```text
+assetRef
++ assetType
++ version
++ sha256 contentHash
+```
+
+该 identity 直接映射既有 G9-02：
+
+```text
+SourceAssetDescriptor.stableRef
+SourceAssetDescriptor.assetType
+SourceAssetDescriptor.version
+SourceAssetDescriptor.contentHash
+```
+
+不建立第二套 Runtime Source identity。
+
+### 4.2 Frozen protocol capabilities
+
+已实现并验证：
+
+- deterministic canonical JSON + SHA-256；
+- same `assetRef + version` conflicting digest fail closed；
+- Hard / Optional / Feature-conditional / Reference dependency；
+- hard dependency cycle fail closed；
+- World default / recommended / optional composition；
+- Expansion Package / Feature / Source Module declarations；
+- Source `runtimeModuleRef` → Program `RuntimeDomainModuleDescriptor.moduleRef`；
+- resolved active binding → existing `RuntimeDomainModuleBinding`；
+- exact Program-owned Typed Config validator gate；
+- minimal routing profile / projection / handoff seams；
+- G8 Host-safe UI capability validation；
+- Library stable entry / provenance / four-audience eligibility；
+- `TavernBundleManifestV1`；
+- `TavernGameAssetManifestV1` exact snapshot pinning；
+- Source v2 publication does not silently update an existing v1 Game Manifest；
+- no executable Source fields / arbitrary query DSL / Creator transport。
+
+### 4.3 G9-03A identity clarification
+
+永久区分：
+
+```text
+ExpansionModuleV1.moduleRef
+= Source declaration identity
+
+ExpansionModuleV1.runtimeModuleRef
+= Program Runtime module identity
+
+RuntimeDomainModuleBinding.moduleRef
+= runtimeModuleRef
+```
+
+Source `ownerNamespace` 不覆盖 Program descriptor owner。
+
+同一 resolved active set 中两个 Source modules 指向同一 `runtimeModuleRef` 必须 fail closed。
+
+### 4.4 Final correction evidence
+
+```text
+g9:03:test              36 / 36 PASS
+G9-02 closure            2 / 2 PASS
+G5                       207 / 207 PASS
+G6                        17 / 17 PASS
+G7                        20 / 20 PASS
+G8                       208 / 208 PASS
+full npm test            789 / 789 PASS
+typecheck                PASS
+lint                     PASS
+product:build            PASS
+launcher:smoke           PASS
+g2:disclosure            PASS
+git diff --check         PASS
+```
+
+Correction did not modify G9-02 / G8 production contracts or `tavern.asset.v1` wire fields.
 
 ---
 
-## 9. #18 / #18A｜资料库资源层
+## 5. #18 / #18A｜资料库资源层
 
 ```text
 三类主资产
@@ -303,11 +297,13 @@ Retrieved Library Slice
 != Runtime State
 ```
 
-G9-03 v1 已把 Library identity / version / hash / stable entry / provenance / 4-audience eligibility / Bundle / exact Game Manifest binding 纳入同一 machine protocol；完整检索产品仍后置。
+G9-03 已冻结并实现 Library identity / version / hash / stable entry / provenance / four-audience eligibility / Bundle / exact Game Manifest binding。
+
+G9-04 对 Library 仅做最小协议 proof；完整检索产品继续后置。
 
 ---
 
-## 10. #19｜Creator Conversational Authoring
+## 6. #19｜Creator Conversational Authoring
 
 G9-05 首版产品定义保持：
 
@@ -319,68 +315,76 @@ Conversational AI Authoring
 
 AI 通过 Typed Creator Tools 受控修改 Draft；Chat != Draft；Draft != Saved Source Asset；Save / Publish 由用户显式触发并经过 deterministic Validator。
 
-G9-03 Source schema 明确不包含 chat history、prompt、provider、AI action log 或 Creator tool transport。
+Source Asset schema 不包含 chat history、prompt、provider、AI action log 或 Creator tool transport。
 
 ---
 
-## 11. G9-03｜SEMANTICS FROZEN / IMPLEMENTATION NEXT
+## 7. G9-04｜AUTHORIZED / NEXT
 
-正式规格：
+G9-04 的唯一主 Outcome：
 
-`G9-03_UnifiedAssetReferenceProtocol规格_v1.0_2026-08-20.md`
-
-已冻结：
-
-```text
-TavernAssetV1
-= one Source Envelope
-+ world | character | expansion | library typed payload
-```
-
-以及：
-
-- `assetRef / assetType / version / sha256` exact Source Snapshot identity；
-- typed Hard / Optional / Feature-conditional / Reference dependency；
-- World default / recommended / optional composition；
-- Expansion Package / Feature / Module / built-in runtime module binding；
-- minimal routing profile / projection / handoff / safe UI declaration seams；
-- Library stable entry / provenance / 4-audience eligibility / retrieval hints；
-- `TavernBundleManifestV1`；
-- `TavernGameAssetManifestV1` exact resolved creation binding；
-- explicit migration / no silent source update；
-- deterministic canonical serialization / integrity；
-- stable fail-closed validation error classes。
+> **让当前 canonical World Pack / Character Card / Expansion Pack 通过 AI-independent Adapter / Compiler 转换成已冻结的 `TavernAssetV1`，再由 exact `TavernGameAssetManifestV1` 接到既有 G9-02 Game-local Source Binding；同时对 Library 做最小 parse / validate / round-trip / cross-reference proof。**
 
 正式链：
 
 ```text
-Authoring Source
-→ TavernAssetV1
-→ validate / canonicalize / hash
-→ resolved TavernGameAssetManifestV1
-→ existing G9-02 SourceAssetDescriptor
-→ Game-local Binding / lineage / revision
-→ Runtime
+current canonical Markdown Source
+↓ deterministic adapter / parser
+TavernAssetV1
+↓ validate / canonicalize / hash
+resolved TavernGameAssetManifestV1
+↓ compiler / binding
+existing SourceAssetDescriptor
+↓
+G9-02 Game-local Binding / lineage / revision
 ```
 
-G9-03 implementation 当前必须实现协议与验证 proof；完整 Markdown adapter / compiler 留给 G9-04。
+### 7.1 三类主资产必须证明
+
+- World Pack current sample 可转换；
+- Character Card current sample 可转换；
+- Expansion current sample 可转换；
+- stable identities / versions / ownership / dependencies 不因 adapter 丢失；
+- Expansion Feature / Module / runtimeModuleRef mapping 使用 G9-03A；
+- exact snapshot manifest 可进入 G9-02 Source binding；
+- source update 不静默改变已绑定 Game；
+- parse / compile 全流程 AI-independent。
+
+### 7.2 Library 最小 proof
+
+允许：
+
+```text
+Library sample
+→ parse
+→ validate
+→ canonical serialize / round-trip
+→ cross-reference validation
+```
+
+禁止借 G9-04 提前实现：
+
+- Library product UI；
+- Runtime indexing / retrieval；
+- model Reference Provider；
+- Creator Library editor。
+
+### 7.3 Non-scope
+
+G9-04 不重新设计 `tavern.asset.v1`；如真实 current asset 暴露 protocol blocker，必须回到 GPT architecture review，不允许 adapter 私自发明第二 wire。
 
 ---
 
-## 12. 当前 DAG
+## 8. 当前 DAG
 
 ```text
-G9-02 Integrated Closure      PASS / CLOSED
+G9-02                         PASS / CLOSED
 ↓
-G9-03 Semantics               FROZEN / PASS
-↓
-G9-03 Implementation          ACTIVE / NEXT
-↓
-GPT exact-SHA Independent Review
-↓
-G9-03 PASS / CLOSED
+G9-03 Unified Asset / Reference Protocol
+                              PASS / CLOSED
 ↓
 G9-04 Adapter / Compiler / Binding
+                              AUTHORIZED / NEXT
 ↓
 G9-05 Structured Creator Workspace + Conversational AI
 ↓
