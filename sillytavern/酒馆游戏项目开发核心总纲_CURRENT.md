@@ -17,7 +17,7 @@ G9-03                         PASS / CLOSED
 G9-04                         PASS / CLOSED
 G9-05A Creator Foundation     PASS / FROZEN
 G9-05B Creator Core Contract  PASS / FROZEN
-G9-05B Core Implementation    CORRECTION-01 ACTIVE
+G9-05B Core Implementation    CORRECTION-02 ACTIVE
 G9-05C World Creator          NOT AUTHORIZED
 ```
 
@@ -32,8 +32,8 @@ c492ac4a0eb33ec055f582a2a023066853e2c323
 
 ```text
 agent/g9-05b-creator-core
-reviewed implementation = 0757f4674da23bcc2588b6265cc5c3d663e3667b
-correction-01 packet     = 21bf495bbbb1d1dcfec7714ac8c76e059740a431
+reviewed correction-01 = f789150d584f8f2e538558c0129e0b25e5bbb73e
+correction-02 packet   = eb9502b177f289bf5ee8956a454dca4a63e8cd2c
 ```
 
 当前资产仓库主线：
@@ -47,7 +47,7 @@ G9-04 真实资产 Gate 仍以 `968175e6c3fb3545b7c2907b65089c7e1dbb40a0` 为冻
 
 当前下一步：
 
-> **G9-05B correction-01。** Codex 继续原任务分支，关闭普通 AI 任务级授权、导入 section identity、AI 局部合法应用、Source 版本冲突恢复四个 P1。修正通过新的精确提交独立审核之前，不合并 main、不进入 G9-05C。
+> **G9-05B correction-02。** Codex 继续原任务分支，只关闭复杂 typed node 的精确任务授权与复杂 Provider operation 的完整运行时类型/取值校验两个残余 P1。新精确提交通过独立审核之前，不合并 main、不进入 G9-05C。
 
 ---
 
@@ -68,6 +68,7 @@ G9-04 真实资产 Gate 仍以 `968175e6c3fb3545b7c2907b65089c7e1dbb40a0` 为冻
 - `G9-05A_Creator基础模型与创作稿导入产品架构裁定_v1.0_2026-08-20.md`
 - `G9-05B_CreatorCore草稿导入发布内部合同规格_v1.0_2026-08-20.md`
 - `G9-05B_IndependentReview_CreatorCore_correction-01_v1.0_2026-08-20.md`
+- `G9-05B_IndependentReview_CreatorCore_correction-02_v1.0_2026-08-20.md`
 - `酒馆游戏新版主体重建总路线 v2.3.md`
 
 ### 执行治理
@@ -202,25 +203,35 @@ Source Asset Library Store
 
 ---
 
-## 6. G9-05B Independent Review｜CORRECTION-01 ACTIVE
+## 6. G9-05B Independent Review｜CORRECTION-02 ACTIVE
 
-审核对象：
+最新审核对象：
 
 ```text
-Formal Base     c492ac4a0eb33ec055f582a2a023066853e2c323
-Reviewed Final  0757f4674da23bcc2588b6265cc5c3d663e3667b
-P0              0
-P1              4
+Formal Base              c492ac4a0eb33ec055f582a2a023066853e2c323
+Reviewed correction-01   f789150d584f8f2e538558c0129e0b25e5bbb73e
+P0                       0
+P1                       2
 ```
 
-四个阻断项：
+correction-01 已关闭：
 
-1. **AI 任务级授权缺失**：当前普通 AI 任务可在 Program 层访问整个资产类型的编辑面，不能证明“只改用户本次授权的区域”。
-2. **导入 section identity 错位**：blank-only 检查按 `sectionRef` 语义发起，但底层按 `nodeRef` 读取/替换，可能覆盖已有玩家 section。
-3. **AI 局部合法应用未成立**：一个坏 operation 可让同批合法 operation 全部失败，与 AC-07 / 导入局部应用合同冲突。
-4. **版本冲突后 Draft 卡死**：Source 版本冲突发生在 `publishing` 后，当前没有回到可编辑状态的修复路径。
+1. **导入 section identity：PASS**。blank-only 按 `sectionRef`，Program 重新生成内部 `nodeRef`，两类碰撞均失败关闭。
+2. **Source 版本冲突恢复：PASS**。确定性版本冲突会 CAS 恢复 Draft 为 `editable`，保留内容和当前版本，用户可改新版本后重发。
 
-已确认非阻断方向：Source Store validated-only / append-only、Draft CAS、原件保存、stale AI、Undo、G9-03 发布编译、Source-written/Draft-not-finalized recovery、Runtime 隔离均方向正确。
+仍阻断：
+
+1. **复杂 typed node 授权仍不够精确**：`nodeRefs` 没有绑定 `nodeKind`，一个被授权 Feature 的 nodeRef 仍可能被模型拿去构造 Module 等另一语义种类。
+2. **复杂 Provider operation 的运行时校验仍过浅**：Provider 已是 `unknown[]`，但 dependency / feature / module / UI 等复杂 payload 尚未逐字段验证 enum、boolean、nested shape、array 成员和未知字段；畸形模型输出仍可能先污染 Draft，直到发布时才被 G9-03 拒绝。
+
+当前返修：
+
+```text
+repo: zhangchenjia21-dot/sillytavern
+branch: agent/g9-05b-creator-core
+packet: agent tasks/G9-05B_Codex_correction-02_复杂操作类型校验与TypedNode授权收口_v1.0_2026-08-20.md
+packet commit: eb9502b177f289bf5ee8956a454dca4a63e8cd2c
+```
 
 ---
 
@@ -238,7 +249,7 @@ G9-05A Creator Foundation                PASS / FROZEN
 G9-05B Creator Core Contract             PASS / FROZEN
 ↓
 G9-05B Shared Creator Core Implementation
-                                        CORRECTION-01 ACTIVE
+                                        CORRECTION-02 ACTIVE
 ↓
 GPT exact-SHA Independent Review
 ↓ PASS only
