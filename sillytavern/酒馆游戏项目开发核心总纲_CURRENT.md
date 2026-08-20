@@ -12,31 +12,31 @@ current_path: sillytavern/酒馆游戏项目开发核心总纲_CURRENT.md
 ```text
 G1–G8                         PASS / CLOSED
 G9-01                         PASS / CLOSED
-G9-02A                        PASS / CLOSED
-G9-02BC                       PASS / CLOSED
-G9-02B                        PASS / CLOSED
-G9-02C Core                   PASS / CLOSED
-G9-02C Breadth                PASS / CLOSED
-G9-02 Integrated Closure      PASS / CLOSED
 G9-02                         PASS / CLOSED
-G9-03 Semantics               PASS / FROZEN
-G9-03 Implementation          PASS / CLOSED
 G9-03                         PASS / CLOSED
-G9-04                         AUTHORIZED / NEXT
+G9-04                         PASS / CLOSED
+G9-05                         AUTHORIZED / NEXT
 ```
 
 当前实现主线：
 
 ```text
 zhangchenjia21-dot/sillytavern main
-5da2294a9d21585665167e69307d9c693427582d
+c492ac4a0eb33ec055f582a2a023066853e2c323
+```
+
+当前资产事实源：
+
+```text
+zhangchenjia21-dot/sillytavern-assets main
+968175e6c3fb3545b7c2907b65089c7e1dbb40a0
 ```
 
 当前核心路线：`酒馆游戏新版主体重建总路线 v2.3.md`。
 
-当前 Next：
+当前下一阶段：
 
-> **G9-04 Adapter / Compiler / Binding。** 使用已经冻结并实现的 `TavernAssetV1 / TavernBundleManifestV1 / TavernGameAssetManifestV1`，对现有 World / Character / Expansion canonical Markdown 做 AI-independent adapter / compiler，并把 exact snapshot manifest 接到现有 G9-02 Source Binding / Game-local rails；资料库在本阶段仅做最小 parse / validate / round-trip / cross-reference proof，不实现 Runtime retrieval 或产品 UI。
+> **G9-05｜三类主资产 Creator 基础闭环。** 在 G9-03 统一资产协议与 G9-04 真实 Markdown 适配/编译/本局绑定已经关闭的基础上，建立世界包、角色卡、拓展包的结构化创作工作区与 AI 协作式编辑流程；AI 只能通过受控工具修改 Draft，不能直接发布资产。
 
 ---
 
@@ -47,19 +47,12 @@ zhangchenjia21-dot/sillytavern main
 - `15_酒馆游戏_RuntimeContextOrchestration与模块化复杂度控制裁定_v1.2_2026-08-18.md`
 - `16_酒馆游戏_RuntimeWorldMaterialization与当局游戏资产演化裁定_v1.1_2026-08-18.md`
 - `17_酒馆游戏_PlayerKnownEntityDirectory与长期资料表面信息架构裁定_v1.0_2026-08-18.md`
-- `G9-02A_SourceBinding与GameLocalRevisionFoundation规格_v1.0_2026-08-18.md`
-- `G9-02A_IndependentReview_SourceBinding与GameLocalRevision_v1.0_2026-08-19.md`
-- `G9-02BC_SharedRuntimeFoundationConvergence规格_v1.0_2026-08-19.md`
-- `G9-02BC_IndependentReview_共享运行时基础_v1.0_2026-08-19.md`
-- `G9-02B_RuntimeDomainBreadth与PlayerKnownDirectory规格_v1.0_2026-08-19.md`
-- `G9-02B_IndependentReview_PlayerKnownDirectory最终收口_v1.0_2026-08-19.md`
-- `G9-02C_ModelFirstRouting与ContextOrchestration核心规格_v1.0_2026-08-19.md`
-- `G9-02C_IndependentReview_Core最终收口_v1.0_2026-08-19.md`
-- `G9-02C_Breadth_IndependentReview_最终收口_v1.0_2026-08-19.md`
 - `G9-02_IntegratedClosure_IndependentReview_最终收口_v1.0_2026-08-20.md`
 - `G9-03_UnifiedAssetReferenceProtocol规格_v1.0_2026-08-20.md`
 - `G9-03A_RuntimeModuleBinding与TypedConfig增量裁定_v1.0_2026-08-20.md`
 - `G9-03_IndependentReview_最终收口_v1.0_2026-08-20.md`
+- `G9-04_LegacyMarkdownAdapterCompilerBinding规格_v1.0_2026-08-20.md`
+- `G9-04_IndependentReview_最终收口_v1.0_2026-08-20.md`
 
 ### Asset / Library / Creator
 
@@ -68,30 +61,20 @@ zhangchenjia21-dot/sillytavern main
 - `19_酒馆游戏_CreatorConversationalAuthoring与AI协作式结构化创作裁定_v1.0_2026-08-19.md`
 - `酒馆游戏新版主体重建总路线 v2.3.md`
 
-最新资产事实源：
+### 执行治理
 
-```text
-zhangchenjia21-dot/sillytavern-assets main
-d2dc31c1b80e514285021a6ed1e37f0c9e733f3a
-```
-
-G9-03 已吸收 `tavern-asset v1.0`、EP-KINSHIP-CORE / EP-POLITICS-CORE 与 Large Relation Graph / deterministic subgraph projection 结论。
-
-### Execution Governance
-
-- `G9及后续阶段_Agent资源分配与GrokBuild代码协作裁定_v1.0_2026-08-19.md`
+- `G9及后续阶段_Agent资源分配与Codex默认代码协作裁定_v1.1_2026-08-20.md`
 - `代码Agent_Worktree隔离与Main合并治理_v1.0_2026-08-19.md`
 - `AgentTaskPacket_GitHub原生交付增量裁定_v1.0_2026-08-20.md`
 - `Skill/main/skill/gpt/agent-task-packet/SKILL.md` v1.1
 
-Discussion / deferred optional：
+默认代码执行 Agent = Codex；只有项目所有者明确指定时才使用 Grok。
 
-- `G9_世界包OpeningScenario与Creator首轮创作验证_DRAFT_v0.4_2026-08-19.md`
-- `Creator_AI后续可选增量备忘录_v1.0_2026-08-19.md`
+面向项目所有者沟通时中文优先；只有代码字段名、接口名、文件路径、命令、提交号等必须精确引用的内容保留英文。
 
 ---
 
-## 2. 不可回滚 Runtime / Asset Authority
+## 2. 不可回滚架构边界
 
 ```text
 Source Asset
@@ -115,124 +98,44 @@ Player-known
 != Model Visible
 ```
 
-```text
-Bounded
-!= Starved
-```
-
-继续保持 Program Final Outcome、Player Agency / Open Attempt、No Phantom、private/public disclosure、Save / Restore / Branch、Crash / Resume / Recovery / exactly-once、need-gated Materialization 与 Source 不被 Runtime 反写。
-
-G9-03 / G9-04 不得建立第二套 Game-local identity、Runtime state、Router、mutation 或 persistence authority。
+继续保持：程序拥有最终结果权、玩家行动权、开放尝试、No Phantom、私密/公开边界、按需物化、Save / Restore / Branch、Crash / Resume / Recovery 与 exactly-once。
 
 ---
 
 ## 3. G9-02｜PASS / CLOSED
 
-Final integrated code before G9-03：
-
-```text
-ab09c7ce6960a99b062d22fd49c143f9ae876f4e
-```
-
-组成：
-
-```text
-G9-02A Source Binding / Game-local Revision       PASS / CLOSED
-G9-02BC Shared Runtime Foundation                 PASS / CLOSED
-G9-02B Player-known / Domain Breadth              PASS / CLOSED
-G9-02C Core                                        PASS / CLOSED
-G9-02C Breadth                                     PASS / CLOSED
-G9-02 Integrated Closure                           PASS / CLOSED
-```
-
-长期 rails：
+G9-02 建立并关闭了长期运行时基础：
 
 ```text
 Source Asset Descriptor
 → per-game binding / lineage
 → Game-local Canonical Instance / definitionRevision
-→ Domain Module Host / owner-scoped records + state
-→ Model-first bounded routing / selected-only projection
-→ Formal Turn / Program Outcome authority
-→ Save / Restore / Branch / Recovery exactly-once
+→ Domain Module Host
+→ bounded routing / selected-only projection
+→ Formal Turn authority
+→ Save / Restore / Branch / Recovery
 ```
 
-G9-03 及以后全部复用这套 rails。
+G9-03 及以后全部复用这套轨道，不建立第二套身份、状态、路由、变更或持久化权威。
 
 ---
 
 ## 4. G9-03｜PASS / CLOSED
 
-正式规格：
-
-- `G9-03_UnifiedAssetReferenceProtocol规格_v1.0_2026-08-20.md`
-- `G9-03A_RuntimeModuleBinding与TypedConfig增量裁定_v1.0_2026-08-20.md`
-- `G9-03_IndependentReview_最终收口_v1.0_2026-08-20.md`
-
-Final implementation / integrated main：
+最终实现：
 
 ```text
 5da2294a9d21585665167e69307d9c693427582d
 ```
 
-Final Review：
-
-```text
-P0 = 0
-P1 = 0
-G9-03 = PASS / CLOSED
-```
-
-### 4.1 Frozen Source protocol
+G9-03 冻结并实现了统一资产机器协议：
 
 ```text
 TavernAssetV1
-= one Source Envelope
-+ world | character | expansion | library typed payload
+= world | character | expansion | library
 ```
 
-Source Snapshot identity：
-
-```text
-assetRef
-+ assetType
-+ version
-+ sha256 contentHash
-```
-
-该 identity 直接映射既有 G9-02：
-
-```text
-SourceAssetDescriptor.stableRef
-SourceAssetDescriptor.assetType
-SourceAssetDescriptor.version
-SourceAssetDescriptor.contentHash
-```
-
-不建立第二套 Runtime Source identity。
-
-### 4.2 Frozen protocol capabilities
-
-已实现并验证：
-
-- deterministic canonical JSON + SHA-256；
-- same `assetRef + version` conflicting digest fail closed；
-- Hard / Optional / Feature-conditional / Reference dependency；
-- hard dependency cycle fail closed；
-- World default / recommended / optional composition；
-- Expansion Package / Feature / Source Module declarations；
-- Source `runtimeModuleRef` → Program `RuntimeDomainModuleDescriptor.moduleRef`；
-- resolved active binding → existing `RuntimeDomainModuleBinding`；
-- exact Program-owned Typed Config validator gate；
-- minimal routing profile / projection / handoff seams；
-- G8 Host-safe UI capability validation；
-- Library stable entry / provenance / four-audience eligibility；
-- `TavernBundleManifestV1`；
-- `TavernGameAssetManifestV1` exact snapshot pinning；
-- Source v2 publication does not silently update an existing v1 Game Manifest；
-- no executable Source fields / arbitrary query DSL / Creator transport。
-
-### 4.3 G9-03A identity clarification
+关键能力包括：稳定 `assetRef`、版本、SHA-256、依赖、Bundle、精确 Game Asset Manifest、拓展包 Feature / Module / `runtimeModuleRef` 接线、Typed Config 校验、资料库稳定条目/来源/四类受众资格以及失败关闭验证。
 
 永久区分：
 
@@ -247,148 +150,142 @@ RuntimeDomainModuleBinding.moduleRef
 = runtimeModuleRef
 ```
 
-Source `ownerNamespace` 不覆盖 Program descriptor owner。
+---
 
-同一 resolved active set 中两个 Source modules 指向同一 `runtimeModuleRef` 必须 fail closed。
+## 5. G9-04｜PASS / CLOSED
 
-### 4.4 Final correction evidence
+最终实现 / integrated main：
 
 ```text
-g9:03:test              36 / 36 PASS
-G9-02 closure            2 / 2 PASS
-G5                       207 / 207 PASS
-G6                        17 / 17 PASS
-G7                        20 / 20 PASS
-G8                       208 / 208 PASS
-full npm test            789 / 789 PASS
-typecheck                PASS
-lint                     PASS
-product:build            PASS
-launcher:smoke           PASS
-g2:disclosure            PASS
-git diff --check         PASS
+c492ac4a0eb33ec055f582a2a023066853e2c323
 ```
 
-Correction did not modify G9-02 / G8 production contracts or `tavern.asset.v1` wire fields.
+最终审核：
+
+```text
+P0 = 0
+P1 = 0
+G9-04 = PASS / CLOSED
+```
+
+G9-04 已证明真实资产链：
+
+```text
+真实 canonical Markdown
+→ 显式 Legacy Adapter Profile
+→ 确定性 YAML / Markdown 解析
+→ TavernAssetV1
+→ G9-03 validator + canonical SHA-256
+→ exact TavernGameAssetManifestV1
+→ binding compiler
+→ SourceAssetDescriptor
+→ hidden Game-local binding anchors
+→ SQLiteRuntimeStore.bootstrap()
+→ exact sourceLineage
+→ Save / Restore
+```
+
+真实样本包括汉末三国世界包、刘备角色卡、EP-CHAR-CORE 与诸界余辉世界包。
+
+关键边界：
+
+- `assetRef` 必须由显式适配档案提供，禁止从文件名、标题、别名或 Wikilink 模糊猜测；
+- 旧 Markdown 完整正文默认 private，public 只能由精确章节选择器放行；
+- Character Card 的绑定不等于角色实体物化，No Phantom 已验证；
+- Source v2 不静默改写旧 Manifest / 旧游戏 lineage；
+- Library 在 G9-04 只做协议与交叉引用完整性证明，不进入本局主资产 `sourceLineage`；
+- Library `relatedRefs` 只做精确身份解析；
+- Character / Expansion 重复主绑定必须失败关闭；
+- Expansion Host 证明为 proof-only，不冒充具体玩法机制已经实现；
+- Provider 调用 = 0。
+
+最终测试：
+
+```text
+g9:04:test                 17 / 17 PASS
+g9:04:real                 PASS
+g9:03:test                 36 / 36 PASS
+G9-02 focused regressions  PASS
+G5                         207 / 207 PASS
+G6                          17 / 17 PASS
+G7                          20 / 20 PASS
+G8                         208 / 208 PASS
+full suite                 88 files / 806 tests PASS
+typecheck                  PASS
+lint                       PASS
+product build              PASS
+launcher smoke             PASS
+disclosure                 PASS
+git diff --check           PASS
+```
 
 ---
 
-## 5. #18 / #18A｜资料库资源层
+## 6. 资料库边界
 
 ```text
 三类主资产
 = 世界包 + 角色卡 + 拓展包
 
 资料库
-= 可复用 / 可绑定 / 可检索的资料资源层
+= Reference Resource Layer
 != 第四类主资产
 != Runtime Truth
 ```
 
-继续冻结：
+G9-03 已完成资料库协议；G9-04 已完成最小 parse / validate / canonical round-trip / cross-reference proof。
 
-```text
-Library Source Update
-!= Existing Game Silent Update
-
-Retrieved Library Slice
-= Reference Projection
-!= Game-local Truth
-!= Runtime State
-```
-
-G9-03 已冻结并实现 Library identity / version / hash / stable entry / provenance / four-audience eligibility / Bundle / exact Game Manifest binding。
-
-G9-04 对 Library 仅做最小协议 proof；完整检索产品继续后置。
+资料库产品页面、Runtime 检索/索引、模型资料提供器、Creator 资料库编辑器继续后置到三类主资产端到端闭环之后。
 
 ---
 
-## 6. #19｜Creator Conversational Authoring
+## 7. G9-05｜AUTHORIZED / NEXT
 
-G9-05 首版产品定义保持：
+首版产品定义：
 
 ```text
-Structured Creator Workspace
+结构化 Creator 主工作区
 +
-Conversational AI Authoring
+AI 创作对话区
++
+受控 Draft 编辑
 ```
 
-AI 通过 Typed Creator Tools 受控修改 Draft；Chat != Draft；Draft != Saved Source Asset；Save / Publish 由用户显式触发并经过 deterministic Validator。
-
-Source Asset schema 不包含 chat history、prompt、provider、AI action log 或 Creator tool transport。
-
----
-
-## 7. G9-04｜AUTHORIZED / NEXT
-
-G9-04 的唯一主 Outcome：
-
-> **让当前 canonical World Pack / Character Card / Expansion Pack 通过 AI-independent Adapter / Compiler 转换成已冻结的 `TavernAssetV1`，再由 exact `TavernGameAssetManifestV1` 接到既有 G9-02 Game-local Source Binding；同时对 Library 做最小 parse / validate / round-trip / cross-reference proof。**
-
-正式链：
+永久保持：
 
 ```text
-current canonical Markdown Source
-↓ deterministic adapter / parser
-TavernAssetV1
-↓ validate / canonicalize / hash
-resolved TavernGameAssetManifestV1
-↓ compiler / binding
-existing SourceAssetDescriptor
-↓
-G9-02 Game-local Binding / lineage / revision
+AI Chat
+!= Creator Draft
+
+Creator Draft
+!= Saved Source Asset
+
+AI can edit Draft
+!= AI can publish asset
 ```
 
-### 7.1 三类主资产必须证明
-
-- World Pack current sample 可转换；
-- Character Card current sample 可转换；
-- Expansion current sample 可转换；
-- stable identities / versions / ownership / dependencies 不因 adapter 丢失；
-- Expansion Feature / Module / runtimeModuleRef mapping 使用 G9-03A；
-- exact snapshot manifest 可进入 G9-02 Source binding；
-- source update 不静默改变已绑定 Game；
-- parse / compile 全流程 AI-independent。
-
-### 7.2 Library 最小 proof
-
-允许：
-
-```text
-Library sample
-→ parse
-→ validate
-→ canonical serialize / round-trip
-→ cross-reference validation
-```
-
-禁止借 G9-04 提前实现：
-
-- Library product UI；
-- Runtime indexing / retrieval；
-- model Reference Provider；
-- Creator Library editor。
-
-### 7.3 Non-scope
-
-G9-04 不重新设计 `tavern.asset.v1`；如真实 current asset 暴露 protocol blocker，必须回到 GPT architecture review，不允许 adapter 私自发明第二 wire。
+G9-05 必须让人工编辑和 AI 辅助编辑最终生成同一种合法 `TavernAssetV1` Source Asset，并复用 G9-03 validator 与 G9-04 adapter/compiler/binding 基础；不得创建第二套 Creator 专属资产协议。
 
 ---
 
 ## 8. 当前 DAG
 
 ```text
-G9-02                         PASS / CLOSED
+G9-02 Runtime Foundation
+PASS / CLOSED
 ↓
-G9-03 Unified Asset / Reference Protocol
-                              PASS / CLOSED
+G9-03 Unified Asset Protocol
+PASS / CLOSED
 ↓
 G9-04 Adapter / Compiler / Binding
-                              AUTHORIZED / NEXT
+PASS / CLOSED
 ↓
-G9-05 Structured Creator Workspace + Conversational AI
+G9-05 Creator 基础闭环
+AUTHORIZED / NEXT
 ↓
-Primary Asset End-to-End Closure
+三类主资产“我的资产库 → 创建游戏 → 完整游玩”端到端闭环
+↓
+Primary Asset End-to-End Closure Gate
 ↓
 Library Product Increment
 ```
