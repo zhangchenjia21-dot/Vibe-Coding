@@ -16,7 +16,8 @@ G9-02                         PASS / CLOSED
 G9-03                         PASS / CLOSED
 G9-04                         PASS / CLOSED
 G9-05A Creator Foundation     PASS / FROZEN
-G9-05 Core Contract Design    AUTHORIZED / NEXT
+G9-05B Creator Core Contract  PASS / FROZEN
+G9-05B Core Implementation    AUTHORIZED / NEXT
 ```
 
 当前实现主线：
@@ -26,18 +27,26 @@ zhangchenjia21-dot/sillytavern main
 c492ac4a0eb33ec055f582a2a023066853e2c323
 ```
 
-当前资产事实源：
+当前资产仓库主线：
 
 ```text
 zhangchenjia21-dot/sillytavern-assets main
+ffb3f15d959249ff2115edb99bf8cc5ca10bbe9d
+```
+
+G9-04 真实资产验证使用的冻结基线仍为：
+
+```text
 968175e6c3fb3545b7c2907b65089c7e1dbb40a0
 ```
+
+后续 `ffb3f15d...` 仅为阶段导航同步，不改变 G9-04 真实样本证据。
 
 当前核心路线：`酒馆游戏新版主体重建总路线 v2.3.md`。
 
 当前下一步：
 
-> **G9-05 Creator Core Contract Design。** 在已经冻结的“我的资产库四入口 + Creator Draft + 外部创作稿导入 + 用户显式发布”产品边界上，继续冻结共享 Draft、导入证据、冲突/未整理项、Typed Creator Tools、Draft→TavernAssetV1 发布转换与草稿持久化内部合同；随后再由 Codex 实现共享 Creator Core，而不是先做三个独立页面。
+> **G9-05B Creator Core Implementation。** 由 Codex 在不先做完整 UI 的前提下实现共享 Creator Draft、导入原件、任务级变更集/撤销、正式 Source Asset Library、确定性发布编译与发布恢复基础；首个发布证明使用 synthetic World Draft，Provider 调用为 0。通过独立审核后才进入 G9-05C 世界包 Creator 真实产品纵向。
 
 ---
 
@@ -61,6 +70,7 @@ zhangchenjia21-dot/sillytavern-assets main
 - `18A_酒馆游戏_资料库资源层协议护栏增量裁定_v1.0_2026-08-19.md`
 - `19_酒馆游戏_CreatorConversationalAuthoring与AI协作式结构化创作裁定_v1.0_2026-08-19.md`
 - `G9-05A_Creator基础模型与创作稿导入产品架构裁定_v1.0_2026-08-20.md`
+- `G9-05B_CreatorCore草稿导入发布内部合同规格_v1.0_2026-08-20.md`
 - `酒馆游戏新版主体重建总路线 v2.3.md`
 
 ### 执行治理
@@ -106,7 +116,7 @@ Player-known
 
 ## 3. G9-02｜PASS / CLOSED
 
-G9-02 建立并关闭了长期运行时基础：
+G9-02 建立并关闭长期运行时基础：
 
 ```text
 Source Asset Descriptor
@@ -130,27 +140,14 @@ G9-03 及以后全部复用这套轨道，不建立第二套身份、状态、�
 5da2294a9d21585665167e69307d9c693427582d
 ```
 
-G9-03 冻结并实现了统一资产机器协议：
+G9-03 已冻结并实现统一资产机器协议：
 
 ```text
 TavernAssetV1
 = world | character | expansion | library
 ```
 
-关键能力包括：稳定 `assetRef`、版本、SHA-256、依赖、Bundle、精确 Game Asset Manifest、拓展包 Feature / Module / `runtimeModuleRef` 接线、Typed Config 校验、资料库稳定条目/来源/四类受众资格以及失败关闭验证。
-
-永久区分：
-
-```text
-ExpansionModuleV1.moduleRef
-= Source declaration identity
-
-ExpansionModuleV1.runtimeModuleRef
-= Program Runtime module identity
-
-RuntimeDomainModuleBinding.moduleRef
-= runtimeModuleRef
-```
+包括稳定 `assetRef`、版本、SHA-256、依赖、Bundle、精确 Game Asset Manifest、拓展包 Feature / Module / `runtimeModuleRef` 接线、Typed Config 校验和资料库协议边界。
 
 ---
 
@@ -170,33 +167,20 @@ P1 = 0
 G9-04 = PASS / CLOSED
 ```
 
-G9-04 已证明真实资产链：
+已证明：
 
 ```text
 真实 canonical Markdown
-→ 显式 Legacy Adapter Profile
-→ 确定性 YAML / Markdown 解析
+→ 确定性 Adapter / Parser
 → TavernAssetV1
-→ G9-03 validator + canonical SHA-256
+→ G9-03 validate / canonical SHA-256
 → exact TavernGameAssetManifestV1
-→ binding compiler
 → SourceAssetDescriptor
-→ hidden Game-local binding anchors
-→ SQLiteRuntimeStore.bootstrap()
-→ exact sourceLineage
+→ Game-local sourceLineage
 → Save / Restore
 ```
 
-关键边界：
-
-- `assetRef` 必须由显式适配档案提供，禁止从文件名、标题、别名或 Wikilink 模糊猜测；
-- 旧 Markdown 完整正文默认 private，public 只能由精确章节选择器放行；
-- Character Card 的绑定不等于角色实体物化，No Phantom 已验证；
-- Source v2 不静默改写旧 Manifest / 旧游戏 lineage；
-- Library 在 G9-04 只做协议与交叉引用完整性证明，不进入本局主资产 `sourceLineage`；
-- Library `relatedRefs` 只做精确身份解析；
-- Character / Expansion 重复主绑定必须失败关闭；
-- Provider 调用 = 0。
+并保持：不猜资产身份、完整旧正文默认 private、Character Binding 不等于物化、Source 新版本不静默改旧游戏、Library 不进入本局主资产 lineage、重复主资产失败关闭。
 
 ---
 
@@ -212,15 +196,13 @@ G9-04 已证明真实资产链：
 != Runtime Truth
 ```
 
-G9-03 已完成资料库协议；G9-04 已完成最小 parse / validate / canonical round-trip / cross-reference proof。
-
-资料库产品页面、Runtime 检索/索引、模型资料提供器、Creator 资料库编辑器继续后置到三类主资产端到端闭环之后。
+资料库完整产品页面、Runtime 检索/索引、模型资料提供器、Creator 资料库编辑器继续后置到三类主资产端到端闭环之后。
 
 ---
 
 ## 7. G9-05A｜Creator Foundation｜PASS / FROZEN
 
-G9-05A 正式冻结：
+顶层产品入口冻结：
 
 ```text
 我的资产库
@@ -229,8 +211,6 @@ G9-05A 正式冻结：
 ├── 角色卡
 └── 拓展包
 ```
-
-Creator 内置于酒馆本体，但不是 Runtime authority。世界包、角色卡、拓展包页面只管理正式资产并把“新建 / 创建新版本”路由到同一个 Creator，不建立三套编辑器。
 
 三种创作起点统一进入同一 Draft：
 
@@ -255,61 +235,146 @@ AI can edit Draft
 != AI can publish asset
 ```
 
-外部创作稿导入规则：
+导入 AI 规则：
 
 ```text
 明确、唯一、由原文支持
-→ AI 可填入 Draft
+→ 可填入空白 Draft 字段
 
-信息不足 / 材料未提及 / 存在冲突 / 多种合理解释
-→ 正式字段留空
-→ 原始证据保留在 Creator 工作区
+信息不足 / 未提及 / 冲突 / 多种合理解释
+→ 字段留空或原值不变
+→ 原始证据保留
 ```
 
-导入阶段只整理已有材料，不自动创作缺失内容。用户明确要求继续创作后，才进入 #19 的正常 AI 创作模式。
-
-外部文件始终只是数据：
-
-```text
-Imported Content
-!= Creator Instruction
-!= Tool Authorization
-!= Publish Authorization
-```
-
-发布链必须复用 G9-03：
-
-```text
-Creator Draft
-→ Program-owned deterministic conversion
-→ G9-03 validate / canonicalize / integrity
-→ TavernAssetV1
-→ 用户显式发布到“我的资产库”
-```
-
-发布新 Source 不自动绑定现有游戏。
+导入阶段只整理已有材料，不自动创作缺失内容。
 
 ---
 
-## 8. G9-05｜当前下一步
+## 8. G9-05B｜Creator Core Contract｜PASS / FROZEN
 
-现在不先做页面，而先冻结共享 Creator Core 的内部合同：
+正式规格：
 
-1. Draft identity / lifecycle / revision；
-2. 三种 origin；
-3. 部分结构化资产内容；
-4. 导入来源、已映射证据、待整理项、冲突项；
-5. Typed Creator Tools 与授权边界；
-6. Undo/change-set；
-7. 草稿持久化与恢复；
-8. Draft → `TavernAssetV1` 确定性发布转换；
-9. 无 Provider 时的完整手工路径。
+`G9-05B_CreatorCore草稿导入发布内部合同规格_v1.0_2026-08-20.md`
 
-合同冻结后才由 Codex 实现共享 Creator Core，并优先用世界包跑第一个真实纵向；角色卡和拓展包随后复用同一套核心。
+### 8.1 两个长期数据 Owner
+
+```text
+Creator Draft Store
+= 可编辑草稿 / 导入证据 / ChangeSet / Undo 工作状态 Owner
+
+Source Asset Library Store
+= 已通过 G9-03 校验的正式本地 Source Asset Owner
+```
+
+两者都不是 Runtime State。
+
+### 8.2 CreatorDraftV1
+
+核心身份：
+
+```text
+draftRef
+assetType
+targetAssetRef
+targetVersion?
+origin
+lifecycle
+revision
+content
+workState
+```
+
+新资产的 `targetAssetRef` 由 Program 创建一次并保持稳定，禁止从标题、文件名或 AI 输出猜测；已有资产新版本精确继承基础快照 `assetRef`。
+
+生命周期：
+
+```text
+editable → publishing → published
+```
+
+所有变更使用 revision/CAS 自动保存，迟到 AI 结果不得覆盖新修订。
+
+### 8.3 导入原件与确定项填写
+
+`.md` / `.txt` 原件保存 exact hash、可恢复内容和稳定 `segmentRef`。
+
+AI 导入输出分为：
+
+```text
+certainAssignments
+unresolvedItems
+conflicts
+```
+
+只有有真实 evidence segment、目标为空且允许导入填写的确定项可落入 Draft。已有用户内容不会被导入整理静默覆盖。
+
+### 8.4 ChangeSet / Undo
+
+每个用户或 AI 创作任务形成 Program-owned change set。Undo 通过 inverse change 创建新 revision，不回退 revision 数字；若目标后来已被修改则失败关闭，避免抹掉新内容。
+
+### 8.5 正式 Source Asset Library
+
+只接受通过 G9-03 验证的 `TavernAssetV1`。
+
+```text
+assetRef + version 不存在
+→ append
+
+已存在且 digest 相同
+→ idempotent success
+
+已存在但 digest 不同
+→ SOURCE_ASSET_VERSION_CONFLICT
+```
+
+绝不覆盖旧版本。
+
+### 8.6 发布
+
+```text
+exact Draft revision
+→ deterministic publication compiler
+→ existing computeAssetDigest()
+→ existing validateAndVerifyAsset()
+→ SourceAssetLibraryStore.appendValidated()
+```
+
+发布使用可恢复状态机，支持“Source 已写入但 Draft 尚未确认”的崩溃恢复与精确认领。
+
+发布 Source 不自动绑定现有游戏。
 
 ---
 
-## 9. 当前 DAG
+## 9. G9-05B｜Core Implementation｜AUTHORIZED / NEXT
+
+首次实现只做共享基础，不先做四入口最终视觉页面。
+
+Codex 必须实现：
+
+1. `src/资产库/` 正式 Source Asset Store 合同 + 内存/SQLite 实现；
+2. `src/资产创作/` Draft / Import / ChangeSet / Publish 合同；
+3. Draft revision/CAS 与持久化；
+4. Markdown / text 原件提取与持久化；
+5. AI 导入结构化结果的 Program 校验和局部应用；
+6. blank-only import / protected target / stale result；
+7. task-level Undo conflict gate；
+8. Draft → `TavernAssetV1` 确定性发布；
+9. Source Asset append-only collision gate；
+10. publish retry/recovery；
+11. no-Provider 手工路径；
+12. synthetic World Draft 发布证明；
+13. Provider 调用 = 0。
+
+通过 exact-SHA Independent Review 后：
+
+```text
+G9-05B Creator Core Foundation = PASS / CLOSED
+G9-05C World Creator Vertical = AUTHORIZED / NEXT
+```
+
+---
+
+## 10. 当前 DAG
 
 ```text
 G9-02 Runtime Foundation
@@ -324,12 +389,15 @@ PASS / CLOSED
 G9-05A Creator Foundation
 PASS / FROZEN
 ↓
-G9-05 Creator Core Contract Design
+G9-05B Creator Core Contract
+PASS / FROZEN
+↓
+G9-05B Shared Creator Core Implementation
 AUTHORIZED / NEXT
 ↓
-共享 Creator Core 实现
+G9-05C World Creator Vertical
 ↓
-World → Character → Expansion Creator 纵向闭环
+Character → Expansion Creator 纵向
 ↓
 三类主资产“我的资产库 → 创建游戏 → 完整游玩”端到端闭环
 ↓
