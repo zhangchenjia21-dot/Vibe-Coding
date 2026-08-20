@@ -32,7 +32,7 @@ zhangchenjia21-dot/sillytavern main
 
 ```text
 zhangchenjia21-dot/sillytavern-assets main
-ffb3f15d959249ff2115edb99bf8cc5ca10bbe9d
+34f72dd1a32b84649f2b3973e98836ad68f3b65e
 ```
 
 G9-04 真实资产 Gate 的冻结证据基线仍为：
@@ -41,7 +41,7 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 968175e6c3fb3545b7c2907b65089c7e1dbb40a0
 ```
 
-后续 `ffb3f15d...` 为阶段导航同步，不改变 G9-04 真实样本证据。
+后续资产仓库提交 `ffb3f15d...` 与 `34f72dd1...` 均为阶段导航同步，不改变 G9-04 真实样本证据或 canonical semantic asset 正文。
 
 当前核心路线：`酒馆游戏新版主体重建总路线 v2.3.md`。
 
