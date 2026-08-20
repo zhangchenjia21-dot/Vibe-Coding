@@ -1,7 +1,7 @@
 ---
 title: 酒馆游戏项目开发核心总纲
 status: current-integrated
-updated: 2026-08-19
+updated: 2026-08-20
 current_path: sillytavern/酒馆游戏项目开发核心总纲_CURRENT.md
 ---
 
@@ -11,28 +11,29 @@ current_path: sillytavern/酒馆游戏项目开发核心总纲_CURRENT.md
 
 ```text
 G1–G8                         PASS / CLOSED
-G9-01                          PASS / CLOSED
-G9-02A                         PASS / CLOSED
-G9-02BC                        PASS / CLOSED
-G9-02B                         PASS / CLOSED
-G9-02C Core                    PASS / CLOSED
-G9-02C Breadth                 PASS / CLOSED
-G9-02 Integrated Closure       ACTIVE / NEXT
-G9-03                          NOT AUTHORIZED
+G9-01                         PASS / CLOSED
+G9-02A                        PASS / CLOSED
+G9-02BC                       PASS / CLOSED
+G9-02B                        PASS / CLOSED
+G9-02C Core                   PASS / CLOSED
+G9-02C Breadth                PASS / CLOSED
+G9-02 Integrated Closure      PASS / CLOSED
+G9-02                          PASS / CLOSED
+G9-03                          AUTHORIZED / NEXT
 ```
 
 当前实现主线：
 
 ```text
 zhangchenjia21-dot/sillytavern main
-81bdbb7b321e796d8d623989a8eb1e10a0c11bee
+ab09c7ce6960a99b062d22fd49c143f9ae876f4e
 ```
 
 当前核心路线：`酒馆游戏新版主体重建总路线 v2.3.md`。
 
 当前 Next：
 
-> **G9-02 Integrated Closure。** 不再扩新 Runtime architecture；对 02A / 02BC / 02B / 02C 的当前组合实现做最终回归、authority convergence、Save/Restore/Branch/Recovery、真实 Provider 与 scope-drift Stage Gate。
+> **G9-03 Unified Asset / Reference Protocol。** G9-02 Runtime foundation 已正式关闭；下一步由 GPT 先冻结世界包 / 角色卡 / 拓展包 / 资料库的统一 machine contract 语义，再交给实现 Agent。G9-03 开始前仍需重新执行 Freshness Preflight。
 
 ---
 
@@ -52,6 +53,7 @@ zhangchenjia21-dot/sillytavern main
 - `G9-02C_ModelFirstRouting与ContextOrchestration核心规格_v1.0_2026-08-19.md`
 - `G9-02C_IndependentReview_Core最终收口_v1.0_2026-08-19.md`
 - `G9-02C_Breadth_IndependentReview_最终收口_v1.0_2026-08-19.md`
+- `G9-02_IntegratedClosure_IndependentReview_最终收口_v1.0_2026-08-20.md`
 
 ### Asset / Library / Creator
 
@@ -64,6 +66,7 @@ zhangchenjia21-dot/sillytavern main
 
 - `G9及后续阶段_Agent资源分配与GrokBuild代码协作裁定_v1.0_2026-08-19.md`
 - `代码Agent_Worktree隔离与Main合并治理_v1.0_2026-08-19.md`
+- `AgentTaskPacket_GitHub原生交付增量裁定_v1.0_2026-08-20.md`
 
 Discussion / deferred optional：
 
@@ -102,6 +105,8 @@ Bounded
 ```
 
 继续保持 Program Final Outcome、Player Agency / Open Attempt、No Phantom、private/public disclosure、Save / Restore / Branch、Crash / Resume / Recovery / exactly-once、need-gated Materialization 与 Source 不被 Runtime 反写。
+
+G9-03 不得建立第二套 Game-local identity、Runtime state、Router、mutation 或 persistence authority。
 
 ---
 
@@ -195,19 +200,11 @@ existing Formal Turn authority
 
 ## 7. G9-02C Breadth｜PASS / CLOSED
 
-Reviewed code：
+Reviewed code：`8a481ef16737e2c36310668b61b40e29b82ee1f7`。
 
-```text
-8a481ef16737e2c36310668b61b40e29b82ee1f7
-```
+Breadth final evidence / former integrated main：`81bdbb7b321e796d8d623989a8eb1e10a0c11bee`。
 
-Final evidence / integrated main：
-
-```text
-81bdbb7b321e796d8d623989a8eb1e10a0c11bee
-```
-
-Breadth 已证明：
+已证明：
 
 ```text
 1,000 enabled leaves
@@ -230,61 +227,83 @@ Breadth 已证明：
 → Save / Restore / Branch / Recovery exactly-once
 ```
 
-### Real Provider Gate
-
-Tested code：`8a481ef...`。
+Real Provider Gate：
 
 ```text
 model                      deepseek-v4-pro
 enabledLeaves              1000
 providerCalls              3
-groupProfileKinds          package, feature, module
 maxProfilesPerRequest      10 / limit 16
 maxSerializedChars/request 4601 / limit 8000
 selectedModule             builtin:smoke.inventory-state.v1
 verdict                    PASS
 ```
 
-Evidence-only commit 没有修改实现代码，也未提交 Key、raw prompt、raw Provider response 或 hidden state。
-
 ---
 
-## 8. G9-02 Integrated Closure｜ACTIVE / NEXT
+## 8. G9-02 Integrated Closure｜PASS / CLOSED
 
-目标不是继续建设新功能，而是证明当前 G9-02 foundations 已真正收敛为一套长期轨道：
+Independent Review：`G9-02_IntegratedClosure_IndependentReview_最终收口_v1.0_2026-08-20.md`。
 
 ```text
-Source identity / revision
+Formal Code Base
+81bdbb7b321e796d8d623989a8eb1e10a0c11bee
+
+Task Packet
+f415659361a640fc6eb98d2c61c73e25bccf6853
+
+Tested composition implementation
+c705ee240da70a77e804cca49821162c573f9bad
+
+Final Evidence / integrated main
+ab09c7ce6960a99b062d22fd49c143f9ae876f4e
+```
+
+Review 结论：
+
+```text
+P0 = 0
+P1 = 0
+AC-01～AC-12 = PASS
+Runtime production implementation changed = NO
+```
+
+组合闭环在同一局、同一 Store、同一 Host、同一 Formal Turn / Orchestrator 上证明：
+
+```text
+Source identity / lineage
 +
-Game-local canonical definitions
+Game-local definition / revision
 +
-Domain ownership / formal changes
+Domain canonical + runtime ownership
 +
 Player-known / disclosure
 +
-Model-first bounded routing / context
+Model-first selected-only routing / context
++
+Authorized Candidate / provenance
 +
 Save / Restore / Branch / Recovery
-+
-real Provider evidence
 ↓
 ONE coherent Runtime foundation
 ```
 
-必须确认：
+额外确认：
 
-1. 02A / 02BC / 02B / 02C 没有双 authority / second truth；
-2. Source → Local → Runtime 边界一致；
-3. Player Agency / Open Attempt 没有被 Domain Router 改写；
-4. Domain selection / projection / continuation 都继承 Authoritative Turn / owner boundaries；
-5. Player-known 与 relationship projection 无信息泄漏；
-6. ordinary turn context 与 session/history/registry 总量解耦；
-7. Save / Restore / Branch / Crash / Recovery exactly-once 无回滚；
-8. G5–G9 全回归通过；
-9. real Model-first routing evidence 可追溯；
-10. 没有提前进入 G9-03 external schema / Creator / Library Runtime。
+- routing miss 不改写合法 Player Attempt；
+- `state_mandatory` 与 `authoritative_continuation` provenance 都有现行自动回归证据；
+- hidden character / relation / private runtime marker 不泄漏；
+- deterministic wait 不调用 Router / Domain Candidate model；
+- `semantic_ready` recovery 不重复 model authoring；
+- G5/G6/G7/G8/G9 与 full suite 全部通过；
+- Closure 没有 `src` drift，因此合法继承已审核的真实 Provider evidence；
+- 没有进入 G9-03 / Creator / Library Runtime。
 
-Integrated Closure PASS 后，才允许把 G9-02 整体标记 `PASS / CLOSED` 并授权 G9-03。
+因此：
+
+```text
+G9-02 PASS / CLOSED
+```
 
 ---
 
@@ -337,20 +356,33 @@ AI 通过 Typed Creator Tools 受控修改 Draft；Chat != Draft；Draft != Save
 
 ---
 
-## 11. G9-03 Gate
+## 11. G9-03 Gate｜AUTHORIZED / NEXT
 
 ```text
 G9-02 Integrated Closure PASS
 ↓
 G9-02 PASS / CLOSED
 ↓
-G9-03 AUTHORIZED
+G9-03 AUTHORIZED / NEXT
 ```
 
-当前仍：
+G9-03 下一步统一冻结：
+
+- 世界包；
+- 角色卡；
+- 拓展包；
+- 资料库 Reference Resource Layer；
+
+的 machine-readable identity / version / refs / dependency / contribution / routing / binding / compatibility / migration contract。
+
+必须继续保持：
 
 ```text
-G9-03 NOT AUTHORIZED
+Asset Contract
+!= Creator Tool Contract
+!= Conversation Protocol
 ```
 
-G9-03 才统一冻结世界包 / 角色卡 / 拓展包 / 资料库 machine contract；不得提前把 Creator chat/tool transport 写入 Source Asset schema。
+Source Asset schema 不得包含 chat history、prompt、model provider、AI action history 或 Creator tool transport。
+
+G9-03 开始正式语义设计前必须重新执行 Freshness Preflight。
