@@ -15,7 +15,8 @@ G9-01                         PASS / CLOSED
 G9-02                         PASS / CLOSED
 G9-03                         PASS / CLOSED
 G9-04                         PASS / CLOSED
-G9-05                         AUTHORIZED / NEXT
+G9-05A Creator Foundation     PASS / FROZEN
+G9-05 Core Contract Design    AUTHORIZED / NEXT
 ```
 
 当前实现主线：
@@ -34,9 +35,9 @@ zhangchenjia21-dot/sillytavern-assets main
 
 当前核心路线：`酒馆游戏新版主体重建总路线 v2.3.md`。
 
-当前下一阶段：
+当前下一步：
 
-> **G9-05｜三类主资产 Creator 基础闭环。** 在 G9-03 统一资产协议与 G9-04 真实 Markdown 适配/编译/本局绑定已经关闭的基础上，建立世界包、角色卡、拓展包的结构化创作工作区与 AI 协作式编辑流程；AI 只能通过受控工具修改 Draft，不能直接发布资产。
+> **G9-05 Creator Core Contract Design。** 在已经冻结的“我的资产库四入口 + Creator Draft + 外部创作稿导入 + 用户显式发布”产品边界上，继续冻结共享 Draft、导入证据、冲突/未整理项、Typed Creator Tools、Draft→TavernAssetV1 发布转换与草稿持久化内部合同；随后再由 Codex 实现共享 Creator Core，而不是先做三个独立页面。
 
 ---
 
@@ -59,6 +60,7 @@ zhangchenjia21-dot/sillytavern-assets main
 - `18_酒馆游戏_资料库资源层与世界创作集成裁定_v1.2_2026-08-19.md`
 - `18A_酒馆游戏_资料库资源层协议护栏增量裁定_v1.0_2026-08-19.md`
 - `19_酒馆游戏_CreatorConversationalAuthoring与AI协作式结构化创作裁定_v1.0_2026-08-19.md`
+- `G9-05A_Creator基础模型与创作稿导入产品架构裁定_v1.0_2026-08-20.md`
 - `酒馆游戏新版主体重建总路线 v2.3.md`
 
 ### 执行治理
@@ -185,8 +187,6 @@ G9-04 已证明真实资产链：
 → Save / Restore
 ```
 
-真实样本包括汉末三国世界包、刘备角色卡、EP-CHAR-CORE 与诸界余辉世界包。
-
 关键边界：
 
 - `assetRef` 必须由显式适配档案提供，禁止从文件名、标题、别名或 Wikilink 模糊猜测；
@@ -196,28 +196,7 @@ G9-04 已证明真实资产链：
 - Library 在 G9-04 只做协议与交叉引用完整性证明，不进入本局主资产 `sourceLineage`；
 - Library `relatedRefs` 只做精确身份解析；
 - Character / Expansion 重复主绑定必须失败关闭；
-- Expansion Host 证明为 proof-only，不冒充具体玩法机制已经实现；
 - Provider 调用 = 0。
-
-最终测试：
-
-```text
-g9:04:test                 17 / 17 PASS
-g9:04:real                 PASS
-g9:03:test                 36 / 36 PASS
-G9-02 focused regressions  PASS
-G5                         207 / 207 PASS
-G6                          17 / 17 PASS
-G7                          20 / 20 PASS
-G8                         208 / 208 PASS
-full suite                 88 files / 806 tests PASS
-typecheck                  PASS
-lint                       PASS
-product build              PASS
-launcher smoke             PASS
-disclosure                 PASS
-git diff --check           PASS
-```
 
 ---
 
@@ -239,16 +218,28 @@ G9-03 已完成资料库协议；G9-04 已完成最小 parse / validate / canoni
 
 ---
 
-## 7. G9-05｜AUTHORIZED / NEXT
+## 7. G9-05A｜Creator Foundation｜PASS / FROZEN
 
-首版产品定义：
+G9-05A 正式冻结：
 
 ```text
-结构化 Creator 主工作区
-+
-AI 创作对话区
-+
-受控 Draft 编辑
+我的资产库
+├── Creator
+├── 世界包
+├── 角色卡
+└── 拓展包
+```
+
+Creator 内置于酒馆本体，但不是 Runtime authority。世界包、角色卡、拓展包页面只管理正式资产并把“新建 / 创建新版本”路由到同一个 Creator，不建立三套编辑器。
+
+三种创作起点统一进入同一 Draft：
+
+```text
+从空白开始
+外部创作稿导入
+已有正式资产创建新版本
+↓
+Creator Draft
 ```
 
 永久保持：
@@ -264,11 +255,61 @@ AI can edit Draft
 != AI can publish asset
 ```
 
-G9-05 必须让人工编辑和 AI 辅助编辑最终生成同一种合法 `TavernAssetV1` Source Asset，并复用 G9-03 validator 与 G9-04 adapter/compiler/binding 基础；不得创建第二套 Creator 专属资产协议。
+外部创作稿导入规则：
+
+```text
+明确、唯一、由原文支持
+→ AI 可填入 Draft
+
+信息不足 / 材料未提及 / 存在冲突 / 多种合理解释
+→ 正式字段留空
+→ 原始证据保留在 Creator 工作区
+```
+
+导入阶段只整理已有材料，不自动创作缺失内容。用户明确要求继续创作后，才进入 #19 的正常 AI 创作模式。
+
+外部文件始终只是数据：
+
+```text
+Imported Content
+!= Creator Instruction
+!= Tool Authorization
+!= Publish Authorization
+```
+
+发布链必须复用 G9-03：
+
+```text
+Creator Draft
+→ Program-owned deterministic conversion
+→ G9-03 validate / canonicalize / integrity
+→ TavernAssetV1
+→ 用户显式发布到“我的资产库”
+```
+
+发布新 Source 不自动绑定现有游戏。
 
 ---
 
-## 8. 当前 DAG
+## 8. G9-05｜当前下一步
+
+现在不先做页面，而先冻结共享 Creator Core 的内部合同：
+
+1. Draft identity / lifecycle / revision；
+2. 三种 origin；
+3. 部分结构化资产内容；
+4. 导入来源、已映射证据、待整理项、冲突项；
+5. Typed Creator Tools 与授权边界；
+6. Undo/change-set；
+7. 草稿持久化与恢复；
+8. Draft → `TavernAssetV1` 确定性发布转换；
+9. 无 Provider 时的完整手工路径。
+
+合同冻结后才由 Codex 实现共享 Creator Core，并优先用世界包跑第一个真实纵向；角色卡和拓展包随后复用同一套核心。
+
+---
+
+## 9. 当前 DAG
 
 ```text
 G9-02 Runtime Foundation
@@ -280,8 +321,15 @@ PASS / CLOSED
 G9-04 Adapter / Compiler / Binding
 PASS / CLOSED
 ↓
-G9-05 Creator 基础闭环
+G9-05A Creator Foundation
+PASS / FROZEN
+↓
+G9-05 Creator Core Contract Design
 AUTHORIZED / NEXT
+↓
+共享 Creator Core 实现
+↓
+World → Character → Expansion Creator 纵向闭环
 ↓
 三类主资产“我的资产库 → 创建游戏 → 完整游玩”端到端闭环
 ↓
