@@ -18,7 +18,8 @@ G9-04                         PASS / CLOSED
 G9-05A Creator Foundation     PASS / FROZEN
 G9-05B Creator Core Foundation
                               PASS / CLOSED
-G9-05C World Creator Vertical AUTHORIZED / NEXT
+G9-05C World Creator Vertical CORRECTION-01 ACTIVE
+Character Creator Vertical    NOT AUTHORIZED
 ```
 
 当前实现主线：
@@ -26,6 +27,14 @@ G9-05C World Creator Vertical AUTHORIZED / NEXT
 ```text
 zhangchenjia21-dot/sillytavern main
 25286b2517cb26520109e3d8738671e53d88c861
+```
+
+当前 G9-05C 任务分支：
+
+```text
+agent/g9-05c-world-creator
+reviewed implementation = 4f4f8449acb95b5270f0b4d21d65351129d9fe6a
+correction-01 packet     = a22fb7f89caeb7eec733de3d12311c9219c710c7
 ```
 
 当前资产仓库主线：
@@ -41,13 +50,13 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 968175e6c3fb3545b7c2907b65089c7e1dbb40a0
 ```
 
-后续资产仓库提交 `ffb3f15d...` 与 `34f72dd1...` 均为阶段导航同步，不改变 G9-04 真实样本证据或 canonical semantic asset 正文。
+后续资产仓库提交仅为阶段导航同步，不改变 G9-04 真实样本证据或 canonical semantic asset 正文。
 
 当前核心路线：`酒馆游戏新版主体重建总路线 v2.3.md`。
 
 当前下一步：
 
-> **G9-05C World Creator Vertical。** 在已经关闭的 G9-05B 共享 Creator Core 上，实现第一个真实世界包 Creator 产品纵向：结构化 World Draft 工作区、手工编辑、受控 AI 创作、外部 `.md/.txt` 创作稿导入整理、Validator / ChangeSet / Undo、显式发布到 Source Asset Library、重新打开与创建新版本。不得复制第二套 Draft / AI Patch / Source Store / 发布事务。
+> **G9-05C correction-01。** Codex 继续原 `agent/g9-05c-world-creator` 分支，关闭 World composition/dependency 高级编辑完整性、Import unresolved/conflict 继续创作定位、existing sectionRef identity UX、World `feature_conditional` dependency 语义门禁四个 P1。新精确提交通过独立审核之前，不合并 main、不授权 Character Creator。
 
 ---
 
@@ -68,6 +77,8 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 - `G9-05A_Creator基础模型与创作稿导入产品架构裁定_v1.0_2026-08-20.md`
 - `G9-05B_CreatorCore草稿导入发布内部合同规格_v1.0_2026-08-20.md`
 - `G9-05B_IndependentReview_最终收口_v1.0_2026-08-20.md`
+- `G9-05C_WorldCreator产品纵向规格_v1.0_2026-08-20.md`
+- `G9-05C_IndependentReview_WorldCreator_correction-01_v1.0_2026-08-20.md`
 - `酒馆游戏新版主体重建总路线 v2.3.md`
 
 ### 历史返修证据
@@ -108,7 +119,7 @@ Creator Draft
 AI Chat
 != Creator Draft
 
-AI can edit Draft
+AI can edit authorized Draft scope
 != AI can publish asset
 ```
 
@@ -185,13 +196,9 @@ Creator Draft
 
 ## 5. G9-05B｜Creator Core Foundation｜PASS / CLOSED
 
-正式规格：
+正式规格：`G9-05B_CreatorCore草稿导入发布内部合同规格_v1.0_2026-08-20.md`。
 
-`G9-05B_CreatorCore草稿导入发布内部合同规格_v1.0_2026-08-20.md`
-
-最终审核：
-
-`G9-05B_IndependentReview_最终收口_v1.0_2026-08-20.md`
+最终审核：`G9-05B_IndependentReview_最终收口_v1.0_2026-08-20.md`。
 
 最终实现 / integrated main：
 
@@ -199,131 +206,59 @@ Creator Draft
 25286b2517cb26520109e3d8738671e53d88c861
 ```
 
-最终结论：
-
 ```text
 P0 = 0
 P1 = 0
 G9-05B = PASS / CLOSED
 ```
 
-### 5.1 两个长期 Owner
-
-```text
-Creator Draft Store
-= 草稿 / Import Artifact / evidence / ChangeSet / Undo / publish work state
-
-Source Asset Library Store
-= 已发布、通过 G9-03 基础验证的本地正式 Source Asset
-```
-
-二者都不是 Runtime State，也不等于研发仓库 `sillytavern-assets`。
-
-### 5.2 Draft identity / CAS
-
-- Program-minted `targetAssetRef`；
-- source revision 精确继承 base snapshot identity；
-- revision/CAS；
-- stale AI fail closed；
-- published Draft 不原地编辑。
-
-### 5.3 Import Artifact / blank-only
-
-- `.md/.txt` exact 原文；
-- SHA-256；
-- stable segment refs；
-- certain + evidence + blank target 才可填写；
-- unresolved / conflict 保留；
-- section 按 `sectionRef` 判空；
-- Provider 不拥有 Creator node identity。
-
-### 5.4 AI task authorization
-
-Program-owned scope 约束：
-
-- operation family；
-- scalar targets；
-- semantic section refs；
-- dependency/list node refs；
-- typed node exact `nodeKind + nodeRef + allowedOperations`。
-
-AI 无默认全 Draft 写权限，`targetVersion` 也不默认授权。
-
-### 5.5 Provider runtime gate / partial apply
-
-Provider operation 视为 `unknown`；Program 对 complex payload 做完整运行时 shape / type / enum / nested key parsing。
-
-非法 operation 局部忽略并记录；合法 sibling 保留；一次 AI task 仍形成一个 ChangeSet，最终只做一次 CAS persist。
-
-### 5.6 Undo
-
-Undo 使用 inverse mutation 创建新 revision；目标后来已经变化则 `CREATOR_UNDO_CONFLICT`，不覆盖后续修改。
-
-### 5.7 Source Asset Library
-
-```text
-assetRef + version 不存在
-→ append
-
-存在且 digest 相同
-→ idempotent success
-
-存在但 digest 不同
-→ SOURCE_ASSET_VERSION_CONFLICT
-→ never overwrite
-```
-
-### 5.8 Publish / Recovery
-
-```text
-exact Draft revision
-→ deterministic publication compiler
-→ existing computeAssetDigest()
-→ existing validateAndVerifyAsset()
-→ SourceAssetLibraryStore
-```
-
-发布状态：
-
-```text
-editable → publishing → published
-```
-
-Source 已写入 / Draft 未 final 可 exact resume；确定性版本冲突会恢复 Draft 为 editable，让用户修改版本继续创作。
+共享 Core 已冻结：Program-minted identity、Draft Store / Source Store 分离、revision/CAS、Import Artifact/evidence、task-level AI scope、typed runtime parsing、partial apply、ChangeSet/Undo、Source append-only、deterministic publish 与 recovery、No-Provider 手工路径。
 
 ---
 
-## 6. G9-05C｜World Creator Vertical｜AUTHORIZED / NEXT
+## 6. G9-05C｜World Creator Vertical｜CORRECTION-01 ACTIVE
 
-G9-05C 是第一个真实 Creator 产品纵向，不再建设共享底座。
+正式产品规格：`G9-05C_WorldCreator产品纵向规格_v1.0_2026-08-20.md`。
 
-目标链：
+首次审核对象：
 
 ```text
-我的资产库
-→ Creator
-→ 新建世界包 / 导入创作稿 / 已有世界包新版本
-→ World Creator Draft Workspace
-→ 手工 + bounded AI authoring
-→ import unresolved/conflict visibility
-→ deterministic validation
-→ task change summary / Undo
-→ explicit Publish
-→ Source Asset Library
-→ 世界包资产详情 / 再打开 / 创建新版本
+Formal Base          25286b2517cb26520109e3d8738671e53d88c861
+Reviewed Implementation
+                     4f4f8449acb95b5270f0b4d21d65351129d9fe6a
+P0                   0
+P1                   4
 ```
 
-本阶段必须复用 G9-05B：
+已成立主链：
 
-- `CreatorDraftV1`；
-- Creator Draft Store；
-- Import Artifact；
-- typed operation / authoring scope；
-- ChangeSet / Undo；
-- Source Asset Library；
-- publication compiler / recovery。
+- “我的资产库”四入口；
+- Creator / 世界包真实可用，角色卡 / 拓展包明确后续开放；
+- blank / `.md/.txt` import / exact Source revision 三起点；
+- World structured workspace；
+- G9-05B CAS / AI exact scope / ChangeSet / Undo / Publish 复用；
+- SQLite Draft / Import / Source 持久化；
+- Source list / detail / version history；
+- Provider 未配置手工降级；
+- Runtime 隔离。
 
-不得先复制角色卡/拓展包页面；先用世界包验证真实产品工作区与 AI 创作体验，再向后复用。
+当前四个阻断：
+
+1. **高级 composition/dependency 编辑不完整**：现有 UI 只支持固定简化新增 + 删除，未满足正式字段和 existing edit。
+2. **Import unresolved/conflict 缺少继续创作定位**：证据可读，但不能从问题项回到相关字段/章节。
+3. **existing `sectionRef` UX 与 Core identity 冲突**：UI 看似可编辑，但 G9-05B 正确禁止 semantic identity 原地迁移。
+4. **World `feature_conditional` dependency 未收紧**：Product/AI 可产生在 G9-03 catalog 语义上仅适用于 Expansion source feature/module 的 conditional dependency。
+
+返修任务：
+
+```text
+repo:   zhangchenjia21-dot/sillytavern
+branch: agent/g9-05c-world-creator
+packet: agent tasks/G9-05C_Codex_correction-01_World高级编辑与导入审阅收口_v1.0_2026-08-20.md
+packet commit: a22fb7f89caeb7eec733de3d12311c9219c710c7
+```
+
+Character Creator 在新的 exact SHA 达到 `P0=0 / P1=0` 之前明确未授权。
 
 ---
 
@@ -340,8 +275,8 @@ G9-05A Creator Foundation                PASS / FROZEN
 ↓
 G9-05B Shared Creator Core               PASS / CLOSED
 ↓
-G9-05C World Creator Vertical            AUTHORIZED / NEXT
-↓
+G9-05C World Creator Vertical            CORRECTION-01 ACTIVE
+↓ exact-SHA review PASS only
 Character Creator Vertical
 ↓
 Expansion Creator Vertical
