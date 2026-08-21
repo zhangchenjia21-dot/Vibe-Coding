@@ -18,31 +18,30 @@ G9-04                         PASS / CLOSED
 G9-05A Creator Foundation     PASS / FROZEN
 G9-05B Creator Core Foundation
                               PASS / CLOSED
-G9-05C World Creator Vertical CORRECTION-02 ACTIVE
-Character Creator Vertical    NOT AUTHORIZED
+G9-05C World Creator Vertical PASS / CLOSED
+Character Creator Vertical    AUTHORIZED / NEXT
 ```
 
 当前实现主线：
 
 ```text
 zhangchenjia21-dot/sillytavern main
-25286b2517cb26520109e3d8738671e53d88c861
+1b79323bb53b5fb243465294a50c9d0b3f63dac8
 ```
 
-当前 G9-05C 任务分支：
+G9-05C 最终审核实现：
 
 ```text
-agent/g9-05c-world-creator
-reviewed implementation = 19f97f6210c1a5165c5e09a192f0bce7ee936983
-correction-02 packet     = 7c0f4d38625edf4dddea33abc89b11ab8aacd110
-executor                 = Grok Build (current temporary override)
+1b79323bb53b5fb243465294a50c9d0b3f63dac8
+P0 = 0
+P1 = 0
 ```
 
 当前资产仓库主线：
 
 ```text
 zhangchenjia21-dot/sillytavern-assets main
-34f72dd1a32b84649f2b3973e98836ad68f3b65e
+1d9872dccdb2caeff141e959fd533512c9de384a
 ```
 
 G9-04 真实资产 Gate 的冻结证据基线仍为：
@@ -57,7 +56,7 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 
 当前下一步：
 
-> **G9-05C correction-02。** Grok 继续原 `agent/g9-05c-world-creator` 分支，只关闭两个残余 Gate：修正 `section:${sectionRef}` formal target 到真实 existing section identity 的确定性定位；补齐 published World + synthetic targets → existing `validateAssetCatalog()` 的 catalog-compatible proof。新精确提交通过独立审核之前，不合并 main、不授权 Character Creator。
+> **Character Creator Vertical。** 复用 G9-05B Shared Creator Core 和 G9-05C 已验证的产品纵向模式，先冻结 Character-specific structured workspace / Source schema 映射，再由当前临时主力 Grok Build 执行 bounded implementation。不得把 World-only composition/dependency UI 生搬硬套到 Character Creator，也不得重开 Creator Core。
 
 ---
 
@@ -79,16 +78,17 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 - `G9-05B_CreatorCore草稿导入发布内部合同规格_v1.0_2026-08-20.md`
 - `G9-05B_IndependentReview_最终收口_v1.0_2026-08-20.md`
 - `G9-05C_WorldCreator产品纵向规格_v1.0_2026-08-20.md`
-- `G9-05C_IndependentReview_WorldCreator_correction-02_v1.0_2026-08-21.md`
+- `G9-05C_IndependentReview_最终收口_v1.0_2026-08-21.md`
 - `酒馆游戏新版主体重建总路线 v2.3.md`
 
 ### 历史返修证据
 
-以下只作为 historical evidence，不是当前 Gate Authority：
+以下只作为 historical evidence，不再是当前 Gate Authority：
 
 - `G9-05B_IndependentReview_CreatorCore_correction-01_v1.0_2026-08-20.md`
 - `G9-05B_IndependentReview_CreatorCore_correction-02_v1.0_2026-08-20.md`
 - `G9-05C_IndependentReview_WorldCreator_correction-01_v1.0_2026-08-20.md`
+- `G9-05C_IndependentReview_WorldCreator_correction-02_v1.0_2026-08-21.md`
 
 ### 执行治理
 
@@ -203,69 +203,62 @@ Creator Draft
 
 最终审核：`G9-05B_IndependentReview_最终收口_v1.0_2026-08-20.md`。
 
-最终实现 / integrated main：
+最终实现：
 
 ```text
 25286b2517cb26520109e3d8738671e53d88c861
-```
-
-```text
 P0 = 0
 P1 = 0
-G9-05B = PASS / CLOSED
 ```
 
 共享 Core 已冻结：Program-minted identity、Draft Store / Source Store 分离、revision/CAS、Import Artifact/evidence、task-level AI scope、typed runtime parsing、partial apply、ChangeSet/Undo、Source append-only、deterministic publish 与 recovery、No-Provider 手工路径。
 
 ---
 
-## 6. G9-05C｜World Creator Vertical｜CORRECTION-02 ACTIVE
+## 6. G9-05C｜World Creator Vertical｜PASS / CLOSED
 
 正式产品规格：`G9-05C_WorldCreator产品纵向规格_v1.0_2026-08-20.md`。
 
-当前审核权威：`G9-05C_IndependentReview_WorldCreator_correction-02_v1.0_2026-08-21.md`。
+最终审核：`G9-05C_IndependentReview_最终收口_v1.0_2026-08-21.md`。
 
-当前 exact reviewed implementation：
+最终实现 / integrated main：
 
 ```text
-19f97f6210c1a5165c5e09a192f0bce7ee936983
-
+1b79323bb53b5fb243465294a50c9d0b3f63dac8
 P0 = 0
-P1 = 2
+P1 = 0
 ```
 
-### 6.1 已成立主链
+### 6.1 已成立产品纵向
 
 - “我的资产库”四入口；
-- Creator / 世界包真实可用，角色卡 / 拓展包明确后续开放；
+- Creator / 世界包真实可用，角色卡 / 拓展包仍为后续入口；
 - blank / `.md/.txt` import / exact Source revision 三起点；
 - World structured workspace；
-- G9-05B CAS / AI exact scope / ChangeSet / Undo / Publish 复用；
-- SQLite Draft / Import / Source 持久化；
-- Source list / detail / version history；
-- Provider 未配置手工降级；
-- Runtime 隔离；
-- composition/dependency 正式 create/edit/delete；
-- existing `sectionRef` 作为只读 identity；
-- World dependency kind 收紧为 `hard | optional | reference`；
-- World UI / HTTP / DeepSeek 不再暴露 Expansion-only `feature_conditional`；
-- mutation 失败时新增表单保留未提交输入。
+- manual CAS autosave；
+- section create/edit/delete，existing `sectionRef` 只读稳定 identity；
+- composition/dependency 完整 create/edit/delete；
+- World dependency kind 仅 `hard | optional | reference`；
+- exact AI scope / Provider runtime parsing / ChangeSet / Undo；
+- raw evidence / mappings / unresolved / conflict visibility；
+- formal target → exact field/section continuation navigation；
+- explicit Publish；
+- Source world list / exact version history；
+- SQLite restart persistence；
+- No-Provider manual path；
+- Runtime isolation。
 
-### 6.2 当前两个阻断
+### 6.2 Catalog 语义证明
 
-1. **Import section formal target locator**：Core mapping 使用 `section:${sectionRef}`；例如 `sectionRef = section:overview` 时 canonical target 是 `section:section:overview`。当前 UI 的前缀解析会形成错误 DOM identity，按钮可能存在但无法定位真实章节。
-2. **G9-03 catalog-compatible proof 缺失**：当前只证明合法 dependency 可发布进 Source Store；还必须将 exact published World 与 synthetic target assets 送入现有 `validateAssetCatalog()`，证明最初“Source 可发布但 catalog 失败”的语义缺口确实关闭。
+最终 correction-02 已证明：Creator 发布的 World Source，带合法 `hard / optional / reference` dependency 后，可以进入 G9-03 `validateAssetCatalog()`：
 
-当前返修任务：
+- hard target present → PASS；
+- optional target absent → gap only；
+- reference target absent → allowed；
+- 无 `CONDITIONAL_DEPENDENCY_SCOPE_MISSING`；
+- 无 `DEPENDENCY_MISSING`。
 
-```text
-repo:   zhangchenjia21-dot/sillytavern
-branch: agent/g9-05c-world-creator
-packet: agent tasks/G9-05C_Grok_correction-02_章节定位与Catalog证据收口_v1.0_2026-08-21.md
-packet commit: 7c0f4d38625edf4dddea33abc89b11ab8aacd110
-```
-
-Character Creator 在新的 exact SHA 达到 `P0=0 / P1=0` 之前明确未授权。
+因此 G9-05C 不再存在“Source 可发布但 catalog 不可用”的已知 P1。
 
 ---
 
@@ -282,9 +275,9 @@ G9-05A Creator Foundation                PASS / FROZEN
 ↓
 G9-05B Shared Creator Core               PASS / CLOSED
 ↓
-G9-05C World Creator Vertical            CORRECTION-02 ACTIVE
-↓ exact-SHA review PASS only
-Character Creator Vertical
+G9-05C World Creator Vertical            PASS / CLOSED
+↓
+Character Creator Vertical               AUTHORIZED / NEXT
 ↓
 Expansion Creator Vertical
 ↓
