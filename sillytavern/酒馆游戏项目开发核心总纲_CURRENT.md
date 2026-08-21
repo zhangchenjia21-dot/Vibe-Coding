@@ -19,10 +19,10 @@ G9-05A Creator Foundation     PASS / FROZEN
 G9-05B Creator Core Foundation
                               PASS / CLOSED
 G9-05C World Creator Vertical PASS / CLOSED
-G9-05D0 Character Field Seam  SPEC / FROZEN
-G9-05D Character Creator      IMPLEMENTATION ACTIVE
+G9-05D0 Character Field Seam  PASS / CLOSED
+G9-05D Character Creator      PASS / CLOSED
 G9-05E Use My Assets Game Creation
-                              AUTHORIZED / NEXT AFTER D
+                              AUTHORIZED / SPEC NEXT
 G9-05F Expansion Creator      DEFERRED / NOT AUTHORIZED
 ```
 
@@ -30,16 +30,15 @@ G9-05F Expansion Creator      DEFERRED / NOT AUTHORIZED
 
 ```text
 zhangchenjia21-dot/sillytavern main
-1b79323bb53b5fb243465294a50c9d0b3f63dac8
+dd67bd9c02f42717dab139e9c87b4fe7e25f0fc6
 ```
 
-当前 G9-05D 任务分支：
+G9-05D 最终实现 / 集成主线：
 
 ```text
-agent/g9-05d-character-creator
-formal base  = 1b79323bb53b5fb243465294a50c9d0b3f63dac8
-packet       = agent tasks/G9-05D_Grok_CharacterCreator产品纵向执行包_v1.0_2026-08-21.md
-executor     = Grok Build (current temporary override)
+dd67bd9c02f42717dab139e9c87b4fe7e25f0fc6
+P0 = 0
+P1 = 0
 ```
 
 当前资产仓库主线：
@@ -61,7 +60,7 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 
 当前下一步：
 
-> **先完成 G9-05D Character Creator。** Grok 在 `agent/g9-05d-character-creator` 上按既有任务包完成 D0 + Character Creator，不追加范围。D 通过 GPT exact-SHA Independent Review 后，下一阶段改为 **G9-05E【使用我的资产库】创建游戏纵向**，而不是 Expansion Creator。G9-05F Expansion Creator 在 G9-05E PASS/CLOSED 前保持未授权。
+> **进入 G9-05E【使用我的资产库】创建游戏纵向的详细规格冻结。** World Creator 与 Character Creator 已经 PASS/CLOSED，下一步优先验证“已发布 Source Asset exact snapshot → TavernGameAssetManifestV1 → Game-local binding → 创建游戏 → Session / Save / Continue / Restore / Recovery”的真实闭环。G9-05F Expansion Creator 在 G9-05E PASS/CLOSED 前保持未授权。
 
 ---
 
@@ -86,6 +85,7 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 - `G9-05C_IndependentReview_最终收口_v1.0_2026-08-21.md`
 - `G9-05D0_CharacterProfileFields增量裁定_v1.0_2026-08-21.md`
 - `G9-05D_CharacterCreator产品纵向规格_v1.0_2026-08-21.md`
+- `G9-05D_IndependentReview_最终收口_v1.0_2026-08-21.md`
 - `G9-05_阶段重排_先资产建局后ExpansionCreator裁定_v1.0_2026-08-21.md`
 - `酒馆游戏新版主体重建总路线 v2.3.md`
 
@@ -97,6 +97,7 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 - `G9-05B_IndependentReview_CreatorCore_correction-02_v1.0_2026-08-20.md`
 - `G9-05C_IndependentReview_WorldCreator_correction-01_v1.0_2026-08-20.md`
 - `G9-05C_IndependentReview_WorldCreator_correction-02_v1.0_2026-08-21.md`
+- `G9-05D_IndependentReview_CharacterCreator_correction-01_v1.0_2026-08-21.md`
 
 ### 执行治理
 
@@ -253,7 +254,7 @@ P1 = 0
 
 最终审核：`G9-05C_IndependentReview_最终收口_v1.0_2026-08-21.md`。
 
-最终实现 / integrated main：
+最终实现：
 
 ```text
 1b79323bb53b5fb243465294a50c9d0b3f63dac8
@@ -265,68 +266,58 @@ P1 = 0
 
 ---
 
-## 7. G9-05D0 / G9-05D｜Character Creator｜ACTIVE
+## 7. G9-05D0 / G9-05D｜Character Creator｜PASS / CLOSED
 
-### 7.1 G9-05D0｜SPEC / FROZEN
+正式规格：
 
-正式裁定：`G9-05D0_CharacterProfileFields增量裁定_v1.0_2026-08-21.md`。
+- `G9-05D0_CharacterProfileFields增量裁定_v1.0_2026-08-21.md`
+- `G9-05D_CharacterCreator产品纵向规格_v1.0_2026-08-21.md`
 
-仅补齐 Character Creator 缺失的 exact Program-owned fields：
+最终审核：`G9-05D_IndependentReview_最终收口_v1.0_2026-08-21.md`。
 
-```text
-metadata.aliases
-character.playerCharacterSupported (undefined | true | false)
-character.displayName import assignment
-```
-
-实现必须继续走 typed operations / runtime parser / task-level scope / ChangeSet / Undo / evidence-backed blank-only import。禁止 generic path patch。
-
-### 7.2 G9-05D Character Creator｜IMPLEMENTATION ACTIVE
-
-正式规格：`G9-05D_CharacterCreator产品纵向规格_v1.0_2026-08-21.md`。
-
-Character workspace 结构：
+最终实现 / integrated main：
 
 ```text
-metadata / profile
-+
-sections
-+
-referenceSources
-+
-dependencies
+dd67bd9c02f42717dab139e9c87b4fe7e25f0fc6
+P0 = 0
+P1 = 0
 ```
 
-Character dependency 只允许 `hard | optional | reference`；`feature_conditional` / `sourceScope` 禁止。
+已成立：
 
-`referenceSources.libraryEntryRef` 第一版只接受 exact ref，不做 Library fuzzy lookup/retrieval。
+- exact `metadata.aliases` mutation / import / Undo；
+- `playerCharacterSupported` 未声明 / true / false 三态；
+- Character-specific Provider adapter，author / organizer exact type+revision preflight；
+- blank / `.md/.txt` import / exact Source revision；
+- Character dossier workspace；
+- sections / referenceSources / dependencies 完整编辑；
+- Character dependency 只允许 `hard | optional | reference`；
+- exact AI scope、partial ignore、ChangeSet / Undo；
+- evidence / unresolved / conflict；
+- stale CAS 刷新保留玩家失败的本地基础字段输入，不削弱 CAS；
+- explicit Publish；
+- Character Source list/detail/version history；
+- SQLite reopen；
+- No-Provider manual path；
+- `validateAssetCatalog()` 正向证明；
+- Runtime No-Phantom / session revision-turn isolation。
 
-强制 No-Phantom Gate：创建、导入、AI 编辑、发布、查看 Source、创建新版本全过程不得 materialize Character 或修改 Runtime State。
-
-当前任务：
+永久保持：
 
 ```text
-repo:   zhangchenjia21-dot/sillytavern
-branch: agent/g9-05d-character-creator
-base:   1b79323bb53b5fb243465294a50c9d0b3f63dac8
-packet: agent tasks/G9-05D_Grok_CharacterCreator产品纵向执行包_v1.0_2026-08-21.md
+Character Source Definition
+!= materialized Character
+!= current player character
+!= Runtime State
 ```
 
-当前 G9-05D 任务不因阶段重排而修改。完成后先独立审核；不得在该分支提前实现 G9-05E 或 Expansion Creator。
+---
 
-### 7.3 G9-05E / G9-05F 顺序
+## 8. G9-05E｜Use My Assets Game Creation｜AUTHORIZED / SPEC NEXT
 
 正式顺序裁定：`G9-05_阶段重排_先资产建局后ExpansionCreator裁定_v1.0_2026-08-21.md`。
 
-G9-05D PASS/CLOSED 后：
-
-```text
-G9-05E Use My Assets Game Creation
-↓
-G9-05F Expansion Creator
-```
-
-G9-05E 首轮允许：
+首轮允许：
 
 ```text
 1 exact published World
@@ -336,11 +327,33 @@ G9-05E 首轮允许：
 0 published Expansions
 ```
 
-因此 Expansion Creator 不是前置条件。G9-05E 详细规格将在 D 收口后基于新的 integrated main 冻结。
+目标闭环：
+
+```text
+Published Source exact snapshots
+↓
+TavernGameAssetManifestV1
+↓
+existing catalog / manifest validation
+↓
+G9-04 binding semantics
+↓
+G9-02 lineage / game-local instances
+↓
+创建游戏
+↓
+Session / Save / Continue / Restore / Recovery
+```
+
+Draft 不可直接选择；不得自动发布；不得形成临时 Source；不得因为 Character 被选入 Manifest 就绕过既有 materialization / No-Phantom 边界。
+
+G9-05E 详细规格和 Task Packet 现在允许基于 `sillytavern/main@dd67bd9c...` 冻结。规格冻结前不进入实现。
+
+G9-05F Expansion Creator 在 G9-05E PASS/CLOSED 前保持未授权。
 
 ---
 
-## 8. 当前 DAG
+## 9. 当前 DAG
 
 ```text
 G9-02 Runtime Foundation                 PASS / CLOSED
@@ -355,11 +368,11 @@ G9-05B Shared Creator Core               PASS / CLOSED
 ↓
 G9-05C World Creator Vertical            PASS / CLOSED
 ↓
-G9-05D0 Character Field Seam             SPEC / FROZEN
+G9-05D0 Character Field Seam             PASS / CLOSED
 ↓
-G9-05D Character Creator Vertical        IMPLEMENTATION ACTIVE
-↓ exact-SHA review PASS only
-G9-05E Use My Assets Game Creation       AUTHORIZED / NEXT AFTER D
+G9-05D Character Creator Vertical        PASS / CLOSED
+↓
+G9-05E Use My Assets Game Creation       AUTHORIZED / SPEC NEXT
 ↓
 G9-05F Expansion Creator Vertical        DEFERRED / NOT AUTHORIZED
 ↓
