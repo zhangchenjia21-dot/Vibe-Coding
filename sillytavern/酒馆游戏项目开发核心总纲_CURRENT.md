@@ -19,7 +19,9 @@ G9-05A Creator Foundation     PASS / FROZEN
 G9-05B Creator Core Foundation
                               PASS / CLOSED
 G9-05C World Creator Vertical PASS / CLOSED
-Character Creator Vertical    AUTHORIZED / NEXT
+G9-05D0 Character Field Seam  SPEC / FROZEN
+G9-05D Character Creator      IMPLEMENTATION ACTIVE
+Expansion Creator Vertical    NOT AUTHORIZED
 ```
 
 当前实现主线：
@@ -29,12 +31,13 @@ zhangchenjia21-dot/sillytavern main
 1b79323bb53b5fb243465294a50c9d0b3f63dac8
 ```
 
-G9-05C 最终审核实现：
+当前 G9-05D 任务分支：
 
 ```text
-1b79323bb53b5fb243465294a50c9d0b3f63dac8
-P0 = 0
-P1 = 0
+agent/g9-05d-character-creator
+formal base  = 1b79323bb53b5fb243465294a50c9d0b3f63dac8
+packet       = agent tasks/G9-05D_Grok_CharacterCreator产品纵向执行包_v1.0_2026-08-21.md
+executor     = Grok Build (current temporary override)
 ```
 
 当前资产仓库主线：
@@ -56,7 +59,7 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 
 当前下一步：
 
-> **Character Creator Vertical。** 复用 G9-05B Shared Creator Core 和 G9-05C 已验证的产品纵向模式，先冻结 Character-specific structured workspace / Source schema 映射，再由当前临时主力 Grok Build 执行 bounded implementation。不得把 World-only composition/dependency UI 生搬硬套到 Character Creator，也不得重开 Creator Core。
+> **G9-05D Character Creator。** Grok 在 `agent/g9-05d-character-creator` 上先机械实现 G9-05D0 exact Character profile field seam，focused Core tests PASS 后再实现 Character Creator 产品纵向。不得在 UI 层绕过 Creator Core；不得 materialize Character；不得进入 Expansion Creator。
 
 ---
 
@@ -79,6 +82,8 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 - `G9-05B_IndependentReview_最终收口_v1.0_2026-08-20.md`
 - `G9-05C_WorldCreator产品纵向规格_v1.0_2026-08-20.md`
 - `G9-05C_IndependentReview_最终收口_v1.0_2026-08-21.md`
+- `G9-05D0_CharacterProfileFields增量裁定_v1.0_2026-08-21.md`
+- `G9-05D_CharacterCreator产品纵向规格_v1.0_2026-08-21.md`
 - `酒馆游戏新版主体重建总路线 v2.3.md`
 
 ### 历史返修证据
@@ -130,6 +135,17 @@ AI can edit authorized Draft scope
 Model authors / proposes
 Program / Domain Owner commits reality
 ```
+
+Character 特别边界：
+
+```text
+Character Source Definition
+!= materialized Character
+!= current player character
+!= current position / relationship / knowledge / injury / allegiance
+```
+
+`playerCharacterSupported=true` 只表示 Source capability，不执行选择或 materialization。
 
 继续保持程序最终结果权、玩家行动权、开放尝试、No Phantom、私密/公开边界、按需物化、Save / Restore / Branch、Crash / Resume / Recovery 与 exactly-once。
 
@@ -229,40 +245,62 @@ P0 = 0
 P1 = 0
 ```
 
-### 6.1 已成立产品纵向
-
-- “我的资产库”四入口；
-- Creator / 世界包真实可用，角色卡 / 拓展包仍为后续入口；
-- blank / `.md/.txt` import / exact Source revision 三起点；
-- World structured workspace；
-- manual CAS autosave；
-- section create/edit/delete，existing `sectionRef` 只读稳定 identity；
-- composition/dependency 完整 create/edit/delete；
-- World dependency kind 仅 `hard | optional | reference`；
-- exact AI scope / Provider runtime parsing / ChangeSet / Undo；
-- raw evidence / mappings / unresolved / conflict visibility；
-- formal target → exact field/section continuation navigation；
-- explicit Publish；
-- Source world list / exact version history；
-- SQLite restart persistence；
-- No-Provider manual path；
-- Runtime isolation。
-
-### 6.2 Catalog 语义证明
-
-最终 correction-02 已证明：Creator 发布的 World Source，带合法 `hard / optional / reference` dependency 后，可以进入 G9-03 `validateAssetCatalog()`：
-
-- hard target present → PASS；
-- optional target absent → gap only；
-- reference target absent → allowed；
-- 无 `CONDITIONAL_DEPENDENCY_SCOPE_MISSING`；
-- 无 `DEPENDENCY_MISSING`。
-
-因此 G9-05C 不再存在“Source 可发布但 catalog 不可用”的已知 P1。
+已成立：四入口、World 三种创作起点、结构化 workspace、sections/composition/dependency 完整编辑、exact AI scope、Import evidence/continuation、ChangeSet/Undo、显式 Publish、Source list/detail/version history、No-Provider manual path、Runtime isolation 与 `validateAssetCatalog()` 正向兼容证明。
 
 ---
 
-## 7. 当前 DAG
+## 7. G9-05D0 / G9-05D｜Character Creator｜ACTIVE
+
+### 7.1 G9-05D0｜SPEC / FROZEN
+
+正式裁定：`G9-05D0_CharacterProfileFields增量裁定_v1.0_2026-08-21.md`。
+
+仅补齐 Character Creator 缺失的 exact Program-owned fields：
+
+```text
+metadata.aliases
+character.playerCharacterSupported (undefined | true | false)
+character.displayName import assignment
+```
+
+实现必须继续走 typed operations / runtime parser / task-level scope / ChangeSet / Undo / evidence-backed blank-only import。禁止 generic path patch。
+
+### 7.2 G9-05D Character Creator｜IMPLEMENTATION ACTIVE
+
+正式规格：`G9-05D_CharacterCreator产品纵向规格_v1.0_2026-08-21.md`。
+
+Character workspace 结构：
+
+```text
+metadata / profile
++
+sections
++
+referenceSources
++
+dependencies
+```
+
+Character dependency 只允许 `hard | optional | reference`；`feature_conditional` / `sourceScope` 禁止。
+
+`referenceSources.libraryEntryRef` 第一版只接受 exact ref，不做 Library fuzzy lookup/retrieval。
+
+强制 No-Phantom Gate：创建、导入、AI 编辑、发布、查看 Source、创建新版本全过程不得 materialize Character 或修改 Runtime State。
+
+当前任务：
+
+```text
+repo:   zhangchenjia21-dot/sillytavern
+branch: agent/g9-05d-character-creator
+base:   1b79323bb53b5fb243465294a50c9d0b3f63dac8
+packet: agent tasks/G9-05D_Grok_CharacterCreator产品纵向执行包_v1.0_2026-08-21.md
+```
+
+Expansion Creator 在 G9-05D 新 exact SHA 达到 `P0=0 / P1=0` 之前明确未授权。
+
+---
+
+## 8. 当前 DAG
 
 ```text
 G9-02 Runtime Foundation                 PASS / CLOSED
@@ -277,8 +315,10 @@ G9-05B Shared Creator Core               PASS / CLOSED
 ↓
 G9-05C World Creator Vertical            PASS / CLOSED
 ↓
-Character Creator Vertical               AUTHORIZED / NEXT
+G9-05D0 Character Field Seam             SPEC / FROZEN
 ↓
+G9-05D Character Creator Vertical        IMPLEMENTATION ACTIVE
+↓ exact-SHA review PASS only
 Expansion Creator Vertical
 ↓
 三类主资产“我的资产库 → 创建游戏 → 完整游玩”端到端闭环
