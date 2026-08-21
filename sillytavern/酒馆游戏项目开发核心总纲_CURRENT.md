@@ -1,7 +1,7 @@
 ---
 title: 酒馆游戏项目开发核心总纲
 status: current-integrated
-updated: 2026-08-20
+updated: 2026-08-21
 current_path: sillytavern/酒馆游戏项目开发核心总纲_CURRENT.md
 ---
 
@@ -18,7 +18,7 @@ G9-04                         PASS / CLOSED
 G9-05A Creator Foundation     PASS / FROZEN
 G9-05B Creator Core Foundation
                               PASS / CLOSED
-G9-05C World Creator Vertical CORRECTION-01 ACTIVE
+G9-05C World Creator Vertical CORRECTION-02 ACTIVE
 Character Creator Vertical    NOT AUTHORIZED
 ```
 
@@ -33,8 +33,9 @@ zhangchenjia21-dot/sillytavern main
 
 ```text
 agent/g9-05c-world-creator
-reviewed implementation = 4f4f8449acb95b5270f0b4d21d65351129d9fe6a
-correction-01 packet     = a22fb7f89caeb7eec733de3d12311c9219c710c7
+reviewed implementation = 19f97f6210c1a5165c5e09a192f0bce7ee936983
+correction-02 packet     = 7c0f4d38625edf4dddea33abc89b11ab8aacd110
+executor                 = Grok Build (current temporary override)
 ```
 
 当前资产仓库主线：
@@ -56,7 +57,7 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 
 当前下一步：
 
-> **G9-05C correction-01。** Codex 继续原 `agent/g9-05c-world-creator` 分支，关闭 World composition/dependency 高级编辑完整性、Import unresolved/conflict 继续创作定位、existing sectionRef identity UX、World `feature_conditional` dependency 语义门禁四个 P1。新精确提交通过独立审核之前，不合并 main、不授权 Character Creator。
+> **G9-05C correction-02。** Grok 继续原 `agent/g9-05c-world-creator` 分支，只关闭两个残余 Gate：修正 `section:${sectionRef}` formal target 到真实 existing section identity 的确定性定位；补齐 published World + synthetic targets → existing `validateAssetCatalog()` 的 catalog-compatible proof。新精确提交通过独立审核之前，不合并 main、不授权 Character Creator。
 
 ---
 
@@ -78,25 +79,27 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 - `G9-05B_CreatorCore草稿导入发布内部合同规格_v1.0_2026-08-20.md`
 - `G9-05B_IndependentReview_最终收口_v1.0_2026-08-20.md`
 - `G9-05C_WorldCreator产品纵向规格_v1.0_2026-08-20.md`
-- `G9-05C_IndependentReview_WorldCreator_correction-01_v1.0_2026-08-20.md`
+- `G9-05C_IndependentReview_WorldCreator_correction-02_v1.0_2026-08-21.md`
 - `酒馆游戏新版主体重建总路线 v2.3.md`
 
 ### 历史返修证据
 
-以下仅为 historical evidence，不再是当前 Gate Authority：
+以下只作为 historical evidence，不是当前 Gate Authority：
 
 - `G9-05B_IndependentReview_CreatorCore_correction-01_v1.0_2026-08-20.md`
 - `G9-05B_IndependentReview_CreatorCore_correction-02_v1.0_2026-08-20.md`
+- `G9-05C_IndependentReview_WorldCreator_correction-01_v1.0_2026-08-20.md`
 
 ### 执行治理
 
 - `G9及后续阶段_Agent资源分配与Codex默认代码协作裁定_v1.1_2026-08-20.md`
+- `G9及后续阶段_Grok临时主力执行切换记录_v1.0_2026-08-21.md`
 - `代码Agent_Worktree隔离与Main合并治理_v1.0_2026-08-19.md`
 - `AgentTaskPacket_GitHub原生交付增量裁定_v1.0_2026-08-20.md`
 - `Skill/main/skill/gpt/agent-task-packet/SKILL.md` v1.1
 - `Skill/main/skill/gpt/lifecycle-dev-process/SKILL.md` v2.1
 
-默认代码执行 Agent = Codex；Grok 只有项目所有者明确指定时使用。面向项目所有者沟通中文优先，仅精确代码字段、路径、命令、协议名和提交号保留英文。
+当前因 Codex 额度不可用，Project Owner 已明确选择 Grok Build 作为临时优先实现 Agent；GPT 继续负责产品/架构、Task Packet、exact-SHA Independent Review 与 main 集成 Gate。面向项目所有者沟通中文优先，仅精确代码字段、路径、命令、协议名和提交号保留英文。
 
 ---
 
@@ -216,21 +219,22 @@ G9-05B = PASS / CLOSED
 
 ---
 
-## 6. G9-05C｜World Creator Vertical｜CORRECTION-01 ACTIVE
+## 6. G9-05C｜World Creator Vertical｜CORRECTION-02 ACTIVE
 
 正式产品规格：`G9-05C_WorldCreator产品纵向规格_v1.0_2026-08-20.md`。
 
-首次审核对象：
+当前审核权威：`G9-05C_IndependentReview_WorldCreator_correction-02_v1.0_2026-08-21.md`。
+
+当前 exact reviewed implementation：
 
 ```text
-Formal Base          25286b2517cb26520109e3d8738671e53d88c861
-Reviewed Implementation
-                     4f4f8449acb95b5270f0b4d21d65351129d9fe6a
-P0                   0
-P1                   4
+19f97f6210c1a5165c5e09a192f0bce7ee936983
+
+P0 = 0
+P1 = 2
 ```
 
-已成立主链：
+### 6.1 已成立主链
 
 - “我的资产库”四入口；
 - Creator / 世界包真实可用，角色卡 / 拓展包明确后续开放；
@@ -240,22 +244,25 @@ P1                   4
 - SQLite Draft / Import / Source 持久化；
 - Source list / detail / version history；
 - Provider 未配置手工降级；
-- Runtime 隔离。
+- Runtime 隔离；
+- composition/dependency 正式 create/edit/delete；
+- existing `sectionRef` 作为只读 identity；
+- World dependency kind 收紧为 `hard | optional | reference`；
+- World UI / HTTP / DeepSeek 不再暴露 Expansion-only `feature_conditional`；
+- mutation 失败时新增表单保留未提交输入。
 
-当前四个阻断：
+### 6.2 当前两个阻断
 
-1. **高级 composition/dependency 编辑不完整**：现有 UI 只支持固定简化新增 + 删除，未满足正式字段和 existing edit。
-2. **Import unresolved/conflict 缺少继续创作定位**：证据可读，但不能从问题项回到相关字段/章节。
-3. **existing `sectionRef` UX 与 Core identity 冲突**：UI 看似可编辑，但 G9-05B 正确禁止 semantic identity 原地迁移。
-4. **World `feature_conditional` dependency 未收紧**：Product/AI 可产生在 G9-03 catalog 语义上仅适用于 Expansion source feature/module 的 conditional dependency。
+1. **Import section formal target locator**：Core mapping 使用 `section:${sectionRef}`；例如 `sectionRef = section:overview` 时 canonical target 是 `section:section:overview`。当前 UI 的前缀解析会形成错误 DOM identity，按钮可能存在但无法定位真实章节。
+2. **G9-03 catalog-compatible proof 缺失**：当前只证明合法 dependency 可发布进 Source Store；还必须将 exact published World 与 synthetic target assets 送入现有 `validateAssetCatalog()`，证明最初“Source 可发布但 catalog 失败”的语义缺口确实关闭。
 
-返修任务：
+当前返修任务：
 
 ```text
 repo:   zhangchenjia21-dot/sillytavern
 branch: agent/g9-05c-world-creator
-packet: agent tasks/G9-05C_Codex_correction-01_World高级编辑与导入审阅收口_v1.0_2026-08-20.md
-packet commit: a22fb7f89caeb7eec733de3d12311c9219c710c7
+packet: agent tasks/G9-05C_Grok_correction-02_章节定位与Catalog证据收口_v1.0_2026-08-21.md
+packet commit: 7c0f4d38625edf4dddea33abc89b11ab8aacd110
 ```
 
 Character Creator 在新的 exact SHA 达到 `P0=0 / P1=0` 之前明确未授权。
@@ -275,7 +282,7 @@ G9-05A Creator Foundation                PASS / FROZEN
 ↓
 G9-05B Shared Creator Core               PASS / CLOSED
 ↓
-G9-05C World Creator Vertical            CORRECTION-01 ACTIVE
+G9-05C World Creator Vertical            CORRECTION-02 ACTIVE
 ↓ exact-SHA review PASS only
 Character Creator Vertical
 ↓
