@@ -22,7 +22,7 @@ G9-05C World Creator Vertical PASS / CLOSED
 G9-05D0 Character Field Seam  PASS / CLOSED
 G9-05D Character Creator      PASS / CLOSED
 G9-05E Use My Assets Game Creation
-                              AUTHORIZED / SPEC NEXT
+                              SPEC / FROZEN · IMPLEMENTATION ACTIVE
 G9-05F Expansion Creator      DEFERRED / NOT AUTHORIZED
 ```
 
@@ -39,6 +39,17 @@ G9-05D 最终实现 / 集成主线：
 dd67bd9c02f42717dab139e9c87b4fe7e25f0fc6
 P0 = 0
 P1 = 0
+```
+
+当前 G9-05E 任务：
+
+```text
+repo:   zhangchenjia21-dot/sillytavern
+branch: agent/g9-05e-use-my-assets-game-creation
+base:   dd67bd9c02f42717dab139e9c87b4fe7e25f0fc6
+packet: agent tasks/G9-05E_Grok_使用我的资产库创建游戏纵向执行包_v1.0_2026-08-21.md
+packet commit: 540fdf5d72208a932d8f0656ff43ffea8e89d89c
+executor: Grok Build (current temporary override)
 ```
 
 当前资产仓库主线：
@@ -60,7 +71,7 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 
 当前下一步：
 
-> **进入 G9-05E【使用我的资产库】创建游戏纵向的详细规格冻结。** World Creator 与 Character Creator 已经 PASS/CLOSED，下一步优先验证“已发布 Source Asset exact snapshot → TavernGameAssetManifestV1 → Game-local binding → 创建游戏 → Session / Save / Continue / Restore / Recovery”的真实闭环。G9-05F Expansion Creator 在 G9-05E PASS/CLOSED 前保持未授权。
+> **执行 G9-05E【使用我的资产库】创建游戏纵向。** 先完成 Asset Game Creation Core：published Source exact selection、hard dependency selected-set closure、deterministic Source→Game-local materialization、exact Manifest、G9-04 binding reuse 与 exactly-once bootstrap；再接现有 New Game 产品页并证明 Session / Save / Continue / Restore。G9-05F Expansion Creator 在 G9-05E PASS/CLOSED 前保持未授权。
 
 ---
 
@@ -87,6 +98,7 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 - `G9-05D_CharacterCreator产品纵向规格_v1.0_2026-08-21.md`
 - `G9-05D_IndependentReview_最终收口_v1.0_2026-08-21.md`
 - `G9-05_阶段重排_先资产建局后ExpansionCreator裁定_v1.0_2026-08-21.md`
+- `G9-05E_使用我的资产库创建游戏产品与内部合同规格_v1.0_2026-08-21.md`
 - `酒馆游戏新版主体重建总路线 v2.3.md`
 
 ### 历史返修证据
@@ -159,10 +171,14 @@ Creator Draft
 
 Saved Source Asset exact snapshot
 → TavernGameAssetManifestV1
-→ Game-local binding / creation
+→ explicit Game Creation materialization
+→ G9-04 binding / lineage
+→ Runtime bootstrap
 ```
 
 【使用我的资产库】只能选择已发布 Source Asset；Draft 可提示“未发布”并跳回 Creator，但不得直接进入 Manifest、不得自动发布、不得偷偷形成临时 Source。
+
+Source binding 不等于 semantic materialization。Character 只有在 Final Create 中被显式指定为 `player_character` 或 `opening_character` 时才允许创建 Runtime Character；`bound_only` 只绑定，不赋予位置或 live state。
 
 继续保持程序最终结果权、玩家行动权、开放尝试、No Phantom、私密/公开边界、按需物化、Save / Restore / Branch、Crash / Resume / Recovery 与 exactly-once。
 
@@ -313,9 +329,19 @@ Character Source Definition
 
 ---
 
-## 8. G9-05E｜Use My Assets Game Creation｜AUTHORIZED / SPEC NEXT
+## 8. G9-05E｜Use My Assets Game Creation｜SPEC / FROZEN · IMPLEMENTATION ACTIVE
 
-正式顺序裁定：`G9-05_阶段重排_先资产建局后ExpansionCreator裁定_v1.0_2026-08-21.md`。
+正式规格：`G9-05E_使用我的资产库创建游戏产品与内部合同规格_v1.0_2026-08-21.md`。
+
+当前任务：
+
+```text
+repo:   zhangchenjia21-dot/sillytavern
+branch: agent/g9-05e-use-my-assets-game-creation
+base:   dd67bd9c02f42717dab139e9c87b4fe7e25f0fc6
+packet: agent tasks/G9-05E_Grok_使用我的资产库创建游戏纵向执行包_v1.0_2026-08-21.md
+packet commit: 540fdf5d72208a932d8f0656ff43ffea8e89d89c
+```
 
 首轮允许：
 
@@ -324,32 +350,44 @@ Character Source Definition
 +
 0..N exact published Characters
 +
-0 published Expansions
+0..N exact published Expansions
++
+0 Library product selection
 ```
 
-目标闭环：
+核心链：
 
 ```text
 Published Source exact snapshots
 ↓
-TavernGameAssetManifestV1
+AssetGameCreationIntentV1
 ↓
-existing catalog / manifest validation
+selected-set dependency closure
 ↓
-G9-04 binding semantics
+exact TavernGameAssetManifestV1
 ↓
-G9-02 lineage / game-local instances
+deterministic Source → Game-local materialization
 ↓
-创建游戏
+existing G9-04 compileAssetBindingPlan()
+↓
+SQLiteRuntimeStore.bootstrap()
 ↓
 Session / Save / Continue / Restore / Recovery
 ```
 
-Draft 不可直接选择；不得自动发布；不得形成临时 Source；不得因为 Character 被选入 Manifest 就绕过既有 materialization / No-Phantom 边界。
+Character role：
 
-G9-05E 详细规格和 Task Packet 现在允许基于 `sillytavern/main@dd67bd9c...` 冻结。规格冻结前不进入实现。
+```text
+bound_only
+opening_character
+player_character
+```
 
-G9-05F Expansion Creator 在 G9-05E PASS/CLOSED 前保持未授权。
+只有 Final Create 中显式 `opening_character` / `player_character` 才 materialize。只有 `playerCharacterSupported=true` 可作为 Source-backed player。0 Character Source 时使用玩家显式提供的本局 player identity。
+
+hard dependency 必须由当前 Manifest 中 exact selected snapshot 满足；“资产库里存在 target”不等于“本局已选择 target”，且 stable ref 不自动选 latest。
+
+Draft 不可直接选择；不得自动发布；不得形成临时 Source。G9-05E 主链 Provider calls = 0。
 
 ---
 
@@ -372,8 +410,8 @@ G9-05D0 Character Field Seam             PASS / CLOSED
 ↓
 G9-05D Character Creator Vertical        PASS / CLOSED
 ↓
-G9-05E Use My Assets Game Creation       AUTHORIZED / SPEC NEXT
-↓
+G9-05E Use My Assets Game Creation       SPEC / FROZEN · IMPLEMENTATION ACTIVE
+↓ exact-SHA review PASS only
 G9-05F Expansion Creator Vertical        DEFERRED / NOT AUTHORIZED
 ↓
 三类主资产完整组合建局与游玩闭环
