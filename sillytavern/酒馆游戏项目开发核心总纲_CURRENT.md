@@ -21,7 +21,9 @@ G9-05B Creator Core Foundation
 G9-05C World Creator Vertical PASS / CLOSED
 G9-05D0 Character Field Seam  SPEC / FROZEN
 G9-05D Character Creator      IMPLEMENTATION ACTIVE
-Expansion Creator Vertical    NOT AUTHORIZED
+G9-05E Use My Assets Game Creation
+                              AUTHORIZED / NEXT AFTER D
+G9-05F Expansion Creator      DEFERRED / NOT AUTHORIZED
 ```
 
 当前实现主线：
@@ -59,7 +61,7 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 
 当前下一步：
 
-> **G9-05D Character Creator。** Grok 在 `agent/g9-05d-character-creator` 上先机械实现 G9-05D0 exact Character profile field seam，focused Core tests PASS 后再实现 Character Creator 产品纵向。不得在 UI 层绕过 Creator Core；不得 materialize Character；不得进入 Expansion Creator。
+> **先完成 G9-05D Character Creator。** Grok 在 `agent/g9-05d-character-creator` 上按既有任务包完成 D0 + Character Creator，不追加范围。D 通过 GPT exact-SHA Independent Review 后，下一阶段改为 **G9-05E【使用我的资产库】创建游戏纵向**，而不是 Expansion Creator。G9-05F Expansion Creator 在 G9-05E PASS/CLOSED 前保持未授权。
 
 ---
 
@@ -74,7 +76,7 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 - `G9-04_LegacyMarkdownAdapterCompilerBinding规格_v1.0_2026-08-20.md`
 - `G9-04_IndependentReview_最终收口_v1.0_2026-08-20.md`
 
-### Creator
+### Creator / Asset Game Creation
 
 - `19_酒馆游戏_CreatorConversationalAuthoring与AI协作式结构化创作裁定_v1.0_2026-08-19.md`
 - `G9-05A_Creator基础模型与创作稿导入产品架构裁定_v1.0_2026-08-20.md`
@@ -84,6 +86,7 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 - `G9-05C_IndependentReview_最终收口_v1.0_2026-08-21.md`
 - `G9-05D0_CharacterProfileFields增量裁定_v1.0_2026-08-21.md`
 - `G9-05D_CharacterCreator产品纵向规格_v1.0_2026-08-21.md`
+- `G9-05_阶段重排_先资产建局后ExpansionCreator裁定_v1.0_2026-08-21.md`
 - `酒馆游戏新版主体重建总路线 v2.3.md`
 
 ### 历史返修证据
@@ -146,6 +149,19 @@ Character Source Definition
 ```
 
 `playerCharacterSupported=true` 只表示 Source capability，不执行选择或 materialization。
+
+资产建局特别边界：
+
+```text
+Creator Draft
+!= selectable game asset
+
+Saved Source Asset exact snapshot
+→ TavernGameAssetManifestV1
+→ Game-local binding / creation
+```
+
+【使用我的资产库】只能选择已发布 Source Asset；Draft 可提示“未发布”并跳回 Creator，但不得直接进入 Manifest、不得自动发布、不得偷偷形成临时 Source。
 
 继续保持程序最终结果权、玩家行动权、开放尝试、No Phantom、私密/公开边界、按需物化、Save / Restore / Branch、Crash / Resume / Recovery 与 exactly-once。
 
@@ -296,7 +312,31 @@ base:   1b79323bb53b5fb243465294a50c9d0b3f63dac8
 packet: agent tasks/G9-05D_Grok_CharacterCreator产品纵向执行包_v1.0_2026-08-21.md
 ```
 
-Expansion Creator 在 G9-05D 新 exact SHA 达到 `P0=0 / P1=0` 之前明确未授权。
+当前 G9-05D 任务不因阶段重排而修改。完成后先独立审核；不得在该分支提前实现 G9-05E 或 Expansion Creator。
+
+### 7.3 G9-05E / G9-05F 顺序
+
+正式顺序裁定：`G9-05_阶段重排_先资产建局后ExpansionCreator裁定_v1.0_2026-08-21.md`。
+
+G9-05D PASS/CLOSED 后：
+
+```text
+G9-05E Use My Assets Game Creation
+↓
+G9-05F Expansion Creator
+```
+
+G9-05E 首轮允许：
+
+```text
+1 exact published World
++
+0..N exact published Characters
++
+0 published Expansions
+```
+
+因此 Expansion Creator 不是前置条件。G9-05E 详细规格将在 D 收口后基于新的 integrated main 冻结。
 
 ---
 
@@ -319,9 +359,11 @@ G9-05D0 Character Field Seam             SPEC / FROZEN
 ↓
 G9-05D Character Creator Vertical        IMPLEMENTATION ACTIVE
 ↓ exact-SHA review PASS only
-Expansion Creator Vertical
+G9-05E Use My Assets Game Creation       AUTHORIZED / NEXT AFTER D
 ↓
-三类主资产“我的资产库 → 创建游戏 → 完整游玩”端到端闭环
+G9-05F Expansion Creator Vertical        DEFERRED / NOT AUTHORIZED
+↓
+三类主资产完整组合建局与游玩闭环
 ↓
 Primary Asset End-to-End Closure Gate
 ↓
