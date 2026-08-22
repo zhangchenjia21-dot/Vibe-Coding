@@ -1,7 +1,7 @@
 ---
 title: G9-05H｜Owner First Playable Independent Review｜correction-01
 status: current-review-rework
-version: 1.0
+version: 1.1
 updated: 2026-08-22
 ---
 
@@ -28,11 +28,33 @@ Exact head 通过临时 Draft PR #7 锁定；PR 随后关闭，`merged=false`。
 
 GitHub 对 reviewed SHA 无 external status / workflow run；本 Review 不声称 CI green。
 
-## 1. Verdict
+## 1. Owner clarification superseding initial review note
+
+Project Owner 已明确说明：
+
+```text
+0909740352462a0732b3be5ae51de7e3ef314932
+chore: remove superseded G9-02B/02C/03/04 Grok build task packets
+```
+
+对应的 `grok build/` 历史文件删除是 **Owner 本人主动执行且明确认可的仓库清理**。
+
+因此 initial review 中把该删除视为 G9-05H scope violation 的判断被撤销：
+
+```text
+Owner-authorized historical cleanup
+= ACCEPTED
+= 不要求恢复
+= 不计 P1
+```
+
+后续 Agent 不得恢复这些已由 Owner 删除的文件，除非 Owner 另行明确要求。
+
+## 2. Revised Verdict
 
 ```text
 P0 = 0
-P1 = 3
+P1 = 2
 
 G9-05H Engineering Gate
 = CORRECTION-01 REQUIRED
@@ -41,7 +63,7 @@ READY FOR OWNER UAT
 = NOT YET AUTHORIZED
 
 OWNER UAT PASS
-= 当然不属于 Engineering Review 可授予状态
+= 不属于 Engineering Review 可授予状态
 ```
 
 本轮核心实现方向可保留，不要求重做：
@@ -55,44 +77,14 @@ OWNER UAT PASS
 - default production Host / proof ref isolation；
 - NoProvider / external Provider calls = 0；
 - thin launcher wrapper；
-- Owner-facing UAT guide 基础结构。
+- Owner-facing UAT guide 基础结构；
+- Owner-authorized `grok build/` cleanup。
 
-Correction 只关闭以下三个边界。
-
----
-
-## 2. P1-01｜越权删除 historical `grok build/` 任务资料
-
-Reviewed branch 在 Task Packet 之后出现独立提交：
-
-```text
-0909740352462a0732b3be5ae51de7e3ef314932
-chore: remove superseded G9-02B/02C/03/04 Grok build task packets
-```
-
-该提交删除 `grok build/` 下历史任务包与 README，并在 commit message 中称为 `Owner-directed cleanup`。
-
-但 G9-05H 的唯一 Outcome 是 Owner UAT enablement；当前 Owner 决策还明确把 branch/handoff 历史清理列为低优先级卫生项，没有授权在本阶段执行 destructive cleanup。
-
-因此：
-
-```text
-Historical task evidence cleanup
-!= G9-05H UAT enablement
-```
-
-### Required
-
-- 在同一 task branch 恢复 `090974...` 删除的全部 `grok build/` 文件，内容必须与 Formal Code Base `a97b4bae...` exact 一致；
-- 不删除/改写其它历史资料；
-- 不借 correction 清理 branch、handoff、archive；
-- UAT implementation commit `9bed470...` 的功能代码保持。
-
-允许使用显式、范围受限的 restore/revert；禁止 reset/rebase/force-push 改写已审查历史。
+Correction 只关闭以下两个边界。
 
 ---
 
-## 3. P1-02｜Owner preflight 的 Source readiness 不是 exact snapshot
+## 3. P1-01｜Owner preflight 的 Source readiness 不是 exact snapshot
 
 当前 `buildOwnerUatPreflight()`：
 
@@ -171,7 +163,7 @@ World exact snapshot也必须进入同一机制。
 
 ---
 
-## 4. P1-03｜Owner UAT 指南给出的关闭方式会留下 launcher-owned 进程
+## 4. P1-02｜Owner UAT 指南给出的关闭方式会留下 launcher-owned 进程
 
 当前指南第 9 节写：
 
@@ -180,7 +172,12 @@ World exact snapshot也必须进入同一机制。
 → 再次 owner:uat:launch
 ```
 
-但正式 `start-playtest.ps1` 会使用 `Start-Process` 启动 backend/frontend，保存 `.local/g2-launcher-state.json` ownership record，然后 launcher 脚本自身结束；它明确提示 Owner 使用“关闭酒馆游戏.bat”结束本轮进程。
+但正式 `start-playtest.ps1` 会使用独立进程启动 backend/frontend，并保存 launcher ownership state；仓库已有正式：
+
+```text
+关闭酒馆游戏.bat
+→ scripts/stop-playtest.ps1
+```
 
 因此：
 
@@ -227,17 +224,19 @@ production capability module present
 proof module absent
 thin start wrapper
 Library deferred
+Owner-authorized grok build cleanup
 external Provider calls = 0
 ```
 
 禁止：
 
+- 恢复 Owner 已明确删除的 `grok build/` 历史文件；
 - CI / Node pinning / SQLite driver migration；
 - Creator UI convergence；
 - Library Product；
 - G10 / Release；
 - Runtime bootstrap 重写；
-- historical branch/archive cleanup；
+- 继续做其它 historical branch/archive cleanup；
 - 真实 Provider 自动调用。
 
 ---
@@ -245,16 +244,16 @@ external Provider calls = 0
 ## 6. Correction Acceptance
 
 ```text
-AC-HC01 090974 删除的 grok build 文件全部 exact 恢复；无其它卫生清理
-AC-HC02 三枚 production Source 有共享 exact snapshot pins
-AC-HC03 installer regression 证明 pins 与 frozen real corpus + formal revision 输出一致
-AC-HC04 preflight 用 exact snapshot 校验，不再只看 ref/version
-AC-HC05 same-version different-hash preflight BLOCKED
-AC-HC06 owner:uat:launch 无 assets-root 时仍可 exact 检查已安装 Source
-AC-HC07 UAT guide 使用“关闭酒馆游戏.bat”作为正式关闭路径
-AC-HC08 prepare/idempotency/user-state/proof-host 原已通过行为不回归
-AC-HC09 G9-05G real-assets gate 与 tests 不回归
-AC-HC10 external Provider calls = 0
+AC-HC01 三枚 production Source 有共享 exact snapshot pins
+AC-HC02 installer regression 证明 pins 与 frozen real corpus + formal revision 输出一致
+AC-HC03 preflight 用 exact snapshot 校验，不再只看 ref/version
+AC-HC04 same-version different-hash preflight BLOCKED
+AC-HC05 owner:uat:launch 无 assets-root 时仍可 exact 检查已安装 Source
+AC-HC06 UAT guide 使用“关闭酒馆游戏.bat”作为正式关闭路径
+AC-HC07 prepare/idempotency/user-state/proof-host 原已通过行为不回归
+AC-HC08 G9-05G real-assets gate 与 tests 不回归
+AC-HC09 external Provider calls = 0
+AC-HC10 Owner-authorized grok build deletions remain deleted；无额外 hygiene cleanup
 AC-HC11 main 保持 a97b4bae...，不得集成
 AC-HC12 最终 branch/worktree clean，返回 exact Final SHA
 ```
@@ -267,8 +266,6 @@ AC-HC12 最终 branch/worktree clean，返回 exact Final SHA
 
 ```text
 SILLYTAVERN_ASSETS_DIR=<real-assets-root> npm run owner:uat:test
-npm run owner:uat:prepare -- <real-assets-root>   # 只允许指向隔离/任务专用 DB；不得碰 Owner 真实 UAT DB
-npm run owner:uat:preflight -- <real-assets-root> # 同上，或以测试调用证明 CLI
 npm run g9:05g:real-assets -- <real-assets-root>
 npm run g9:05g:test
 npm run g9:05g0:test
@@ -285,13 +282,9 @@ npm run launcher:smoke
 git diff --check
 ```
 
-注意：CLI `owner:uat:prepare` 的真实默认 DB 是 `.local/g5-playtest.sqlite`。自动验证不得破坏 Owner 的真实本地 DB；应优先通过测试 API / 环境覆盖指向隔离 `.local/*.sqlite`，并在报告中明确实际路径与未触碰 Owner DB。
+如需验证 prepare/preflight CLI，必须通过测试 API 或显式环境覆盖指向隔离/任务专用 `.local/*.sqlite`；不得破坏 Owner 的真实 `.local/g5-playtest.sqlite`。
 
-真实 Provider：
-
-```text
-0 calls
-```
+真实 Provider：`0 calls`。
 
 GitHub status/workflow 若为空，必须如实写无 external CI evidence。
 
