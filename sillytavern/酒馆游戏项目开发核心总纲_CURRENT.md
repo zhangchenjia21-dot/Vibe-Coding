@@ -55,7 +55,7 @@ G9-05F_IndependentReview_最终收口_v1.0_2026-08-22.md
 
 ```text
 zhangchenjia21-dot/sillytavern-assets main
-1d9872dccdb2caeff141e959fd533512c9de384a
+5fb7886d51d7ddb2235d9cf0a52f8530dc8a827e
 ```
 
 G9-04 真实资产 Gate 的冻结证据基线仍为：
