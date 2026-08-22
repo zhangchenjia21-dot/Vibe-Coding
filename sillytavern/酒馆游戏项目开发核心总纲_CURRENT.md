@@ -23,20 +23,24 @@ G9-05D0 Character Field Seam  PASS / CLOSED
 G9-05D Character Creator      PASS / CLOSED
 G9-05E Use My Assets Game Creation
                               PASS / CLOSED
-G9-05F Expansion Creator      AUTHORIZED / NEXT
+G9-05F0 Expansion Import / Host Gate
+                              PASS / CLOSED
+G9-05F Expansion Creator      PASS / CLOSED
+Primary Asset End-to-End Closure
+                              AUTHORIZED / NEXT
 ```
 
 当前实现主线：
 
 ```text
 zhangchenjia21-dot/sillytavern main
-f1ec971b09dc9ed6dc59474f2c8ad1137e0f2e26
+26d23d47c5f5ac42d3e1029654a64eda831c4db1
 ```
 
-G9-05E 最终实现 / 集成主线：
+G9-05F 最终实现 / 集成主线：
 
 ```text
-f1ec971b09dc9ed6dc59474f2c8ad1137e0f2e26
+26d23d47c5f5ac42d3e1029654a64eda831c4db1
 P0 = 0
 P1 = 0
 ```
@@ -44,7 +48,7 @@ P1 = 0
 最终审核：
 
 ```text
-G9-05E_IndependentReview_最终收口_v1.0_2026-08-22.md
+G9-05F_IndependentReview_最终收口_v1.0_2026-08-22.md
 ```
 
 当前资产仓库主线：
@@ -62,11 +66,11 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 
 后续资产仓库提交仅为阶段导航同步，不改变 G9-04 真实样本证据或 canonical semantic asset 正文。
 
-当前核心路线：`酒馆游戏新版主体重建总路线 v2.3.md`。
+当前核心路线：`酒馆游戏新版主体重建总路线 v2.4.md`。
 
 当前下一步：
 
-> **设计并冻结 G9-05F Expansion Creator Vertical。** G9-05E 已证明 published World / Character / existing Expansion Source 可以通过 exact selection → dependency closure → Manifest → explicit Game-local materialization → G9-04 binding → Runtime → Session / Save / Restore。G9-05F 现在获准进入产品/合同设计，但在新的 canonical spec 与正式 Task Packet 出现前，任何 Agent 不得自行实现。
+> **设计并冻结 Primary Asset End-to-End Closure｜三类主资产完整组合建局与游玩闭环。** World / Character / Expansion Creator 与【使用我的资产库】建局均已 PASS/CLOSED。下一阶段必须使用真实 published World + Character + Expansion exact snapshots，证明 feature/module enablement、Program Runtime binding、Game-local materialization、Session、Save / Continue / Restore / Crash-Recovery 与 Source version isolation 的完整闭环。在新的 canonical spec 与正式 Task Packet 出现前，任何 Agent 不得自行进入 Library Product、G10 Provider 扩展或 Release。
 
 ---
 
@@ -95,7 +99,10 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 - `G9-05_阶段重排_先资产建局后ExpansionCreator裁定_v1.0_2026-08-21.md`
 - `G9-05E_使用我的资产库创建游戏产品与内部合同规格_v1.0_2026-08-21.md`
 - `G9-05E_IndependentReview_最终收口_v1.0_2026-08-22.md`
-- `酒馆游戏新版主体重建总路线 v2.3.md`
+- `G9-05F0_ExpansionImport与HostPublishGate增量裁定_v1.0_2026-08-22.md`
+- `G9-05F_ExpansionCreator产品纵向规格_v1.0_2026-08-22.md`
+- `G9-05F_IndependentReview_最终收口_v1.0_2026-08-22.md`
+- `酒馆游戏新版主体重建总路线 v2.4.md`
 
 ### 历史返修证据
 
@@ -108,17 +115,19 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 - `G9-05D_IndependentReview_CharacterCreator_correction-01_v1.0_2026-08-21.md`
 - `G9-05E_IndependentReview_使用我的资产库创建游戏_correction-01_v1.0_2026-08-22.md`
 - `G9-05E_IndependentReview_使用我的资产库创建游戏_correction-02_v1.0_2026-08-22.md`
+- `G9-05F_IndependentReview_ExpansionCreator_correction-01_v1.0_2026-08-22.md`
+- `G9-05F_IndependentReview_ExpansionCreator_correction-02_v1.0_2026-08-22.md`
 
 ### 执行治理
 
 - `G9及后续阶段_Agent资源分配与Codex默认代码协作裁定_v1.1_2026-08-20.md`
-- `G9及后续阶段_Grok临时主力执行切换记录_v1.0_2026-08-21.md`
+- `G9及后续阶段_Kimi临时主力执行切换记录_v1.0_2026-08-22.md`
 - `代码Agent_Worktree隔离与Main合并治理_v1.0_2026-08-19.md`
 - `AgentTaskPacket_GitHub原生交付增量裁定_v1.0_2026-08-20.md`
 - `Skill/main/skill/gpt/agent-task-packet/SKILL.md` v1.1
 - `Skill/main/skill/gpt/lifecycle-dev-process/SKILL.md` v2.1
 
-当前因 Codex 额度不可用，Project Owner 已明确选择 Grok Build 作为临时优先实现 Agent；GPT 继续负责产品/架构、Task Packet、exact-SHA Independent Review 与 main 集成 Gate。面向项目所有者沟通中文优先，仅精确代码字段、路径、命令、协议名和提交号保留英文。
+当前因 Grok 本周额度不可用，Project Owner 已明确选择 Kimi 作为临时优先实现 Agent；GPT 继续负责产品/架构、Task Packet、exact-SHA Independent Review 与 main 集成 Gate。旧 Grok 临时路由降为历史执行记录。面向项目所有者沟通中文优先，仅精确代码字段、路径、命令、协议名和提交号保留英文。
 
 ---
 
@@ -160,6 +169,34 @@ Character Source Definition
 ```
 
 `playerCharacterSupported=true` 只表示 Source capability，不执行选择或 materialization。
+
+Expansion 特别边界：
+
+```text
+Expansion Source moduleRef
+!= Program runtimeModuleRef
+
+Publish Expansion Source
+!= enable current game feature/module
+!= activate Runtime module
+```
+
+Program-owned refs（`runtimeModuleRef / config.schemaRef / projectionRef / hostCapability`）只能来自当前 Program Capability/Host truth；manual / import / AI 不得自行发明。
+
+已有正式语义 identity 对 AI 只读：
+
+```text
+sectionRef
+dependencyRef
+featureRef
+moduleRef
+surfaceId
+contributionRef
+world compositionRef
+character referenceRef
+```
+
+授权编辑节点内容不等于授权重命名其正式 identity。
 
 资产建局特别边界：
 
@@ -405,7 +442,51 @@ GitHub 没有为最终 SHA 返回 external combined CI status / workflow run；�
 
 ---
 
-## 9. 当前 DAG
+## 9. G9-05F0 / G9-05F｜Expansion Creator｜PASS / CLOSED
+
+正式规格：
+
+- `G9-05F0_ExpansionImport与HostPublishGate增量裁定_v1.0_2026-08-22.md`
+- `G9-05F_ExpansionCreator产品纵向规格_v1.0_2026-08-22.md`
+
+最终审核：`G9-05F_IndependentReview_最终收口_v1.0_2026-08-22.md`。
+
+最终实现 / integrated main：
+
+```text
+26d23d47c5f5ac42d3e1029654a64eda831c4db1
+P0 = 0
+P1 = 0
+```
+
+已成立：
+
+- Expansion blank / import / exact Source revision；
+- `packageRef / ownerNamespace`；
+- Features / Modules / semantic sections；
+- hard / optional / reference / `feature_conditional` dependencies；
+- UI surfaces / UI contributions；
+- Program Capability Catalog；
+- production Program Host / Runtime Module Host 共享组合 seam；
+- manual / import / AI Program-owned ref gate；
+- exact AI scope：scalar / section / dependency / feature / module / UI surface / UI contribution；
+- Import formal locator 全 Expansion target family；
+- stale scalar + structured-node dirty retention；
+- exact Source detail / version history / exact revision；
+- Publish / publishing recovery 任何 append 前重跑当前 Host Gate；
+- No-Provider manual path；
+- Publish 不自动激活 current game / Runtime；
+- G9-05E 可选择已发布 Expansion exact snapshot；
+- existing semantic identity AI read-only，identity rewrite 局部 ignored，合法 sibling edit 继续 apply；
+- shared identity gate 同时守住 World compositionRef / Character referenceRef。
+
+Source `moduleRef` 与 Program `runtimeModuleRef` 永久分层；Typed Config 必须通过当前 Program schema validator。Creator 不能因字段结构合法就发布 Host 不接受的 Expansion。
+
+GitHub 没有为最终 SHA 返回 external combined CI status / workflow run；最终 PASS 基于 exact-SHA diff、冻结规格、correction-01/02 代码与行为测试审核、ancestry Gate，不声称 external CI green。
+
+---
+
+## 10. 当前 DAG
 
 ```text
 G9-02 Runtime Foundation                 PASS / CLOSED
@@ -426,9 +507,11 @@ G9-05D Character Creator Vertical        PASS / CLOSED
 ↓
 G9-05E Use My Assets Game Creation       PASS / CLOSED
 ↓
-G9-05F Expansion Creator Vertical        AUTHORIZED / NEXT
+G9-05F0 Expansion Import / Host Gate     PASS / CLOSED
 ↓
-三类主资产完整组合建局与游玩闭环
+G9-05F Expansion Creator Vertical        PASS / CLOSED
+↓
+三类主资产完整组合建局与游玩闭环        AUTHORIZED / NEXT
 ↓
 Primary Asset End-to-End Closure Gate
 ↓
