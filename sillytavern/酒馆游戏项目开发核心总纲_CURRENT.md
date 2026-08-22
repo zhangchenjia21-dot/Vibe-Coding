@@ -1,7 +1,7 @@
 ---
 title: 酒馆游戏项目开发核心总纲
 status: current-integrated
-updated: 2026-08-21
+updated: 2026-08-22
 current_path: sillytavern/酒馆游戏项目开发核心总纲_CURRENT.md
 ---
 
@@ -22,34 +22,29 @@ G9-05C World Creator Vertical PASS / CLOSED
 G9-05D0 Character Field Seam  PASS / CLOSED
 G9-05D Character Creator      PASS / CLOSED
 G9-05E Use My Assets Game Creation
-                              SPEC / FROZEN · IMPLEMENTATION ACTIVE
-G9-05F Expansion Creator      DEFERRED / NOT AUTHORIZED
+                              PASS / CLOSED
+G9-05F Expansion Creator      AUTHORIZED / NEXT
 ```
 
 当前实现主线：
 
 ```text
 zhangchenjia21-dot/sillytavern main
-dd67bd9c02f42717dab139e9c87b4fe7e25f0fc6
+f1ec971b09dc9ed6dc59474f2c8ad1137e0f2e26
 ```
 
-G9-05D 最终实现 / 集成主线：
+G9-05E 最终实现 / 集成主线：
 
 ```text
-dd67bd9c02f42717dab139e9c87b4fe7e25f0fc6
+f1ec971b09dc9ed6dc59474f2c8ad1137e0f2e26
 P0 = 0
 P1 = 0
 ```
 
-当前 G9-05E 任务：
+最终审核：
 
 ```text
-repo:   zhangchenjia21-dot/sillytavern
-branch: agent/g9-05e-use-my-assets-game-creation
-base:   dd67bd9c02f42717dab139e9c87b4fe7e25f0fc6
-packet: agent tasks/G9-05E_Grok_使用我的资产库创建游戏纵向执行包_v1.0_2026-08-21.md
-packet commit: 540fdf5d72208a932d8f0656ff43ffea8e89d89c
-executor: Grok Build (current temporary override)
+G9-05E_IndependentReview_最终收口_v1.0_2026-08-22.md
 ```
 
 当前资产仓库主线：
@@ -71,7 +66,7 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 
 当前下一步：
 
-> **执行 G9-05E【使用我的资产库】创建游戏纵向。** 先完成 Asset Game Creation Core：published Source exact selection、hard dependency selected-set closure、deterministic Source→Game-local materialization、exact Manifest、G9-04 binding reuse 与 exactly-once bootstrap；再接现有 New Game 产品页并证明 Session / Save / Continue / Restore。G9-05F Expansion Creator 在 G9-05E PASS/CLOSED 前保持未授权。
+> **设计并冻结 G9-05F Expansion Creator Vertical。** G9-05E 已证明 published World / Character / existing Expansion Source 可以通过 exact selection → dependency closure → Manifest → explicit Game-local materialization → G9-04 binding → Runtime → Session / Save / Restore。G9-05F 现在获准进入产品/合同设计，但在新的 canonical spec 与正式 Task Packet 出现前，任何 Agent 不得自行实现。
 
 ---
 
@@ -99,6 +94,7 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 - `G9-05D_IndependentReview_最终收口_v1.0_2026-08-21.md`
 - `G9-05_阶段重排_先资产建局后ExpansionCreator裁定_v1.0_2026-08-21.md`
 - `G9-05E_使用我的资产库创建游戏产品与内部合同规格_v1.0_2026-08-21.md`
+- `G9-05E_IndependentReview_最终收口_v1.0_2026-08-22.md`
 - `酒馆游戏新版主体重建总路线 v2.3.md`
 
 ### 历史返修证据
@@ -110,6 +106,8 @@ G9-04 真实资产 Gate 的冻结证据基线仍为：
 - `G9-05C_IndependentReview_WorldCreator_correction-01_v1.0_2026-08-20.md`
 - `G9-05C_IndependentReview_WorldCreator_correction-02_v1.0_2026-08-21.md`
 - `G9-05D_IndependentReview_CharacterCreator_correction-01_v1.0_2026-08-21.md`
+- `G9-05E_IndependentReview_使用我的资产库创建游戏_correction-01_v1.0_2026-08-22.md`
+- `G9-05E_IndependentReview_使用我的资产库创建游戏_correction-02_v1.0_2026-08-22.md`
 
 ### 执行治理
 
@@ -179,6 +177,14 @@ Saved Source Asset exact snapshot
 【使用我的资产库】只能选择已发布 Source Asset；Draft 可提示“未发布”并跳回 Creator，但不得直接进入 Manifest、不得自动发布、不得偷偷形成临时 Source。
 
 Source binding 不等于 semantic materialization。Character 只有在 Final Create 中被显式指定为 `player_character` 或 `opening_character` 时才允许创建 Runtime Character；`bound_only` 只绑定，不赋予位置或 live state。
+
+所有建局产品投影都必须以 exact snapshot：
+
+```text
+assetRef + assetType + version + contentHash
+```
+
+为 authoritative selection identity；同一 stable ref 的 sibling version 不得继承选择、role 或 enablement。
 
 继续保持程序最终结果权、玩家行动权、开放尝试、No Phantom、私密/公开边界、按需物化、Save / Restore / Branch、Crash / Resume / Recovery 与 exactly-once。
 
@@ -329,21 +335,21 @@ Character Source Definition
 
 ---
 
-## 8. G9-05E｜Use My Assets Game Creation｜SPEC / FROZEN · IMPLEMENTATION ACTIVE
+## 8. G9-05E｜Use My Assets Game Creation｜PASS / CLOSED
 
 正式规格：`G9-05E_使用我的资产库创建游戏产品与内部合同规格_v1.0_2026-08-21.md`。
 
-当前任务：
+最终审核：`G9-05E_IndependentReview_最终收口_v1.0_2026-08-22.md`。
+
+最终实现 / integrated main：
 
 ```text
-repo:   zhangchenjia21-dot/sillytavern
-branch: agent/g9-05e-use-my-assets-game-creation
-base:   dd67bd9c02f42717dab139e9c87b4fe7e25f0fc6
-packet: agent tasks/G9-05E_Grok_使用我的资产库创建游戏纵向执行包_v1.0_2026-08-21.md
-packet commit: 540fdf5d72208a932d8f0656ff43ffea8e89d89c
+f1ec971b09dc9ed6dc59474f2c8ad1137e0f2e26
+P0 = 0
+P1 = 0
 ```
 
-首轮允许：
+首轮正式支持：
 
 ```text
 1 exact published World
@@ -355,7 +361,7 @@ packet commit: 540fdf5d72208a932d8f0656ff43ffea8e89d89c
 0 Library product selection
 ```
 
-核心链：
+已关闭主链：
 
 ```text
 Published Source exact snapshots
@@ -372,7 +378,9 @@ existing G9-04 compileAssetBindingPlan()
 ↓
 SQLiteRuntimeStore.bootstrap()
 ↓
-Session / Save / Continue / Restore / Recovery
+My Games / Session
+↓
+Save / Continue / Restore
 ```
 
 Character role：
@@ -385,9 +393,15 @@ player_character
 
 只有 Final Create 中显式 `opening_character` / `player_character` 才 materialize。只有 `playerCharacterSupported=true` 可作为 Source-backed player。0 Character Source 时使用玩家显式提供的本局 player identity。
 
-hard dependency 必须由当前 Manifest 中 exact selected snapshot 满足；“资产库里存在 target”不等于“本局已选择 target”，且 stable ref 不自动选 latest。
+hard dependency 必须由当前 Manifest 中 exact selected snapshot 满足；“资产库里存在 target”不等于“本局已选择 target”，stable ref 不自动选 latest。
+
+Final Create 以 Program-derived `createFingerprint` 保证 success-response loss / retry / finalize 的 exactly-once，同 fingerprint replay 同一 game，不同 fingerprint fail closed。
+
+多版本产品投影现已按完整 exact snapshot 区分：World、Source-backed Player、Expansion、Other Character 均不允许 sibling version 继承选择；Compatibility Review 显示 Character exact version + role 与 Expansion exact version + feature/module enablement。
 
 Draft 不可直接选择；不得自动发布；不得形成临时 Source。G9-05E 主链 Provider calls = 0。
+
+GitHub 没有为最终 SHA 返回 external combined CI status / workflow run；最终 PASS 基于 exact-SHA diff、frozen spec、committed regression tests 与 ancestry 独立审核，不声称 external CI green。
 
 ---
 
@@ -410,9 +424,9 @@ G9-05D0 Character Field Seam             PASS / CLOSED
 ↓
 G9-05D Character Creator Vertical        PASS / CLOSED
 ↓
-G9-05E Use My Assets Game Creation       SPEC / FROZEN · IMPLEMENTATION ACTIVE
-↓ exact-SHA review PASS only
-G9-05F Expansion Creator Vertical        DEFERRED / NOT AUTHORIZED
+G9-05E Use My Assets Game Creation       PASS / CLOSED
+↓
+G9-05F Expansion Creator Vertical        AUTHORIZED / NEXT
 ↓
 三类主资产完整组合建局与游玩闭环
 ↓
