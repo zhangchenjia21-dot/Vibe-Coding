@@ -1,13 +1,14 @@
 ---
 title: 酒馆游戏｜核心游玩重构产品与架构总纲
 status: current-canonical-product-spec
-version: 0.2
+version: 0.3
 updated: 2026-08-23
 project: 酒馆游戏新版主体
 supersedes_narrow_interpretations:
   - 玩家授权是所有世界变化前置条件
   - 叙事只能复述既有正式结果且不得产生任何新世界内容
   - 世界主动发展必须先有玩家输入中的直接证据
+  - 对低成本可恢复的模型错误默认采用预防优先并提前建设大规模限制
 ---
 
 # 酒馆游戏｜核心游玩重构产品与架构总纲 CURRENT
@@ -24,8 +25,10 @@ Project Owner 已明确：当前最大问题不是缺少更多外围系统，而
 
 ```text
 Product Definition Reset = PASS
-Architecture / Capability Survey = AUTHORIZED / NEXT
-Implementation = NOT YET AUTHORIZED until architecture survey closes
+Architecture Survey = PASS
+Turn + World Initiative Architecture = FROZEN
+PLAY-01 Independent Review = RETURN FOR CORRECTION
+PLAY-01 correction-01 = AUTHORIZED / NEXT
 Owner UAT = BLOCKED / NEEDS CORE PLAYABILITY REBUILD
 ```
 
@@ -169,6 +172,45 @@ Program 的价值不再是替模型决定“故事接下来应该发生什么”
 
 不得把 Program validation 重新演化成一套僵硬的剧情白名单。
 
+### 3.1 DEC-P04｜Freedom Before Prevention / Prefer Recovery over Prevention
+
+Project Owner 将模型自由与恢复哲学提升为一级产品原则。正式裁定见：
+
+`DEC-P04_ModelFreedom与RecoveryPhilosophy_一级产品原则_v1.0_2026-08-23.md`
+
+核心判断：
+
+> **对于低成本、可感知、可恢复的模型错误，默认优先让模型正常主持，并通过撤回、修正、重生成、回档和恢复处理；不因为理论上可能发生一次错误，就提前建设会明显限制核心体验的大规模防错体系。**
+
+因此防错机制必须考虑风险经济性：
+
+```text
+真实错误成本
++
+恢复成本
+vs
+预防机制的体验损失
++
+实现复杂度
++
+上下文 / Tool / 状态传播负担
++
+新增 bug surface
+```
+
+若预防成本明显高于错误及恢复成本，默认采用 Recovery-first，而不是 Prevention-first。
+
+但以下高风险边界继续前置保护：
+
+- Player Agency；
+- hidden / private disclosure；
+- 外部不可逆副作用；
+- Source Asset 等局外持久资源；
+- 存档完整性与 Recovery 基础设施本身；
+- 有正式规则 Owner 的高影响 contested outcome / RNG / 稀缺资源结果。
+
+从本原则起，**新增任何会显著限制模型主持、世界推进、内容创造或上下文使用的机制，都需要证明限制成本小于它防止的真实风险。**
+
 ---
 
 ## 4. Narrative Freedom 分层
@@ -278,6 +320,8 @@ World Initiative 必须能够：
 - 每回合强行转折；
 - 为“有内容”而无限生成无记忆实体。
 
+这里的“不得”应优先通过模型职责、上下文和恢复机制实现；只有触及高风险边界时才默认升级为强校验 / 强阻断。
+
 ---
 
 ## 7. 开放世界增长
@@ -340,9 +384,10 @@ Runtime World Materialization 不再只是“玩家说出未知对象后的补�
 8. 模型叙事明显更自由，但不会替玩家做决定；
 9. Save / Restore 后动态世界增长保持一致；
 10. 与“直接让通用网页版 AI 主持同一酒馆游戏”的对照体验相比，正式产品在主动性、创意承接、场景推进和继续游玩欲望上不得明显更差；
-11. Project Owner 明确给出“我愿意继续玩”的体验结论。
+11. Project Owner 明确给出“我愿意继续玩”的体验结论；
+12. 当模型出现一次低成本坏叙事 / 坏发展时，产品应有明确且低摩擦的恢复路径，而不是只能依赖更多前置限制来避免错误。
 
-工程测试通过只能证明实现可用，不能替代第 10–11 条。
+工程测试通过只能证明实现可用，不能替代第 10–12 条。
 
 ---
 
@@ -357,7 +402,8 @@ Runtime World Materialization 不再只是“玩家说出未知对象后的补�
 - Save / Restore / Recovery；
 - hidden knowledge boundary；
 - contested outcome / RNG 的 Program ownership；
-- Model authors candidates / Program commits durable reality。
+- Model authors candidates / Program commits durable reality；
+- 高风险边界采用 Prevention-first。
 
 ### 废除或收窄
 
@@ -365,7 +411,8 @@ Runtime World Materialization 不再只是“玩家说出未知对象后的补�
 - world materialization 必须被当前 Player Candidate 精确引用；
 - 叙事只能输出已经枚举过的全部实体与细节；
 - No Phantom 被解释成“模型不能自由增加任何环境内容”；
-- Candidate Directory 被当成世界可发生内容的白名单。
+- Candidate Directory 被当成世界可发生内容的白名单；
+- 因模型理论上可能犯低成本错误就预先建设大规模限制、审批和剧情白名单。
 
 ### 必须重审
 
@@ -376,7 +423,9 @@ Runtime World Materialization 不再只是“玩家说出未知对象后的补�
 - T0 静态启动；
 - Suggested Actions 与玩家自由输入关系；
 - Formal Turn 是否只能由 Player Initiative 驱动；
-- 世界主动行为和玩家回合之间的事务边界。
+- 世界主动行为和玩家回合之间的事务边界；
+- 哪些旧 validator / approval / schema 是高风险必要护栏，哪些只是为了防低成本模型错误而过度建设；
+- Recovery UX 是否足够低摩擦，使 DEC-P04 真正可执行。
 
 ---
 
@@ -385,17 +434,21 @@ Runtime World Materialization 不再只是“玩家说出未知对象后的补�
 ```text
 Canonical Product Reset = PASS
 ↓
-Runtime / Narrative / Materialization / Authority 全边界审计
+Architecture Survey = PASS
 ↓
-新 Turn + World Initiative 架构规格
+Turn + World Initiative Architecture = FROZEN
 ↓
-Shared Foundation implementation
+PLAY-01 implementation
 ↓
-最小真实刘备纵向
+Independent Review = RETURN FOR CORRECTION
+↓
+PLAY-01 correction-01
 ↓
 Independent Review
 ↓
 Owner 真人连续试玩
+↓
+Playability + Recovery Philosophy Reality Check
 ↓
 Playability PASS 才继续其它路线
 ```
