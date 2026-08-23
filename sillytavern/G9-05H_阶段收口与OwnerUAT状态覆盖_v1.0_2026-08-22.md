@@ -37,8 +37,9 @@ Owner First Playable = EXECUTED / PRODUCT FEEDBACK OBTAINED
 Owner UAT = BLOCKED / NEEDS CORE PLAYABILITY REBUILD
 
 Core Playability Product Reset = PASS
-Core Playability Architecture Survey = AUTHORIZED / NEXT
-Core Playability Implementation = NOT YET AUTHORIZED until architecture survey closes
+Core Playability Architecture Survey = PASS
+Turn + World Initiative Architecture = FROZEN
+PLAY-01 World Initiative Shared Foundation + First Vertical = AUTHORIZED / NEXT
 
 Library Product = DEFERRED / LATER EXTENSION
 Generic Core Capability Expansion = DEFERRED
@@ -58,37 +59,30 @@ Release = NOT AUTHORIZED
 5. 回合结束没有下一步钩子；
 6. 当前过度限制路线已经伤害游戏核心，应大刀阔斧调整；即使其它能力暂缓，核心游玩必须实现。
 
-正式 current 产品事实源：
+正式 current 产品 / 架构事实源：
 
 - `OwnerUAT_核心游玩体验优先级重排裁定_v1.0_2026-08-23.md`
 - `OwnerUAT_核心游玩循环根因与世界主动生成裁定_v1.0_2026-08-23.md`
 - `核心游玩重构_产品与架构总纲_CURRENT.md`
+- `核心游玩重构_Turn与WorldInitiative架构规格_v1.0_2026-08-23.md`
 
 ## Current Next Action
 
 本轮不再按 G9-05H correction budget 继续机械修补，也不把问题降格为 UI polish。
 
-下一动作：
+当前正式执行顺序：
 
 ```text
-Runtime / Narrative / Materialization / Authority 全边界审计
-↓
-识别应保留、应收窄、应退休的历史限制
-↓
-冻结新的 Turn + World Initiative 主干架构
-↓
-Shared Foundation implementation
-↓
-最小真实刘备纵向
+PLAY-01 World Initiative Shared Foundation + First Vertical
 ↓
 Independent Review
 ↓
-Project Owner 真人连续试玩
+Project Owner 刘备真人连续试玩
 ↓
-Playability PASS / 继续体验迭代
+Playability PASS / PLAY-02 体验收敛
 ```
 
-本阶段允许退休会实质阻止核心体验的旧 production 约束。不得因为某条规则历史上已经“冻结”就跳过重新审查。
+PLAY-01 允许退休会实质阻止核心体验的旧 production 约束，但必须保留 Player Agency、durable reality consistency、stable identity、atomic commit、Save / Restore / Recovery 与 hidden disclosure boundary。
 
 工程不得替 Owner 宣布 `FUN / PLAYABILITY PASS`。
 
@@ -102,3 +96,4 @@ Playability PASS / 继续体验迭代
 - `OwnerUAT_核心游玩体验优先级重排裁定_v1.0_2026-08-23.md`
 - `OwnerUAT_核心游玩循环根因与世界主动生成裁定_v1.0_2026-08-23.md`
 - `核心游玩重构_产品与架构总纲_CURRENT.md`
+- `核心游玩重构_Turn与WorldInitiative架构规格_v1.0_2026-08-23.md`
