@@ -1,0 +1,96 @@
+---
+title: The World｜Gate B 首个 RPG 体验插件与游戏面板裁定
+status: current
+version: 1.0
+created: 2026-08-24
+last_updated: 2026-08-24
+scope: the-world-project / Gate B
+decision_type: product-architecture
+---
+
+# Gate B 首个 RPG 体验插件与游戏面板裁定 v1.0
+
+## 0. 背景
+
+2026-08-24 规划线程与项目所有者的插件讨论收口。前置状态：Gate A 经真实试玩基本成立（正式收口宣告由所有者择机发出）；DSH current（pushed 2026-08-21）已核验，确认 Web 端存在正式 client module 机制（`packages/client/modules`）与声明式 slot 系统（`packages/client/ui-slots`、`ui-sidebar`、`ui-conversation` 等），游戏 UI 插件可完全 DSH-native 实现，不 fork / patch 宿主。
+
+本文件冻结九项裁定（DEC-B1 ~ DEC-B9）。实施时回写 `the-world` 正式文档（`docs/ARCHITECTURE_CURRENT.md` 等），本文件不替代项目仓库 truth。
+
+## 1. 裁定清单
+
+### DEC-B1｜插件开关与作用域模式（确认现状即正式模式）
+
+- The World 全部 RPG 插件挂同一个独立 "The World" preset（以 standard 为底）；选用 standard preset 时 The World 插件不加载，正常 agent 功能零影响；
+- 每个插件内部保留 cwd / game 语义门（`resolveGame` 模式）；
+- 已知维护债：preset 以 standard 为底复制，DSH 升级时需人工跟进同步。
+
+### DEC-B2｜首个插件：只读游戏面板
+
+- 形态：一个面板插件（`plugins/` 下新插件），内部分页，不拆多个插件；
+- 数据全部来自 Workspace Architecture v0.2 已稳定 Owner：
+
+| 面板内容 | 数据 Owner |
+|---|---|
+| 角色 / 状态 | `state/PLAYER.md` |
+| 在场人物 | `state/characters/` |
+| 物品 / 货币 / 系统 | `mechanics/<mechanic-id>/STATE.md` |
+| 任务 / 悬而未决 | `state/THREADS.md` + 系统任务合同 |
+
+### DEC-B3｜UI 硬边界：projection only
+
+- 面板**永远只读**，不提供任何编辑 / 写回入口；
+- 遵守既有原则：UI 是 game truth projection，不是第二事实源；Chat 展示机制事件，UI 承载机制当前状态；
+- 面板显示"当前活档案"（state/、mechanics/ 当下事实），不显示 saves/ 历史快照；玩家手动回档后面板跟随显示恢复后的时点。
+
+### DEC-B4｜数据通路
+
+- 浏览器半（前台网页）受浏览器安全约束不能直接读本地文件；数据由插件 Node 半（后台）经 DSH webserver 前缀路由提供 HTTP 端点；
+- 刷新节奏：每回合结束后刷新一次，玩家无感；不做实时轮询重活。
+
+### DEC-B5｜构建链进仓库（方案 A）
+
+- the-world 仓库引入前端构建链（对齐 DSH 使用的 tsdown），仓库存人可读源码，构建产物不提交（或按实施时裁定的最小例外处理）；
+- 一次搭建，后续所有 UI 插件（Map、战斗面板等）复用同一构建链；
+- 接受仓库性质变化：the-world 从"纯 Markdown + 简单脚本"变为带前端工程链的仓库。
+
+### DEC-B6｜DEF-01（quiet mode）搭车
+
+- Gate B UI 工作期间一并处理 Chat 工作噪音隐藏；
+- 仍走既定方案 B：向 `deepseek-ai/deepseek-harness` 上游提显示偏好开关 PR，不 fork / patch DSH 内部。
+
+### DEC-B7｜Gate B 验收
+
+- 以项目所有者授意为准，所有者认为可收口时亲自宣告；
+- 参考口径（非机械门槛）：同段游戏流程有/无面板对照，沉浸感与信息可读性主观提升；面板内容与 state 文件事实一致（projection 不失真）；GM 质量不因插件引入而下降。
+
+### DEC-B8｜Web-only
+
+- 第一阶段 UI 插件只做 DSH Web 端，CLI 不投入（玩家环境为 Web）。
+
+### DEC-B9｜多 game 识别
+
+- 面板经 `resolveGame(cwd)` 同一逻辑识别当前 session 对应 game；
+- `游戏定位.js` 抽为 the-world-core 与面板插件的共同依赖，不复制实现。
+
+## 2. 风险与缓解
+
+| 风险 | 缓解 |
+|---|---|
+| DSH 快速演进，slot 契约 / client module 协议变化 | 只用文档化 seam；实施前核验 DSH current；DSH 升级时跟随检查 |
+| 前端构建链维护成本 | 对齐 DSH 自身工具链（tsdown），不自选异构工具 |
+| 面板变成"第二事实源"诱惑 | DEC-B3 硬边界 + Review 时专项检查 |
+| 为 UI 倒逼游戏数据结构化 | 禁止；数据结构由游戏真实需求驱动（Freedom Before Prevention），面板迁就文件现状 |
+
+## 3. 后续动作
+
+1. 生成正式实施任务包（执行线程，按 agent-task-packet 协议）；
+2. 实施完成 → Independent Review（含 DEC-B3 专项检查）；
+3. 真实试玩对照 → 所有者宣告 Gate B 是否收口；
+4. quiet mode 上游 PR 另派任务（可并行）。
+
+## 4. 明确不做
+
+- 不做 Map / 战斗面板（后续插件候选，本次不启动）；
+- 不做面板编辑功能；
+- 不做 CLI 端 UI；
+- 不为面板新增任何游戏数据文件 / 结构。
