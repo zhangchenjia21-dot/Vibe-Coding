@@ -23,14 +23,19 @@ scope: the-world-project
 
 ## 待办
 
-- [ ] Gate B 面板插件（the-world-panel）：十项裁定已收口（见 `GateB_首个RPG体验插件与游戏面板裁定_v1.1_2026-08-24.md`），实施任务包见同目录 `任务包_TW-IMPL-2026-08-24-03_the-world-panel游戏面板实施_v1.0.md`，待派发执行线程；quiet mode 上游 PR 可并行另派。环境前置：启用 web profile 中被禁用的 better-sidebar；卸载 `@linxin666/dsh-web-ui-all` 全家桶（项目所有者已确认将卸载）。
+- [ ] TW-REV-2026-08-24-04：the-world-panel 独立审核（任务包见同目录 v1.0），待派审核线程（不得为实施线程；建议 DSH/K3 或独立 Kimi 会话）。Gate B 宣告以其通过为前提之一。
+- [ ] Gate B 收口收尾：Review 通过后——① 所有者宣告 Gate B（DEC-B7）；② 裁定 v1.2 回写 `the-world/docs/ARCHITECTURE_CURRENT.md` 与 `PRODUCT_SPEC_CURRENT.md`（the-world-panel 登记 + DEC-B10 宿主边界 + DEC-B3 v1.2 窄写口），并更新 the-world `README.md` 状态行。
+- [ ] 阶段 1（Gate B 收口后启动，可并行）：① quiet mode 上游 PR（DEF-01 已触发，目标 deepseek-harness 仓库）；② fileViewer 定制渲染（PLAYER.md/char-\*.md 打开渲染为角色卡，DEC-B10 已列候选）。
+- [ ] 阶段 2 面板演进候选池（真实试玩拉动，各自先出任务包）：人物详情页；世界态势页（待 WORLD.md 真实建档）；存档页（含写面，须先专项裁定）；掷骰入口（接 tools/掷骰.mjs）；多 game polish。
+- [ ] 阶段 3 暂缓项：Map（触发=某局真实产生地理数据维护需求）；战斗/机制专用面板（触发=战斗高频真实使用）；CLI 端 UI（DEC-B8 不做）。
 - [ ] TW-01 后台维护两层拆分：已在 the-world/main 实施（commit `eab96a4`，2026-08-24），待 luan-shi-sanguo 实测验证后正式收口。
 - [ ] Gate A 正式收口宣告：试玩基本成立，待项目所有者择机正式宣布。
-- [ ] Gate B 裁定回写 the-world docs：裁定 v1.1（DEC-B1~B10）目前只在 Vibe-Coding；待 TW-IMPL-03 实施+Review 通过后，作为 Gate B 收口收尾任务回写 `the-world/docs/ARCHITECTURE_CURRENT.md` 与 `PRODUCT_SPEC_CURRENT.md`（the-world-panel 登记 + DEC-B10 宿主边界）。刻意不并入 TW-IMPL-03（已派发，中途不改包）。
+- [ ] Gate B 收口后：经验复盘（候选素材：双工作树幽灵文档、规划线程越界实施、宿主薄适配层模式、窄写口裁定模式）。
 - [ ] sillytavern-assets：STA-ADAPT-02 资产已入库 the-world/main（commit `dc46271`，v1+v2 收口）；Independent Review 是否已做待确认。
 - [ ] sillytavern-assets：资产族治理文档（索引 / 蓝图 / 版本锁）同步时机待裁定——适配全量收口后统一处理，还是随 v2 合并处理。
 
 ## 已完成（移出登记）
 
+- TW-IMPL-2026-08-24-03（the-world-panel 实施）：2026-08-24 完成并上线（HEAD `f1b61d7`），五分页 + DEC-B3 v1.2 窄写口（线程归档）+ 部署/冒烟脚本；玩家截图确认可用。待独立审核（TW-REV-04）。裁定同期升 v1.2（DEC-B3 窄写口，所有者裁定）。
 - TW-DOC-2026-08-24-02（WC-08 回迁+删克隆）：2026-08-24 完成，commit `6f497f7`，六项 AC 全 PASS，规划线程已对照 GitHub 核验。遗留 P3：世界包内容 v0.2.4 与文件名 v0.2.3 脱钩（为保护约 20 张人物卡引用，Revision Notes 已注明）；下一份世界包资产文档更新时评估是否统一更名。
 - TW-ASSET-2026-08-24-01（d20 判定包提交）：2026-08-24 由项目所有者直接 push 完成（HEAD `3381595`），已实用于 luan-shi-sanguo。
