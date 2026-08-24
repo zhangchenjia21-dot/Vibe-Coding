@@ -23,10 +23,13 @@ scope: the-world-project
 
 ## 待办
 
-- [ ] WC-08 设计文档回迁：`D:\AI\deepseekharness\user-repos\the-world`（DSH 克隆）藏有唯一一份 WC-08 Game Composition 设计批次（PLAN +47 行、6 文件配套、`library/worlds/三国/` 草稿），功能已实施但 main 文档缺失。执行线程按任务包 TW-DOC-2026-08-24-02（见同目录 v1.0）回迁 → push → 删克隆。删除前禁止清空该目录。
-- [ ] Gate B 面板插件（the-world-panel）：十项裁定已收口（见 `GateB_首个RPG体验插件与游戏面板裁定_v1.1_2026-08-24.md`），待生成正式实施任务包并派发执行线程；quiet mode 上游 PR 可并行另派。环境前置：启用 web profile 中被禁用的 better-sidebar；建议卸载 `@linxin666/dsh-web-ui-all` 全家桶（要求 DSH>=0.1.1-rc.1，与 rc.8 不匹配）。
-- [ ] TW-ASSET-2026-08-24-01：判定与检定过渡包（d20）已由规划线程在 `D:\AI\Projects\the world` 本地落地（5 个文件，未提交），执行线程按任务包验证并提交推送（见同目录任务包 v1.0）。
+- [ ] Gate B 面板插件（the-world-panel）：十项裁定已收口（见 `GateB_首个RPG体验插件与游戏面板裁定_v1.1_2026-08-24.md`），实施任务包见同目录 `任务包_TW-IMPL-2026-08-24-03_the-world-panel游戏面板实施_v1.0.md`，待派发执行线程；quiet mode 上游 PR 可并行另派。环境前置：启用 web profile 中被禁用的 better-sidebar；卸载 `@linxin666/dsh-web-ui-all` 全家桶（项目所有者已确认将卸载）。
 - [ ] TW-01 后台维护两层拆分：已在 the-world/main 实施（commit `eab96a4`，2026-08-24），待 luan-shi-sanguo 实测验证后正式收口。
 - [ ] Gate A 正式收口宣告：试玩基本成立，待项目所有者择机正式宣布。
 - [ ] sillytavern-assets：STA-ADAPT-02 资产已入库 the-world/main（commit `dc46271`，v1+v2 收口）；Independent Review 是否已做待确认。
 - [ ] sillytavern-assets：资产族治理文档（索引 / 蓝图 / 版本锁）同步时机待裁定——适配全量收口后统一处理，还是随 v2 合并处理。
+
+## 已完成（移出登记）
+
+- TW-DOC-2026-08-24-02（WC-08 回迁+删克隆）：2026-08-24 完成，commit `6f497f7`，六项 AC 全 PASS，规划线程已对照 GitHub 核验。遗留 P3：世界包内容 v0.2.4 与文件名 v0.2.3 脱钩（为保护约 20 张人物卡引用，Revision Notes 已注明）；下一份世界包资产文档更新时评估是否统一更名。
+- TW-ASSET-2026-08-24-01（d20 判定包提交）：2026-08-24 由项目所有者直接 push 完成（HEAD `3381595`），已实用于 luan-shi-sanguo。
