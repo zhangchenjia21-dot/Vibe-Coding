@@ -26,6 +26,7 @@ scope: the-world-project
 - [ ] Gate B 面板插件（the-world-panel）：十项裁定已收口（见 `GateB_首个RPG体验插件与游戏面板裁定_v1.1_2026-08-24.md`），实施任务包见同目录 `任务包_TW-IMPL-2026-08-24-03_the-world-panel游戏面板实施_v1.0.md`，待派发执行线程；quiet mode 上游 PR 可并行另派。环境前置：启用 web profile 中被禁用的 better-sidebar；卸载 `@linxin666/dsh-web-ui-all` 全家桶（项目所有者已确认将卸载）。
 - [ ] TW-01 后台维护两层拆分：已在 the-world/main 实施（commit `eab96a4`，2026-08-24），待 luan-shi-sanguo 实测验证后正式收口。
 - [ ] Gate A 正式收口宣告：试玩基本成立，待项目所有者择机正式宣布。
+- [ ] Gate B 裁定回写 the-world docs：裁定 v1.1（DEC-B1~B10）目前只在 Vibe-Coding；待 TW-IMPL-03 实施+Review 通过后，作为 Gate B 收口收尾任务回写 `the-world/docs/ARCHITECTURE_CURRENT.md` 与 `PRODUCT_SPEC_CURRENT.md`（the-world-panel 登记 + DEC-B10 宿主边界）。刻意不并入 TW-IMPL-03（已派发，中途不改包）。
 - [ ] sillytavern-assets：STA-ADAPT-02 资产已入库 the-world/main（commit `dc46271`，v1+v2 收口）；Independent Review 是否已做待确认。
 - [ ] sillytavern-assets：资产族治理文档（索引 / 蓝图 / 版本锁）同步时机待裁定——适配全量收口后统一处理，还是随 v2 合并处理。
 
