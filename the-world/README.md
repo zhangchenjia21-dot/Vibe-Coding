@@ -35,7 +35,7 @@ the-world/README.md
 | `TW-01_后台维护两层拆分裁定_v1.0_2026-08-24.md` | 回合后维护耗时问题的正式裁定（已实施，待实测收口） |
 | `任务包_TW-ASSET-2026-08-24-01_判定与检定过渡包提交与生效_v1.0.md` | d20 过渡判定包的提交交接（执行线程） |
 | `任务包_TW-DOC-2026-08-24-02_WC-08设计文档回迁与克隆清理_v1.0.md` | WC-08 设计文档从 DSH 废弃克隆回迁 main + 清理克隆（执行线程） |
-| `GateB_首个RPG体验插件与游戏面板裁定_v1.0_2026-08-24.md` | Gate B 九项裁定：只读游戏面板、projection only、构建链进仓库、Web-only（已收口，待派任务包） |
+| `GateB_首个RPG体验插件与游戏面板裁定_v1.1_2026-08-24.md` | Gate B 十项裁定：the-world-panel、better-sidebar 宿主（零修改）、projection only、构建链进仓库、Web-only（已收口，待派任务包） |
 | `延后裁定与待办_CURRENT.md` | 滚动 backlog：正式延后项、触发条件与待办 |
 
 ## 治理规则

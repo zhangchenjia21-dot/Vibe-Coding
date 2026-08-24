@@ -24,7 +24,7 @@ scope: the-world-project
 ## 待办
 
 - [ ] WC-08 设计文档回迁：`D:\AI\deepseekharness\user-repos\the-world`（DSH 克隆）藏有唯一一份 WC-08 Game Composition 设计批次（PLAN +47 行、6 文件配套、`library/worlds/三国/` 草稿），功能已实施但 main 文档缺失。执行线程按任务包 TW-DOC-2026-08-24-02（见同目录 v1.0）回迁 → push → 删克隆。删除前禁止清空该目录。
-- [ ] Gate B 面板插件：九项裁定已收口（见 `GateB_首个RPG体验插件与游戏面板裁定_v1.0_2026-08-24.md`），待生成正式实施任务包并派发执行线程；quiet mode 上游 PR 可并行另派。
+- [ ] Gate B 面板插件（the-world-panel）：十项裁定已收口（见 `GateB_首个RPG体验插件与游戏面板裁定_v1.1_2026-08-24.md`），待生成正式实施任务包并派发执行线程；quiet mode 上游 PR 可并行另派。环境前置：启用 web profile 中被禁用的 better-sidebar；建议卸载 `@linxin666/dsh-web-ui-all` 全家桶（要求 DSH>=0.1.1-rc.1，与 rc.8 不匹配）。
 - [ ] TW-ASSET-2026-08-24-01：判定与检定过渡包（d20）已由规划线程在 `D:\AI\Projects\the world` 本地落地（5 个文件，未提交），执行线程按任务包验证并提交推送（见同目录任务包 v1.0）。
 - [ ] TW-01 后台维护两层拆分：已在 the-world/main 实施（commit `eab96a4`，2026-08-24），待 luan-shi-sanguo 实测验证后正式收口。
 - [ ] Gate A 正式收口宣告：试玩基本成立，待项目所有者择机正式宣布。
