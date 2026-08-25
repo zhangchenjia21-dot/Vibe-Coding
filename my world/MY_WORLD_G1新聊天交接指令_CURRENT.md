@@ -73,16 +73,7 @@ G1-02 已真实验证：
 - 完整 Windows functional export proof 仍属于 G1-05；
 - GDScript/C#/mixed 与 Runtime boundary 仍由 G1-06 决定。
 
-G1-03 已由用户完成人工 Windows UAT 并确认 PASS：
-
-- 中文正常显示；
-- 大量长文本滚动正常；
-- 300 段批量追加正常；
-- 持续追加期间 UI 保持响应；
-- 中文输入与 Ctrl+Enter 正常；
-- 阅读区选择 / Ctrl+C 正常；
-- 没有明显布局崩坏、卡死或不可操作；
-- 正常退出且 Git clean。
+G1-03 已由用户完成人工 Windows UAT 并确认 PASS：中文显示、长文本滚动、300 段批量追加、持续追加期间 UI 响应、中文输入、Ctrl+Enter、选择 / Ctrl+C、正常退出与 Git clean 均通过。
 
 G1-03 的 timer 模拟追加不算真实 Provider streaming evidence。
 
@@ -117,16 +108,7 @@ World Pack / Mod 一级能力
 
 ### 明确不要从 The World / DSH 搬来的实现
 
-不要复制：
-
-- DSH Session workaround；
-- fresh-session restore seam；
-- `fs.watch` Restore workaround；
-- 周期性 consolidation；
-- DELTAS + 批量 Markdown edit 作为主状态 Runtime；
-- 把 Markdown 当游戏数据库；
-- DSH plugin lifecycle；
-- 为通用 Agent Workspace 设计的 UI / Owner 结构。
+不要复制 DSH Session workaround、fresh-session restore seam、`fs.watch` Restore workaround、周期性 consolidation、DELTAS + 批量 Markdown runtime、Markdown DB、DSH plugin lifecycle 或通用 Agent Workspace UI / Owner 结构。
 
 ### 当前 Roadmap
 
@@ -156,9 +138,10 @@ G9 Standalone Alpha / Release Validation
 DeepSeek Chat Completions
 POST https://api.deepseek.com/chat/completions
 stream = true
+default model = deepseek-v4-pro
 ```
 
-这是 G1-04 execution choice，不是最终产品 Provider 决定。默认 spike model = `deepseek-chat`；如用户账户/实验需要，可通过 `MY_WORLD_G1_04_MODEL` 在本地覆盖，不把 model 名写死成产品契约。
+这是 G1-04 execution choice，不是最终产品 Provider 决定。DeepSeek 当前官方 `/models` 文档列出 `deepseek-v4-pro` 与 `deepseek-v4-flash`；旧 `deepseek-chat` / `deepseek-reasoner` 已在 2026-07-24 后退役。若当前账户/实验需要，也可通过 `MY_WORLD_G1_04_MODEL` 在本地覆盖模型名。
 
 实现边界：
 
@@ -188,12 +171,7 @@ DEEPSEEK_API_KEY
 MY_WORLD_G1_04_MODEL
 ```
 
-严禁：
-
-- 把 key 写进 Git；
-- 把 key 写进 `.gd` / `.tscn` / `project.godot`；
-- 在 UI / console / screenshot 中显示 key 值；
-- 把 key 发到聊天。
+严禁把 key 写进 Git、`.gd` / `.tscn` / `project.godot`、UI、console、截图或聊天。
 
 ### G1-04 PASS 必须由真实 Windows UAT 证明
 
