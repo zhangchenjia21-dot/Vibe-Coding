@@ -1,7 +1,7 @@
 ---
 title: my world｜独立版 Preflight 与第一阶段计划
 status: current-plan
-version: 1.1
+version: 1.2
 created: 2026-08-25
 updated: 2026-08-25
 stage: G1 Foundation & Project Bootstrap
@@ -86,7 +86,7 @@ project.godot
 src/main.tscn
 ```
 
-`src/main.tscn` 是无脚本、语言中立的最小启动场景。`assets/`、`tests/`、`docs/` 等只在出现真实实现 / 验证需求时创建，不为了架构完整提前制造空目录。
+`src/main.tscn` 最初是无脚本、语言中立的最小启动场景；从 G1-03 开始允许把它演进为立即需要的 Foundation Spike 测试面。`assets/`、`tests/`、`docs/` 等只在出现真实实现 / 验证需求时创建，不为了架构完整提前制造空目录。
 
 G1-01 / Gate MW-F0 已 PASS。
 
@@ -100,9 +100,12 @@ G1-01 / Gate MW-F0 已 PASS。
 - Console：`D:\AI\Engine\Godot_v4.7.2-stable_win64_console.exe`；
 - Git `2.54.0.windows.1`；
 - OS Architecture `X64`；
-- Vulkan / Forward+ 可正常初始化。
+- Vulkan / Forward+ 可正常初始化；
+- CLI 提供 `--export-release` / `--export-debug` / `--export-pack`；
+- Godot 4.7.2 Windows x86_64 export templates 已安装并验证；
+- ICU Data 已安装并验证，可用于后续中文相关导出测试。
 
-当前 G1-02 provisional execution choice：
+G1-02 provisional execution choice：
 
 - GDScript 作为第一轮 Foundation Spike 的最低依赖语言候选；
 - 这不是 G1-06 的最终 GDScript / C# / mixed architecture decision；
@@ -110,11 +113,7 @@ G1-01 / Gate MW-F0 已 PASS。
 - 不为理论未来提前安装额外 SDK；
 - external local runtime process 不是 G1-03 前置条件，最终 Runtime boundary 由 G1-04/G1-05 证据与 G1-06 决定。
 
-G1-02 尚需确认：
-
-- 本机 Godot 4.7.2 export templates / export CLI tooling 是否可用。
-
-Windows Export 的最终功能性 proof 仍在 G1-05，而不是在 G1-02 提前宣布。
+**G1-02 已 PASS。** Windows Export 的最终功能性 proof 仍在 G1-05，而不是因为模板已安装就提前宣布。
 
 ---
 
@@ -140,6 +139,8 @@ NOT production commitment
 - 文本区域可持续追加大量内容；
 - 玩家输入框可用；
 - 滚动 / 选择 / 复制等基础阅读体验不异常。
+
+当前对应任务：`G1-03`。
 
 #### B. 流式 AI 输出
 
@@ -465,8 +466,8 @@ PASS 条件：第 8、9 节完整路径实际通过，并由玩家人工确认�
 
 ```text
 1. G1-01 Project Bootstrap                          PASS
-2. G1-02 Godot 工具链 / 语言候选确认               CURRENT
-3. G1-03 2D 中文长文本 / 输入 Foundation Spike
+2. G1-02 Godot 工具链 / 语言候选确认               PASS
+3. G1-03 2D 中文长文本 / 输入 Foundation Spike    CURRENT
 4. G1-04 真实 Provider stream / cancel Spike
 5. G1-05 local IO / image / Windows Export Spike
 6. G1-06 Runtime Boundary / Foundation Architecture Decision
