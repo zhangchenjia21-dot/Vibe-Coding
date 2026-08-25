@@ -7,7 +7,7 @@
 - 项目名：`my world`
 - 本地项目目录：`D:\AI\Projects\my-world`
 - 项目实现仓库：`https://github.com/zhangchenjia21-dot/my-world`
-- 当前项目仓库状态：G1-01 最小仓库与 Godot bootstrap 已建立，当前等待解决 Windows 本地写权限 blocker 后完成 runtime verification
+- 当前项目仓库状态：G1-01 最小仓库与 Godot bootstrap 已通过真实 Windows runtime verification
 - 当前优先游戏引擎：Godot `v4.7.2`
 - 已验证 Godot：`4.7.2.stable.official.ed1daf0bf`，Standard / non-.NET Windows x64
 - Godot 本地位置：`D:\AI\Engine`
@@ -31,14 +31,15 @@
 
 ```text
 Current Phase = G1
-Current Task = G1-01
+Current Task = G1-02
+G1-01 = PASS
 ```
 
 ### 3. G1 新聊天交接
 
 [`MY_WORLD_G1新聊天交接指令_CURRENT.md`](./MY_WORLD_G1新聊天交接指令_CURRENT.md)
 
-用于新的工程开发聊天直接接手当前事实、执行 freshness，并继续 G1-01。
+用于新的工程开发聊天直接接手当前事实、执行 freshness，并继续 G1-02。
 
 ### 4. 独立版 Preflight 与第一阶段计划
 
@@ -52,25 +53,40 @@ Current Task = G1-01
 
 明确哪些 The World / DSH 经验应继承、哪些应重新设计、哪些只是宿主债务不得迁移。
 
-## 当前 G1-01 Reality Check
+## G1-01 Reality Check
 
-GitHub 实现仓库已经不再为空，并已建立最小 Godot 4.7.2 工作面。Windows 本地工具链已确认：
+G1-01 已由用户人工确认 **PASS**。真实 Windows 证据包括：
 
 ```text
 Godot 4.7.2.stable.official.ed1daf0bf
 Standard / non-.NET Windows x64
 Git 2.54.0.windows.1
 OS Architecture X64
+Vulkan / Forward+
+NVIDIA GeForce RTX 4070 Laptop GPU
 ```
 
-当前本地运行验证发现环境写权限 blocker：
+同时确认：
 
-- Git 无法写 `.git/FETCH_HEAD`；
-- Godot 无法创建 `user://logs` / `user://vulkan`；
-- shader cache 无法创建；
-- root certificate store 读取失败。
+- 普通 PowerShell 下 `git pull --ff-only` 正常；
+- `.git` metadata 可写；
+- Godot `user://` 可写；
+- 最小工程窗口正常显示 `my world` / `G1 Foundation Spike`；
+- Godot exit code = 0；
+- 退出后 `git status --short` 无输出。
 
-因此当前仍保持 `G1-01`，不得把 runtime verification 标记 PASS，直到本机写权限问题被真实解决并重新运行最小工程。
+此前 Codex 内的 `.git/FETCH_HEAD` 与 Godot `user://` 写入失败已定位为 Codex execution sandbox 边界，不是 Windows ACL 或项目 blocker。
+
+## 当前 G1-02
+
+`G1-02｜Godot 4.7.2 工具链与语言确认` 当前目标：
+
+- Standard / .NET 已确认：Standard / non-.NET；
+- executable / CLI 已确认；
+- GDScript 作为 G1 Foundation Spike 的 provisional language candidate；
+- 不为了理论未来立即安装 .NET-enabled Godot / .NET SDK；
+- 检查本机 Godot 4.7.2 export templates / CLI tooling；
+- external local runtime process 暂不作为 G1-03 前置条件，最终由后续 Spike 与 G1-06 裁定。
 
 ## 当前阶段
 
