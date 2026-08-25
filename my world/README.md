@@ -7,7 +7,7 @@
 - 项目名：`my world`
 - 本地项目目录：`D:\AI\Projects\my-world`
 - 项目实现仓库：`https://github.com/zhangchenjia21-dot/my-world`
-- 当前项目仓库状态：G1-01 bootstrap 已 PASS；G1-02 工具链确认已 PASS；当前进入 G1-03 2D 中文长文本 / 输入 Foundation Spike
+- 当前项目仓库状态：G1-01 / G1-02 / G1-03 已 PASS；当前进入 G1-04 真实 Provider stream / cancel / UI 非冻结 Foundation Spike
 - 当前优先游戏引擎：Godot `v4.7.2`
 - 已验证 Godot：`4.7.2.stable.official.ed1daf0bf`，Standard / non-.NET Windows x64
 - Godot 本地位置：`D:\AI\Engine`
@@ -31,22 +31,23 @@
 
 ```text
 Current Phase = G1
-Current Task = G1-03
+Current Task = G1-04
 G1-01 = PASS
 G1-02 = PASS
+G1-03 = PASS
 ```
 
 ### 3. G1 新聊天交接
 
 [`MY_WORLD_G1新聊天交接指令_CURRENT.md`](./MY_WORLD_G1新聊天交接指令_CURRENT.md)
 
-用于新的工程开发聊天直接接手当前事实、执行 freshness，并继续 G1-03。
+用于新的工程开发聊天直接接手当前事实、执行 freshness，并继续 G1-04。
 
 ### 4. 独立版 Preflight 与第一阶段计划
 
 [`MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md`](./MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md)
 
-定义正式写大规模游戏代码前的 Foundation Spike、首个 Vertical Slice、Stage Gate 与暂不做事项。Godot 的当前已确认版本以本 README 与 current Roadmap 中登记的 `v4.7.2` 为准。
+定义正式写大规模游戏代码前的 Foundation Spike、首个 Vertical Slice、Stage Gate 与暂不做事项。
 
 ### 5. DSH 经验继承矩阵
 
@@ -54,56 +55,62 @@ G1-02 = PASS
 
 明确哪些 The World / DSH 经验应继承、哪些应重新设计、哪些只是宿主债务不得迁移。
 
-## G1-01 Reality Check
+## 已完成 G1 证据
 
-G1-01 已由用户人工确认 **PASS**。真实 Windows 证据包括：
+### G1-01｜Repository Bootstrap — PASS
 
-```text
-Godot 4.7.2.stable.official.ed1daf0bf
-Standard / non-.NET Windows x64
-Git 2.54.0.windows.1
-OS Architecture X64
-Vulkan / Forward+
-NVIDIA GeForce RTX 4070 Laptop GPU
-```
+真实 Windows 证据：Godot `4.7.2.stable.official.ed1daf0bf`、Standard / non-.NET Windows x64、Vulkan / Forward+、RTX 4070 Laptop GPU；普通 PowerShell 下 Git metadata 与 Godot `user://` 可写；最小工程正常启动、显示、退出且 working tree clean。此前 Codex 内写权限错误已定位为 sandbox-only。
 
-同时确认：
+### G1-02｜Toolchain & Language Confirmation — PASS
 
-- 普通 PowerShell 下 `git pull --ff-only` 正常；
-- `.git` metadata 可写；
-- Godot `user://` 可写；
-- 最小工程窗口正常显示 `my world` / `G1 Foundation Spike`；
-- Godot exit code = 0；
-- 退出后 `git status --short` 无输出。
+已确认：
 
-此前 Codex 内的 `.git/FETCH_HEAD` 与 Godot `user://` 写入失败已定位为 Codex execution sandbox 边界，不是 Windows ACL 或项目 blocker。
-
-## G1-02 Result
-
-`G1-02｜Godot 4.7.2 工具链与语言确认` 已 **PASS**：
-
-- Standard / non-.NET Godot 4.7.2 Windows x64；
-- executable / CLI 已确认；
-- CLI 提供 `--export-release` / `--export-debug` / `--export-pack`；
-- Godot 4.7.2 Windows x86_64 export templates 已安装并验证；
-- ICU Data 已安装并验证；
-- GDScript 作为 G1 Foundation Spike 的 provisional language candidate；
-- 不为了理论未来立即安装 .NET-enabled Godot / .NET SDK；
-- external local runtime process 暂不作为 G1-03 前置条件，最终由后续 Spike 与 G1-06 裁定；
+- GUI / console executable 与 CLI；
+- Windows x86_64 export templates；
+- ICU Data；
+- GDScript 是当前 Foundation Spike 的 provisional lowest-dependency language candidate；
+- C# / .NET 与最终 Runtime boundary 仍由后续证据和 G1-06 决定；
 - 完整 Windows functional export proof 仍属于 G1-05。
 
-## 当前 G1-03
+### G1-03｜2D 中文长文本 / 输入 Foundation Spike — PASS
 
-`G1-03｜2D 中文长文本 / 输入 Foundation Spike` 当前只验证：
+用户已完成人工 Windows UAT 并确认 PASS。已真实观察：
 
-- 中文字体显示；
-- 大量中文文本滚动；
-- 文本持续追加；
-- 玩家输入；
-- 选择 / 复制；
-- 长文本下 UI 是否保持可用。
+- 中文显示正常；
+- 大量长文本滚动正常；
+- 300 段批量追加可用；
+- 持续追加时 UI 保持响应；
+- 中文输入与 Ctrl+Enter 可用；
+- 阅读区选择 / Ctrl+C 可用；
+- 没有明显布局崩坏或不可操作；
+- 正常退出且 Git clean。
 
-这是 Foundation exploration，不是正式 RPG UI，也不进入 Provider / Persistence / World Pack 实现。
+G1-03 的本地模拟追加只证明 UI append seam，不构成真实 Provider streaming 证据。
+
+## 当前 G1-04
+
+`G1-04｜真实 Provider 流式调用 Spike` 当前 Outcome：
+
+> **用一个真实 Provider 证明 Godot Foundation surface 可以完成真实网络请求、SSE 增量输出、cancel、错误态和 UI 非冻结。**
+
+本轮 exploratory provider 选择为 **DeepSeek Chat Completions**，只用于 G1-04 Foundation evidence，不冻结最终产品 Provider：
+
+```text
+POST https://api.deepseek.com/chat/completions
+stream = true
+```
+
+实现约束：
+
+- Provider surface 保持极薄，不建设多 Provider 平台；
+- API key 仅从本地 `DEEPSEEK_API_KEY` 环境变量读取；
+- 不提交、不显示、不记录 key 值；
+- Godot 使用 non-blocking `HTTPClient` + `poll()` / incremental body reads；
+- cancel 只验证当前活动生成可被中止并恢复 UI；
+- deterministic failure test 不携带凭据；
+- same-process networking 是 Spike 证据，不是 G1-06 Runtime boundary 裁定。
+
+G1-04 必须等待用户真实 Windows 网络 UAT 后才能 PASS。
 
 ## 当前阶段
 
@@ -138,8 +145,6 @@ G9 Standalone Alpha / Release Validation
 > **迁移经验，不迁移宿主债务。**
 
 > **Commodity Foundation, Owned Game Semantics.**
->
-> **通用基底尽量复用，游戏核心语义必须掌握在自己手里。**
 
 > **Engine-native, not engine-semantic-coupled.**
 
