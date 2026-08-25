@@ -7,7 +7,7 @@
 - 项目名：`my world`
 - 本地项目目录：`D:\AI\Projects\my-world`
 - 项目实现仓库：`https://github.com/zhangchenjia21-dot/my-world`
-- 当前项目仓库状态：G1-01 最小仓库与 Godot bootstrap 已通过真实 Windows runtime verification
+- 当前项目仓库状态：G1-01 bootstrap 已 PASS；G1-02 工具链确认已 PASS；当前进入 G1-03 2D 中文长文本 / 输入 Foundation Spike
 - 当前优先游戏引擎：Godot `v4.7.2`
 - 已验证 Godot：`4.7.2.stable.official.ed1daf0bf`，Standard / non-.NET Windows x64
 - Godot 本地位置：`D:\AI\Engine`
@@ -31,15 +31,16 @@
 
 ```text
 Current Phase = G1
-Current Task = G1-02
+Current Task = G1-03
 G1-01 = PASS
+G1-02 = PASS
 ```
 
 ### 3. G1 新聊天交接
 
 [`MY_WORLD_G1新聊天交接指令_CURRENT.md`](./MY_WORLD_G1新聊天交接指令_CURRENT.md)
 
-用于新的工程开发聊天直接接手当前事实、执行 freshness，并继续 G1-02。
+用于新的工程开发聊天直接接手当前事实、执行 freshness，并继续 G1-03。
 
 ### 4. 独立版 Preflight 与第一阶段计划
 
@@ -77,26 +78,32 @@ NVIDIA GeForce RTX 4070 Laptop GPU
 
 此前 Codex 内的 `.git/FETCH_HEAD` 与 Godot `user://` 写入失败已定位为 Codex execution sandbox 边界，不是 Windows ACL 或项目 blocker。
 
-## 当前 G1-02
+## G1-02 Result
 
-`G1-02｜Godot 4.7.2 工具链与语言确认` 当前事实：
+`G1-02｜Godot 4.7.2 工具链与语言确认` 已 **PASS**：
 
-- Standard / .NET 已确认：Standard / non-.NET；
+- Standard / non-.NET Godot 4.7.2 Windows x64；
 - executable / CLI 已确认；
 - CLI 提供 `--export-release` / `--export-debug` / `--export-pack`；
+- Godot 4.7.2 Windows x86_64 export templates 已安装并验证；
+- ICU Data 已安装并验证；
 - GDScript 作为 G1 Foundation Spike 的 provisional language candidate；
 - 不为了理论未来立即安装 .NET-enabled Godot / .NET SDK；
-- external local runtime process 暂不作为 G1-03 前置条件，最终由后续 Spike 与 G1-06 裁定。
+- external local runtime process 暂不作为 G1-03 前置条件，最终由后续 Spike 与 G1-06 裁定；
+- 完整 Windows functional export proof 仍属于 G1-05。
 
-最新本地检查发现 Godot 4.7.2 export templates 尚未安装：
+## 当前 G1-03
 
-```text
-%APPDATA%\Godot\export_templates\4.7.2.stable = missing
-windows_debug_x86_64.exe = missing
-windows_release_x86_64.exe = missing
-```
+`G1-03｜2D 中文长文本 / 输入 Foundation Spike` 当前只验证：
 
-因此 G1-02 当前唯一 blocker 是安装 Godot 4.7.2 Windows x86_64 export templates。安装时同时安装 ICU Data，以支持后续中文 Foundation / export 验证。完整 Windows functional export proof 仍属于 G1-05。
+- 中文字体显示；
+- 大量中文文本滚动；
+- 文本持续追加；
+- 玩家输入；
+- 选择 / 复制；
+- 长文本下 UI 是否保持可用。
+
+这是 Foundation exploration，不是正式 RPG UI，也不进入 Provider / Persistence / World Pack 实现。
 
 ## 当前阶段
 
