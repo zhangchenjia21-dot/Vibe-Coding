@@ -1,11 +1,11 @@
 ---
 title: my world｜G1 新聊天交接指令
 status: current-handoff
-version: 1.3
+version: 1.4
 created: 2026-08-25
 updated: 2026-08-25
 current_phase: G1
-current_task: G1-03
+current_task: G1-04
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 roadmap: MY_WORLD_总体规划路线图_CURRENT.md
 ---
@@ -14,13 +14,11 @@ roadmap: MY_WORLD_总体规划路线图_CURRENT.md
 
 下面内容用于新聊天接手 `my world` 独立项目开发。
 
----
-
 ## 可直接复制到新聊天
 
 你现在接手一个新的独立游戏项目：**my world**。
 
-不要依赖聊天记忆，也不要把前代 DSH 项目的实现直接搬过来。先按以下 Authority / Source Manifest 做 freshness 检查，然后从当前阶段 G1 / 当前任务 G1-03 继续。
+不要依赖聊天记忆，也不要把前代 DSH 项目的实现直接搬过来。先按以下 Authority / Source Manifest 做 freshness 检查，然后从当前阶段 G1 / 当前任务 G1-04 继续。
 
 ### 项目位置
 
@@ -34,49 +32,6 @@ roadmap: MY_WORLD_总体规划路线图_CURRENT.md
 Godot 本地目录：D:\AI\Engine
 Godot 版本：v4.7.2
 ```
-
-### 已完成事实
-
-`G1-01｜实现仓库初始化` 已 **PASS**。
-
-真实 Windows 证据：
-
-```text
-Godot: 4.7.2.stable.official.ed1daf0bf
-Distribution: Standard / non-.NET Windows x64
-GUI: D:\AI\Engine\Godot_v4.7.2-stable_win64.exe
-Console: D:\AI\Engine\Godot_v4.7.2-stable_win64_console.exe
-Git: 2.54.0.windows.1
-OS Architecture: X64
-Renderer: Vulkan / Forward+
-GPU: NVIDIA GeForce RTX 4070 Laptop GPU
-```
-
-G1-01 runtime verification 已确认：
-
-- 普通 Windows PowerShell 下 `git pull --ff-only` 正常；
-- `.git` metadata 可写；
-- Godot `user://` 可写；
-- 最小工程正常启动；
-- 窗口显示 `my world` / `G1 Foundation Spike`；
-- Godot 正常退出，exit code = 0；
-- `git status --short` 退出后无输出。
-
-此前 Codex 内出现的 `.git/FETCH_HEAD`、`user://logs`、`user://vulkan` 写入失败已经定位为 Codex execution sandbox 边界，不是 Windows ACL 或 Godot 项目 blocker。不要为此修改系统 ACL 或游戏架构。
-
-`G1-02｜Godot 4.7.2 工具链与语言确认` 已 **PASS**。
-
-已确认：
-
-- Standard / non-.NET Godot 4.7.2 Windows x64；
-- GUI / console executable 与 CLI 正常；
-- CLI 提供 `--export-release`、`--export-debug`、`--export-pack`；
-- Windows x86_64 export templates 已安装并验证；
-- ICU Data 已安装并验证；
-- GDScript 是当前 Foundation Spike 的最低依赖 provisional language candidate，但不是 G1-06 最终语言裁定；
-- C# 若进入真实候选，需要另行引入 .NET-enabled Godot editor + .NET SDK；
-- external local runtime process 不是 G1-03 前置条件；最终 Runtime boundary 仍由 G1-04 / G1-05 证据与 G1-06 决定；
-- 完整 Windows functional export proof 仍属于 G1-05。
 
 ### Authority / Source Manifest
 
@@ -92,6 +47,44 @@ G1-01 runtime verification 已确认：
 8. 如需生成正式 Agent 任务，再读取 `zhangchenjia21-dot/Skill` 当前最新版。
 
 历史聊天、旧附件、模型记忆与 The World 的 DSH workaround 不构成 `my world` 当前实现权威。
+
+### 已完成事实
+
+```text
+G1-01 Repository Bootstrap                         PASS
+G1-02 Godot 4.7.2 Toolchain & Language            PASS
+G1-03 2D Chinese Long Text / Input Spike          PASS
+Current Phase                                      G1
+Current Task                                       G1-04
+```
+
+G1-01 已真实验证：普通 Windows PowerShell 下 Git metadata 与 Godot `user://` 可写；最小工程正常启动、显示、退出；exit code 0；Git clean。Codex 内早先的写权限失败是 sandbox-only。
+
+G1-02 已真实验证：
+
+- Godot `4.7.2.stable.official.ed1daf0bf`；
+- Standard / non-.NET Windows x64；
+- GUI / console executable 与 CLI；
+- Vulkan / Forward+；
+- NVIDIA GeForce RTX 4070 Laptop GPU；
+- Windows x86_64 export templates；
+- ICU Data；
+- GDScript = 当前 Foundation Spike provisional lowest-dependency language candidate；
+- 完整 Windows functional export proof 仍属于 G1-05；
+- GDScript/C#/mixed 与 Runtime boundary 仍由 G1-06 决定。
+
+G1-03 已由用户完成人工 Windows UAT 并确认 PASS：
+
+- 中文正常显示；
+- 大量长文本滚动正常；
+- 300 段批量追加正常；
+- 持续追加期间 UI 保持响应；
+- 中文输入与 Ctrl+Enter 正常；
+- 阅读区选择 / Ctrl+C 正常；
+- 没有明显布局崩坏、卡死或不可操作；
+- 正常退出且 Git clean。
+
+G1-03 的 timer 模拟追加不算真实 Provider streaming evidence。
 
 ### 当前产品结论
 
@@ -137,8 +130,6 @@ World Pack / Mod 一级能力
 
 ### 当前 Roadmap
 
-阶段固定为：
-
 ```text
 G1 Foundation & Project Bootstrap
 G2 AI Conversation Spine
@@ -151,71 +142,84 @@ G8 Mod / Authoring Ecosystem
 G9 Standalone Alpha / Release Validation
 ```
 
-当前：
-
-```text
-Current Phase = G1
-Current Task = G1-03
-G1-01 = PASS
-G1-02 = PASS
-```
-
 不要提前大规模实现 G2–G9。
 
-### 现在执行 G1-03
+### 现在执行 G1-04
 
-`G1-03｜2D 中文长文本 / 输入 Foundation Spike` 的 Outcome：
+`G1-04｜真实 Provider 流式调用 Spike` 的 Outcome：
 
-> **用最小 Godot/GDScript 可执行测试面证明中文文本、长文本滚动、持续追加、玩家输入、选择/复制以及长文本下 UI 可用。**
+> **用一个真实 Provider 证明 Godot 可以完成真实网络请求、真实 SSE 增量输出、cancel、错误路径，并在请求期间保持 UI 主循环可响应。**
 
-允许建立的最小工作面：
+当前 exploratory provider：
 
-- 在 `src/main.tscn` 上形成立即可运行的 Spike UI；
-- 一个专用 GDScript 脚本；
-- Windows 系统字体 fallback 仅作为 G1-03 本地 Host seam 验证，不等于最终发行字体策略；
-- 本地模拟逐块追加只用于测试 UI append/scroll，不等于真实 Provider streaming。
+```text
+DeepSeek Chat Completions
+POST https://api.deepseek.com/chat/completions
+stream = true
+```
 
-G1-03 必须人工观察并记录：
+这是 G1-04 execution choice，不是最终产品 Provider 决定。
 
-1. 中文无乱码、无明显缺字方块；
-2. 初始化大量中文段落后滚动正常；
-3. 可继续批量追加文本；
-4. 可模拟逐块持续追加且 UI 仍可操作；
-5. 玩家输入框可输入中文，并能追加到阅读区；
-6. 阅读区文字可鼠标选择并 `Ctrl+C` 复制；
-7. 在较大文本量下没有明显卡死、布局崩坏或不可操作；
-8. 正常退出后 `git status --short` 只反映预期 GitHub 提交，不出现生成缓存污染。
+实现边界：
 
-G1-03 不做：
+- 使用当前 provisional GDScript Foundation surface；
+- 使用 Godot non-blocking `HTTPClient`；
+- `poll()` 驱动网络状态；
+- incremental response body → SSE `data:` 解析；
+- `data: [DONE]` 完成；
+- real streamed text 直接追加到 Godot reading surface；
+- cancel 通过关闭活动 transport 验证中断与 UI recovery；
+- UI heartbeat + 手动 response counter 验证网络期间主循环仍活着；
+- `127.0.0.1:1` 无凭据连接用于 deterministic failure path；
+- 不建设多 Provider routing/fallback/retry platform；
+- 不提前冻结 same-process vs local runtime process。
 
-- 真实 Provider；
-- API key / secret；
-- persistence；
-- World Pack；
-- 正式 RPG UI architecture；
-- Windows functional export；
-- Runtime process boundary 冻结。
+### Secret 规则
 
-### G1 的完整目标
+真实 API key 只允许存在于用户本机进程环境变量：
 
-G1 最终必须验证：
+```text
+DEEPSEEK_API_KEY
+```
 
-1. Godot v4.7.2 Windows 工程可运行；
-2. 中文长文本与输入体验可用；
-3. 一个真实 Provider 可以流式输出到 UI；
-4. cancel 可用；
-5. 网络请求 / 后台工作不冻结 UI；
-6. 本地读写可用；
-7. 动态加载立绘 / 场景 / 地图类图片可用；
-8. Windows Export 后上述核心能力仍可运行；
-9. 基于 Spike 决定 Standard/.NET、GDScript/C# 或混合边界；
-10. 基于证据决定 Runtime 与 Godot 同进程还是 Local Runtime Process。
+可选 G1-04 本地模型覆盖：
 
-在 G1-GATE 之前，不要冻结 G3 的数据库模型、G4 的完整 World Pack Schema、G5 的 NPC Runtime 或 G6 的完整 UI。
+```text
+MY_WORLD_G1_04_MODEL
+```
+
+严禁：
+
+- 把 key 写进 Git；
+- 把 key 写进 `.gd` / `.tscn` / `project.godot`；
+- 在 UI / console / screenshot 中显示 key 值；
+- 把 key 发到聊天。
+
+### G1-04 PASS 必须由真实 Windows UAT 证明
+
+1. 本地 key 已设置，但 UI 不显示 key 值；
+2. 真 Provider 返回 HTTP 2xx；
+3. 内容在生成尚未完成时逐步出现，而不是最后一次性出现；
+4. streaming 期间 heartbeat 持续增加；
+5. streaming 期间 `UI 响应 +1` 可点击；
+6. cancel 真正中止活动生成并迅速恢复 UI；
+7. cancel 后可再次发起真实请求；
+8. deterministic failure path 有明确反馈且不冻结；
+9. Provider/API 错误有可读错误态而非 silent hang；
+10. 正常退出；
+11. `git status --short` clean。
+
+没有真实 Provider + cancel 证据不得判 G1-04 PASS。
+
+### G1 剩余边界
+
+G1-05：local IO / dynamic portrait-scene-map images / functional Windows export。
+
+G1-06：根据 G1 真实 Spike 证据裁定 Godot Host、Standard/.NET、GDScript/C#/mixed、Runtime process boundary 与第一阶段 persistence candidate range。
+
+在 G1-GATE 前，不冻结 G3 数据库模型、G4 完整 World Pack Schema、G5 NPC Runtime 或 G6 完整 UI。
 
 ### 工作方式
-
-遵循：
 
 ```text
 focused exploration
@@ -226,18 +230,4 @@ focused exploration
 → next task
 ```
 
-如果当前聊天无法真正运行本机 Godot，则不要假装完成本地验证；可以完成 GitHub 侧 Spike，实现后给出普通 Windows PowerShell 的最小验证命令，等待真实证据再判 G1-03。
-
-### 第一次回复应做什么
-
-不要重新讨论产品愿景。先完成 freshness / repo-state，然后简短报告：
-
-```text
-两个仓库当前 HEAD
-G1-01 / G1-02 PASS 是否仍为 current fact
-G1-03 是否仍有效
-当前实现仓库是否已经有 G1-03 Spike surface
-下一步最小动作
-```
-
-若无 superseding decision，直接继续 G1-03。
+如果聊天无法真正运行用户本机 Godot / Provider，则只完成 GitHub-side implementation，并给出普通 Windows PowerShell 的最小验证命令；不得假装本地网络 PASS。
