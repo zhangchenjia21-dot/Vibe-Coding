@@ -1,12 +1,12 @@
 ---
 title: my world｜项目启动总纲
 status: current-canonical-product-spec
-version: 1.3
+version: 1.4
 created: 2026-08-25
 updated: 2026-08-25
 stage: G1 Foundation & Project Bootstrap
 product_definition_gate: PASS
-next: G1-03
+next: G1-04
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 local_project_dir: D:\AI\Projects\my-world
 engine_candidate: Godot
@@ -331,7 +331,9 @@ NVIDIA GeForce RTX 4070 Laptop GPU
 
 G1-02 已 PASS：Godot CLI 已确认提供 `--export-release` / `--export-debug` / `--export-pack`；Godot 4.7.2 Windows x86_64 export templates 与 ICU Data 已安装并由本地验证确认可用。基于已安装 Standard build，GDScript 作为第一轮 Foundation Spike 的最低依赖 language candidate；这不是 G1-06 的最终 GDScript/C#/mixed 边界裁定。C# 若成为真实候选，需要另行引入 .NET-enabled Godot editor 与 .NET SDK，并以 Spike 证据说明必要性。
 
-当前进入 G1-03。Windows Export 的完整功能性 proof 仍属于 G1-05；Runtime process boundary、persistence 与最终 Host/语言裁定仍保持开放。
+G1-03 已由用户完成真实 Windows UAT 并确认 **PASS**：中文显示、长文本滚动、300 段批量追加、持续追加期间 UI 响应、中文输入、Ctrl+Enter、文本选择 / Ctrl+C、正常退出与 clean Git state 均通过。G1-03 的 timer-driven append 只证明本地 UI append seam，不构成真实 Provider streaming 证据。
+
+当前进入 G1-04。Windows Export 的完整功能性 proof 仍属于 G1-05；Runtime process boundary、persistence 与最终 Host/语言裁定仍保持开放。
 
 ---
 
@@ -432,6 +434,16 @@ cancel
 
 AI Runtime 必须支持流式文本，且后台模型 / 世界维护不能冻结玩家 UI。
 
+G1-04 当前 concrete exploratory Provider = **DeepSeek Chat Completions**：
+
+```text
+POST https://api.deepseek.com/chat/completions
+stream = true
+default model = deepseek-v4-pro
+```
+
+这只是 Foundation Spike execution choice，不冻结第一代产品最终 Provider。API key 只从本地进程环境变量 `DEEPSEEK_API_KEY` 读取，UI 只能显示 key 是否存在，不得显示 key 值；不得把 key 写入 Git、场景、脚本、日志或聊天。Godot 当前使用 non-blocking `HTTPClient` 验证真实 stream / cancel / error / UI responsiveness；same-process networking 本身不等于 G1-06 Runtime boundary 裁定。
+
 ---
 
 ## 11. 第一阶段明确 Non-scope
@@ -519,7 +531,7 @@ AI Runtime 必须支持流式文本，且后台模型 / 世界维护不能冻结
 - Agent Context 的具体数据模型；
 - World Pack manifest 的最小格式；
 - Mod 是否允许可执行脚本，以及何时引入沙箱；
-- 第一批 Provider 接入方式；
+- 第一批 Provider 的最终选择 / product-facing 配置方式；
 - 第一阶段测试 / packaging harness。
 
 这些问题以 Spike 和真实 Vertical 证据裁定，不凭空提前冻结。
@@ -559,14 +571,15 @@ Implementation Repository     INITIALIZED / FOUNDATION SPIKES
 Godot Toolchain               4.7.2 STANDARD X64 VERIFIED
 G1-01 Repository Bootstrap    PASS
 G1-02 Toolchain Confirmation  PASS
+G1-03 Text / Input Spike      PASS
 Current Phase                 G1
-Current Task                  G1-03
+Current Task                  G1-04
 First Vertical Slice          NOT STARTED
 ```
 
-G1-02 已通过：CLI export capability、Windows x86_64 export templates、ICU Data 与 GDScript provisional candidate 均已确认；完整 Windows build proof 仍按计划留在 G1-05。
+G1-03 已通过真实 Windows manual UAT。当前 G1-04 使用 DeepSeek Chat Completions / `deepseek-v4-pro` 作为 exploratory Provider，只为获得真实 stream / cancel / error / UI non-freezing evidence，不冻结最终 Provider 或 Runtime boundary。
 
-**当前下一步是 G1-03：验证中文字体、长文本滚动与持续追加、玩家输入、文本选择/复制以及长文本下的 UI 稳定性。**
+**当前下一步是 G1-04：运行真实 Provider 网络 UAT；没有真实 HTTP 2xx、增量 SSE、cancel 与 UI responsiveness 证据，不得判 PASS。**
 
 对应执行计划：
 
