@@ -15,13 +15,11 @@
 
 ## 当前权威入口
 
-### 1. 产品与项目总纲
-[`MY_WORLD_项目启动总纲_CURRENT.md`](./MY_WORLD_项目启动总纲_CURRENT.md)
-
-这是 `my world` 当前唯一的滚动产品 / 项目事实入口。
-
-### 2. 总体规划路线图
-[`MY_WORLD_总体规划路线图_CURRENT.md`](./MY_WORLD_总体规划路线图_CURRENT.md)
+1. [`MY_WORLD_项目启动总纲_CURRENT.md`](./MY_WORLD_项目启动总纲_CURRENT.md) — rolling product / project facts.
+2. [`MY_WORLD_总体规划路线图_CURRENT.md`](./MY_WORLD_总体规划路线图_CURRENT.md) — canonical G1–G9 roadmap.
+3. [`MY_WORLD_G1新聊天交接指令_CURRENT.md`](./MY_WORLD_G1新聊天交接指令_CURRENT.md) — current G1 handoff.
+4. [`MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md`](./MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md) — Foundation / first vertical plan.
+5. [`MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md`](./MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md) — inherit / redesign / reject matrix.
 
 当前：
 
@@ -32,15 +30,6 @@ G1-01 = PASS
 G1-02 = PASS
 G1-03 = PASS
 ```
-
-### 3. G1 新聊天交接
-[`MY_WORLD_G1新聊天交接指令_CURRENT.md`](./MY_WORLD_G1新聊天交接指令_CURRENT.md)
-
-### 4. 独立版 Preflight 与第一阶段计划
-[`MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md`](./MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md)
-
-### 5. DSH 经验继承矩阵
-[`MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md`](./MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md)
 
 ## 已完成 G1 证据
 
@@ -68,15 +57,7 @@ default model = deepseek-v4-pro
 
 这是 G1-04 execution choice，不冻结最终产品 Provider。当前 DeepSeek 官方 API 使用 `deepseek-v4-pro` / `deepseek-v4-flash`；旧 `deepseek-chat` / `deepseek-reasoner` 已退役。
 
-实现约束：
-
-- Provider surface 保持极薄，不建设多 Provider 平台；
-- API key 仅从本地 `DEEPSEEK_API_KEY` 环境变量读取；
-- UI 只允许显示 key 是否存在，绝不显示 key 值；
-- Godot 使用 non-blocking `HTTPClient` + `poll()` / incremental reads；
-- cancel 只验证活动生成可中止并恢复 UI；
-- deterministic failure test 不携带凭据；
-- same-process networking 是 Spike 证据，不是 G1-06 Runtime boundary 裁定。
+实现约束：Provider surface 保持极薄；API key 仅从本地 `DEEPSEEK_API_KEY` 环境变量读取；UI 只显示 key 是否存在、不显示值；Godot 使用 non-blocking `HTTPClient`；cancel 验证活动生成中止与 UI recovery；deterministic failure test 不携带凭据；same-process networking 仅是 Spike 证据。
 
 G1-04 必须等待用户真实 Windows Provider UAT 后才能 PASS。
 
@@ -118,6 +99,6 @@ G9 Standalone Alpha / Release Validation
 
 ## 仓库职责
 
-- `Vibe-Coding/my world/`：项目长期治理、产品裁定、架构决策、Roadmap、阶段计划、复盘与任务事实。
-- `zhangchenjia21-dot/my-world`：代码、测试、构建、运行、项目级 `AGENTS.md` 与真实实现事实。
-- `zhangchenjia21-dot/the-world`：DSH 参考实现、真实试玩证据与前代产品实验，不作为新项目代码模板直接搬迁。
+- `Vibe-Coding/my world/`：长期治理、产品裁定、架构决策、Roadmap、阶段计划与任务事实。
+- `zhangchenjia21-dot/my-world`：代码、测试、构建、运行与实现事实。
+- `zhangchenjia21-dot/the-world`：DSH 参考实现与产品证据，不作为新项目代码迁移模板。
