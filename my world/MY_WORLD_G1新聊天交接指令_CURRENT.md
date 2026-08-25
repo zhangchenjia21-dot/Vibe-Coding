@@ -1,11 +1,11 @@
 ---
 title: my world｜G1 新聊天交接指令
 status: current-handoff
-version: 1.2
+version: 1.3
 created: 2026-08-25
 updated: 2026-08-25
 current_phase: G1
-current_task: G1-02
+current_task: G1-03
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 roadmap: MY_WORLD_总体规划路线图_CURRENT.md
 ---
@@ -20,7 +20,7 @@ roadmap: MY_WORLD_总体规划路线图_CURRENT.md
 
 你现在接手一个新的独立游戏项目：**my world**。
 
-不要依赖聊天记忆，也不要把前代 DSH 项目的实现直接搬过来。先按以下 Authority / Source Manifest 做 freshness 检查，然后从当前阶段 G1 / 当前任务 G1-02 继续。
+不要依赖聊天记忆，也不要把前代 DSH 项目的实现直接搬过来。先按以下 Authority / Source Manifest 做 freshness 检查，然后从当前阶段 G1 / 当前任务 G1-03 继续。
 
 ### 项目位置
 
@@ -35,19 +35,9 @@ Godot 本地目录：D:\AI\Engine
 Godot 版本：v4.7.2
 ```
 
-### G1-01 已完成事实
+### 已完成事实
 
-`G1-01｜实现仓库初始化` 已由用户人工确认 **PASS**。
-
-实现仓库最小工作面：
-
-```text
-README.md
-AGENTS.md
-.gitignore
-project.godot
-src/main.tscn
-```
+`G1-01｜实现仓库初始化` 已 **PASS**。
 
 真实 Windows 证据：
 
@@ -73,6 +63,20 @@ G1-01 runtime verification 已确认：
 - `git status --short` 退出后无输出。
 
 此前 Codex 内出现的 `.git/FETCH_HEAD`、`user://logs`、`user://vulkan` 写入失败已经定位为 Codex execution sandbox 边界，不是 Windows ACL 或 Godot 项目 blocker。不要为此修改系统 ACL 或游戏架构。
+
+`G1-02｜Godot 4.7.2 工具链与语言确认` 已 **PASS**。
+
+已确认：
+
+- Standard / non-.NET Godot 4.7.2 Windows x64；
+- GUI / console executable 与 CLI 正常；
+- CLI 提供 `--export-release`、`--export-debug`、`--export-pack`；
+- Windows x86_64 export templates 已安装并验证；
+- ICU Data 已安装并验证；
+- GDScript 是当前 Foundation Spike 的最低依赖 provisional language candidate，但不是 G1-06 最终语言裁定；
+- C# 若进入真实候选，需要另行引入 .NET-enabled Godot editor + .NET SDK；
+- external local runtime process 不是 G1-03 前置条件；最终 Runtime boundary 仍由 G1-04 / G1-05 证据与 G1-06 决定；
+- 完整 Windows functional export proof 仍属于 G1-05。
 
 ### Authority / Source Manifest
 
@@ -151,47 +155,46 @@ G9 Standalone Alpha / Release Validation
 
 ```text
 Current Phase = G1
-Current Task = G1-02
+Current Task = G1-03
 G1-01 = PASS
+G1-02 = PASS
 ```
 
 不要提前大规模实现 G2–G9。
 
-### 现在执行 G1-02
+### 现在执行 G1-03
 
-`G1-02｜Godot 4.7.2 工具链与语言确认` 的 Outcome：
+`G1-03｜2D 中文长文本 / 输入 Foundation Spike` 的 Outcome：
 
-> **在不冻结最终 Architecture 的前提下，确认第一轮 Foundation Spike 使用的最低依赖 Godot 工具链、语言候选、Windows Export CLI/tooling 能力，以及 external local runtime 是否是当前前置条件。**
+> **用最小 Godot/GDScript 可执行测试面证明中文文本、长文本滚动、持续追加、玩家输入、选择/复制以及长文本下 UI 可用。**
 
-当前已经确认：
+允许建立的最小工作面：
 
-- 当前安装为 Standard / non-.NET Godot 4.7.2 Windows x64；
-- GUI / console executable 与 CLI 正常；
-- CLI 明确提供 `--export-release`、`--export-debug`、`--export-pack`；
-- Standard Godot 不提供 C# 支持；若未来把 C# 纳入候选，需要另行使用 .NET-enabled Godot editor + .NET SDK；
-- 因此 GDScript 是当前 Foundation Spike 的最低依赖语言候选，但不是 G1-06 的最终语言裁定；
-- 当前不要为了理论未来安装额外 .NET 工具链；
-- external local runtime process 不是 G1-03 的前置条件；最终 Runtime boundary 仍由 G1-04 / G1-05 证据和 G1-06 决定；
-- Windows Export 的最终功能性 proof 在 G1-05。
+- 在 `src/main.tscn` 上形成立即可运行的 Spike UI；
+- 一个专用 GDScript 脚本；
+- Windows 系统字体 fallback 仅作为 G1-03 本地 Host seam 验证，不等于最终发行字体策略；
+- 本地模拟逐块追加只用于测试 UI append/scroll，不等于真实 Provider streaming。
 
-最新真实本地检查发现：
+G1-03 必须人工观察并记录：
 
-```text
-%APPDATA%\Godot\export_templates\4.7.2.stable = missing
-windows_debug_x86_64.exe = missing
-windows_release_x86_64.exe = missing
-```
+1. 中文无乱码、无明显缺字方块；
+2. 初始化大量中文段落后滚动正常；
+3. 可继续批量追加文本；
+4. 可模拟逐块持续追加且 UI 仍可操作；
+5. 玩家输入框可输入中文，并能追加到阅读区；
+6. 阅读区文字可鼠标选择并 `Ctrl+C` 复制；
+7. 在较大文本量下没有明显卡死、布局崩坏或不可操作；
+8. 正常退出后 `git status --short` 只反映预期 GitHub 提交，不出现生成缓存污染。
 
-因此 **G1-02 当前唯一 blocker 是 Godot 4.7.2 export templates 尚未安装**。CLI 本身不是 blocker。
+G1-03 不做：
 
-下一步：
-
-1. 在 Godot Editor 使用 `Editor → Manage Export Templates...`；
-2. 安装 Windows x86_64 export templates；
-3. 同时安装 ICU Data，因为后续 Foundation Spike 包含中文文本；
-4. 安装后重新验证 `4.7.2.stable` 目录和两个 x86_64 template 文件；
-5. 若通过，G1-02 可关闭并进入 G1-03；
-6. 不在 G1-02 实际导出完整游戏，功能性 Windows Export proof 仍属于 G1-05。
+- 真实 Provider；
+- API key / secret；
+- persistence；
+- World Pack；
+- 正式 RPG UI architecture；
+- Windows functional export；
+- Runtime process boundary 冻结。
 
 ### G1 的完整目标
 
@@ -223,7 +226,7 @@ focused exploration
 → next task
 ```
 
-如果当前聊天无法真正运行本机 Godot，则不要假装完成本地验证；把需要本地执行的部分整理成最小命令，并等待真实证据。
+如果当前聊天无法真正运行本机 Godot，则不要假装完成本地验证；可以完成 GitHub 侧 Spike，实现后给出普通 Windows PowerShell 的最小验证命令，等待真实证据再判 G1-03。
 
 ### 第一次回复应做什么
 
@@ -231,10 +234,10 @@ focused exploration
 
 ```text
 两个仓库当前 HEAD
-G1-01 PASS 是否仍为 current fact
-G1-02 是否仍有效
-当前已确认工具链事实
-G1-02 剩余最小验证项
+G1-01 / G1-02 PASS 是否仍为 current fact
+G1-03 是否仍有效
+当前实现仓库是否已经有 G1-03 Spike surface
+下一步最小动作
 ```
 
-若无 superseding decision，直接继续 G1-02。
+若无 superseding decision，直接继续 G1-03。
