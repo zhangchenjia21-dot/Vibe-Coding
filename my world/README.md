@@ -79,14 +79,24 @@ NVIDIA GeForce RTX 4070 Laptop GPU
 
 ## 当前 G1-02
 
-`G1-02｜Godot 4.7.2 工具链与语言确认` 当前目标：
+`G1-02｜Godot 4.7.2 工具链与语言确认` 当前事实：
 
 - Standard / .NET 已确认：Standard / non-.NET；
 - executable / CLI 已确认；
+- CLI 提供 `--export-release` / `--export-debug` / `--export-pack`；
 - GDScript 作为 G1 Foundation Spike 的 provisional language candidate；
 - 不为了理论未来立即安装 .NET-enabled Godot / .NET SDK；
-- 检查本机 Godot 4.7.2 export templates / CLI tooling；
 - external local runtime process 暂不作为 G1-03 前置条件，最终由后续 Spike 与 G1-06 裁定。
+
+最新本地检查发现 Godot 4.7.2 export templates 尚未安装：
+
+```text
+%APPDATA%\Godot\export_templates\4.7.2.stable = missing
+windows_debug_x86_64.exe = missing
+windows_release_x86_64.exe = missing
+```
+
+因此 G1-02 当前唯一 blocker 是安装 Godot 4.7.2 Windows x86_64 export templates。安装时同时安装 ICU Data，以支持后续中文 Foundation / export 验证。完整 Windows functional export proof 仍属于 G1-05。
 
 ## 当前阶段
 
