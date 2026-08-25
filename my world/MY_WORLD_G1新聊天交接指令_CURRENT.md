@@ -20,13 +20,13 @@ roadmap: MY_WORLD_总体规划路线图_CURRENT.md
 
 你现在接手一个新的独立游戏项目：**my world**。
 
-不要依赖本聊天之外的记忆，也不要把前代 DSH 项目的实现直接搬过来。先按以下 Authority / Source Manifest 做 freshness 检查，然后从当前阶段 G1 开始。
+不要依赖本聊天之外的记忆，也不要把前代 DSH 项目的实现直接搬过来。先按以下 Authority / Source Manifest 做 freshness 检查，然后从当前阶段 G1 继续。
 
 ### 项目位置
 
 ```text
 项目名：my world
-本地项目目录：D:\AI\Projects\my world
+本地项目目录：D:\AI\Projects\my-world
 实现仓库：https://github.com/zhangchenjia21-dot/my-world
 治理 / 产品仓库：https://github.com/zhangchenjia21-dot/Vibe-Coding
 治理目录：Vibe-Coding/my world/
@@ -35,7 +35,35 @@ Godot 本地目录：D:\AI\Engine
 Godot 版本：v4.7.2
 ```
 
-截至交接建立时，`zhangchenjia21-dot/my-world` 仍为空仓库。
+当前 `zhangchenjia21-dot/my-world` 已完成最小 GitHub bootstrap，并包含：
+
+```text
+README.md
+AGENTS.md
+.gitignore
+project.godot
+src/main.tscn
+```
+
+已验证 Windows 本地工具链：
+
+```text
+Godot: 4.7.2.stable.official.ed1daf0bf
+Distribution: Standard / non-.NET Windows x64
+GUI: D:\AI\Engine\Godot_v4.7.2-stable_win64.exe
+Console: D:\AI\Engine\Godot_v4.7.2-stable_win64_console.exe
+Git: 2.54.0.windows.1
+OS Architecture: X64
+```
+
+当前 G1-01 仍未关闭，因为最新本地运行验证发现环境写权限 blocker：
+
+- `git pull` 无法写 `.git/FETCH_HEAD`，报 `Permission denied`；
+- Godot 可以启动并初始化 Vulkan / RTX 4070 Laptop GPU；
+- 但 Godot 无法创建 `user://logs`、`user://vulkan` 和 shader cache；
+- root certificate store 读取失败。
+
+在上述本地写权限问题解决并重新完成最小运行验证前，不得把 G1-01 runtime verification 标记 PASS，也不得提前进入 G1-02。
 
 ### Authority / Source Manifest
 
@@ -129,18 +157,22 @@ Current Task = G1-01
 
 不要提前大规模实现 G2–G9。
 
-### 现在执行 G1-01
+### 现在继续 G1-01
 
 G1-01 的 Outcome：
 
-> **把空的 `zhangchenjia21-dot/my-world` 初始化成一个可以承载 Godot v4.7.2 Foundation Spike 的最小、干净、可继续开发的项目仓库。**
+> **把 `zhangchenjia21-dot/my-world` 初始化成一个可以承载 Godot v4.7.2 Foundation Spike 的最小、干净、可继续开发的项目仓库，并用真实 Windows 运行证据证明 bootstrap 可启动。**
+
+当前 GitHub-side bootstrap 已完成；剩余工作是解决 Windows 本地写权限 blocker 后重新执行 runtime verification。
 
 先做 freshness：
 
 1. 读取上述 current sources；
 2. 检查 `my-world` 当前 HEAD / contents；
-3. 若仓库已经不再为空，必须基于最新状态重新判断，不可覆盖未知改动；
-4. 若可以访问 `D:\AI\Engine`，确认 Godot v4.7.2 实际 executable、Standard / .NET 类型；如果不能访问本机文件系统，明确说不能验证，不得编造结果。
+3. 不可覆盖未知并行改动；
+4. 本地工作目录统一使用 `D:\AI\Projects\my-world`；
+5. 真实运行 Godot 并保留原始日志；
+6. 若仍出现文件写权限错误，先诊断权限环境，不修改游戏架构规避环境问题。
 
 G1-01 允许建立的最小工作面：
 
@@ -148,7 +180,7 @@ G1-01 允许建立的最小工作面：
 README.md
 AGENTS.md
 .gitignore
-project.godot                 # 只有在 Godot 项目形态已确认后
+project.godot
 src/                          # 只创建立即需要的最小内容
 tests/                        # 只创建实际测试入口
 docs/                         # 只存实现仓库直接需要的说明
@@ -208,12 +240,12 @@ focused exploration
 
 如果当前聊天具备合法 GitHub 写权限并且用户没有给出相反指令，可以围绕当前明确任务完成必要的创建 / 修改并提交；禁止 destructive Git 操作、覆盖未知并行改动、删除无法确认归属的内容。
 
-如果本聊天无法真正访问本机 `D:\AI\Engine` 或运行 Godot，则不要假装完成本地验证。此时：
+如果当前聊天无法真正访问本机 `D:\AI\Engine` 或运行 Godot，则不要假装完成本地验证。此时：
 
-1. 可以完成 GitHub 侧仓库初始化与规划；
+1. 可以完成 GitHub 侧工作；
 2. 把需要本地执行的部分整理成一个最小任务包；
 3. 明确告诉用户哪一步需要本地 Codex/KimiCode/终端执行；
-4. 等真实运行证据回来后再判 G1-GATE。
+4. 等真实运行证据回来后再判对应 Gate。
 
 ### 第一次回复应做什么
 
@@ -223,10 +255,10 @@ focused exploration
 
 ```text
 已读取哪些 current sources
-my-world 当前是否为空
+my-world 当前 HEAD / contents
 当前 G1-01 是否仍有效
-Godot 本机信息能否真实验证
+最新本地运行证据与 blocker
 接下来准备执行的最小动作
 ```
 
-如果没有 blocker，直接开始 G1-01。
+如果没有 blocker，继续当前任务；如果有 blocker，先解决 blocker，不提前进入下一任务。
