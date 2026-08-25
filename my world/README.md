@@ -15,13 +15,11 @@
 
 ## 当前权威入口
 
-1. [`MY_WORLD_项目启动总纲_CURRENT.md`](./MY_WORLD_项目启动总纲_CURRENT.md) — rolling product / project facts.
-2. [`MY_WORLD_总体规划路线图_CURRENT.md`](./MY_WORLD_总体规划路线图_CURRENT.md) — canonical G1–G9 roadmap.
-3. [`MY_WORLD_G1新聊天交接指令_CURRENT.md`](./MY_WORLD_G1新聊天交接指令_CURRENT.md) — current G1 handoff.
-4. [`MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md`](./MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md) — Foundation / first vertical plan.
-5. [`MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md`](./MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md) — inherit / redesign / reject matrix.
-
-当前：
+1. [`MY_WORLD_项目启动总纲_CURRENT.md`](./MY_WORLD_项目启动总纲_CURRENT.md)
+2. [`MY_WORLD_总体规划路线图_CURRENT.md`](./MY_WORLD_总体规划路线图_CURRENT.md)
+3. [`MY_WORLD_G1新聊天交接指令_CURRENT.md`](./MY_WORLD_G1新聊天交接指令_CURRENT.md)
+4. [`MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md`](./MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md)
+5. [`MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md`](./MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md)
 
 ```text
 Current Phase = G1
@@ -33,59 +31,46 @@ G1-03 = PASS
 
 ## 已完成 G1 证据
 
-### G1-01 — PASS
-普通 Windows PowerShell 下 Git metadata 与 Godot `user://` 可写；最小工程正常启动、显示、退出且 Git clean。Codex 内早先的权限失败已定位为 sandbox-only。
+G1-01 已证明普通 Windows PowerShell 下 Git metadata 与 Godot `user://` 可写，最小工程正常启动 / 显示 / 退出且 Git clean；Codex 权限失败是 sandbox-only。
 
-### G1-02 — PASS
-Standard / non-.NET Godot 4.7.2 Windows x64、GUI / console / CLI、Windows x86_64 export templates、ICU Data 均已验证。GDScript 为当前 provisional spike candidate；最终语言 / Runtime boundary 留给 G1-06；functional Windows export 留给 G1-05。
+G1-02 已证明 Standard / non-.NET Godot 4.7.2 Windows x64、GUI / console / CLI、Windows x86_64 export templates 与 ICU Data 可用。GDScript 为 provisional spike candidate；最终语言 / Runtime boundary 留给 G1-06；functional Windows export 留给 G1-05。
 
-### G1-03 — PASS
-用户已完成人工 Windows UAT：中文显示、长文本滚动、300 段批量追加、持续追加期间 UI 响应、中文输入、Ctrl+Enter、选择 / Ctrl+C、正常退出与 Git clean 均通过。模拟追加不算真实 Provider streaming evidence。
+G1-03 已由用户人工 Windows UAT 确认 PASS：中文、长文本滚动、批量 / 持续追加、UI 响应、中文输入、Ctrl+Enter、选择 / Ctrl+C、正常退出与 Git clean 均通过。模拟追加不算真实 Provider stream。
 
 ## 当前 G1-04
 
 Outcome：**用一个真实 Provider 证明 Godot Foundation surface 可以完成真实网络请求、SSE 增量输出、cancel、错误态和 UI 非冻结。**
 
-当前 exploratory provider：
-
 ```text
-DeepSeek Chat Completions
+Provider: DeepSeek Chat Completions
 POST https://api.deepseek.com/chat/completions
 stream = true
 default model = deepseek-v4-pro
 ```
 
-这是 G1-04 execution choice，不冻结最终产品 Provider。当前 DeepSeek 官方 API 使用 `deepseek-v4-pro` / `deepseek-v4-flash`；旧 `deepseek-chat` / `deepseek-reasoner` 已退役。
+这是 G1-04 exploratory execution choice，不冻结最终产品 Provider。API key 只从本地 `DEEPSEEK_API_KEY` 读取；UI 只显示 key 是否存在，绝不显示值。Godot 使用 non-blocking `HTTPClient`；same-process networking 仅是 Spike 证据。
 
-实现约束：Provider surface 保持极薄；API key 仅从本地 `DEEPSEEK_API_KEY` 环境变量读取；UI 只显示 key 是否存在、不显示值；Godot 使用 non-blocking `HTTPClient`；cancel 验证活动生成中止与 UI recovery；deterministic failure test 不携带凭据；same-process networking 仅是 Spike 证据。
-
-G1-04 必须等待用户真实 Windows Provider UAT 后才能 PASS。
+G1-04 必须等待真实 Windows Provider UAT 后才能 PASS。
 
 ## 当前阶段
 
 ```text
-The World / DSH 真实长局验证
-        ↓
-产品经验抽取
-        ↓
-my world Product Definition Gate PASS
-        ↓
 G1 Foundation & Project Bootstrap
-        ↓
+↓
 G2 AI Conversation Spine
-        ↓
+↓
 G3 Persistent Game & Timeline
-        ↓
+↓
 G4 World Pack & Local Content Foundation
-        ↓
+↓
 G5 World Semantics & GM Runtime
-        ↓
+↓
 G6 RPG Experience & 2D Presentation
-        ↓
+↓
 G7 Long-session Context & Performance
-        ↓
+↓
 G8 Mod / Authoring Ecosystem
-        ↓
+↓
 G9 Standalone Alpha / Release Validation
 ```
 
