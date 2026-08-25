@@ -5,10 +5,11 @@
 ## 项目事实
 
 - 项目名：`my world`
-- 本地项目目录：`D:\AI\Projects\my world`
+- 本地项目目录：`D:\AI\Projects\my-world`
 - 项目实现仓库：`https://github.com/zhangchenjia21-dot/my-world`
-- 当前项目仓库状态：截至 2026-08-25，GitHub 仓库为空，尚未正式初始化实现
+- 当前项目仓库状态：G1-01 最小仓库与 Godot bootstrap 已建立，当前等待解决 Windows 本地写权限 blocker 后完成 runtime verification
 - 当前优先游戏引擎：Godot `v4.7.2`
+- 已验证 Godot：`4.7.2.stable.official.ed1daf0bf`，Standard / non-.NET Windows x64
 - Godot 本地位置：`D:\AI\Engine`
 - 前代参考实现：`https://github.com/zhangchenjia21-dot/the-world`
 
@@ -37,7 +38,7 @@ Current Task = G1-01
 
 [`MY_WORLD_G1新聊天交接指令_CURRENT.md`](./MY_WORLD_G1新聊天交接指令_CURRENT.md)
 
-用于新的工程开发聊天直接接手当前事实、执行 freshness，并从 G1-01 开始。
+用于新的工程开发聊天直接接手当前事实、执行 freshness，并继续 G1-01。
 
 ### 4. 独立版 Preflight 与第一阶段计划
 
@@ -50,6 +51,26 @@ Current Task = G1-01
 [`MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md`](./MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md)
 
 明确哪些 The World / DSH 经验应继承、哪些应重新设计、哪些只是宿主债务不得迁移。
+
+## 当前 G1-01 Reality Check
+
+GitHub 实现仓库已经不再为空，并已建立最小 Godot 4.7.2 工作面。Windows 本地工具链已确认：
+
+```text
+Godot 4.7.2.stable.official.ed1daf0bf
+Standard / non-.NET Windows x64
+Git 2.54.0.windows.1
+OS Architecture X64
+```
+
+当前本地运行验证发现环境写权限 blocker：
+
+- Git 无法写 `.git/FETCH_HEAD`；
+- Godot 无法创建 `user://logs` / `user://vulkan`；
+- shader cache 无法创建；
+- root certificate store 读取失败。
+
+因此当前仍保持 `G1-01`，不得把 runtime verification 标记 PASS，直到本机写权限问题被真实解决并重新运行最小工程。
 
 ## 当前阶段
 
