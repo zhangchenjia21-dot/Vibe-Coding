@@ -1,11 +1,11 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 1.1
+version: 1.2
 created: 2026-08-25
 updated: 2026-08-25
 current_phase: G1
-next_task: G1-01
+next_task: G1-02
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 local_project_dir: D:\AI\Projects\my-world
 engine: Godot v4.7.2
@@ -76,7 +76,7 @@ engine_local_dir: D:\AI\Engine
 
 当前实现仓库：`https://github.com/zhangchenjia21-dot/my-world`
 
-实现仓库已完成 G1-01 最小 bootstrap，并建立：
+G1-01 已完成并通过真实 Windows runtime verification。实现仓库当前最小 bootstrap：
 
 ```text
 README.md
@@ -91,11 +91,14 @@ src/main.tscn
 ```text
 Godot 4.7.2.stable.official.ed1daf0bf
 Standard / non-.NET Windows x64
+GUI: D:\AI\Engine\Godot_v4.7.2-stable_win64.exe
+Console: D:\AI\Engine\Godot_v4.7.2-stable_win64_console.exe
 Git 2.54.0.windows.1
 OS Architecture X64
+Vulkan / Forward+ on NVIDIA GeForce RTX 4070 Laptop GPU
 ```
 
-当前 G1-01 runtime verification 被本地文件写权限 blocker 阻塞：Git 无法写 `.git/FETCH_HEAD`，Godot 无法创建 `user://logs` / `user://vulkan` / shader cache。该 blocker 解决前不进入 G1-02。
+G1-01 runtime proof 已确认：普通 Windows PowerShell 下 Git 元数据与 Godot `user://` 可写；最小工程窗口正常显示 `my world / G1 Foundation Spike`；Godot 正常退出；退出后仓库干净。此前在 Codex 内出现的 `.git/FETCH_HEAD`、`user://logs`、`user://vulkan` 写入失败已定位为 Codex execution sandbox 边界，不是项目或 Windows ACL blocker。
 
 Godot 是当前 Foundation 候选，不是游戏语义 Owner。`Game / World / Timeline / Save / NPC / Knowledge / Agent Context / World Pack` 等核心概念由 `my world` 自己定义。
 
@@ -119,7 +122,7 @@ G<阶段>-<两位序号>
 
 ```text
 G1-01  初始化实现仓库
-G1-02  Godot Foundation 最小工程
+G1-02  Godot 4.7.2 工具链与语言确认
 G3-04  Restore / Timeline Context 重建
 ```
 
@@ -214,7 +217,7 @@ G9  Standalone Alpha / Release Validation
 
 不创建大量空架构目录。
 
-当前实现状态：GitHub-side bootstrap 已完成；Windows-local runtime verification 仍因文件写权限 blocker 未 PASS。
+当前状态：**PASS**。GitHub-side bootstrap、Windows-local runtime、正常退出与 clean working tree 均已得到真实证据。
 
 ### G1-02｜Godot 4.7.2 工具链与语言确认
 
@@ -225,6 +228,15 @@ G9  Standalone Alpha / Release Validation
 - 第一阶段语言候选；
 - Windows Export 能力；
 - 是否需要外部 local runtime process。
+
+当前已确认：
+
+- Standard / non-.NET Windows x64；
+- GUI 与 console executable / CLI 可正常运行；
+- GDScript 作为当前 Foundation Spike 的最低依赖语言候选，不等于 G1-06 最终语言裁定；
+- C# 若进入候选，需要另行引入 .NET-enabled Godot editor 与 .NET SDK，不因未来可能性现在安装；
+- Windows Export 的最终功能性验证仍属于 G1-05；G1-02 先确认 export templates / CLI capability；
+- external local runtime process 当前不是 G1-03 的前置条件，是否采用留给 G1-04/G1-05 的证据与 G1-06 Architecture Decision。
 
 ### G1-03｜2D 长文本 / 输入 Foundation Spike
 
@@ -939,15 +951,15 @@ Save / Restore / Branch 与聊天历史必须从第一代架构就分离。
 Product Definition Gate      PASS
 Standalone Strategy          PASS
 Godot Toolchain              v4.7.2 Standard x64 VERIFIED
-Implementation Repo          INITIALIZED / MINIMAL G1-01 BOOTSTRAP
-G1-01 Runtime Verification   BLOCKED: LOCAL WRITE PERMISSIONS
+Implementation Repo          INITIALIZED / MINIMAL GODOT BOOTSTRAP
+G1-01 Repository Bootstrap   PASS
 Current Phase                G1
-Next Task                    G1-01
+Current Task                 G1-02
 ```
 
-因此下一步不是实现 G2/G3 的完整 Runtime，也不是提前进入 G1-02，而是：
+因此下一步是：
 
-> **继续 G1-01：解决 Windows 本地写权限 blocker，完成最小 Godot runtime proof。**
+> **G1-02：确认当前 Godot 4.7.2 工具链、最低依赖语言候选与 Windows Export CLI/tooling 能力；不提前冻结 G1-06 的最终 Runtime Architecture。**
 
 ---
 
