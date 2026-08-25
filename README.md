@@ -19,6 +19,9 @@ sillytavern/
 the-world/
 → The World（DSH-native Agent RPG）规划、裁定、任务包与延后记录
 
+my world/
+→ my world 独立单人 AI RPG 的产品总纲、独立版 Preflight、Foundation 决策与 DSH 经验继承资料
+
 99_归档/
 → superseded 版本与已关闭过程资料，不构成 current authority
 ```
@@ -27,6 +30,7 @@ the-world/
 
 - 酒馆游戏当前代码、测试与运行事实：`zhangchenjia21-dot/sillytavern`
 - The World 项目本体（代码、产品规格、游戏工作区）：`zhangchenjia21-dot/the-world`
+- my world 独立游戏项目本体（代码、测试、Godot 工程与运行事实）：`zhangchenjia21-dot/my-world`
 - 世界包、人物卡、拓展包与资产族：`zhangchenjia21-dot/sillytavern-assets`
 - 可复用执行 Skill：`zhangchenjia21-dot/Skill`
 - 项目治理与正式项目裁定：本仓库
