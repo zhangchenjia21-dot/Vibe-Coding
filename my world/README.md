@@ -8,6 +8,7 @@
 - 实现仓库：`https://github.com/zhangchenjia21-dot/my-world`
 - Godot：`4.7.2.stable.official.ed1daf0bf` Standard / non-.NET Windows x64
 - 当前：`G1-04 — Real Provider Streaming / Cancel Foundation Spike`
+- G1-04 当前必须真实接通：**DeepSeek + Kimi**
 
 ## Authority
 
@@ -33,16 +34,25 @@ G1-03 已由用户人工 Windows UAT 确认 PASS：中文、长文本滚动、�
 
 ## G1-04
 
-Outcome：用一个真实 Provider 证明 Godot 可完成真实网络请求、SSE 增量输出、cancel、错误态和 UI 非冻结。
+Outcome：验证 Godot Foundation surface 对**两个真实 Provider**都能完成真实网络请求、SSE 增量输出、cancel、错误态和 UI 非冻结。
 
 ```text
-Provider: DeepSeek Chat Completions
+DeepSeek
 POST https://api.deepseek.com/chat/completions
 stream = true
 default model = deepseek-v4-pro
+key env = DEEPSEEK_API_KEY
+
+Kimi / Moonshot AI
+POST https://api.moonshot.ai/v1/chat/completions
+stream = true
+default model = kimi-k3
+key env = MOONSHOT_API_KEY
 ```
 
-这是 exploratory execution choice，不冻结最终产品 Provider。API key 只从本地 `DEEPSEEK_API_KEY` 读取；UI 只显示是否设置，不显示 key 值。Godot 使用 non-blocking `HTTPClient`。G1-04 只有在真实 Windows Provider + cancel UAT 后才能 PASS。
+这是 G1-04 exploratory execution scope，不冻结最终产品 Provider 架构。实现只保留一个极薄的共同 HTTP/SSE seam，并显式区分两家的 host/path/key/model；不建设自动路由、fallback mesh、负载均衡或 Provider 平台。
+
+G1-04 只有在 **DeepSeek 与 Kimi 都获得真实 HTTP 2xx + 增量 stream 证据**，并验证真实 cancel / UI responsiveness 后才能 PASS。
 
 ## 原则
 
