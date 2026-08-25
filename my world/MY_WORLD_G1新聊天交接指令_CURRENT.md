@@ -1,7 +1,7 @@
 ---
 title: my world｜G1 新聊天交接指令
 status: current-handoff
-version: 1.1
+version: 1.2
 created: 2026-08-25
 updated: 2026-08-25
 current_phase: G1
@@ -167,20 +167,31 @@ G1-01 = PASS
 
 - 当前安装为 Standard / non-.NET Godot 4.7.2 Windows x64；
 - GUI / console executable 与 CLI 正常；
+- CLI 明确提供 `--export-release`、`--export-debug`、`--export-pack`；
 - Standard Godot 不提供 C# 支持；若未来把 C# 纳入候选，需要另行使用 .NET-enabled Godot editor + .NET SDK；
 - 因此 GDScript 是当前 Foundation Spike 的最低依赖语言候选，但不是 G1-06 的最终语言裁定；
 - 当前不要为了理论未来安装额外 .NET 工具链；
 - external local runtime process 不是 G1-03 的前置条件；最终 Runtime boundary 仍由 G1-04 / G1-05 证据和 G1-06 决定；
-- Windows Export 的最终功能性 proof 在 G1-05；G1-02 只确认本机 export templates / CLI tooling 是否具备。
+- Windows Export 的最终功能性 proof 在 G1-05。
 
-G1-02 下一步最小动作：
+最新真实本地检查发现：
 
-1. freshness：再次检查两个仓库 `main` 与本地 HEAD；
-2. 在普通 Windows PowerShell 检查 Godot 4.7.2 export templates 是否存在；
-3. 检查 Godot CLI export capability / help，不伪造真实 export PASS；
-4. 记录 GDScript 为 G1-03 第一 spike language candidate（provisional）；
-5. 若 export templates/tooling 可用且无新 blocker，G1-02 可关闭并进入 G1-03；
-6. 不在 G1-02 实现 Provider、Persistence、完整 Runtime 或大规模 UI。
+```text
+%APPDATA%\Godot\export_templates\4.7.2.stable = missing
+windows_debug_x86_64.exe = missing
+windows_release_x86_64.exe = missing
+```
+
+因此 **G1-02 当前唯一 blocker 是 Godot 4.7.2 export templates 尚未安装**。CLI 本身不是 blocker。
+
+下一步：
+
+1. 在 Godot Editor 使用 `Editor → Manage Export Templates...`；
+2. 安装 Windows x86_64 export templates；
+3. 同时安装 ICU Data，因为后续 Foundation Spike 包含中文文本；
+4. 安装后重新验证 `4.7.2.stable` 目录和两个 x86_64 template 文件；
+5. 若通过，G1-02 可关闭并进入 G1-03；
+6. 不在 G1-02 实际导出完整游戏，功能性 Windows Export proof 仍属于 G1-05。
 
 ### G1 的完整目标
 
