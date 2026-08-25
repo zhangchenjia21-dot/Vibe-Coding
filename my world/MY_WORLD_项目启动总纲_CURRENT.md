@@ -1,12 +1,12 @@
 ---
 title: my world｜项目启动总纲
 status: current-canonical-product-spec
-version: 1.1
+version: 1.2
 created: 2026-08-25
 updated: 2026-08-25
-stage: Stage 0 Complete / Standalone Preflight
+stage: G1 Foundation & Project Bootstrap
 product_definition_gate: PASS
-next: Foundation Spike
+next: G1-02
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 local_project_dir: D:\AI\Projects\my-world
 engine_candidate: Godot
@@ -314,7 +314,7 @@ Godot 当前拥有最高的第一轮验证优先级。
 
 `D:\AI\Engine`
 
-已验证 Windows 本地工具链：
+已验证 Windows 本地工具链与 G1-01 runtime proof：
 
 ```text
 Godot 4.7.2.stable.official.ed1daf0bf
@@ -323,9 +323,15 @@ GUI: D:\AI\Engine\Godot_v4.7.2-stable_win64.exe
 Console: D:\AI\Engine\Godot_v4.7.2-stable_win64_console.exe
 Git 2.54.0.windows.1
 OS Architecture X64
+Vulkan / Forward+
+NVIDIA GeForce RTX 4070 Laptop GPU
 ```
 
-这只确认 Foundation 工具链形态，不代表 Godot 已通过 G1-GATE，也不冻结 GDScript/C#、Runtime process boundary、persistence 或 Windows export 裁定。
+普通 Windows PowerShell 下已经确认 Git metadata 与 Godot `user://` 可写，最小工程可正常启动、显示预期内容、以 exit code `0` 退出，且退出后 Git working tree clean。此前 Codex 内写入失败属于 Codex execution sandbox 边界，不是 Windows ACL 或 Godot blocker。
+
+当前进入 G1-02。基于已安装 Standard build，GDScript 作为最低依赖 Foundation Spike language candidate；这不是 G1-06 的最终 GDScript/C#/mixed 边界裁定。C# 若成为真实候选，需要另行引入 .NET-enabled Godot editor 与 .NET SDK，并以 Spike 证据说明必要性。
+
+这仍不代表 Godot 已通过 G1-GATE，也不冻结 Runtime process boundary、persistence 或最终 Windows export 裁定。
 
 ---
 
@@ -549,15 +555,17 @@ AI Runtime 必须支持流式文本，且后台模型 / 世界维护不能冻结
 ```text
 Product Definition Gate       PASS
 DSH Experience Extraction     READY
-Implementation Repository     INITIALIZED / G1-01 MINIMAL BOOTSTRAP
+Implementation Repository     INITIALIZED / MINIMAL GODOT BOOTSTRAP
 Godot Toolchain               4.7.2 STANDARD X64 VERIFIED
-G1-01 Runtime Verification    BLOCKED BY LOCAL WRITE PERMISSIONS
+G1-01 Repository Bootstrap    PASS
+Current Phase                 G1
+Current Task                  G1-02
 First Vertical Slice          NOT STARTED
 ```
 
-当前本地 blocker 是 Windows / execution-account 文件写权限：Git 无法写 `.git/FETCH_HEAD`，Godot 无法创建 `user://logs` / `user://vulkan` / shader cache。该问题解决并完成真实最小运行验证前，当前任务仍为 G1-01。
+G1-01 已通过真实 Windows runtime proof；Codex 内先前出现的写权限错误已证明为 sandbox-only，不构成项目 blocker。
 
-**当前下一步不是直接开发完整游戏功能，而是完成 G1-01 本地 runtime proof，然后继续 Foundation Spike。**
+**当前下一步是 G1-02：确认最低依赖语言候选与 Windows Export CLI/tooling 能力，然后继续 Foundation Spike。**
 
 对应执行计划：
 
