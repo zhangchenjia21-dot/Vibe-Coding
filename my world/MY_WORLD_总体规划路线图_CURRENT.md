@@ -1,13 +1,13 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 1.0
+version: 1.1
 created: 2026-08-25
 updated: 2026-08-25
 current_phase: G1
 next_task: G1-01
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
-local_project_dir: D:\AI\Projects\my world
+local_project_dir: D:\AI\Projects\my-world
 engine: Godot v4.7.2
 engine_local_dir: D:\AI\Engine
 ---
@@ -70,11 +70,32 @@ engine_local_dir: D:\AI\Engine
 
 > **Godot v4.7.2**
 
-本地路径：`D:\AI\Engine`
+本地 Godot 路径：`D:\AI\Engine`
+
+本地项目路径：`D:\AI\Projects\my-world`
 
 当前实现仓库：`https://github.com/zhangchenjia21-dot/my-world`
 
-截至路线图建立时，该实现仓库仍为空仓库。
+实现仓库已完成 G1-01 最小 bootstrap，并建立：
+
+```text
+README.md
+AGENTS.md
+.gitignore
+project.godot
+src/main.tscn
+```
+
+已验证 Windows 本地工具链：
+
+```text
+Godot 4.7.2.stable.official.ed1daf0bf
+Standard / non-.NET Windows x64
+Git 2.54.0.windows.1
+OS Architecture X64
+```
+
+当前 G1-01 runtime verification 被本地文件写权限 blocker 阻塞：Git 无法写 `.git/FETCH_HEAD`，Godot 无法创建 `user://logs` / `user://vulkan` / shader cache。该 blocker 解决前不进入 G1-02。
 
 Godot 是当前 Foundation 候选，不是游戏语义 Owner。`Game / World / Timeline / Save / NPC / Knowledge / Agent Context / World Pack` 等核心概念由 `my world` 自己定义。
 
@@ -192,6 +213,8 @@ G9  Standalone Alpha / Release Validation
 - 最小运行说明。
 
 不创建大量空架构目录。
+
+当前实现状态：GitHub-side bootstrap 已完成；Windows-local runtime verification 仍因文件写权限 blocker 未 PASS。
 
 ### G1-02｜Godot 4.7.2 工具链与语言确认
 
@@ -915,15 +938,16 @@ Save / Restore / Branch 与聊天历史必须从第一代架构就分离。
 ```text
 Product Definition Gate      PASS
 Standalone Strategy          PASS
-Godot Candidate              v4.7.2 confirmed
-Implementation Repo          empty
+Godot Toolchain              v4.7.2 Standard x64 VERIFIED
+Implementation Repo          INITIALIZED / MINIMAL G1-01 BOOTSTRAP
+G1-01 Runtime Verification   BLOCKED: LOCAL WRITE PERMISSIONS
 Current Phase                G1
 Next Task                    G1-01
 ```
 
-因此下一步不是实现 G2/G3 的完整 Runtime，而是：
+因此下一步不是实现 G2/G3 的完整 Runtime，也不是提前进入 G1-02，而是：
 
-> **G1-01：初始化 `zhangchenjia21-dot/my-world`，建立最小项目治理和 Godot 4.7.2 Foundation Spike 工作面。**
+> **继续 G1-01：解决 Windows 本地写权限 blocker，完成最小 Godot runtime proof。**
 
 ---
 
