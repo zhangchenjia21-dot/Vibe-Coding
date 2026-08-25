@@ -1,7 +1,7 @@
 ---
 title: my world｜G1 新聊天交接指令
 status: current-handoff
-version: 1.4
+version: 1.5
 created: 2026-08-25
 updated: 2026-08-25
 current_phase: G1
@@ -43,26 +43,25 @@ Godot 版本：v4.7.2
 4. `Vibe-Coding/my world/MY_WORLD_总体规划路线图_CURRENT.md`；
 5. `Vibe-Coding/my world/MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md`；
 6. `Vibe-Coding/my world/MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md`；
-7. `zhangchenjia21-dot/my-world` 当前代码 / 测试 / HEAD；
-8. 如需生成正式 Agent 任务，再读取 `zhangchenjia21-dot/Skill` 当前最新版。
+7. `zhangchenjia21-dot/my-world` 当前代码 / 测试 / HEAD。
 
 历史聊天、旧附件、模型记忆与 The World 的 DSH workaround 不构成 `my world` 当前实现权威。
 
 ### 已完成事实
 
 ```text
-G1-01 Repository Bootstrap                         PASS
-G1-02 Godot 4.7.2 Toolchain & Language            PASS
-G1-03 2D Chinese Long Text / Input Spike          PASS
-Current Phase                                      G1
-Current Task                                       G1-04
+G1-01 Repository Bootstrap                PASS
+G1-02 Toolchain & Language Confirmation   PASS
+G1-03 Chinese Long Text / Input Spike     PASS
+Current Phase                             G1
+Current Task                              G1-04
 ```
 
 G1-01 已真实验证：普通 Windows PowerShell 下 Git metadata 与 Godot `user://` 可写；最小工程正常启动、显示、退出；exit code 0；Git clean。Codex 内早先的写权限失败是 sandbox-only。
 
-G1-02 已真实验证 Godot `4.7.2.stable.official.ed1daf0bf` Standard / non-.NET Windows x64、GUI / console / CLI、Vulkan / Forward+、RTX 4070 Laptop GPU、Windows x86_64 export templates 与 ICU Data。GDScript 是当前 Foundation Spike provisional lowest-dependency candidate；完整 Windows functional export 仍属于 G1-05；最终语言与 Runtime boundary 属于 G1-06。
+G1-02 已真实验证 Godot `4.7.2.stable.official.ed1daf0bf` Standard / non-.NET Windows x64、CLI、Vulkan / Forward+、Windows x86_64 export templates 与 ICU Data。GDScript 是 provisional lowest-dependency candidate；最终语言 / Runtime boundary 属于 G1-06；functional Windows export 属于 G1-05。
 
-G1-03 已由用户完成人工 Windows UAT 并确认 PASS：中文显示、长文本滚动、300 段批量追加、持续追加期间 UI 响应、中文输入、Ctrl+Enter、选择 / Ctrl+C、正常退出与 Git clean 均通过。G1-03 timer 模拟追加不算真实 Provider streaming evidence。
+G1-03 已由用户人工 Windows UAT 确认 PASS：中文、长文本滚动、300 段追加、持续追加期间 UI 响应、中文输入、Ctrl+Enter、选择 / Ctrl+C、正常退出与 Git clean 均通过。
 
 ### 当前产品结论
 
@@ -82,80 +81,80 @@ G1-03 已由用户完成人工 Windows UAT 并确认 PASS：中文显示、长�
 
 > Model authors candidates; Program / Domain Owner commits reality.
 
-### 明确不要从 The World / DSH 搬来的实现
+### 当前 G1-04 修正决定
 
-不要复制 DSH Session workaround、fresh-session restore seam、`fs.watch` Restore workaround、周期性 consolidation、DELTAS + 批量 Markdown runtime、Markdown DB、DSH plugin lifecycle 或通用 Agent Workspace UI / Owner 结构。
+用户已明确修正：G1-04 **不能只接 DeepSeek，还必须加入 Kimi**。
 
-### 当前 Roadmap
-
-```text
-G1 Foundation & Project Bootstrap
-G2 AI Conversation Spine
-G3 Persistent Game & Timeline
-G4 World Pack & Local Content Foundation
-G5 World Semantics & GM Runtime
-G6 RPG Experience & 2D Presentation
-G7 Long-session Context & Performance
-G8 Mod / Authoring Ecosystem
-G9 Standalone Alpha / Release Validation
-```
-
-不要提前大规模实现 G2–G9。
-
-### 现在执行 G1-04
-
-Outcome：**用一个真实 Provider 证明 Godot 可以完成真实网络请求、真实 SSE 增量输出、cancel、错误路径，并在请求期间保持 UI 主循环可响应。**
-
-当前 exploratory provider：
+因此当前 required real Providers = **DeepSeek + Kimi**。这项决定 supersede 任何旧的“G1-04 只接一个实际 Provider / 当前 concrete Provider 只有 DeepSeek”的表述。
 
 ```text
-DeepSeek Chat Completions
+DeepSeek
 POST https://api.deepseek.com/chat/completions
 stream = true
 default model = deepseek-v4-pro
+key env = DEEPSEEK_API_KEY
+optional model override = MY_WORLD_G1_04_DEEPSEEK_MODEL
+
+Kimi / Moonshot AI
+POST https://api.moonshot.ai/v1/chat/completions
+stream = true
+default model = kimi-k3
+key env = MOONSHOT_API_KEY
+optional model override = MY_WORLD_G1_04_KIMI_MODEL
 ```
 
-这是 G1-04 execution choice，不是最终产品 Provider 决定。DeepSeek 当前官方 `/models` 文档列出 `deepseek-v4-pro` 与 `deepseek-v4-flash`；旧 `deepseek-chat` / `deepseek-reasoner` 已退役。如当前账户/实验需要，可通过 `MY_WORLD_G1_04_MODEL` 在本地覆盖模型名。
+Kimi 当前官方 API 与 OpenAI API 格式兼容，并支持 `stream: true`。本轮只复用极薄的共同 HTTP/SSE seam，不建设通用多 Provider 平台。
 
-实现边界：Godot non-blocking `HTTPClient` + `poll()` + incremental body reads；SSE `data:` / `[DONE]`；真实文本直接追加；cancel 通过关闭活动 transport；heartbeat + UI response counter；`127.0.0.1:1` 无凭据 deterministic failure；不建设 multi-provider routing/fallback/retry platform；same-process networking 不等于 G1-06 Runtime boundary。
+### G1-04 实现边界
+
+- provisional GDScript；
+- Godot non-blocking `HTTPClient`；
+- `poll()` 驱动网络状态；
+- incremental response body → SSE `data:`；
+- `data: [DONE]` 完成；
+- Provider 下拉框显式选择 DeepSeek / Kimi；
+- 两家 host/path/key/model 分开配置；
+- real streamed text 直接追加到 Godot reading surface；
+- cancel 通过关闭活动 transport 验证中断与 UI recovery；
+- UI heartbeat + 手动 response counter 验证主循环；
+- `127.0.0.1:1` 无凭据 deterministic failure path；
+- 不做自动路由、fallback mesh、负载均衡、账户系统、通用 Provider registry；
+- same-process networking 不等于 G1-06 Runtime boundary。
 
 ### Secret 规则
 
-真实 API key 只允许存在于用户本机进程环境变量：
+真实 key 只允许存在于用户本机进程环境变量：
 
 ```text
 DEEPSEEK_API_KEY
+MOONSHOT_API_KEY
 ```
 
-可选模型覆盖：
-
-```text
-MY_WORLD_G1_04_MODEL
-```
-
-可以在 UI 中只显示 `DEEPSEEK_API_KEY: 已设置/未设置` 这种布尔状态；**绝不能显示 key 值**。严禁把 key 写进 Git、`.gd` / `.tscn` / `project.godot`、console、截图或聊天。
+UI 可以显示 `已设置 / 未设置`，**绝不能显示 key 值**。禁止把 key 写进 Git、`.gd` / `.tscn` / `project.godot`、console、截图或聊天。
 
 ### G1-04 PASS 必须由真实 Windows UAT 证明
 
-1. UI 只显示 key 是否已设置，不显示值；
-2. 真 Provider 返回 HTTP 2xx；
-3. 内容在生成未完成时逐步出现；
-4. streaming 期间 heartbeat 持续增加；
-5. streaming 期间 `UI 响应 +1` 可点击；
-6. cancel 中止活动生成并恢复 UI；
-7. cancel 后可再次真实请求；
-8. deterministic failure path 明确且不冻结；
-9. Provider/API 错误可读；
-10. 正常退出；
-11. Git clean。
+1. UI 只显示两个 key 是否已设置，不显示值；
+2. DeepSeek 返回真实 HTTP 2xx；
+3. DeepSeek 内容在生成未完成时增量出现；
+4. Kimi 返回真实 HTTP 2xx；
+5. Kimi 内容在生成未完成时增量出现；
+6. 两家请求期间 heartbeat 持续增加，`UI 响应 +1` 可点击；
+7. 对一个真实活动生成执行 Cancel，生成停止且 UI 立即恢复；
+8. Cancel 后至少再成功完成一次真实请求；
+9. idle 时可在 DeepSeek / Kimi 间切换，无需重启；
+10. deterministic failure path 明确且不冻结；
+11. Provider/API 错误可读；
+12. 正常退出；
+13. Git clean。
 
-没有真实 Provider + cancel 证据不得判 G1-04 PASS。
+**任一家没有真实 stream 证据，G1-04 都不能 PASS，也不能进入 G1-05。**
 
 ### G1 剩余边界
 
 G1-05：local IO / dynamic portrait-scene-map images / functional Windows export。
 
-G1-06：根据真实 Spike 裁定 Godot Host、Standard/.NET、GDScript/C#/mixed、Runtime process boundary 与第一阶段 persistence candidate range。
+G1-06：根据真实 Spike 裁定 Godot Host、Standard/.NET、GDScript/C#/mixed、Provider/product configuration boundary、Runtime process boundary 与第一阶段 persistence candidate range。
 
 ### 工作方式
 
