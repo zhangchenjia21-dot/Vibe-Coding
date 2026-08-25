@@ -18,6 +18,8 @@
 ### 1. 产品与项目总纲
 [`MY_WORLD_项目启动总纲_CURRENT.md`](./MY_WORLD_项目启动总纲_CURRENT.md)
 
+这是 `my world` 当前唯一的滚动产品 / 项目事实入口。
+
 ### 2. 总体规划路线图
 [`MY_WORLD_总体规划路线图_CURRENT.md`](./MY_WORLD_总体规划路线图_CURRENT.md)
 
@@ -64,7 +66,7 @@ stream = true
 default model = deepseek-v4-pro
 ```
 
-这是 G1-04 execution choice，不冻结最终产品 Provider。当前 DeepSeek 官方 API 已使用 `deepseek-v4-pro` / `deepseek-v4-flash`；旧 `deepseek-chat` / `deepseek-reasoner` 已退役。
+这是 G1-04 execution choice，不冻结最终产品 Provider。当前 DeepSeek 官方 API 使用 `deepseek-v4-pro` / `deepseek-v4-flash`；旧 `deepseek-chat` / `deepseek-reasoner` 已退役。
 
 实现约束：
 
@@ -77,6 +79,34 @@ default model = deepseek-v4-pro
 - same-process networking 是 Spike 证据，不是 G1-06 Runtime boundary 裁定。
 
 G1-04 必须等待用户真实 Windows Provider UAT 后才能 PASS。
+
+## 当前阶段
+
+```text
+The World / DSH 真实长局验证
+        ↓
+产品经验抽取
+        ↓
+my world Product Definition Gate PASS
+        ↓
+G1 Foundation & Project Bootstrap
+        ↓
+G2 AI Conversation Spine
+        ↓
+G3 Persistent Game & Timeline
+        ↓
+G4 World Pack & Local Content Foundation
+        ↓
+G5 World Semantics & GM Runtime
+        ↓
+G6 RPG Experience & 2D Presentation
+        ↓
+G7 Long-session Context & Performance
+        ↓
+G8 Mod / Authoring Ecosystem
+        ↓
+G9 Standalone Alpha / Release Validation
+```
 
 ## 当前原则
 
