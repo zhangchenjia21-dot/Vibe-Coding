@@ -1,11 +1,11 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 1.3
+version: 1.4
 created: 2026-08-25
 updated: 2026-08-25
 current_phase: G1
-next_task: G1-03
+next_task: G1-04
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 local_project_dir: D:\AI\Projects\my-world
 engine: Godot v4.7.2
@@ -76,7 +76,7 @@ engine_local_dir: D:\AI\Engine
 
 当前实现仓库：`https://github.com/zhangchenjia21-dot/my-world`
 
-G1-01 已完成并通过真实 Windows runtime verification。实现仓库当前最小 bootstrap：
+G1-01 已完成并通过真实 Windows runtime verification。实现仓库当前最小 Foundation surface：
 
 ```text
 README.md
@@ -84,6 +84,7 @@ AGENTS.md
 .gitignore
 project.godot
 src/main.tscn
+src/<current G1 spike script>
 ```
 
 已验证 Windows 本地工具链：
@@ -101,6 +102,8 @@ Vulkan / Forward+ on NVIDIA GeForce RTX 4070 Laptop GPU
 G1-01 runtime proof 已确认：普通 Windows PowerShell 下 Git 元数据与 Godot `user://` 可写；最小工程窗口正常显示 `my world / G1 Foundation Spike`；Godot 正常退出；退出后仓库干净。此前在 Codex 内出现的 `.git/FETCH_HEAD`、`user://logs`、`user://vulkan` 写入失败已定位为 Codex execution sandbox 边界，不是项目或 Windows ACL blocker。
 
 G1-02 已 PASS：Godot CLI export capability 已确认；Godot 4.7.2 Windows x86_64 export templates 与 ICU Data 已本地安装并验证；GDScript 作为当前 Foundation Spike 的最低依赖 provisional language candidate。完整 Windows build proof 仍属于 G1-05，最终 GDScript/C#/mixed 与 Runtime boundary 仍属于 G1-06。
+
+G1-03 已 PASS：用户完成真实 Windows manual UAT，中文显示、长文本滚动、300 段批量追加、持续追加期间 UI 响应、中文输入、Ctrl+Enter、选择 / Ctrl+C、正常退出与 Git clean 均通过。G1-03 的 timer append 只证明 UI seam，不算真实 Provider stream。
 
 Godot 是当前 Foundation 候选，不是游戏语义 Owner。`Game / World / Timeline / Save / NPC / Knowledge / Agent Context / World Pack` 等核心概念由 `my world` 自己定义。
 
@@ -242,7 +245,7 @@ G9  Standalone Alpha / Release Validation
 - GDScript 作为当前 Foundation Spike 的最低依赖语言候选，不等于 G1-06 最终语言裁定；
 - C# 若进入候选，需要另行引入 .NET-enabled Godot editor 与 .NET SDK，不因未来可能性现在安装；
 - Windows Export 的最终功能性验证仍属于 G1-05；
-- external local runtime process 当前不是 G1-03 的前置条件，是否采用留给 G1-04/G1-05 的证据与 G1-06 Architecture Decision。
+- external local runtime process 不是 G1-04 的前置条件；是否采用留给 G1-04/G1-05 证据与 G1-06 Architecture Decision。
 
 ### G1-03｜2D 长文本 / 输入 Foundation Spike
 
@@ -255,7 +258,7 @@ G9  Standalone Alpha / Release Validation
 - 复制 / 选择；
 - UI 不因长文本明显失控。
 
-当前状态：**CURRENT**。采用 GDScript 作为 provisional spike language，只构建上述 Host seam 的最小可执行测试面，不扩展到 Provider、Persistence 或正式 RPG UI。
+当前状态：**PASS**。用户已完成人工 Windows UAT 并确认上述 Host seams 全部可用；正常退出与 clean Git state 也已确认。
 
 ### G1-04｜真实 Provider 流式调用 Spike
 
@@ -268,6 +271,21 @@ G9  Standalone Alpha / Release Validation
 - 请求期间 UI 不冻结。
 
 Provider abstraction 保持极薄：`send / stream / cancel`。
+
+当前状态：**CURRENT / LOCAL REAL NETWORK UAT REQUIRED**。
+
+本轮 exploratory Provider：
+
+```text
+DeepSeek Chat Completions
+POST https://api.deepseek.com/chat/completions
+stream = true
+default model = deepseek-v4-pro
+```
+
+实现采用 Godot non-blocking `HTTPClient` + `poll()` / incremental body reads，并提供 SSE 解析、Cancel、UI heartbeat、手动 UI response counter 与无凭据 deterministic connection-failure test。API key 只从本地 `DEEPSEEK_API_KEY` 环境变量读取；UI 只能显示是否设置，绝不显示 key 值。
+
+这不是最终 Provider 产品决策，也不冻结 same-process vs local-runtime-process。G1-04 只有在真实 Provider HTTP 2xx、增量 SSE、真实 cancel、失败路径和 UI responsiveness 都经 Windows UAT 后才可 PASS。
 
 ### G1-05｜本地 IO / 图片 / Windows Export Spike
 
@@ -962,13 +980,14 @@ Godot Toolchain              v4.7.2 Standard x64 VERIFIED
 Implementation Repo          FOUNDATION SPIKES ACTIVE
 G1-01 Repository Bootstrap   PASS
 G1-02 Toolchain Confirmation PASS
+G1-03 Text / Input Spike     PASS
 Current Phase                G1
-Current Task                 G1-03
+Current Task                 G1-04
 ```
 
 因此下一步是：
 
-> **G1-03：用最小 GDScript Foundation Spike 验证中文字体、长文本滚动与持续追加、玩家输入、选择/复制，以及长文本下 UI 是否保持可用。**
+> **G1-04：运行真实 DeepSeek Provider stream / cancel / failure / UI responsiveness UAT；没有真实网络证据不得进入 G1-05。**
 
 ---
 
