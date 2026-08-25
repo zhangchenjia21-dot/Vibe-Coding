@@ -45,17 +45,29 @@ Preflight 完成后才进入大规模 Runtime / UI 实现。
 
 ```text
 项目名：my world
-本地项目目录：D:\AI\Projects\my world
+本地项目目录：D:\AI\Projects\my-world
 实现仓库：https://github.com/zhangchenjia21-dot/my-world
-当前 GitHub 状态：空仓库
+当前 GitHub 状态：G1-01 最小 bootstrap 已建立
 
 Godot 本地位置：D:\AI\Engine
-Godot 具体版本：待登记
+Godot 版本：4.7.2.stable.official.ed1daf0bf
+Godot Distribution：Standard / non-.NET Windows x64
+Git：2.54.0.windows.1
+OS Architecture：X64
 
 前代参考实现：
 D:\AI\Projects\the world
 https://github.com/zhangchenjia21-dot/the-world
 ```
+
+当前本地验证 blocker：
+
+- Git 无法写 `.git/FETCH_HEAD`，报 `Permission denied`；
+- Godot 可以启动并初始化 Vulkan / NVIDIA GeForce RTX 4070 Laptop GPU；
+- Godot 无法创建 `user://logs`、`user://vulkan` 与 shader cache；
+- root certificate store 读取失败。
+
+因此 G1-01 的 GitHub bootstrap 已完成，但最小 runtime proof 尚未 PASS。先解决执行账户 / 文件系统写权限，不通过修改游戏架构规避环境问题。
 
 注意：`D:\AI\Engine` 是引擎安装位置，不作为游戏项目目录。
 
@@ -65,30 +77,35 @@ https://github.com/zhangchenjia21-dot/the-world
 
 ### 4.1 建立实现仓库最小骨架
 
-在 `my-world` 中首先建立：
+当前已建立：
 
 ```text
 README.md
 AGENTS.md
-project.godot                 # Foundation Spike 确认 Godot 后
-src/                          # 后续按真实边界展开
-assets/
-tests/
-docs/                         # 只存实现直接需要的项目级文档；长期治理仍在 Vibe-Coding
+.gitignore
+project.godot
+src/main.tscn
 ```
 
-不要在初始化阶段创建大量空目录模拟未来完整架构。
+`src/main.tscn` 是无脚本、语言中立的最小启动场景。`assets/`、`tests/`、`docs/` 等只在出现真实实现 / 验证需求时创建，不为了架构完整提前制造空目录。
 
 ### 4.2 记录本地工具链
 
-至少记录：
+已确认：
 
-- Godot 具体版本；
-- 是否为 Standard / .NET 版本；
-- Windows 版本 / 架构（只需项目真正需要的最小信息）；
-- Git；
+- Godot `4.7.2.stable.official.ed1daf0bf`；
+- Standard / non-.NET Windows x64；
+- GUI：`D:\AI\Engine\Godot_v4.7.2-stable_win64.exe`；
+- Console：`D:\AI\Engine\Godot_v4.7.2-stable_win64_console.exe`；
+- Git `2.54.0.windows.1`；
+- OS Architecture `X64`。
+
+尚未冻结：
+
 - 第一阶段开发语言候选；
-- 第一 Provider 的本地开发接入方式。
+- 第一 Provider 的本地开发接入方式；
+- Windows Export 路径；
+- Runtime process boundary。
 
 不要提前安装与第一阶段无关的大量 SDK。
 
@@ -413,6 +430,8 @@ PASS 条件：
 - 最小运行项目可启动；
 - Git / build 基础路径明确。
 
+当前：仓库初始化、AGENTS、版本登记与 GitHub-side 最小工程已完成；“最小运行项目可启动”仍因本地写权限 blocker 未证明，因此 MW-F0 / G1-01 尚未 PASS。
+
 ### Gate MW-F1｜Foundation Spike
 
 PASS 条件：
@@ -438,16 +457,15 @@ PASS 条件：第 8、9 节完整路径实际通过，并由玩家人工确认�
 ## 13. 当前执行顺序
 
 ```text
-1. 初始化 my-world repo
-2. 建立项目级 AGENTS.md
-3. 登记 Godot 版本 / 工具链
-4. Godot Foundation Spike
-5. Runtime Boundary Spike
-6. 冻结第一阶段最小技术栈
-7. 实现 First Real Vertical
-8. 玩家真实试玩
-9. 只修实际阻塞
-10. Vertical PASS 后再扩地图 / 立绘 / 人物 UI / World Pack 作者体验
+1. 完成 my-world G1-01 bootstrap runtime proof（当前：先解决本地写权限 blocker）
+2. 完成 Godot 工具链 / 语言候选确认
+3. Godot Foundation Spike
+4. Runtime Boundary Spike
+5. 冻结第一阶段最小技术栈
+6. 实现 First Real Vertical
+7. 玩家真实试玩
+8. 只修实际阻塞
+9. Vertical PASS 后再扩地图 / 立绘 / 人物 UI / World Pack 作者体验
 ```
 
 ---
