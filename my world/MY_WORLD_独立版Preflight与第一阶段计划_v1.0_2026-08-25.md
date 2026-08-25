@@ -1,7 +1,7 @@
 ---
 title: my world｜独立版 Preflight 与第一阶段计划
 status: current-plan
-version: 1.2
+version: 1.3
 created: 2026-08-25
 updated: 2026-08-25
 stage: G1 Foundation & Project Bootstrap
@@ -47,7 +47,7 @@ Preflight 完成后才进入大规模 Runtime / UI 实现。
 项目名：my world
 本地项目目录：D:\AI\Projects\my-world
 实现仓库：https://github.com/zhangchenjia21-dot/my-world
-当前 GitHub 状态：G1-01 最小 bootstrap 已建立并 PASS
+当前 GitHub 状态：G1-01 / G1-02 / G1-03 已 PASS；G1-04 ACTIVE
 
 Godot 本地位置：D:\AI\Engine
 Godot 版本：4.7.2.stable.official.ed1daf0bf
@@ -76,7 +76,7 @@ G1-01 已通过真实 Windows runtime verification：普通 PowerShell 下 Git m
 
 ### 4.1 建立实现仓库最小骨架
 
-当前已建立：
+当前已建立并持续演进：
 
 ```text
 README.md
@@ -84,6 +84,7 @@ AGENTS.md
 .gitignore
 project.godot
 src/main.tscn
+src/<current G1 spike script>
 ```
 
 `src/main.tscn` 最初是无脚本、语言中立的最小启动场景；从 G1-03 开始允许把它演进为立即需要的 Foundation Spike 测试面。`assets/`、`tests/`、`docs/` 等只在出现真实实现 / 验证需求时创建，不为了架构完整提前制造空目录。
@@ -111,9 +112,11 @@ G1-02 provisional execution choice：
 - 这不是 G1-06 的最终 GDScript / C# / mixed architecture decision；
 - 当前 Standard Godot 不提供 C# 支持；若 C# 成为真实候选，需要另行引入 .NET-enabled Godot editor + .NET SDK；
 - 不为理论未来提前安装额外 SDK；
-- external local runtime process 不是 G1-03 前置条件，最终 Runtime boundary 由 G1-04/G1-05 证据与 G1-06 决定。
+- external local runtime process 不是 G1-04 前置条件，最终 Runtime boundary 由 G1-04/G1-05 证据与 G1-06 决定。
 
-**G1-02 已 PASS。** Windows Export 的最终功能性 proof 仍在 G1-05，而不是因为模板已安装就提前宣布。
+**G1-02 已 PASS。** Windows Export 的最终功能性 proof 仍在 G1-05。
+
+G1-03 也已由用户真实 Windows UAT 确认 PASS：中文显示、长文本滚动、300 段批量追加、持续追加期间 UI 响应、中文输入、Ctrl+Enter、选择 / Ctrl+C、正常退出与 Git clean 均通过。
 
 ---
 
@@ -140,21 +143,48 @@ NOT production commitment
 - 玩家输入框可用；
 - 滚动 / 选择 / 复制等基础阅读体验不异常。
 
-当前对应任务：`G1-03`。
+对应任务：`G1-03`，当前 **PASS**。
 
 #### B. 流式 AI 输出
 
-- 可以发起一个实际模型请求；
-- 文本可逐步流式显示；
-- 玩家可以看到生成过程而不是等完整响应；
-- 可以取消正在进行的生成；
-- 错误不会让整个 UI 失效。
+当前用户修正决定：G1-04 不再只验证一个 Provider，而是必须验证 **DeepSeek + Kimi** 两个真实 Provider。
+
+必须证明：
+
+- DeepSeek 可以发起真实请求并获得 HTTP 2xx；
+- DeepSeek 文本可逐步流式显示；
+- Kimi 可以发起真实请求并获得 HTTP 2xx；
+- Kimi 文本可逐步流式显示；
+- 两家都不只是等待完整响应后一次性显示；
+- 活动生成可以取消；
+- Provider/API 错误不会让整个 UI 失效。
+
+当前 G1-04 concrete endpoints：
+
+```text
+DeepSeek
+POST https://api.deepseek.com/chat/completions
+stream = true
+default model = deepseek-v4-pro
+key env = DEEPSEEK_API_KEY
+
+Kimi / Moonshot AI
+POST https://api.moonshot.ai/v1/chat/completions
+stream = true
+default model = kimi-k3
+key env = MOONSHOT_API_KEY
+```
+
+两者复用极薄的 OpenAI-compatible HTTP/SSE seam，但 host/path/key/model 显式分离。**不建设自动路由、fallback mesh、负载均衡、Provider plugin framework 或 account system。**
 
 #### C. 后台工作与 UI 响应
 
-- 网络请求进行时 UI 不冻结；
+- DeepSeek 请求进行时 UI 不冻结；
+- Kimi 请求进行时 UI 不冻结；
 - 本地 persistence / context preparation 进行时 UI 不冻结；
 - 能区分主叙事流与后台工作状态。
+
+G1-04 通过 UI heartbeat + manual response counter 先证明网络请求不冻结主循环。
 
 #### D. 本地 Persistence
 
@@ -234,7 +264,7 @@ Model Provider / Persistence
 按以下问题裁定：
 
 1. 哪个方案让 Godot 更像 presentation / game host，而不是 world semantics owner？
-2. 哪个方案对流式 AI、取消、后台任务和测试更自然？
+2. 哪个方案对两个真实 Provider 的 streaming、取消、后台任务和测试更自然？
 3. 哪个方案的 Windows 打包更可靠？
 4. 哪个方案第一阶段开发复杂度更低？
 5. 如果未来增加 Local Model / Mod / 自动化测试，哪个边界更有余量？
@@ -252,12 +282,12 @@ Foundation Spike 通过后，再冻结以下最小技术决定：
 - GDScript / C# / 混合边界；
 - Runtime 同进程还是独立本地进程；
 - 第一阶段 persistence 技术；
-- 第一 Provider；
+- 第一阶段 Provider / model configuration boundary；
 - 最小测试框架；
 - 最小 logging / crash diagnostics；
 - Windows build / packaging 路径。
 
-只冻结第一 Vertical 真正依赖的决定。
+G1-04 的 DeepSeek + Kimi 是 required Foundation evidence，不等于 G1-06 必须设计一个大型通用 Provider 平台。
 
 ---
 
@@ -422,6 +452,7 @@ optional mechanic references
 - Universal Schema；
 - 完整插件市场；
 - 大型内容编辑器；
+- 自动 Provider 路由 / fallback mesh / 通用 Provider marketplace；
 - 为“以后可能需要”提前做的大量扩展点。
 
 ---
@@ -438,7 +469,7 @@ PASS 条件：
 - 最小运行项目可启动；
 - Git / build 基础路径明确。
 
-当前：**PASS**。G1-01 已通过真实 Windows runtime proof；最小工程、正常退出与 clean Git working tree 均已确认。
+当前：**PASS**。
 
 ### Gate MW-F1｜Foundation Spike
 
@@ -446,7 +477,8 @@ PASS 条件：
 
 - 中文长文本；
 - 玩家输入；
-- 流式真实模型；
+- DeepSeek 真实流式模型输出；
+- Kimi 真实流式模型输出；
 - cancel；
 - UI 不冻结；
 - local IO；
@@ -467,8 +499,8 @@ PASS 条件：第 8、9 节完整路径实际通过，并由玩家人工确认�
 ```text
 1. G1-01 Project Bootstrap                          PASS
 2. G1-02 Godot 工具链 / 语言候选确认               PASS
-3. G1-03 2D 中文长文本 / 输入 Foundation Spike    CURRENT
-4. G1-04 真实 Provider stream / cancel Spike
+3. G1-03 2D 中文长文本 / 输入 Foundation Spike    PASS
+4. G1-04 DeepSeek + Kimi real stream / cancel      CURRENT
 5. G1-05 local IO / image / Windows Export Spike
 6. G1-06 Runtime Boundary / Foundation Architecture Decision
 7. 实现 First Real Vertical
@@ -484,6 +516,7 @@ PASS 条件：第 8、9 节完整路径实际通过，并由玩家人工确认�
 出现以下情况时，不得因为“已经写了很多代码”继续推进：
 
 - Godot Host seam 明显妨碍流式 AI RPG；
+- DeepSeek 或 Kimi 的真实流式 / cancel seam 暴露出当前 Host 方案的结构性 blocker；
 - Windows export 与 Editor 行为严重不一致；
 - Runtime boundary 让游戏语义过度依赖 Godot 内部对象；
 - persistence 方案导致 Save / Timeline 语义无法自然成立；
