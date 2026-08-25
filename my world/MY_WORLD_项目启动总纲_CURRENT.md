@@ -1,12 +1,12 @@
 ---
 title: my world｜项目启动总纲
 status: current-canonical-product-spec
-version: 1.2
+version: 1.3
 created: 2026-08-25
 updated: 2026-08-25
 stage: G1 Foundation & Project Bootstrap
 product_definition_gate: PASS
-next: G1-02
+next: G1-03
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 local_project_dir: D:\AI\Projects\my-world
 engine_candidate: Godot
@@ -329,9 +329,9 @@ NVIDIA GeForce RTX 4070 Laptop GPU
 
 普通 Windows PowerShell 下已经确认 Git metadata 与 Godot `user://` 可写，最小工程可正常启动、显示预期内容、以 exit code `0` 退出，且退出后 Git working tree clean。此前 Codex 内写入失败属于 Codex execution sandbox 边界，不是 Windows ACL 或 Godot blocker。
 
-当前进入 G1-02。基于已安装 Standard build，GDScript 作为最低依赖 Foundation Spike language candidate；这不是 G1-06 的最终 GDScript/C#/mixed 边界裁定。C# 若成为真实候选，需要另行引入 .NET-enabled Godot editor 与 .NET SDK，并以 Spike 证据说明必要性。
+G1-02 已 PASS：Godot CLI 已确认提供 `--export-release` / `--export-debug` / `--export-pack`；Godot 4.7.2 Windows x86_64 export templates 与 ICU Data 已安装并由本地验证确认可用。基于已安装 Standard build，GDScript 作为第一轮 Foundation Spike 的最低依赖 language candidate；这不是 G1-06 的最终 GDScript/C#/mixed 边界裁定。C# 若成为真实候选，需要另行引入 .NET-enabled Godot editor 与 .NET SDK，并以 Spike 证据说明必要性。
 
-这仍不代表 Godot 已通过 G1-GATE，也不冻结 Runtime process boundary、persistence 或最终 Windows export 裁定。
+当前进入 G1-03。Windows Export 的完整功能性 proof 仍属于 G1-05；Runtime process boundary、persistence 与最终 Host/语言裁定仍保持开放。
 
 ---
 
@@ -555,17 +555,18 @@ AI Runtime 必须支持流式文本，且后台模型 / 世界维护不能冻结
 ```text
 Product Definition Gate       PASS
 DSH Experience Extraction     READY
-Implementation Repository     INITIALIZED / MINIMAL GODOT BOOTSTRAP
+Implementation Repository     INITIALIZED / FOUNDATION SPIKES
 Godot Toolchain               4.7.2 STANDARD X64 VERIFIED
 G1-01 Repository Bootstrap    PASS
+G1-02 Toolchain Confirmation  PASS
 Current Phase                 G1
-Current Task                  G1-02
+Current Task                  G1-03
 First Vertical Slice          NOT STARTED
 ```
 
-G1-01 已通过真实 Windows runtime proof；Codex 内先前出现的写权限错误已证明为 sandbox-only，不构成项目 blocker。
+G1-02 已通过：CLI export capability、Windows x86_64 export templates、ICU Data 与 GDScript provisional candidate 均已确认；完整 Windows build proof 仍按计划留在 G1-05。
 
-**当前下一步是 G1-02：确认最低依赖语言候选与 Windows Export CLI/tooling 能力，然后继续 Foundation Spike。**
+**当前下一步是 G1-03：验证中文字体、长文本滚动与持续追加、玩家输入、文本选择/复制以及长文本下的 UI 稳定性。**
 
 对应执行计划：
 
