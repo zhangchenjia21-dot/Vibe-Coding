@@ -8,7 +8,7 @@
 - 本地项目目录：`D:\AI\Projects\my world`
 - 项目实现仓库：`https://github.com/zhangchenjia21-dot/my-world`
 - 当前项目仓库状态：截至 2026-08-25，GitHub 仓库为空，尚未正式初始化实现
-- 当前优先游戏引擎候选：Godot
+- 当前优先游戏引擎：Godot `v4.7.2`
 - Godot 本地位置：`D:\AI\Engine`
 - 前代参考实现：`https://github.com/zhangchenjia21-dot/the-world`
 
@@ -18,15 +18,34 @@
 
 [`MY_WORLD_项目启动总纲_CURRENT.md`](./MY_WORLD_项目启动总纲_CURRENT.md)
 
-这是 `my world` 当前唯一的滚动产品 / 项目事实入口。后续产品方向、Stage、Decision Ledger、范围与当前下一步优先更新此文件。
+这是 `my world` 当前唯一的滚动产品 / 项目事实入口。产品方向、核心价值、范围、产品原则与 Decision Ledger 以此为准。
 
-### 2. 独立版 Preflight 与第一阶段计划
+### 2. 总体规划路线图
+
+[`MY_WORLD_总体规划路线图_CURRENT.md`](./MY_WORLD_总体规划路线图_CURRENT.md)
+
+这是唯一 current 开发 Roadmap。开发阶段固定为 `G1 → G9`，阶段内任务统一使用 `G<阶段>-<两位序号>` 编码。
+
+当前：
+
+```text
+Current Phase = G1
+Current Task = G1-01
+```
+
+### 3. G1 新聊天交接
+
+[`MY_WORLD_G1新聊天交接指令_CURRENT.md`](./MY_WORLD_G1新聊天交接指令_CURRENT.md)
+
+用于新的工程开发聊天直接接手当前事实、执行 freshness，并从 G1-01 开始。
+
+### 4. 独立版 Preflight 与第一阶段计划
 
 [`MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md`](./MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md)
 
-定义正式写大规模游戏代码前的 Foundation Spike、首个 Vertical Slice、Stage Gate 与暂不做事项。
+定义正式写大规模游戏代码前的 Foundation Spike、首个 Vertical Slice、Stage Gate 与暂不做事项。Godot 的当前已确认版本以本 README 与 current Roadmap 中登记的 `v4.7.2` 为准。
 
-### 3. DSH 经验继承矩阵
+### 5. DSH 经验继承矩阵
 
 [`MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md`](./MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md)
 
@@ -39,11 +58,25 @@ The World / DSH 真实长局验证
         ↓
 产品经验抽取
         ↓
-my world Stage 0：Product Definition 已基本明确
+my world Product Definition Gate PASS
         ↓
-Standalone Preflight / Foundation Spike
+G1 Foundation & Project Bootstrap
         ↓
-首个独立版真实 Vertical Slice
+G2 AI Conversation Spine
+        ↓
+G3 Persistent Game & Timeline
+        ↓
+G4 World Pack & Local Content Foundation
+        ↓
+G5 World Semantics & GM Runtime
+        ↓
+G6 RPG Experience & 2D Presentation
+        ↓
+G7 Long-session Context & Performance
+        ↓
+G8 Mod / Authoring Ecosystem
+        ↓
+G9 Standalone Alpha / Release Validation
 ```
 
 当前原则：
@@ -58,6 +91,6 @@ Standalone Preflight / Foundation Spike
 
 ## 仓库职责
 
-- `Vibe-Coding/my world/`：项目长期治理、产品裁定、架构决策、阶段计划、复盘与任务事实。
+- `Vibe-Coding/my world/`：项目长期治理、产品裁定、架构决策、Roadmap、阶段计划、复盘与任务事实。
 - `zhangchenjia21-dot/my-world`：代码、测试、构建、运行、项目级 `AGENTS.md` 与真实实现事实。
 - `zhangchenjia21-dot/the-world`：DSH 参考实现、真实试玩证据与前代产品实验，不作为新项目代码模板直接搬迁。
