@@ -1,0 +1,63 @@
+# my world
+
+`my world` 是基于 The World / DSH 长期真实试玩经验启动的独立单人 AI RPG 项目治理目录。
+
+## 项目事实
+
+- 项目名：`my world`
+- 本地项目目录：`D:\AI\Projects\my world`
+- 项目实现仓库：`https://github.com/zhangchenjia21-dot/my-world`
+- 当前项目仓库状态：截至 2026-08-25，GitHub 仓库为空，尚未正式初始化实现
+- 当前优先游戏引擎候选：Godot
+- Godot 本地位置：`D:\AI\Engine`
+- 前代参考实现：`https://github.com/zhangchenjia21-dot/the-world`
+
+## 当前权威入口
+
+### 1. 产品与项目总纲
+
+[`MY_WORLD_项目启动总纲_CURRENT.md`](./MY_WORLD_项目启动总纲_CURRENT.md)
+
+这是 `my world` 当前唯一的滚动产品 / 项目事实入口。后续产品方向、Stage、Decision Ledger、范围与当前下一步优先更新此文件。
+
+### 2. 独立版 Preflight 与第一阶段计划
+
+[`MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md`](./MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md)
+
+定义正式写大规模游戏代码前的 Foundation Spike、首个 Vertical Slice、Stage Gate 与暂不做事项。
+
+### 3. DSH 经验继承矩阵
+
+[`MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md`](./MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md)
+
+明确哪些 The World / DSH 经验应继承、哪些应重新设计、哪些只是宿主债务不得迁移。
+
+## 当前阶段
+
+```text
+The World / DSH 真实长局验证
+        ↓
+产品经验抽取
+        ↓
+my world Stage 0：Product Definition 已基本明确
+        ↓
+Standalone Preflight / Foundation Spike
+        ↓
+首个独立版真实 Vertical Slice
+```
+
+当前原则：
+
+> **迁移经验，不迁移宿主债务。**
+
+> **Commodity Foundation, Owned Game Semantics.**
+>
+> **通用基底尽量复用，游戏核心语义必须掌握在自己手里。**
+
+> **Engine-native, not engine-semantic-coupled.**
+
+## 仓库职责
+
+- `Vibe-Coding/my world/`：项目长期治理、产品裁定、架构决策、阶段计划、复盘与任务事实。
+- `zhangchenjia21-dot/my-world`：代码、测试、构建、运行、项目级 `AGENTS.md` 与真实实现事实。
+- `zhangchenjia21-dot/the-world`：DSH 参考实现、真实试玩证据与前代产品实验，不作为新项目代码模板直接搬迁。
