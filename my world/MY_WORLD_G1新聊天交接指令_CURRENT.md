@@ -158,7 +158,7 @@ POST https://api.deepseek.com/chat/completions
 stream = true
 ```
 
-这是 G1-04 execution choice，不是最终产品 Provider 决定。
+这是 G1-04 execution choice，不是最终产品 Provider 决定。默认 spike model = `deepseek-chat`；如用户账户/实验需要，可通过 `MY_WORLD_G1_04_MODEL` 在本地覆盖，不把 model 名写死成产品契约。
 
 实现边界：
 
