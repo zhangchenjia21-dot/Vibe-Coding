@@ -1,10 +1,10 @@
 ---
 title: my world｜独立版 Preflight 与第一阶段计划
 status: current-plan
-version: 1.0
+version: 1.1
 created: 2026-08-25
 updated: 2026-08-25
-stage: Standalone Preflight
+stage: G1 Foundation & Project Bootstrap
 owner: Project Owner + GPT Architecture
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
@@ -25,7 +25,7 @@ The World / DSH 已经证明核心 RPG 体验可以成立，但长局开始明�
 
 > DSH 版已经完成最重要的产品探索使命，继续优化宿主边界的边际价值开始低于启动独立版的价值。
 
-因此进入 `my world` Standalone Preflight。
+因此进入 `my world` Standalone Preflight / G1 Foundation Spike。
 
 ---
 
@@ -47,27 +47,26 @@ Preflight 完成后才进入大规模 Runtime / UI 实现。
 项目名：my world
 本地项目目录：D:\AI\Projects\my-world
 实现仓库：https://github.com/zhangchenjia21-dot/my-world
-当前 GitHub 状态：G1-01 最小 bootstrap 已建立
+当前 GitHub 状态：G1-01 最小 bootstrap 已建立并 PASS
 
 Godot 本地位置：D:\AI\Engine
 Godot 版本：4.7.2.stable.official.ed1daf0bf
 Godot Distribution：Standard / non-.NET Windows x64
+GUI：D:\AI\Engine\Godot_v4.7.2-stable_win64.exe
+Console：D:\AI\Engine\Godot_v4.7.2-stable_win64_console.exe
 Git：2.54.0.windows.1
 OS Architecture：X64
+Renderer：Vulkan / Forward+
+GPU：NVIDIA GeForce RTX 4070 Laptop GPU
 
 前代参考实现：
 D:\AI\Projects\the world
 https://github.com/zhangchenjia21-dot/the-world
 ```
 
-当前本地验证 blocker：
+G1-01 已通过真实 Windows runtime verification：普通 PowerShell 下 Git metadata 与 Godot `user://` 可写；最小工程正常启动并显示 `my world / G1 Foundation Spike`；Godot exit code = 0；退出后 `git status --short` 无输出。
 
-- Git 无法写 `.git/FETCH_HEAD`，报 `Permission denied`；
-- Godot 可以启动并初始化 Vulkan / NVIDIA GeForce RTX 4070 Laptop GPU；
-- Godot 无法创建 `user://logs`、`user://vulkan` 与 shader cache；
-- root certificate store 读取失败。
-
-因此 G1-01 的 GitHub bootstrap 已完成，但最小 runtime proof 尚未 PASS。先解决执行账户 / 文件系统写权限，不通过修改游戏架构规避环境问题。
+此前在 Codex 执行环境里出现的 `.git/FETCH_HEAD`、`user://logs`、`user://vulkan` 与 shader cache 写入失败已定位为 Codex execution sandbox 边界，不是 Windows ACL 或项目 blocker。不要为 sandbox-only 错误修改系统 ACL 或游戏架构。
 
 注意：`D:\AI\Engine` 是引擎安装位置，不作为游戏项目目录。
 
@@ -89,6 +88,8 @@ src/main.tscn
 
 `src/main.tscn` 是无脚本、语言中立的最小启动场景。`assets/`、`tests/`、`docs/` 等只在出现真实实现 / 验证需求时创建，不为了架构完整提前制造空目录。
 
+G1-01 / Gate MW-F0 已 PASS。
+
 ### 4.2 记录本地工具链
 
 已确认：
@@ -98,16 +99,22 @@ src/main.tscn
 - GUI：`D:\AI\Engine\Godot_v4.7.2-stable_win64.exe`；
 - Console：`D:\AI\Engine\Godot_v4.7.2-stable_win64_console.exe`；
 - Git `2.54.0.windows.1`；
-- OS Architecture `X64`。
+- OS Architecture `X64`；
+- Vulkan / Forward+ 可正常初始化。
 
-尚未冻结：
+当前 G1-02 provisional execution choice：
 
-- 第一阶段开发语言候选；
-- 第一 Provider 的本地开发接入方式；
-- Windows Export 路径；
-- Runtime process boundary。
+- GDScript 作为第一轮 Foundation Spike 的最低依赖语言候选；
+- 这不是 G1-06 的最终 GDScript / C# / mixed architecture decision；
+- 当前 Standard Godot 不提供 C# 支持；若 C# 成为真实候选，需要另行引入 .NET-enabled Godot editor + .NET SDK；
+- 不为理论未来提前安装额外 SDK；
+- external local runtime process 不是 G1-03 前置条件，最终 Runtime boundary 由 G1-04/G1-05 证据与 G1-06 决定。
 
-不要提前安装与第一阶段无关的大量 SDK。
+G1-02 尚需确认：
+
+- 本机 Godot 4.7.2 export templates / export CLI tooling 是否可用。
+
+Windows Export 的最终功能性 proof 仍在 G1-05，而不是在 G1-02 提前宣布。
 
 ---
 
@@ -430,7 +437,7 @@ PASS 条件：
 - 最小运行项目可启动；
 - Git / build 基础路径明确。
 
-当前：仓库初始化、AGENTS、版本登记与 GitHub-side 最小工程已完成；“最小运行项目可启动”仍因本地写权限 blocker 未证明，因此 MW-F0 / G1-01 尚未 PASS。
+当前：**PASS**。G1-01 已通过真实 Windows runtime proof；最小工程、正常退出与 clean Git working tree 均已确认。
 
 ### Gate MW-F1｜Foundation Spike
 
@@ -457,15 +464,16 @@ PASS 条件：第 8、9 节完整路径实际通过，并由玩家人工确认�
 ## 13. 当前执行顺序
 
 ```text
-1. 完成 my-world G1-01 bootstrap runtime proof（当前：先解决本地写权限 blocker）
-2. 完成 Godot 工具链 / 语言候选确认
-3. Godot Foundation Spike
-4. Runtime Boundary Spike
-5. 冻结第一阶段最小技术栈
-6. 实现 First Real Vertical
-7. 玩家真实试玩
-8. 只修实际阻塞
-9. Vertical PASS 后再扩地图 / 立绘 / 人物 UI / World Pack 作者体验
+1. G1-01 Project Bootstrap                          PASS
+2. G1-02 Godot 工具链 / 语言候选确认               CURRENT
+3. G1-03 2D 中文长文本 / 输入 Foundation Spike
+4. G1-04 真实 Provider stream / cancel Spike
+5. G1-05 local IO / image / Windows Export Spike
+6. G1-06 Runtime Boundary / Foundation Architecture Decision
+7. 实现 First Real Vertical
+8. 玩家真实试玩
+9. 只修实际阻塞
+10. Vertical PASS 后再扩地图 / 立绘 / 人物 UI / World Pack 作者体验
 ```
 
 ---
