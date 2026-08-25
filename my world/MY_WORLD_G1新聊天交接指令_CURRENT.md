@@ -60,37 +60,13 @@ Current Task                                       G1-04
 
 G1-01 已真实验证：普通 Windows PowerShell 下 Git metadata 与 Godot `user://` 可写；最小工程正常启动、显示、退出；exit code 0；Git clean。Codex 内早先的写权限失败是 sandbox-only。
 
-G1-02 已真实验证：
+G1-02 已真实验证 Godot `4.7.2.stable.official.ed1daf0bf` Standard / non-.NET Windows x64、GUI / console / CLI、Vulkan / Forward+、RTX 4070 Laptop GPU、Windows x86_64 export templates 与 ICU Data。GDScript 是当前 Foundation Spike provisional lowest-dependency candidate；完整 Windows functional export 仍属于 G1-05；最终语言与 Runtime boundary 属于 G1-06。
 
-- Godot `4.7.2.stable.official.ed1daf0bf`；
-- Standard / non-.NET Windows x64；
-- GUI / console executable 与 CLI；
-- Vulkan / Forward+；
-- NVIDIA GeForce RTX 4070 Laptop GPU；
-- Windows x86_64 export templates；
-- ICU Data；
-- GDScript = 当前 Foundation Spike provisional lowest-dependency language candidate；
-- 完整 Windows functional export proof 仍属于 G1-05；
-- GDScript/C#/mixed 与 Runtime boundary 仍由 G1-06 决定。
-
-G1-03 已由用户完成人工 Windows UAT 并确认 PASS：中文显示、长文本滚动、300 段批量追加、持续追加期间 UI 响应、中文输入、Ctrl+Enter、选择 / Ctrl+C、正常退出与 Git clean 均通过。
-
-G1-03 的 timer 模拟追加不算真实 Provider streaming evidence。
+G1-03 已由用户完成人工 Windows UAT 并确认 PASS：中文显示、长文本滚动、300 段批量追加、持续追加期间 UI 响应、中文输入、Ctrl+Enter、选择 / Ctrl+C、正常退出与 Git clean 均通过。G1-03 timer 模拟追加不算真实 Provider streaming evidence。
 
 ### 当前产品结论
 
-必须保持：
-
-```text
-2D 对话式 AI RPG / 互动小说
-本地优先
-长期单人
-自然语言玩家输入
-优秀 AI GM 流式叙事
-角色立绘 / 场景图 / 地图 / RPG UI
-World Pack / Mod 一级能力
-原生 Game / Timeline / Save / Agent Context
-```
+保持：2D 对话式 AI RPG / 互动小说、本地优先、长期单人、自然语言玩家输入、优秀 AI GM 流式叙事、角色立绘 / 场景图 / 地图 / RPG UI、World Pack / Mod 一级能力、原生 Game / Timeline / Save / Agent Context。
 
 核心原则：
 
@@ -128,9 +104,7 @@ G9 Standalone Alpha / Release Validation
 
 ### 现在执行 G1-04
 
-`G1-04｜真实 Provider 流式调用 Spike` 的 Outcome：
-
-> **用一个真实 Provider 证明 Godot 可以完成真实网络请求、真实 SSE 增量输出、cancel、错误路径，并在请求期间保持 UI 主循环可响应。**
+Outcome：**用一个真实 Provider 证明 Godot 可以完成真实网络请求、真实 SSE 增量输出、cancel、错误路径，并在请求期间保持 UI 主循环可响应。**
 
 当前 exploratory provider：
 
@@ -141,21 +115,9 @@ stream = true
 default model = deepseek-v4-pro
 ```
 
-这是 G1-04 execution choice，不是最终产品 Provider 决定。DeepSeek 当前官方 `/models` 文档列出 `deepseek-v4-pro` 与 `deepseek-v4-flash`；旧 `deepseek-chat` / `deepseek-reasoner` 已在 2026-07-24 后退役。若当前账户/实验需要，也可通过 `MY_WORLD_G1_04_MODEL` 在本地覆盖模型名。
+这是 G1-04 execution choice，不是最终产品 Provider 决定。DeepSeek 当前官方 `/models` 文档列出 `deepseek-v4-pro` 与 `deepseek-v4-flash`；旧 `deepseek-chat` / `deepseek-reasoner` 已退役。如当前账户/实验需要，可通过 `MY_WORLD_G1_04_MODEL` 在本地覆盖模型名。
 
-实现边界：
-
-- 使用当前 provisional GDScript Foundation surface；
-- 使用 Godot non-blocking `HTTPClient`；
-- `poll()` 驱动网络状态；
-- incremental response body → SSE `data:` 解析；
-- `data: [DONE]` 完成；
-- real streamed text 直接追加到 Godot reading surface；
-- cancel 通过关闭活动 transport 验证中断与 UI recovery；
-- UI heartbeat + 手动 response counter 验证网络期间主循环仍活着；
-- `127.0.0.1:1` 无凭据连接用于 deterministic failure path；
-- 不建设多 Provider routing/fallback/retry platform；
-- 不提前冻结 same-process vs local runtime process。
+实现边界：Godot non-blocking `HTTPClient` + `poll()` + incremental body reads；SSE `data:` / `[DONE]`；真实文本直接追加；cancel 通过关闭活动 transport；heartbeat + UI response counter；`127.0.0.1:1` 无凭据 deterministic failure；不建设 multi-provider routing/fallback/retry platform；same-process networking 不等于 G1-06 Runtime boundary。
 
 ### Secret 规则
 
@@ -165,27 +127,27 @@ default model = deepseek-v4-pro
 DEEPSEEK_API_KEY
 ```
 
-可选 G1-04 本地模型覆盖：
+可选模型覆盖：
 
 ```text
 MY_WORLD_G1_04_MODEL
 ```
 
-严禁把 key 写进 Git、`.gd` / `.tscn` / `project.godot`、UI、console、截图或聊天。
+可以在 UI 中只显示 `DEEPSEEK_API_KEY: 已设置/未设置` 这种布尔状态；**绝不能显示 key 值**。严禁把 key 写进 Git、`.gd` / `.tscn` / `project.godot`、console、截图或聊天。
 
 ### G1-04 PASS 必须由真实 Windows UAT 证明
 
-1. 本地 key 已设置，但 UI 不显示 key 值；
+1. UI 只显示 key 是否已设置，不显示值；
 2. 真 Provider 返回 HTTP 2xx；
-3. 内容在生成尚未完成时逐步出现，而不是最后一次性出现；
+3. 内容在生成未完成时逐步出现；
 4. streaming 期间 heartbeat 持续增加；
 5. streaming 期间 `UI 响应 +1` 可点击；
-6. cancel 真正中止活动生成并迅速恢复 UI；
-7. cancel 后可再次发起真实请求；
-8. deterministic failure path 有明确反馈且不冻结；
-9. Provider/API 错误有可读错误态而非 silent hang；
+6. cancel 中止活动生成并恢复 UI；
+7. cancel 后可再次真实请求；
+8. deterministic failure path 明确且不冻结；
+9. Provider/API 错误可读；
 10. 正常退出；
-11. `git status --short` clean。
+11. Git clean。
 
 没有真实 Provider + cancel 证据不得判 G1-04 PASS。
 
@@ -193,9 +155,7 @@ MY_WORLD_G1_04_MODEL
 
 G1-05：local IO / dynamic portrait-scene-map images / functional Windows export。
 
-G1-06：根据 G1 真实 Spike 证据裁定 Godot Host、Standard/.NET、GDScript/C#/mixed、Runtime process boundary 与第一阶段 persistence candidate range。
-
-在 G1-GATE 前，不冻结 G3 数据库模型、G4 完整 World Pack Schema、G5 NPC Runtime 或 G6 完整 UI。
+G1-06：根据真实 Spike 裁定 Godot Host、Standard/.NET、GDScript/C#/mixed、Runtime process boundary 与第一阶段 persistence candidate range。
 
 ### 工作方式
 
@@ -208,4 +168,4 @@ focused exploration
 → next task
 ```
 
-如果聊天无法真正运行用户本机 Godot / Provider，则只完成 GitHub-side implementation，并给出普通 Windows PowerShell 的最小验证命令；不得假装本地网络 PASS。
+聊天无法运行用户本机 Godot / Provider 时，只完成 GitHub-side implementation 并给出普通 Windows PowerShell 最小验证命令，不得假装本地网络 PASS。
