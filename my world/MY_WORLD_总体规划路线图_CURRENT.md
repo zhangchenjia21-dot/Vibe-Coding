@@ -1,11 +1,11 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 1.2
+version: 1.3
 created: 2026-08-25
 updated: 2026-08-25
 current_phase: G1
-next_task: G1-02
+next_task: G1-03
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 local_project_dir: D:\AI\Projects\my-world
 engine: Godot v4.7.2
@@ -99,6 +99,8 @@ Vulkan / Forward+ on NVIDIA GeForce RTX 4070 Laptop GPU
 ```
 
 G1-01 runtime proof 已确认：普通 Windows PowerShell 下 Git 元数据与 Godot `user://` 可写；最小工程窗口正常显示 `my world / G1 Foundation Spike`；Godot 正常退出；退出后仓库干净。此前在 Codex 内出现的 `.git/FETCH_HEAD`、`user://logs`、`user://vulkan` 写入失败已定位为 Codex execution sandbox 边界，不是项目或 Windows ACL blocker。
+
+G1-02 已 PASS：Godot CLI export capability 已确认；Godot 4.7.2 Windows x86_64 export templates 与 ICU Data 已本地安装并验证；GDScript 作为当前 Foundation Spike 的最低依赖 provisional language candidate。完整 Windows build proof 仍属于 G1-05，最终 GDScript/C#/mixed 与 Runtime boundary 仍属于 G1-06。
 
 Godot 是当前 Foundation 候选，不是游戏语义 Owner。`Game / World / Timeline / Save / NPC / Knowledge / Agent Context / World Pack` 等核心概念由 `my world` 自己定义。
 
@@ -229,13 +231,17 @@ G9  Standalone Alpha / Release Validation
 - Windows Export 能力；
 - 是否需要外部 local runtime process。
 
-当前已确认：
+当前状态：**PASS**。
+
+已确认：
 
 - Standard / non-.NET Windows x64；
 - GUI 与 console executable / CLI 可正常运行；
+- CLI 提供 `--export-release` / `--export-debug` / `--export-pack`；
+- Godot 4.7.2 Windows x86_64 export templates 与 ICU Data 已安装并验证；
 - GDScript 作为当前 Foundation Spike 的最低依赖语言候选，不等于 G1-06 最终语言裁定；
 - C# 若进入候选，需要另行引入 .NET-enabled Godot editor 与 .NET SDK，不因未来可能性现在安装；
-- Windows Export 的最终功能性验证仍属于 G1-05；G1-02 先确认 export templates / CLI capability；
+- Windows Export 的最终功能性验证仍属于 G1-05；
 - external local runtime process 当前不是 G1-03 的前置条件，是否采用留给 G1-04/G1-05 的证据与 G1-06 Architecture Decision。
 
 ### G1-03｜2D 长文本 / 输入 Foundation Spike
@@ -248,6 +254,8 @@ G9  Standalone Alpha / Release Validation
 - 输入框；
 - 复制 / 选择；
 - UI 不因长文本明显失控。
+
+当前状态：**CURRENT**。采用 GDScript 作为 provisional spike language，只构建上述 Host seam 的最小可执行测试面，不扩展到 Provider、Persistence 或正式 RPG UI。
 
 ### G1-04｜真实 Provider 流式调用 Spike
 
@@ -951,15 +959,16 @@ Save / Restore / Branch 与聊天历史必须从第一代架构就分离。
 Product Definition Gate      PASS
 Standalone Strategy          PASS
 Godot Toolchain              v4.7.2 Standard x64 VERIFIED
-Implementation Repo          INITIALIZED / MINIMAL GODOT BOOTSTRAP
+Implementation Repo          FOUNDATION SPIKES ACTIVE
 G1-01 Repository Bootstrap   PASS
+G1-02 Toolchain Confirmation PASS
 Current Phase                G1
-Current Task                 G1-02
+Current Task                 G1-03
 ```
 
 因此下一步是：
 
-> **G1-02：确认当前 Godot 4.7.2 工具链、最低依赖语言候选与 Windows Export CLI/tooling 能力；不提前冻结 G1-06 的最终 Runtime Architecture。**
+> **G1-03：用最小 GDScript Foundation Spike 验证中文字体、长文本滚动与持续追加、玩家输入、选择/复制，以及长文本下 UI 是否保持可用。**
 
 ---
 
