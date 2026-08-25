@@ -1,14 +1,14 @@
 ---
 title: my world｜项目启动总纲
 status: current-canonical-product-spec
-version: 1.0
+version: 1.1
 created: 2026-08-25
 updated: 2026-08-25
 stage: Stage 0 Complete / Standalone Preflight
 product_definition_gate: PASS
 next: Foundation Spike
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
-local_project_dir: D:\AI\Projects\my world
+local_project_dir: D:\AI\Projects\my-world
 engine_candidate: Godot
 engine_local_dir: D:\AI\Engine
 ---
@@ -314,7 +314,18 @@ Godot 当前拥有最高的第一轮验证优先级。
 
 `D:\AI\Engine`
 
-当前 Godot 版本尚未在项目事实中登记，Preflight 时补录。
+已验证 Windows 本地工具链：
+
+```text
+Godot 4.7.2.stable.official.ed1daf0bf
+Standard / non-.NET Windows x64
+GUI: D:\AI\Engine\Godot_v4.7.2-stable_win64.exe
+Console: D:\AI\Engine\Godot_v4.7.2-stable_win64_console.exe
+Git 2.54.0.windows.1
+OS Architecture X64
+```
+
+这只确认 Foundation 工具链形态，不代表 Godot 已通过 G1-GATE，也不冻结 GDScript/C#、Runtime process boundary、persistence 或 Windows export 裁定。
 
 ---
 
@@ -496,7 +507,6 @@ AI Runtime 必须支持流式文本，且后台模型 / 世界维护不能冻结
 
 以下问题当前明确为**架构 / 技术问题，不是产品定义 blocker**：
 
-- Godot 具体版本；
 - GDScript、C# 或混合策略；
 - The World Runtime 是否独立进程；
 - 第一阶段 persistence 技术；
@@ -513,7 +523,7 @@ AI Runtime 必须支持流式文本，且后台模型 / 世界维护不能冻结
 ## 15. Decision Ledger
 
 - **MW-DEC-01** 独立项目名 = `my world`。
-- **MW-DEC-02** 本地项目目录 = `D:\AI\Projects\my world`。
+- **MW-DEC-02** 本地项目目录 = `D:\AI\Projects\my-world`。
 - **MW-DEC-03** 实现仓库 = `zhangchenjia21-dot/my-world`。
 - **MW-DEC-04** 产品核心形态 = 2D 对话式 RPG / 互动小说，而非 3D 自由移动 RPG。
 - **MW-DEC-05** 角色立绘、场景图、地图与 RPG UI 是未来正式游戏体验的一部分。
@@ -539,12 +549,15 @@ AI Runtime 必须支持流式文本，且后台模型 / 世界维护不能冻结
 ```text
 Product Definition Gate       PASS
 DSH Experience Extraction     READY
-Implementation Repository     EMPTY / NOT INITIALIZED
-Godot Foundation Candidate    READY FOR SPIKE
+Implementation Repository     INITIALIZED / G1-01 MINIMAL BOOTSTRAP
+Godot Toolchain               4.7.2 STANDARD X64 VERIFIED
+G1-01 Runtime Verification    BLOCKED BY LOCAL WRITE PERMISSIONS
 First Vertical Slice          NOT STARTED
 ```
 
-**当前下一步不是直接开发完整游戏功能，而是执行 Standalone Preflight，并完成 Godot Foundation Spike。**
+当前本地 blocker 是 Windows / execution-account 文件写权限：Git 无法写 `.git/FETCH_HEAD`，Godot 无法创建 `user://logs` / `user://vulkan` / shader cache。该问题解决并完成真实最小运行验证前，当前任务仍为 G1-01。
+
+**当前下一步不是直接开发完整游戏功能，而是完成 G1-01 本地 runtime proof，然后继续 Foundation Spike。**
 
 对应执行计划：
 
