@@ -1,7 +1,7 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 1.3
+version: 1.4
 created: 2026-08-26
 updated: 2026-08-26
 phase: G2 AI Conversation Spine
@@ -13,15 +13,13 @@ implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 
 ## 1. 文档职责
 
-本文件只拥有**当前执行状态**：Current Phase、Current Task、已完成 Task 的 Gate 状态、Owner UAT 结论、当前 blocker 与不阻塞主链的观察项。
-
-本路径跨阶段长期固定，不再为 G3 / G4 / G5 分别新建阶段状态文件。
+本文件只拥有当前执行状态：Current Phase、Current Task、已完成 Gate、Owner UAT 结论、当前 blocker / waiting。
 
 其它事实 owner：
 
 - 产品目的：`MY_WORLD_项目启动总纲_CURRENT.md`
 - 跨阶段原则：`MY_WORLD_核心设计原则_CURRENT.md`
-- 当前架构地图与专题导航：`MY_WORLD_架构_CURRENT.md`
+- 架构地图：`MY_WORLD_架构_CURRENT.md`
 - 阶段 / Task DAG：`MY_WORLD_总体规划路线图_CURRENT.md`
 
 ---
@@ -34,176 +32,130 @@ G2-01 Application/Game Shell PASS — Owner UAT
 G2-02 Provider Adapter v0.1  PASS — Engineering
 Current Task                  G2-03 — Narrative Conversation View
 Base implementation           d736ac9389c2bf23f7f71b0270d6fd8f72db8461
-IR-01 repair                  774ab522e48ef1026d622f89e7903e9cb7bab64c
-IR-01                         PASS — completed regenerate duplication fixed
-IR-02                         RETURNED — regenerate cancel/fail then new-send history integrity
-Owner UAT                     RETURNED — wide-screen host scaling / startup mode
+IR-01 repair                  774ab522e48ef1026d622f89e7903e9cb7bab64c — PASS
+IR-02 + Host scaling repair   6690461e1dca80096e4d4ba27e7acbed4f109f23 — PASS (engineering review)
+Owner UX closeout             REQUIRED — Composer ergonomics + Narrative richness
 G2-GATE                       NOT YET
 ```
 
 ---
 
-## 3. 已关闭 Task
+## 3. G2-03 已确认通过的工程事实
 
-### G2-01｜Application / Game Shell
+`my-world/main == 6690461e1dca80096e4d4ba27e7acbed4f109f23` 时：
 
-Implementation: `my-world@4a13deb29a2e9c354530843d23eb48422957033c`
+- real DeepSeek stream / Cancel / Regenerate / failure recovery 已有工程证据；
+- IR-01 completed→Regenerate duplicate player history 已修复；
+- IR-02 completed→Regenerate→Cancel/Fail→direct new-send history/context integrity 已修复；
+- maximized desktop 三 Host 约为 `18% / 60% / 22%`；
+- Player / World 保持可用 minimum width；
+- 1280×720 三栏、960×540 collapse/toggle 回归已证明；
+- 默认玩家启动为 Maximized Window（非 Exclusive Fullscreen）；
+- Narrative 正文已有 bounded readable width；
+- Windows export / run-game / secret / Git hygiene 已有工程证据。
 
-Owner UAT：**PASS**。
-
-### G2-02｜Provider Adapter v0.1
-
-Implementation: `my-world@ec0617195cbd71ba49e9c3e4ff834aee83e82fd3`
-
-状态：**ENGINEERING PASS / CLOSED**。
-
-已证明正式 DeepSeek thin adapter、real stream、cancel、post-cancel recovery、missing-key/transport failure、secret/config separation 与 Shell regression safety。
-
-TTFT 波动继续作为观察项，不阻塞当前主链，也不授权建设 telemetry platform。
+这些通过不等于 G2-03 Product PASS。
 
 ---
 
-## 4. Current Task｜G2-03 Narrative Conversation View
+## 4. Owner UX Closeout｜当前唯一剩余工作
 
-目标玩家路径：
+### UX-01｜Composer 不能在最大化后仍是 64px 窄输入条
 
-```text
-打开游戏
-→ 在 Narrative Host 输入自然语言行动
-→ DeepSeek 真正流式生成 GM Narrative
-→ 玩家可 Cancel
-→ 最近一次 generation 可 Regenerate / Retry
-→ 错误后继续使用
-```
+Owner 已实际体验并指出：三栏比例修复后，最大化窗口中 Player input 仍然过矮，不符合自然语言 RPG 的输入需求。
 
-固定产品骨架：
+当前实现事实：
 
 ```text
-Left   = PlayerPanelHost
-Center = NarrativeHost
-Right  = WorldSurfaceHost
+src/main.tscn
+PlayerInput.custom_minimum_size.y = 64
 ```
 
-### 4.1 IR-01｜PASS
+且 `src/应用壳.gd` 没有按 viewport height 调整 Composer 高度的逻辑。
 
-原缺陷：completed generation → Regenerate 会形成 `[user, user, new_assistant]`。
+因此本项属于 G2-03 功能性 usability feedback，不是 deferred visual polish。
 
-修复 commit：
-
-`774ab522e48ef1026d622f89e7903e9cb7bab64c`
-
-复审确认当前实现使用 `_current_turn_in_history` 区分当前 player turn 是否已进入 provisional history；successful completed→regenerate 后 history 保持 `[same user, new assistant]`，并新增 provider-context 只读测试 seam 与回归测试。
-
-当前 `my-world/main == 774ab522e48ef1026d622f89e7903e9cb7bab64c` 时该修复为最新实现事实。
-
-### 4.2 IR-02｜BLOCKING
-
-复审 IR-01 时发现同一 provisional-state 机制仍存在一个边缘路径：
+目标语义：
 
 ```text
-completed turn
-→ Regenerate
-→ old assistant is popped from history
-→ new regeneration Cancel / Fail
-→ history temporarily remains [user]
-→ player chooses to send a new action instead of Retry
+Narrative First != Composer Tiny
 ```
 
-此时新 `_on_send_pressed()` 会把 `_current_turn_in_history` 设为 false，但 `_build_messages()` 看到 history 末位已经是 `user`，不会 append 新 player input；结果可能出现：
+第一代基线：
 
-- provisional history 不再保持 completed player/GM pair；
-- 新玩家行动没有进入下一次 Provider context；
-- UI 显示的新行动与模型实际收到的 context 不一致。
+- 1280×720：Composer / TextEdit 应至少舒适容纳约 3–4 行自然语言行动；
+- maximized 1080p/更高：输入区应适度增高，而不是始终保持 64px；
+- 推荐量级：约 `100–120px`（720p）→ `130–160px`（1080p/maximized），并设置合理上限，不能随超高分辨率无限增长；
+- 960×540 narrow 仍需保持 Narrative + Composer 可用，不被侧栏或按钮挤坏；
+- 不要求本阶段实现复杂 auto-growing editor、Splitter 或可持久化 UI preference。
 
-这违反 G2-03 的 provisional history correctness / failure recovery 目标。
+允许简单 responsive rule / clamp；目标是舒服输入长行动，而不是精确像素公式。
 
-要求最小修复，不引入 G2-04 Domain：
+### UX-02｜Narrative richness over artificial brevity
 
-1. completed-turn Regenerate 的替换过程不得让 Cancel / Fail 后留下会污染下一请求的半对 history；
-2. 推荐语义：直到新 generation **成功完成**前，原 completed assistant 仍作为 active provisional context 的稳定版本；成功后再原子替换，或采用等价的最小正确实现；
-3. Cancel / Fail 后玩家无论选择 Retry 还是直接发送下一条行动，Provider context 与 provisional history 都必须保持一致；
-4. 新增 regression：
+Owner 明确产品偏好：**不要人为限制模型 Narrative 输出量。** 长一点的输出可以承载更多环境、人物、对话、后果与信息，提高沉浸感。
+
+当前 Provider Adapter 没有 `max_tokens` / 字符数硬上限，保持这一点。
+
+G2-03 provisional GM prompt 可增加正向倾向：
+
+> 充分展开对当前场景有价值的环境、人物、行动、对话与后果，不必刻意简短；根据场景节奏自然决定叙事篇幅。
+
+必须同时保持：
 
 ```text
-turn1 completed
-→ regenerate
-→ cancel or deterministic fail
-→ directly send turn2 without retry
-→ provider context contains turn1 exactly once and turn2 exactly once
-→ no half-pair / duplicate user
-→ successful turn2 ends with valid [user,assistant,user,assistant] history
+no hard minimum length
+no fixed per-turn word count
+no artificial short-answer instruction
+no new max_tokens cap merely for UI / latency convenience
 ```
 
-不允许为此提前建设正式 Turn Domain / Session framework。
+篇幅由模型、场景与可用 Context 自然决定。真正的 Narrative quality / length 将在 G2-05 Context Assembly 后继续通过 Owner gameplay 判断。
 
 ---
 
-## 5. Owner UAT｜RETURNED：三栏伸缩与默认窗口
+## 5. Scope
 
-Owner 已真实运行 exported EXE，并确认基础三栏方向成立，但发现最大化后的布局策略不满足长期 RPG 信息栏需求：
+当前只允许 G2-03 Owner UX closeout：
 
-- 默认窗口下比例尚可；
-- 最大化后新增横向空间几乎全部给 Narrative；
-- 左右 Host 基本只纵向拉高，横向仍接近细栏；
-- 左右说明文字出现空间不足 / 边界拥挤；
-- 这种行为会让 Player / World Host 在未来真实承载属性、人物、关系、任务、Save 等信息时不可用。
+- Composer responsive height / multiline usability；
+- 与其直接相关的布局回归；
+- provisional GM prompt 的 Narrative-richness 微调；
+- focused tests / GUI evidence / export。
 
-该项是 **functional layout feedback**，不是 deferred visual polish。
+禁止借机实现：
 
-当前裁定已传播到 `MY_WORLD_架构_CURRENT.md` 与 `architecture/ui/声明式UIHost设计.md`：
-
-```text
-Narrative First != Narrative Only
-```
-
-修复要求：
-
-- 默认玩家启动使用 **Maximized Window**，不是 Exclusive Fullscreen；
-- 宽屏下三个 Host 全部参与横向 expansion；
-- 第一版比例基线约 `18% / 60% / 22%`；
-- Player / World 保持约 `250 / 310px` 量级 minimum usable width；
-- 空间不足时折叠侧 Host，不靠无限压窄维持三栏；
-- 所有侧栏文字正常 wrap / constrain，不越界；
-- 1280×720 继续作为 windowed regression；
-- 960×540 继续作为 narrow responsive regression；
-- 超宽 Narrative 正文避免无限拉长单行，低成本情况下加入 reasonable readable-width constraint。
-
-Owner 不需要在此修复前重复做 UAT。
+- G2-04 formal Turn / Conversation Domain；
+- G2-05 formal Context Assembly；
+- Persistence / Save / Timeline / Branch；
+- generalized UI framework / Splitter preference system；
+- 大规模视觉美化；
+- Provider registry / output-length control platform。
 
 ---
 
-## 6. 当前 Reversibility UX
+## 6. Owner UAT Gate
 
-当前只需要：
+工程完成后最高状态：
 
-```text
-active generation → Cancel
-latest generation → Regenerate / Retry
-```
+> **READY FOR OWNER UAT**
 
-长期原则：
+最终 Owner UAT 重点：
 
-> **Reversibility != frictionless arbitrary rewind.**
->
-> **Save Point != Timeline Node.**
+1. 默认 maximized 启动后三栏比例是否自然；
+2. Composer 是否足够舒服地输入多行行动；
+3. 输入 / streaming Narrative / Cancel / Regenerate 是否自然；
+4. Narrative 是否没有被人为压成短回答；
+5. resize 到普通与窄窗口后仍可用。
 
-历史 Narrative 默认 read / scroll，不为每条放 `回到这里`；Save / Load 是明确玩家意图；Timeline 首先是 Runtime history / recovery foundation。
+只有 Owner 明确 PASS 才关闭 G2-03 并推进 G2-04。
 
 ---
 
-## 7. 当前 blocker / waiting
+## 7. 当前 waiting
 
 ```text
-Blocking:
-- IR-02 completed-regenerate cancel/fail → direct new-send history/context integrity
-- Owner UAT wide-screen proportional Host scaling + default maximized startup
-
-Waiting:
-- KimiCode K3 focused G2-03 repair
-- engineering regression evidence
-- then Owner re-UAT
-
-Owner UAT: HOLD until repair
+Blocking: UX-01 Composer ergonomics
+Required closeout: UX-02 Narrative richness prompt / no artificial output cap
+Waiting: KimiCode K3 focused G2-03 UX repair → engineering evidence → Owner UAT
 ```
-
-该返修仍属于 G2-03，不授权 G2-04 / G2-05 / G3 实现，也不授权大规模 UI 美化。
