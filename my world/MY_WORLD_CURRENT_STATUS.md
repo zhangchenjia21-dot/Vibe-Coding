@@ -1,7 +1,7 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 1.0
+version: 1.1
 created: 2026-08-26
 updated: 2026-08-26
 phase: G2 AI Conversation Spine
@@ -33,6 +33,7 @@ Current Phase                 G2 — AI Conversation Spine
 G2-01 Application/Game Shell PASS — Owner UAT
 G2-02 Provider Adapter v0.1  PASS — Engineering
 Current Task                  G2-03 — Narrative Conversation View
+G2-03 Implementation          COMMITTED — awaiting closeout / Owner UAT
 G2-GATE                       NOT YET
 ```
 
@@ -42,43 +43,21 @@ G2-GATE                       NOT YET
 
 ### G2-01｜Application / Game Shell
 
-Implementation:
-
-`my-world@4a13deb29a2e9c354530843d23eb48422957033c`
+Implementation: `my-world@4a13deb29a2e9c354530843d23eb48422957033c`
 
 Owner UAT：**PASS**。
 
-已确认：
-
-- exported `build/windows/my-world.exe` 是正常游戏壳，不是 Foundation 工具；
-- resize 可用；
-- 正常退出；
-- UI 功能整体正常。
-
-Owner observation：视觉仍较粗糙。该项为 **deferred visual polish / non-blocking**，后续可由 KimiCode 在明确 UI polish 任务中处理。
+Owner observation：功能整体正常但视觉较粗糙，记录为 **deferred visual polish / non-blocking**。
 
 ### G2-02｜Provider Adapter v0.1
 
-Implementation:
-
-`my-world@ec0617195cbd71ba49e9c3e4ff834aee83e82fd3`
+Implementation: `my-world@ec0617195cbd71ba49e9c3e4ff834aee83e82fd3`
 
 状态：**ENGINEERING PASS / CLOSED**。
 
-已证明：
+已证明正式 DeepSeek thin adapter、real stream、cancel、post-cancel recovery、missing-key/transport failure、secret/config separation 与 Shell regression safety。
 
-- 正式 DeepSeek Provider Adapter v0.1；
-- `start_stream / text_delta / completed / cancel / cancelled / failed / is_busy`；
-- non-blocking `HTTPClient.poll()` + incremental SSE；
-- missing-key 在发网前失败；
-- credential-free deterministic failure 可恢复；
-- 真实 DeepSeek streaming；
-- active cancel 无双终止；
-- cancel 后真实请求再次成功；
-- product config 收口到 `DEEPSEEK_API_KEY` + optional `MY_WORLD_DEEPSEEK_MODEL`；
-- secret / Git hygiene PASS。
-
-TTFT 波动是观察项，不阻塞 G2-03，也不授权建设 telemetry / optimization platform。
+TTFT 波动继续作为观察项，不阻塞当前主链，也不授权建设 telemetry platform。
 
 ---
 
@@ -95,7 +74,7 @@ TTFT 波动是观察项，不阻塞 G2-03，也不授权建设 telemetry / optim
 → 错误后继续使用
 ```
 
-同时建立固定产品骨架：
+固定产品骨架：
 
 ```text
 Left   = PlayerPanelHost
@@ -106,52 +85,57 @@ Right  = WorldSurfaceHost
 当前约束：
 
 - Center Narrative 是视觉 / 交互中心；
-- 宽窗口三 Host，窄窗口 Narrative 优先、侧栏折叠 / 隐藏；
+- 宽窗口三 Host，窄窗口 Narrative 优先；
 - 左右只显示诚实最小空状态，不伪造 Character / World / Timeline 数据；
-- 固定手写 Godot UI，不做通用 Declarative Renderer；
-- 不做 G2-04 正式 Turn Domain；
-- 不做 G2-05 正式 Context Assembly；
+- fixed handwritten Godot UI，不做 generalized Declarative Renderer；
+- 不做 G2-04 Turn Domain、G2-05 Context Assembly；
 - 不做 G3 Persistence / Save / Timeline / arbitrary rewind / branch。
 
-G2-03 是产品面任务。执行 Agent 完成 Engineering Acceptance 后最高状态：
+### 当前实现事实
+
+2026-08-26 `my-world/main` 已出现 implementation commit：
+
+`d736ac9389c2bf23f7f71b0270d6fd8f72db8461 — G2-03: add narrative conversation view`
+
+可见增量包括 Narrative View、玩家 `run-game` 启动路径与窗口基线调整。该 commit 的存在只表示实现已提交；**在执行 Agent Final Report / Engineering Evidence 与 Owner UAT 明确关闭前，G2-03 仍是 Current Task，不得自动标记 Product PASS 或推进 G2-04。**
+
+G2-03 是产品面任务。最高 pre-UAT 状态：
 
 > **READY FOR OWNER UAT**
-
-Product PASS 必须由 Owner 真实运行 Windows 产品路径后确认。
 
 ---
 
 ## 5. 当前 Reversibility UX
 
-当前只实现：
+当前只需要：
 
 ```text
 active generation → Cancel
 latest generation → Regenerate / Retry
 ```
 
-长期产品原则：
+长期原则：
 
-> **Reversibility ≠ frictionless arbitrary rewind.**
+> **Reversibility != frictionless arbitrary rewind.**
 >
 > **Save Point != Timeline Node.**
 
 因此：
 
-- 历史 Narrative 默认用于阅读 / 滚动，不放每条 `回到这里`；
-- Save / Load 属于明确玩家意图；
+- 历史 Narrative 默认 read / scroll，不为每条放 `回到这里`；
+- Save / Load 是明确玩家意图；
 - Timeline 首先是 Runtime history / recovery foundation；
 - arbitrary per-turn rewind 当前 **DEFERRED**；
-- G3 优先 reliable persistence、resume、explicit Save、explicit Load/Restore、future-memory isolation、误读档 recoverability。
+- G3 优先 reliable persistence、resume、explicit Save、explicit Load/Restore、future-memory isolation 与误读档 recoverability。
 
-详细设计由 `MY_WORLD_架构_CURRENT.md` 导航到 `architecture/persistence/`。
+详细设计从 `MY_WORLD_架构_CURRENT.md` → `architecture/persistence/`。
 
 ---
 
 ## 6. 当前核心约束
 
 - `Model freedom first. Reversibility over prevention.`
-- `Reversibility ≠ frictionless arbitrary rewind.`
+- `Reversibility != frictionless arbitrary rewind.`
 - `Model authors the world; Runtime makes it durable; Player owns the timeline.`
 - `Save Point != Timeline Node.`
 - `Source provides inertia; actors create history.`
@@ -163,11 +147,11 @@ latest generation → Regenerate / Retry
 
 ---
 
-## 7. 当前 blocker
+## 7. 当前 blocker / waiting
 
 ```text
 Blocking: NONE KNOWN
-Waiting: G2-03 implementation → READY FOR OWNER UAT
+Waiting: G2-03 Final Report / engineering review → Owner UAT
 ```
 
-文档目录整理属于治理维护，不改变 G2-03 Outcome / Scope；当前 Task Packet 在引用路径完成同步后继续有效。
+文档目录整理不改变 G2-03 Outcome / Scope，也不要求已提交实现返工。
