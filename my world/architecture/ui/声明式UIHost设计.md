@@ -2,7 +2,7 @@
 title: my world｜声明式 UI Host 设计
 type: supporting-architecture
 status: active-supporting-design
-version: 1.1
+version: 1.2
 created: 2026-08-26
 updated: 2026-08-26
 canonical_map: ../../MY_WORLD_架构_CURRENT.md
@@ -67,20 +67,94 @@ historical_evidence: SillyTavern G8 Runtime-extensible UI Host
 
 ---
 
-## 2. Responsive
+## 2. Responsive / Wide-screen Layout
 
 三栏是桌面长期骨架，不是最小窗口硬约束。
 
-```text
-wide desktop
-→ Player Host | Narrative Host | World Surface Host
+### 2.1 三栏共同参与横向伸缩
 
-narrow window
+Owner G2-03 UAT 已证明：如果最大化后只让中央 Narrative 扩张，而左右栏近似保持固定宽度，三栏会在大屏上失去信息架构意义。
+
+因此正式规则：
+
+> **Narrative First != Narrative Only.**
+>
+> **三个 Host 在宽屏下都必须参与横向扩张。**
+
+第一版可用的比例调优基线约为：
+
+```text
+Player Host      ~18%
+Narrative Host   ~60%
+World Host       ~22%
+```
+
+右栏可以略宽于左栏，因为人物、关系、任务、地图、Save/Timeline 等 Surface 的信息密度更高。
+
+这不是永久锁死的设计 token；G6 仍可通过真实 RPG 数据与 UAT 调整。
+
+### 2.2 Minimum usable width
+
+Side Host 不能为了维持三栏而无限缩窄。
+
+第一版建议量级：
+
+```text
+Player Host min  ~250 px
+World Host min   ~310 px
+```
+
+同时所有侧栏文字 / 卡片必须拥有正常 wrap / clip / container constraint，不能越过相邻 Host 边界。
+
+如果当前窗口已经无法同时满足：
+
+```text
+Player usable width
++
+Narrative usable width
++
+World usable width
+```
+
+则应该进入折叠模式，而不是继续压缩左右栏。
+
+### 2.3 Narrow behavior
+
+```text
+wide / sufficient
+→ Player | Narrative | World
+→ all three proportionally expand
+
+narrow / insufficient
 → Narrative remains primary
 → Player / World collapse, hide, drawer or overlay
 ```
 
-G2/G6 用真实窗口 UAT 决定 breakpoint，不提前冻结跨项目像素常量。
+Breakpoint 应由最低可用空间决定，不把一个固定像素数字当成架构本身。
+
+### 2.4 默认启动与回归尺寸
+
+当前桌面产品默认启动采用：
+
+> **Maximized Window（非 Exclusive Fullscreen）**
+
+理由：更适合长期桌面 AI RPG、方便真实大屏 UAT，同时保留标题栏、Alt+Tab、最小化和还原。
+
+回归验证继续保留：
+
+```text
+Maximized desktop → primary UAT
+1280x720          → normal windowed regression
+960x540           → narrow responsive regression
+```
+
+### 2.5 Narrative readable width
+
+Narrative Host 的总宽度可以增长，但正文行宽不应无限增长。
+
+长期建议：Host 内部保留独立 readable text column；在超宽桌面上，额外空间可用于 scene art、portrait、contextual UI、氛围与留白，而不是把每行 Narrative 横向拉满。
+
+当前 G2 如果低成本即可加入合理 max/readable width 可以实现；不因此建立复杂布局 framework。
 
 ---
 
@@ -147,7 +221,7 @@ Definition 不拥有 pixel layout，也不拥有 Runtime truth。
 Host layout        → Control / Container / anchors
 Card               → PanelContainer + VBoxContainer
 Meter              → ProgressBar + Label
-Badge              → Label + Theme style
+Badge               → Label + Theme style
 Fact / Status List → VBoxContainer / ItemList
 Action List        → Button / contextual actions
 Surface            → Host-owned navigation + content container
@@ -218,122 +292,122 @@ Authoritative Runtime State
 owns surface.X
 ```
 
-与：
+和：
 
 ```text
 contributes to surface.X
 ```
 
-同一 Extension Surface identity 出现两个 Owner 时不得靠加载顺序静默覆盖。
+同一 Extension Surface identity 不能由多个 owner 靠加载顺序静默覆盖。
 
-内部能力至少保留：stable surface identity、stable contribution identity、source/owner identity，以及跨 owner contribution 的显式依赖。
+第一代内部实现至少保留 stable surface identity、stable contribution identity、source/owner identity，以及需要跨 owner contribution 时的 explicit dependency。
 
-外部 machine ID / schema 留到 G8。
+具体外部 machine ID / schema 留到 G8。
 
 ---
 
 ## 9. Action Intent
 
-声明式 UI 只能请求受控意图，例如：
+声明式 UI 可以请求受控 Intent，例如未来：
 
 - prefill composer；
 - open surface；
 - open entity detail；
-- request retry / regenerate；
-- request explicit save/load flow。
+- request retry/regenerate；
+- request Save/Timeline navigation。
 
-Action Intent 是 UI → Application/Domain 的请求，不是资产直接执行 mutation。
+Intent 是 UI → Application/Domain 的请求，不是资产直接 mutation。
 
-禁止：任意 GDScript callback、任意 method-name dispatch、任意 NodePath execution、filesystem/OS command、World Pack 直接写 authoritative state。
+禁止 arbitrary GDScript callback、arbitrary method dispatch、任意 NodePath execution、filesystem/OS command、World Pack 直接写 authoritative state。
 
 ---
 
-## 10. Narrative / Save / Timeline UX
+## 10. Reversibility 与 UI
 
-中央 Narrative 只暴露高频、低风险动作：
+中央 Narrative 当前只直接暴露低风险操作：
 
 ```text
 active generation → Cancel
-latest GM generation → Regenerate / Retry
+latest generation → Regenerate / Retry
 ```
 
-在正式 Turn/Persistence Domain 成立后，可评估：
+历史恢复由正式 Save / Load / Timeline 语义承担。
+
+不默认：
 
 ```text
-latest player turn → Edit latest input & retry
+每个历史 Turn
+→ 一键“回到这里”
 ```
 
-历史 Turn 默认：
+完整 Timeline / Save 未来可作为 World Surface Host 的 Surface，但内部 Timeline Node 不自动成为玩家可点击 Load Point。
 
-```text
-read / scroll / inspect
-```
-
-**不默认在每条历史内容旁提供 `回到这里` 或任意一键 Rewind。**
-
-Save / Load 是明确高影响操作，未来优先放在 World Surface Host 的 Save / Timeline 区域，并遵守：
-
-> **Save Point != Timeline Node.**
->
-> **Reversibility != frictionless arbitrary rewind.**
-
-详细语义见：`../persistence/时间线存档与可逆性设计.md`。
+详细语义见 `../persistence/时间线存档与可逆性设计.md`。
 
 ---
 
-## 11. UI Preference != Game State
+## 11. Player UI Preference
 
-Surface 顺序、面板展开状态等 UI Preference 可以持久化，但默认不属于 canonical World / Timeline State。
+未来像 Surface 顺序、面板展开、可调 splitter 宽度等 UI Preference 可以持久化，但默认不属于 canonical World / Timeline State。
 
-```text
-Definition recommends
-→ Host initializes
-→ Player customizes
-→ supported player preference wins
-```
-
-Restore 游戏历史默认不回滚纯 UI Preference，除非以后有明确产品裁定。
+G6 只在真实需要时实现；G2 不为理论未来建设完整 preference framework。
 
 ---
 
-## 12. External World Pack / Mod 必须晚于 Host Proof
+## 12. World Pack / Mod 外部声明时序
 
-顺序固定：
+必须保持：
 
 ```text
 真实固定产品 UI
 ↓
 稳定 Host Slots
 ↓
-真实 Runtime / RPG Projection
+真实 Runtime / RPG 数据投影
 ↓
-handwritten internal definitions
+handwritten internal UI definitions
 ↓
 Internal Declarative UI Host vertical proof
 ↓
-capability vocabulary 收敛
+Host capability vocabulary 收敛
 ↓
-G8 external declaration schema
+G8 external World Pack / Mod UI declaration schema
 ↓
-validator / adapter / authoring UX
+Validator / Adapter / Authoring UX
 ```
 
-禁止先冻结一个巨型外部 JSON Schema，再倒逼 Host 支持任意能力。
+禁止为了尚未验证的外部资产需求，先冻结巨型 JSON Schema 再倒逼 Host 支持任意能力。
 
 ---
 
 ## 13. 跨阶段路线
 
 ### G2
-真实 Narrative/Input + 三 Host Slots；固定手写 UI；不做通用 Renderer。
+
+- 固定三 Host 产品骨架；
+- Narrative 主体验；
+- 宽屏三栏共同伸缩；
+- 默认 Maximized Window；
+- 窄窗口合理折叠；
+- 不做通用 declarative renderer。
 
 ### G3–G5
-随着 Game / Save / Character / Relationship / NPC / Faction 等真实语义出现，建立 player-safe projections，让 Host Slots 消费真实数据。
+
+- 真实 Game / Character / Relationship / NPC / Faction 等 Domain 数据进入 player-safe projection；
+- Host 消费真实数据，不维护第二状态。
 
 ### G6
-完成三栏 RPG Experience + Internal Declarative Host vertical proof + safe vocabulary + responsive / Theme / navigation + UAT。
+
+- 完整三栏 RPG Experience；
+- Portrait / Scene / Map / RPG panels；
+- internal safe component vocabulary；
+- Internal Declarative UI Host vertical proof；
+- bounded Action Intent；
+- responsive / Theme / navigation；
+- 根据真实需要评估 splitter / persisted UI preference。
 
 ### G8
-只有 Internal Host 能力真实证明后，才外部化 World Pack / Mod contribution schema、ownership/dependency、validator 和 authoring helper。
 
-复杂脚本沙箱继续 Deferred。
+在 G6 capability 经 UAT 证明后，再外部化 World Pack / Mod UI declaration、Surface ownership、validator 与 authoring helper。
+
+复杂脚本沙箱仍默认 Deferred。
