@@ -1,7 +1,7 @@
 ---
 title: my world｜G2 当前状态
 status: current-stage-status
-version: 1.0
+version: 1.1
 created: 2026-08-26
 updated: 2026-08-26
 phase: G2 AI Conversation Spine
@@ -15,9 +15,7 @@ implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 
 本文件只拥有 **G2 当前执行状态**：当前 Task、已完成 Task 的 Gate 状态、Owner UAT 结论和不阻塞主链的观察项。
 
-产品定义仍由 `MY_WORLD_项目启动总纲_CURRENT.md` 拥有；阶段目标与任务 DAG 仍由 `MY_WORLD_总体规划路线图_CURRENT.md` 拥有；核心产品 / Runtime 原则由 `MY_WORLD_核心设计原则_CURRENT.md` 拥有。
-
-当这些长期文档中的 `Current Task / next_task` 展示字段尚未来得及同步时，以本文件的 current execution status 为准；不得因此改写其长期产品或路线语义。
+产品定义仍由 `MY_WORLD_项目启动总纲_CURRENT.md` 拥有；阶段目标与任务 DAG 仍由 `MY_WORLD_总体规划路线图_CURRENT.md` 拥有；核心产品 / Runtime 原则由 `MY_WORLD_核心设计原则_CURRENT.md` 拥有；G2-03 以后涉及产品 UI Host 的设计由 `MY_WORLD_声明式UIHost架构_CURRENT.md` 拥有。
 
 ## 2. 当前状态
 
@@ -70,9 +68,37 @@ DeepSeek concrete provider
 
 G1-04 的 Provider Spike 只作为已经验证的实现证据，可以复用窄的 HTTP/SSE 经验；不得把旧 Spike UI 或双 Provider 测试产品化带回当前主界面。
 
-## 5. Current Core Constraints
+## 5. UI Host Decision Propagation
+
+2026-08-26 新增 canonical supporting architecture：
+
+`MY_WORLD_声明式UIHost架构_CURRENT.md`
+
+该决策**不改变 G2-02**，所以当前 Provider Adapter Task Packet 继续有效，不需要返工或重发。
+
+它改变下一步 G2-03 的成功标准：
+
+```text
+Left   = Player Host
+Center = Narrative Host
+Right  = World Surface Host
+```
+
+G2-03 必须建立稳定 Host Slots 和响应式三栏骨架，但仍只使用当前真实的固定 Godot UI；不得在 G2-03 直接建设通用 Declarative Renderer、外部 World Pack UI schema 或假功能 Surface。
+
+长期传播：
+
+```text
+G2  fixed UI + Host Slots
+→ G3–G5 real Domain projections
+→ G6 Internal Declarative UI Host
+→ G8 external World Pack / Mod UI contract
+```
+
+## 6. Current Core Constraints
 
 - `Model freedom first. Reversibility over prevention.`
+- `Host capability first; external asset protocol second.`
 - Provider adapter 必须保持薄，不建立 Narrative 审查、行为白名单、Confirmation/Validator 平台。
 - G2 初始 product-facing Provider = DeepSeek `deepseek-v4-pro`。
 - Kimi Code `k3` 仍是 Foundation 已验证 alternate，不在 G2-02 同时产品化，也不做自动 fallback。
