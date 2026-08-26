@@ -7,41 +7,45 @@
 - 本地项目目录：`D:\AI\Projects\my-world`
 - 实现仓库：`https://github.com/zhangchenjia21-dot/my-world`
 - Godot：`4.7.2.stable.official.ed1daf0bf` Standard / non-.NET Windows x64
-- 当前：`G1-05 — Local IO / Image / Windows Export Foundation Spike`
-- G1-04：**PASS**（DeepSeek + Kimi Code Owner Windows UAT）
+- 当前：`G2-01 — Application / Game Shell`（尚未开始实现，等待 current Task Packet）
+- `G1-01...G1-06`：**PASS**
+- `G1-GATE`：**PASS**
 
 ## Authority
 
 1. [`MY_WORLD_项目启动总纲_CURRENT.md`](./MY_WORLD_项目启动总纲_CURRENT.md)
 2. [`MY_WORLD_总体规划路线图_CURRENT.md`](./MY_WORLD_总体规划路线图_CURRENT.md)
-3. [`MY_WORLD_G1新聊天交接指令_CURRENT.md`](./MY_WORLD_G1新聊天交接指令_CURRENT.md)
-4. [`MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md`](./MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md)
-5. [`MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md`](./MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md)
+3. [`MY_WORLD_Foundation架构决策_v1.0_2026-08-26.md`](./MY_WORLD_Foundation架构决策_v1.0_2026-08-26.md)
+4. [`MY_WORLD_G1新聊天交接指令_CURRENT.md`](./MY_WORLD_G1新聊天交接指令_CURRENT.md)
+5. [`MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md`](./MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md)
+6. [`MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md`](./MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md)
 
 ```text
-Current Phase = G1
-G1-04 = PASS
-Current Task = G1-05
+Current Phase = G2
+Current Task = G2-01
 G1-01 = PASS
 G1-02 = PASS
 G1-03 = PASS
+G1-04 = PASS
+G1-05 = PASS
+G1-06 = PASS
+G1-GATE = PASS
 ```
 
-G1-01 已证明本机 Git / Godot runtime 正常；Codex 权限失败为 sandbox-only。
+## G1 Closeout
 
-G1-02 已证明 Godot CLI、Windows x86_64 export templates 与 ICU Data 可用；GDScript 只是 provisional spike candidate，最终语言 / Runtime boundary 留给 G1-06。
+G1 的真实 Windows 证据覆盖 Godot/Git 最小运行、中文长文本与输入、DeepSeek + Kimi Code 的 stream/cancel/UI 非冻结、本地 IO、三类真实 filesystem 图片、Windows export 与 exported EXE 跨启动 probe。没有发现需要放弃 Godot 的 blocker。
 
-G1-03 已由用户人工 Windows UAT 确认 PASS：中文、长文本滚动、批量 / 持续追加、UI 响应、输入、选择 / 复制、正常退出与 Git clean 均通过。
+## 第一代 Foundation Architecture
 
-## G1-04 Closeout
+- Godot `4.7.2` Standard / non-.NET；
+- 第一代 GDScript；
+- Godot same-process Runtime，同时保持 Domain / Provider / Persistence 的明确边界；
+- JSON/files 用于配置、小型元数据和 portable Source；SQLite 是 G3 authoritative state 的首选评估候选；Event Log/Snapshot 是语义模式；
+- UI、Transcript、Markdown、Godot Resource 不是 authoritative gameplay DB；
+- 极薄 `send / stream / cancel` Provider adapter；G2 初始使用一个 concrete Provider；
+- headless parse、最小 focused tests、有界脱敏本地日志与 Windows exported-executable proof。
 
-Owner Windows UAT 已证明 DeepSeek 与 Kimi Code 的真实 HTTP success、增量 stream、cancel、cancel 后重新发送、请求期间 heartbeat / UI 响应、idle 切换、deterministic failure、正常退出与 Git clean。G1-04 = **PASS**。
-
-两家约 30 秒的长输出完整生成耗时不是 G1-04 blocker；后续在 G2 分开观察 TTFT 与 generation throughput。Provider seam 仍保持极薄，不构成 generic multi-provider platform commitment，也不冻结 G1-06 Runtime boundary。
-
-## G1-05
-
-当前目标：用 Godot 原生能力证明最小 local IO、跨启动 probe、portrait / scene / map 三类真实 filesystem dynamic image load、Windows export 与 exported executable runtime。该 Spike 不冻结正式 persistence、asset pipeline、World Pack schema 或 Save 系统。
 ## 原则
 
 > **迁移经验，不迁移宿主债务。**
@@ -49,3 +53,5 @@ Owner Windows UAT 已证明 DeepSeek 与 Kimi Code 的真实 HTTP success、增�
 > **Commodity Foundation, Owned Game Semantics.**
 
 > **Engine-native, not engine-semantic-coupled.**
+
+G2-01 必须由新的 current Task Packet 启动；G1-06 没有实现 G2。

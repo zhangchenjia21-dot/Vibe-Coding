@@ -1,12 +1,13 @@
 ---
 title: my world｜独立版 Preflight 与第一阶段计划
 status: current-plan
-version: 1.5
+version: 1.6
 created: 2026-08-25
 updated: 2026-08-26
-stage: G1 Foundation & Project Bootstrap
+stage: G2 AI Conversation Spine (G1 closed)
 owner: Project Owner + GPT Architecture
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
+
 ---
 
 # my world｜独立版 Preflight 与第一阶段计划 v1.0
@@ -25,7 +26,7 @@ The World / DSH 已经证明核心 RPG 体验可以成立，但长局开始明�
 
 > DSH 版已经完成最重要的产品探索使命，继续优化宿主边界的边际价值开始低于启动独立版的价值。
 
-因此进入 `my world` Standalone Preflight / G1 Foundation Spike。
+因此启动的 Standalone Preflight / G1 Foundation Spike 已于 2026-08-26 完成并通过；项目现进入 G2。
 
 ---
 
@@ -47,7 +48,7 @@ Preflight 完成后才进入大规模 Runtime / UI 实现。
 项目名：my world
 本地项目目录：D:\AI\Projects\my-world
 实现仓库：https://github.com/zhangchenjia21-dot/my-world
-当前 GitHub 状态：G1-01 / G1-02 / G1-03 / G1-04 已 PASS；G1-05 ACTIVE
+当前 GitHub 状态：G1-01～G1-06 与 G1-GATE 全部 PASS；Current Phase G2；Current Task G2-01
 
 Godot 本地位置：D:\AI\Engine
 Godot 版本：4.7.2.stable.official.ed1daf0bf
@@ -106,15 +107,15 @@ G1-01 / Gate MW-F0 已 PASS。
 - Godot 4.7.2 Windows x86_64 export templates 已安装并验证；
 - ICU Data 已安装并验证，可用于后续中文相关导出测试。
 
-G1-02 provisional execution choice：
+G1-06 final first-generation decision：
 
-- GDScript 作为第一轮 Foundation Spike 的最低依赖语言候选；
-- 这不是 G1-06 的最终 GDScript / C# / mixed architecture decision；
-- 当前 Standard Godot 不提供 C# 支持；若 C# 成为真实候选，需要另行引入 .NET-enabled Godot editor + .NET SDK；
-- 不为理论未来提前安装额外 SDK；
-- external local runtime process 不是 G1-04 前置条件，最终 Runtime boundary 由 G1-04/G1-05 证据与 G1-06 决定。
+- 第一代 Host = Godot 4.7.2 Standard / non-.NET；
+- 第一代 Language = GDScript，Domain 不依赖 Scene / Node / Resource 生命周期；
+- 第一代 Runtime = Godot same-process，Domain / Provider / Persistence 保持显式内部边界；
+- 只有 G3/G5/G7 的真实证据才重审 C#/.NET/mixed 或 Local Runtime Process；
+- 当前不安装 .NET，不实现 IPC。
 
-**G1-02 已 PASS。** Windows Export 的最终功能性 proof 仍在 G1-05。
+**G1-02 已 PASS。G1-05 exported-executable proof 也已由 Owner UAT PASS。**
 
 G1-03 也已由用户真实 Windows UAT 确认 PASS：中文显示、长文本滚动、300 段批量追加、持续追加期间 UI 响应、中文输入、Ctrl+Enter、选择 / Ctrl+C、正常退出与 Git clean 均通过。
 
@@ -178,7 +179,7 @@ optional model override = MY_WORLD_G1_04_KIMI_MODEL
 
 两者复用极薄的 OpenAI-compatible HTTP/SSE seam，但 host/path/key/model 显式分离。Kimi Code 替换当前 G1-04 的旧 concrete 配置，不保留兼容 fallback。**不建设自动路由、fallback mesh、负载均衡、Provider plugin framework 或 account system。**
 
-Owner Windows UAT 已证明 DeepSeek 与 Kimi Code 的 real stream / cancel / cancel 后重试、请求期间 heartbeat / UI 响应、idle 切换、deterministic failure、正常退出与 Git clean；G1-04 = PASS，G1-05 已解除阻塞。两家长输出完整生成约 30 秒不是本 Gate blocker，后续在 G2 拆分 TTFT 与 generation throughput 观察。
+Owner Windows UAT 已证明 DeepSeek 与 Kimi Code 的 real stream / cancel / cancel 后重试、请求期间 heartbeat / UI 响应、idle 切换、deterministic failure、正常退出与 Git clean；G1-04 = PASS。G1-05 也已由 exported-executable Owner UAT PASS。两家长输出完整生成约 30 秒不是本 Gate blocker，后续在 G2 拆分 TTFT 与 generation throughput 观察。
 
 #### C. 后台工作与 UI 响应
 
@@ -203,7 +204,7 @@ reopen
 read same state
 ```
 
-此处只测试 Host / IO seam，不提前冻结正式数据库或 Schema。
+G1-05 已通过该 Host / IO seam；它没有冻结正式数据库或 Schema。G1-06 只把 SQLite 冻结为 G3 authoritative state 的首选评估候选。
 
 #### E. 美术资源
 
@@ -214,83 +215,48 @@ read same state
 - 动态加载一张地图；
 - 不要求第一轮有最终美术风格。
 
+G1-05 已在 exported Windows EXE 中验证 portrait / scene / map 三类真实 filesystem 图片并 PASS。
+
 #### F. Windows Export
 
 必须验证：
 
 > **不是只在 Godot Editor 里能跑，而是导出的 Windows build 也能完成上述关键路径。**
 
-这是 Foundation Spike 的硬 Gate。
+该硬 Gate 已由 G1-05 exported-executable Owner UAT PASS。
 
 ---
 
-## 6. Preflight P2｜Runtime Boundary Spike
+## 6. Preflight P2｜Runtime Boundary Decision
 
-Foundation Spike 期间必须比较至少两个边界方案，不必做完整实现：
+G1-06 已比较 Godot 内部 Runtime 与 Godot Client + Local Runtime Process，并裁定第一代采用 **Godot same-process Runtime**。
 
-### 方案 A｜Godot 内部 Runtime
+主要理由：G1-04 已证明 non-blocking Provider stream/cancel 不冻结 UI，G1-05 已证明同进程 IO/export 可靠；独立进程会现在引入没有证据支撑的 IPC、协议、Windows packaging 与生命周期成本。
 
-```text
-Godot UI
-+
-游戏 Runtime / Provider / Persistence
-同进程
-```
+明确代价：Host 与 Runtime 共享故障域，后台任务必须主动调度；未来提取时要把显式内部边界序列化。Domain / Provider / Persistence 必须保持独立于 Scene Tree 的职责边界，业务模块遵循 `L3 -> L2 -> L1 -> L0`，跨模块只经 L3。
 
-优势可能是简单、部署少；风险是 AI / Persistence / UI 逻辑逐渐耦合进 Godot 生命周期。
+最早证伪：G2 持续检查 stream 期间 UI 响应；G3-01 检查事务提交、SQLite 接入和 Domain testability。出现不可避免的主循环阻塞、崩溃隔离需求、成熟库障碍或 G5/G7 长任务生命周期问题时，重审 Local Runtime Process。当前不做 IPC。
 
-### 方案 B｜Godot Client + Local Runtime
-
-```text
-Godot Game Client
-        ↕
-Local The World Runtime
-        ↕
-Model Provider / Persistence
-```
-
-优势可能是：
-
-- 游戏语义更独立；
-- Provider / Persistence / Agent Context 更容易测试；
-- 更符合 Engine Adapter 思路。
-
-风险可能是：
-
-- 增加本地 IPC / 进程生命周期；
-- packaging 更复杂。
-
-### 裁定原则
-
-不能因为“架构看起来漂亮”就选择 B，也不能因为“A 写得快”就永久耦合。
-
-按以下问题裁定：
-
-1. 哪个方案让 Godot 更像 presentation / game host，而不是 world semantics owner？
-2. 哪个方案对两个真实 Provider 的 streaming、取消、后台任务和测试更自然？
-3. 哪个方案的 Windows 打包更可靠？
-4. 哪个方案第一阶段开发复杂度更低？
-5. 如果未来增加 Local Model / Mod / 自动化测试，哪个边界更有余量？
-
-Spike 后只冻结当前最小可行边界，不设计通用服务平台。
+完整记录：`MY_WORLD_Foundation架构决策_v1.0_2026-08-26.md`。
 
 ---
 
 ## 7. Preflight P3｜第一阶段技术裁定
 
-Foundation Spike 通过后，再冻结以下最小技术决定：
+当前：**PASS**。
 
-- Godot 是否正式作为第一代 Host；
-- Godot 具体版本；
-- GDScript / C# / 混合边界；
-- Runtime 同进程还是独立本地进程；
-- 第一阶段 persistence 技术；
-- 第一阶段 Provider / model configuration boundary；
-- 最小测试框架；
-- 最小 logging / crash diagnostics；
-- Windows build / packaging 路径。
+```text
+Host                  Godot 4.7.2
+Distribution          Standard / non-.NET Windows x64
+Language              GDScript
+Runtime               Godot same-process Runtime
+Persistence           JSON/files + SQLite evaluation + Event Log/Snapshot semantics
+Initial Provider      DeepSeek deepseek-v4-pro
+Tests/Diagnostics     headless parse + focused tests + bounded redacted local logs
+Packaging             tracked export preset + ignored build + exported EXE proof
+```
 
-G1-04 的 DeepSeek + Kimi 是 required Foundation evidence，不等于 G1-06 必须设计一个大型通用 Provider 平台。
+Kimi Code 是已验证 Foundation alternate，不是自动 fallback。SQLite 的正式 binding / Schema / migration 留给 G3；本阶段没有实现它们。Canonical 记录见 `MY_WORLD_Foundation架构决策_v1.0_2026-08-26.md`。
 
 ---
 
@@ -489,6 +455,8 @@ PASS 条件：
 - Windows export；
 - Runtime boundary 有实验证据。
 
+当前：**PASS**。G1-01～G1-06 与 G1-GATE 已全部关闭。
+
 ### Gate MW-V1｜First Real Vertical
 
 PASS 条件：第 8、9 节完整路径实际通过，并由玩家人工确认：
@@ -504,13 +472,13 @@ PASS 条件：第 8、9 节完整路径实际通过，并由玩家人工确认�
 2. G1-02 Godot 工具链 / 语言候选确认               PASS
 3. G1-03 2D 中文长文本 / 输入 Foundation Spike    PASS
 4. G1-04 DeepSeek + Kimi real stream / cancel      PASS
-5. G1-05 local IO / image / Windows Export Spike   CURRENT
-6. G1-06 Runtime Boundary / Foundation Architecture Decision
-7. 实现 First Real Vertical
-8. 玩家真实试玩
-9. 只修实际阻塞
-10. Vertical PASS 后再扩地图 / 立绘 / 人物 UI / World Pack 作者体验
+5. G1-05 local IO / image / Windows Export Spike   PASS
+6. G1-06 Foundation Architecture Decision          PASS
+7. G1-GATE Foundation Gate                         PASS
+8. G2-01 Application / Game Shell                  NEXT / NOT STARTED
 ```
+
+G2-01 必须先有新的 current Task Packet；本 Preflight closeout 不授权实现。
 
 ---
 

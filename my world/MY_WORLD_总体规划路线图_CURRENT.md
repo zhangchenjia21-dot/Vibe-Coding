@@ -1,15 +1,16 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 1.6
+version: 1.7
 created: 2026-08-25
 updated: 2026-08-26
-current_phase: G1
-next_task: G1-05
+current_phase: G2
+next_task: G2-01
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 local_project_dir: D:\AI\Projects\my-world
 engine: Godot v4.7.2
 engine_local_dir: D:\AI\Engine
+
 ---
 
 # my world｜总体规划路线图 CURRENT
@@ -101,7 +102,7 @@ Vulkan / Forward+ on NVIDIA GeForce RTX 4070 Laptop GPU
 
 G1-01 runtime proof 已确认：普通 Windows PowerShell 下 Git 元数据与 Godot `user://` 可写；最小工程窗口正常显示 `my world / G1 Foundation Spike`；Godot 正常退出；退出后仓库干净。此前在 Codex 内出现的 `.git/FETCH_HEAD`、`user://logs`、`user://vulkan` 写入失败已定位为 Codex execution sandbox 边界，不是项目或 Windows ACL blocker。
 
-G1-02 已 PASS：Godot CLI export capability 已确认；Godot 4.7.2 Windows x86_64 export templates 与 ICU Data 已本地安装并验证；GDScript 作为当前 Foundation Spike 的最低依赖 provisional language candidate。完整 Windows build proof 仍属于 G1-05，最终 GDScript/C#/mixed 与 Runtime boundary 仍属于 G1-06。
+G1-02 已 PASS：Godot CLI、Windows x86_64 export templates 与 ICU Data 已验证。G1-06 后第一代正式边界为 Godot 4.7.2 Standard / non-.NET + GDScript + same-process Runtime；完整决策见 `MY_WORLD_Foundation架构决策_v1.0_2026-08-26.md`。
 
 G1-03 已 PASS：用户完成真实 Windows manual UAT，中文显示、长文本滚动、300 段批量追加、持续追加期间 UI 响应、中文输入、Ctrl+Enter、选择 / Ctrl+C、正常退出与 Git clean 均通过。G1-03 的 timer append 只证明 UI seam，不算真实 Provider stream。
 
@@ -242,10 +243,10 @@ G9  Standalone Alpha / Release Validation
 - GUI 与 console executable / CLI 可正常运行；
 - CLI 提供 `--export-release` / `--export-debug` / `--export-pack`；
 - Godot 4.7.2 Windows x86_64 export templates 与 ICU Data 已安装并验证；
-- GDScript 作为当前 Foundation Spike 的最低依赖语言候选，不等于 G1-06 最终语言裁定；
-- C# 若进入候选，需要另行引入 .NET-enabled Godot editor 与 .NET SDK，不因未来可能性现在安装；
-- Windows Export 的最终功能性验证仍属于 G1-05；
-- external local runtime process 不是 G1-04 的前置条件；是否采用留给 G1-04/G1-05 证据与 G1-06 Architecture Decision。
+- 第一代语言已裁定为 GDScript；Domain 不得依赖 Scene / Node / Resource 生命周期；
+- C#/.NET 或 mixed 只在 G3/G5/G7 出现真实测试性、性能或成熟库接入缺口时重审；
+- G1-05 已由 Owner UAT 证明 exported Windows EXE 的 IO、三类图片与跨启动 probe；
+- 第一代采用 Godot same-process Runtime；当前不做 IPC，只有真实阻塞、隔离或成熟库证据才重审 Local Runtime Process。
 
 ### G1-03｜2D 长文本 / 输入 Foundation Spike
 
@@ -292,7 +293,7 @@ optional model override = MY_WORLD_G1_04_KIMI_MODEL
 
 实现采用 Godot non-blocking `HTTPClient` + `poll()` / incremental body reads，并提供 SSE 解析、Cancel、UI heartbeat、手动 UI response counter 与无凭据 deterministic connection-failure test。API key 只从本地 `DEEPSEEK_API_KEY` / `KIMI_CODE_API_KEY` 环境变量读取；UI 只能显示是否设置，绝不显示 key 值。Kimi Code 是本阶段 concrete exploratory path，不保留兼容 fallback，也不构成 generic multi-provider platform commitment。
 
-这不是最终 Provider 产品决策，也不冻结 same-process vs local-runtime-process。Owner Windows UAT 已证明 DeepSeek 与 Kimi Code 均具备真实 HTTP success、增量 SSE、真实 cancel、cancel 后重新发送、请求期间 heartbeat / UI 响应、idle Provider 切换、deterministic failure、正常退出与 Git clean，因此 G1-04 = PASS。两家长输出完整生成约 30 秒不是本 Gate blocker；后续在 G2 拆分 TTFT 与 generation throughput 观察。
+Owner Windows UAT 已证明 DeepSeek 与 Kimi Code 均具备真实 HTTP success、增量 SSE、真实 cancel、cancel 后重新发送、请求期间 heartbeat / UI 响应、idle Provider 切换、deterministic failure、正常退出与 Git clean，因此 G1-04 = PASS。G1-06 已进一步裁定 G2 初始只产品化 DeepSeek `deepseek-v4-pro`，Kimi Code 作为已验证 alternate，不自动 fallback；same-process Runtime 是第一代选择。两家长输出完整生成约 30 秒不是本 Gate blocker，G2 分别观察 TTFT 与 generation throughput。
 
 ### G1-05｜本地 IO / 图片 / Windows Export Spike
 
@@ -303,17 +304,13 @@ optional model override = MY_WORLD_G1_04_KIMI_MODEL
 - 打包后的 Windows 程序仍可工作；
 - 不依赖编辑器才能运行核心路径。
 
-当前状态：**CURRENT / UNBLOCKED**。这是 Foundation exploration，不冻结正式 persistence、asset pipeline 或 World Pack schema。
+当前状态：**PASS**。Owner 已在 exported Windows EXE 中验证跨启动 `user://` probe、三类真实 filesystem 图片与再次启动后的保留；该 evidence 不冻结正式 persistence、asset pipeline 或 World Pack schema。
 
 ### G1-06｜Foundation Architecture Decision
 
-根据 Spike 决定：
+当前状态：**PASS**。
 
-- Godot 是否正式成为第一代 Host；
-- Standard / .NET；
-- GDScript / C# / 混合边界；
-- Runtime 与 Godot 同进程，还是 Godot Client + Local Runtime Process；
-- 第一阶段本地持久化技术的候选范围。
+已裁定 Godot 4.7.2 Standard / non-.NET、第一代 GDScript、Godot same-process Runtime、JSON/files + SQLite evaluation + Event Log/Snapshot persistence 候选范围、单 concrete Provider 起步与最小 testing/logging/packaging 路径。Canonical 记录见 `MY_WORLD_Foundation架构决策_v1.0_2026-08-26.md`。
 
 ## G1-GATE｜Foundation Gate
 
@@ -328,7 +325,7 @@ PASS 必须满足：
 - Runtime boundary 与第一阶段语言已有明确裁定；
 - 没有发现需要放弃 Godot 的 blocker。
 
-失败时允许重新评估 Unity / 2D Desktop Foundation，不因为已写代码而强行继续 Godot。
+当前状态：**PASS**。上述九项均有 G1-01～G1-06 证据，且未发现需要放弃 Godot 的 blocker。未来只有真实 Host blocker 才重新评估 Unity / 2D Desktop Foundation。
 
 ---
 
@@ -980,28 +977,21 @@ Save / Restore / Branch 与聊天历史必须从第一代架构就分离。
 
 # 5. 当前阶段
 
-当前状态：
-
 ```text
-Product Definition Gate      PASS
-Standalone Strategy          PASS
-Godot Toolchain              v4.7.2 Standard x64 VERIFIED
-Implementation Repo          FOUNDATION SPIKES ACTIVE
-G1-01 Repository Bootstrap   PASS
-G1-02 Toolchain Confirmation PASS
-G1-03 Text / Input Spike     PASS
-Current Phase                G1
-G1-04 Provider Stream/Cancel PASS
-Current Task                 G1-05
+Current Phase                 G2
+Current Task                  G2-01
+G1-01 Repository Bootstrap    PASS
+G1-02 Toolchain Confirmation  PASS
+G1-03 Text / Input Spike      PASS
+G1-04 Provider Stream/Cancel  PASS
+G1-05 IO / Image / Export     PASS
+G1-06 Architecture Decision   PASS
+G1-GATE Foundation Gate       PASS
 ```
 
-因此下一步是：
+> **G2-01 — Application / Game Shell：尚未开始实现。必须先有新的 current Task Packet；不得把 G1-06 的架构摘要当作实现授权。**
 
-> **G1-05：完成最小 local IO、跨启动 probe、portrait / scene / map 三类 filesystem dynamic image load 与 functional Windows export proof。G1-04 已关闭，不在本任务做 Provider 性能优化。**
-
----
-
-# 6. 当前 Non-scope
+---# 6. 当前 Non-scope
 
 在相应阶段到来前，不提前建设：
 
