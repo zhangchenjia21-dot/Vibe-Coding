@@ -12,17 +12,19 @@
 - `G1-01...G1-06`：**PASS**
 - `G1-GATE`：**PASS**
 - `G2-01 Application / Game Shell`：**PASS — Owner UAT**
+- `G2-02 Provider Adapter v0.1`：**PASS — Engineering**
 
 ## Authority
 
 1. [`MY_WORLD_项目启动总纲_CURRENT.md`](./MY_WORLD_项目启动总纲_CURRENT.md)
 2. [`MY_WORLD_核心设计原则_CURRENT.md`](./MY_WORLD_核心设计原则_CURRENT.md)
-3. [`MY_WORLD_声明式UIHost架构_CURRENT.md`](./MY_WORLD_声明式UIHost架构_CURRENT.md) — G2-03 / G6 / G8 UI supporting architecture
-4. [`MY_WORLD_G2_CURRENT_STATUS.md`](./MY_WORLD_G2_CURRENT_STATUS.md) — G2 current Task / PASS / UAT status
-5. [`MY_WORLD_总体规划路线图_CURRENT.md`](./MY_WORLD_总体规划路线图_CURRENT.md)
-6. [`MY_WORLD_Foundation架构决策_v1.0_2026-08-26.md`](./MY_WORLD_Foundation架构决策_v1.0_2026-08-26.md)
-7. [`MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md`](./MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md)
-8. [`MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md`](./MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md)
+3. [`MY_WORLD_时间线存档与可逆性架构_CURRENT.md`](./MY_WORLD_时间线存档与可逆性架构_CURRENT.md) — Save / Restore / Timeline / Reversibility supporting architecture
+4. [`MY_WORLD_声明式UIHost架构_CURRENT.md`](./MY_WORLD_声明式UIHost架构_CURRENT.md) — G2-03 / G6 / G8 UI supporting architecture；其中旧的 arbitrary `回到这里` 建议受时间线架构 supersede
+5. [`MY_WORLD_G2_CURRENT_STATUS.md`](./MY_WORLD_G2_CURRENT_STATUS.md) — G2 current Task / PASS / UAT status
+6. [`MY_WORLD_总体规划路线图_CURRENT.md`](./MY_WORLD_总体规划路线图_CURRENT.md)
+7. [`MY_WORLD_Foundation架构决策_v1.0_2026-08-26.md`](./MY_WORLD_Foundation架构决策_v1.0_2026-08-26.md)
+8. [`MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md`](./MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md)
+9. [`MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md`](./MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md)
 
 历史 G1 handoff 只保留历史价值，不再拥有 G2 current execution status。
 
@@ -36,7 +38,11 @@
 
 > **Model freedom first. Reversibility over prevention.**
 
+> **Reversibility ≠ frictionless arbitrary rewind.**
+
 > **Model authors the world; Runtime makes it durable; Player owns the timeline.**
+
+> **Save Point != Timeline Node.**
 
 > **Source provides inertia; actors create history.**
 
@@ -69,7 +75,7 @@ Right  World Surface Host
 ```text
 左：主角立绘 / 身份 / 属性 / 高频状态
 中：AI GM Narrative / 玩家自然语言输入 / Turn actions
-右：概览 / 人物 / 关系 / 任务 / 物品 / 地图 / Timeline / Extension Surface
+右：概览 / 人物 / 关系 / 任务 / 物品 / 地图 / Save / Timeline / Extension Surface
 ```
 
 具体右侧 Tab 数量和命名当前不冻结。
@@ -94,10 +100,32 @@ Definition 只声明“表达什么 / 放在哪里 / 使用什么安全组件”
 
 详细 canonical 架构见 [`MY_WORLD_声明式UIHost架构_CURRENT.md`](./MY_WORLD_声明式UIHost架构_CURRENT.md)。
 
+## Save / Timeline / Reversibility
+
+新的正式边界：
+
+```text
+Cancel / Regenerate
+= 高频、低风险、靠近 Narrative
+
+Save / Load
+= 明确玩家意图、长期恢复点
+
+Timeline
+= 首先是 Runtime 内部历史 / 恢复基础设施
+
+Arbitrary per-turn rewind
+= Deferred，不是第一代默认玩家功能
+```
+
+读取旧 Save 时，第一代架构应优先保证当前未来不会被立即不可逆销毁；G3 再选择最小可靠的 recovery checkpoint / old-head / internal-branch 方案。
+
+详细 canonical 架构见 [`MY_WORLD_时间线存档与可逆性架构_CURRENT.md`](./MY_WORLD_时间线存档与可逆性架构_CURRENT.md)。
+
 ## 当前 G2
 
-G2-01 已通过 Owner UAT。当前壳功能正确但视觉较粗糙，记录为 deferred polish，不阻塞 Conversation Spine。
+G2-01 已通过 Owner UAT；视觉粗糙属于 deferred polish。
 
-当前 G2-02 只负责正式 DeepSeek Provider Adapter；新 UI Host 决策**不改变 G2-02**。
+G2-02 Provider Adapter 已 Engineering PASS。
 
-从 G2-03 开始，Narrative Conversation View 必须直接按三 Host Slot 骨架建设，但仍使用固定手写 Godot UI，不提前实现通用 Declarative Renderer 或外部 Mod UI schema。
+当前 G2-03 Narrative Conversation View 正在建立真实 `输入 → DeepSeek streaming Narrative → Cancel / Regenerate` 主路径与三 Host Slot。该任务不实现 Save / Timeline / arbitrary rewind，因此新的时间线架构裁定不要求 G2-03 返工。
