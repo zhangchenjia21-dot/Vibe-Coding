@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 1.5
+version: 1.6
 created: 2026-08-26
 updated: 2026-08-26
 phase: G2 AI Conversation Spine
-current_task: G2-03 Narrative Conversation View
+current_task: G2-04 Turn / Conversation Domain v0.1
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -30,76 +30,98 @@ implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 Current Phase                 G2 — AI Conversation Spine
 G2-01 Application/Game Shell PASS — Owner UAT
 G2-02 Provider Adapter v0.1  PASS — Engineering
-Current Task                  G2-03 — Narrative Conversation View
-Base implementation           d736ac9389c2bf23f7f71b0270d6fd8f72db8461
-IR-01 repair                  774ab522e48ef1026d622f89e7903e9cb7bab64c — PASS
-IR-02 + Host scaling repair   6690461e1dca80096e4d4ba27e7acbed4f109f23 — PASS
-Owner UX closeout             81e7ce0dc7e60094f65b09c428649f49446cb49a — PASS (engineering review)
-G2-03                         READY FOR OWNER UAT
+G2-03 Narrative View         PASS — Owner UAT
+Current Task                  G2-04 — Turn / Conversation Domain v0.1
+G2-05 Context Assembly        NOT STARTED
 G2-GATE                       NOT YET
 ```
 
 ---
 
-## 3. G2-03 当前已确认工程事实
+## 3. G2-03｜CLOSED / PASS
 
-当前 `my-world/main == 81e7ce0dc7e60094f65b09c428649f49446cb49a`。
+最终实现主线：
 
-已确认：
+```text
+d736ac9  initial Narrative Conversation View
+774ab52  IR-01 completed-regenerate history repair
+6690461  IR-02 + wide-screen Host scaling repair
+81e7ce0  Composer responsive height + Narrative richness closeout
+```
 
+Owner 已在导出 EXE 中完成真实 UAT，并明确：
+
+> **PASS，可以进入下一步。**
+
+已成立的产品/工程事实：
+
+- 默认 Maximized Window；
+- `Player | Narrative | World` 三 Host 宽屏约 `18% / 60% / 22%`，窄屏折叠；
+- Composer 支持舒服的多行自然语言输入并按窗口高度在合理范围内响应；
 - real DeepSeek streaming / Cancel / Regenerate / failure recovery；
-- IR-01 completed→Regenerate 不重复 player entry；
-- IR-02 completed→Regenerate→Cancel/Fail→direct new-send 时 history/context 保持完整；
-- 默认 Maximized Window，非 Exclusive Fullscreen；
-- 宽屏三 Host 约 `18% / 60% / 22%`，Player / World 有 minimum usable width；
-- 1280×720 三栏与 960×540 collapse/toggle 回归；
-- Narrative 正文 bounded readable width；
-- Composer responsive height：`clamp(viewport_height × 0.15, 104, 160)`；1280×720 基线 108px，最大化约 160px；
-- multiline input / resize preservation / Ctrl+Enter；
-- provisional GM prompt 已采用 `Narrative richness over artificial brevity` 的正向倾向；
-- Provider 请求没有 `max_tokens` / 固定字数 / UI 截断式输出限制；
-- focused/offline tests、real GUI DeepSeek tests、parse、Windows export、run-game、secret 与 Git hygiene 均有执行 Agent 证据；
-- Independent Review 抽查当前代码后未发现新的 G2-03 blocking defect。
+- IR-01 / IR-02 provisional history correctness；
+- Narrative 长文本 readable width；
+- `Narrative richness over artificial brevity`，Provider 无人为 `max_tokens` / 固定字数限制；
+- Windows export / direct player launcher / secret hygiene 已验证。
 
-这些工程事实只支持：
+G2-03 不再要求“现在已经像完整 AI RPG”。当前仅证明：Conversation Spine / Narrative UI 是未来 AI RPG 的正确交互骨架，而不是把产品锁死成普通聊天 UI。
 
-> **READY FOR OWNER UAT**
+### 非阻塞 Owner observation｜字体偏小
 
-不构成 Product PASS。
+Owner 真实体验指出：当前整个页面字体仍整体偏小。
 
----
+裁定：
 
-## 4. Owner UAT｜最终产品 Gate
+```text
+G2-03 PASS 不受阻塞
+→ G2-04 携带一个小型 UX carry-forward
+→ 当前默认字体调整到中等可读量级
+→ 不在 G2 建设完整字体设置系统
+→ 未来在 RPG Experience / UI Preference 阶段允许玩家自由选择字体大小
+```
 
-入口：
-
-`D:\AI\Projects\my-world\run-game.cmd`
-
-Owner 只需真实游玩，不承担工程验证。
-
-本轮重点判断：
-
-1. 默认最大化启动后，`Player | Narrative | World` 三栏比例是否自然，左右栏是否像未来真正能承载 RPG 信息的区域；
-2. Composer 是否足够舒服地输入多行行动 / 对白 / 计划，而不是一条过薄聊天输入框；
-3. 自然语言输入 → streaming Narrative → Cancel → Regenerate 的操作是否直觉、低操作税；
-4. GM Narrative 是否有充分展开空间，没有被系统人为压成机械短回答；
-5. 整体第一感是否已经开始像 AI RPG / interactive novel，而不是 Provider demo 或普通聊天客户端。
-
-如果需要，可顺手缩放一次窗口观察 responsive；不要求截图、命令、测试、Git 或日志。
-
-只有 Owner 明确 `PASS` 才关闭 G2-03 并生成 / 启动 G2-04 Task Packet。
+该项是已知、低风险、明确的小修，不得扩张成 Theme / Settings framework 重构。
 
 ---
 
-## 5. 当前核心体验约束
+## 4. Current Task｜G2-04 Turn / Conversation Domain v0.1
+
+Why now：G2-03 已证明真实交互，但 Conversation 真相仍主要由 UI 内 provisional `_history` / generation flags 管理。G2-05 Context Assembly 不能建立在 UI 私有状态上，因此先建立最小正式 Conversation Domain。
+
+目标：
+
+```text
+Player Turn
++ GM Generation
++ Conversation Entry / ordered Turn state
++ Generation State
++ Retry / Regenerate
++ latest-turn correction semantics
+→ 由独立 Domain 拥有
+```
+
+关键边界：
+
+- UI 只负责输入与投影，不再拥有第二套 Conversation truth；
+- Provider Adapter 继续只负责 transport；
+- G2-05 才拥有正式 Context Assembly / system instructions / working-set selection；
+- Conversation / Transcript **不是 Timeline**；
+- 不实现 Persistence / Save / Branch / arbitrary historical rewind；
+- completed Regenerate / latest-turn correction 继续遵守“成功前保留旧稳定结果，成功后原子替换”的可逆语义；
+- 本任务附带完成上一节的中等字体基线小修。
+
+---
+
+## 5. 当前核心约束
 
 - `Model freedom first. Reversibility over prevention.`
 - `Narrative richness over artificial brevity.`
-- `Narrative First != Narrative Only.`
-- `Narrative First != Composer Tiny.`
 - `Context stays bounded, not starved.`
-- `Model authors the world; Runtime makes it durable; Player owns the timeline.`
+- `UI is a projection, not a second truth source.`
+- `Transcript != Timeline.`
 - `Reversibility != frictionless arbitrary rewind.`
+- `Save Point != Timeline Node.`
+- G2-04 不得提前实现 G2-05 / G3。
 
 ---
 
@@ -107,8 +129,7 @@ Owner 只需真实游玩，不承担工程验证。
 
 ```text
 Blocking: NONE KNOWN
-Waiting: Owner genuine gameplay UAT / PASS or feedback
-Next only after PASS: G2-04 Turn / Conversation Domain v0.1
+Current: prepare / execute G2-04 repository-native Task Packet
+Owner UAT: not required for G2-04 engineering closeout; font/readability can be re-observed at G2-06 playtest
+Next after G2-04 review PASS: G2-05 Context Assembly v0.1
 ```
-
-不得在 Owner UAT 结论前自动推进 G2-04。
