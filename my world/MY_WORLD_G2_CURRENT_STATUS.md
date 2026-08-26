@@ -1,7 +1,7 @@
 ---
 title: my world｜G2 当前状态
 status: current-stage-status
-version: 1.2
+version: 1.3
 created: 2026-08-26
 updated: 2026-08-26
 phase: G2 AI Conversation Spine
@@ -15,7 +15,9 @@ implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 
 本文件只拥有 **G2 当前执行状态**：当前 Task、已完成 Task 的 Gate 状态、Owner UAT 结论和不阻塞主链的观察项。
 
-产品定义仍由 `MY_WORLD_项目启动总纲_CURRENT.md` 拥有；阶段目标与任务 DAG 仍由 `MY_WORLD_总体规划路线图_CURRENT.md` 拥有；核心产品 / Runtime 原则由 `MY_WORLD_核心设计原则_CURRENT.md` 拥有；G2-03 以后涉及产品 UI Host 的设计由 `MY_WORLD_声明式UIHost架构_CURRENT.md` 拥有。
+产品定义仍由 `MY_WORLD_项目启动总纲_CURRENT.md` 拥有；阶段目标与 Task DAG 由 `MY_WORLD_总体规划路线图_CURRENT.md` 拥有；核心产品 / Runtime 原则由 `MY_WORLD_核心设计原则_CURRENT.md` 拥有；G2-03 以后涉及产品 UI Host 的设计由 `MY_WORLD_声明式UIHost架构_CURRENT.md` 拥有；Save / Restore / Timeline / Reversibility 的更具体产品语义由 `MY_WORLD_时间线存档与可逆性架构_CURRENT.md` 拥有。
+
+当较早 current 文档对 Timeline UX 的表述与 `MY_WORLD_时间线存档与可逆性架构_CURRENT.md` 冲突时，以后者的显式 supersession 为准，直到对应文档下一次收口改写。
 
 ## 2. 当前状态
 
@@ -105,7 +107,7 @@ Right  = WorldSurfaceHost
 - 不做外部 World Pack / Mod UI schema；
 - 不做 G2-04 正式 Turn / Conversation Domain；
 - 不做 G2-05 正式 Context Assembly；
-- 不做 G3 Persistence / Save / Timeline / rewind / branch。
+- 不做 G3 Persistence / Save / Timeline / arbitrary rewind / branch。
 
 G2-03 可以使用**明确标注为 provisional 的最小 in-memory UI/session state 和最小 GM system message**完成真实垂直体验；这些不是正式 Conversation Domain 或 Context Contract，后续必须由 G2-04 / G2-05 接管。
 
@@ -120,7 +122,28 @@ latest generation → Regenerate / Retry
 
 推荐 Turn footer：最近完成/取消/失败的 GM 内容下方提供轻量 `重新生成` 操作；不要永久给每条历史内容铺满大按钮。
 
-`回到这里 / edit-and-retry / branch / Timeline navigation` 归 G3 后续能力，不在 G2-03 模拟假实现。
+2026-08-26 Product Owner 进一步裁定：
+
+> **Reversibility ≠ frictionless arbitrary rewind.**
+>
+> **局部错误低成本纠正；重大历史恢复必须表达明确意图。**
+
+因此：
+
+- 历史 Narrative 默认只用于阅读 / 滚动，不放 `回到这里` 一键回档；
+- `Player owns the timeline` 不解释为每个历史 Turn 都必须成为可点击 Load Point；
+- `Save Point != Timeline Node`；
+- G3 优先实现可靠 current game、明确 Save、明确 Load/Restore、future-memory isolation 与误读档后的可恢复性；
+- arbitrary per-turn rewind 当前为 **DEFERRED / NOT DEFAULT FIRST-GENERATION PRODUCT BEHAVIOR**；
+- 右侧未来可以有 Save / Timeline Surface，但第一代优先服务“保存重要进度 / 明确读取存档”，不是把内部 Timeline 当调试器暴露。
+
+Canonical supporting architecture：
+
+`MY_WORLD_时间线存档与可逆性架构_CURRENT.md`
+
+该文件明确 supersede `MY_WORLD_声明式UIHost架构_CURRENT.md` 中“旧 Turn 可通过 `回到这里` / timeline affordance 直接恢复”的建议，并收窄 Roadmap 中 `Rewind / Branch` 的旧解释。
+
+当前 G2-03 Task Packet **不失效**：它本来只要求 Cancel / Regenerate，并禁止 G3 rewind/branch 实现，因此执行 Agent 无需返工。
 
 正式产品原则继续为：
 
@@ -149,7 +172,9 @@ Owner 重点判断：
 ## 8. Current Core Constraints
 
 - `Model freedom first. Reversibility over prevention.`
+- `Reversibility ≠ frictionless arbitrary rewind.`
 - `Model authors the world; Runtime makes it durable; Player owns the timeline.`
+- `Save Point != Timeline Node.`
 - `Host capability first; external asset protocol second.`
 - G2 product-facing Provider = DeepSeek `deepseek-v4-pro`；Kimi Code 仍只是 Foundation alternate。
 - Secret 只来自本地受保护来源；不得进入 Git、日志、UI、截图或聊天。
