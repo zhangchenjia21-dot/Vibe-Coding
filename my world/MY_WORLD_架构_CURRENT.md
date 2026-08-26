@@ -1,7 +1,7 @@
 ---
 title: my world｜架构总览
 status: current-canonical-architecture-map
-version: 1.0
+version: 1.1
 created: 2026-08-26
 updated: 2026-08-26
 current_phase: G2
@@ -197,14 +197,74 @@ Right
 → 概览 / 人物 / 关系 / 任务 / 物品 / 地图 / Save / Timeline / extensions
 ```
 
-Center 永远是视觉和交互重心。
+Center 永远是视觉和交互重心，但：
 
-响应式：
+> **Narrative First != Narrative Only.**
+
+左右 Host 不是装饰边条，必须拥有足以承载真实 RPG 信息的可用宽度。
+
+### 6.1 宽屏伸缩
+
+宽屏 / 最大化窗口下，三个 Host **都参与横向扩张**，不能只让 Narrative 吃掉新增宽度。
+
+第一代 UAT 基线目标约为：
 
 ```text
-wide → three hosts visible
-narrow → Narrative remains primary; side hosts collapse / hide / overlay
+Player Host      ~18%
+Narrative Host   ~60%
+World Host       ~22%
 ```
+
+这是布局调优基线，不是长期不可修改的像素合同。右侧通常可略宽于左侧，因为 World Surface 的信息密度更高。
+
+同时保留最低可用宽度，第一版建议量级：
+
+```text
+Player Host min  ~250 px
+World Host min   ~310 px
+Narrative        使用剩余弹性空间并保持最大份额
+```
+
+具体值可由 Owner UAT 微调；原则是不允许侧 Host 被压缩成无法承载文字 / 卡片 / 列表的信息细条。
+
+### 6.2 响应式折叠
+
+响应式不是固定 breakpoint 崇拜，而是由三 Host 的最低可用空间决定：
+
+```text
+space sufficient
+→ three hosts visible and proportionally expandable
+
+space insufficient
+→ Narrative remains primary
+→ Player / World collapse, hide, drawer or overlay
+```
+
+因此：
+
+> **先保证 Host 可用性；放不下时折叠，不靠无限压窄侧栏维持三栏。**
+
+### 6.3 默认桌面启动形态
+
+G2 起默认玩家启动应优先使用 **Maximized Window**，而不是 Exclusive Fullscreen：
+
+- 更接近长期桌面游玩状态；
+- 方便测试真实宽屏信息架构；
+- 保留 Windows 标题栏、Alt+Tab、最小化与还原。
+
+回归基线继续保留：
+
+```text
+Maximized desktop  → primary Owner UAT
+1280x720           → normal windowed regression
+960x540            → narrow responsive regression
+```
+
+### 6.4 Narrative 可读宽度
+
+`NarrativeHost` 可以很宽，但长篇正文不应无限拉长单行长度。
+
+后续/当前低成本可实现时，正文列应拥有独立的 readable-width 约束并在 Host 内合理居中；Host 多余空间未来可承载场景、立绘、Narrative contextual UI 与氛围表现，而不是只把文字一行拉得越来越长。
 
 演化顺序：
 
