@@ -1,7 +1,7 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 1.4
+version: 1.5
 created: 2026-08-26
 updated: 2026-08-26
 phase: G2 AI Conversation Spine
@@ -33,129 +33,82 @@ G2-02 Provider Adapter v0.1  PASS — Engineering
 Current Task                  G2-03 — Narrative Conversation View
 Base implementation           d736ac9389c2bf23f7f71b0270d6fd8f72db8461
 IR-01 repair                  774ab522e48ef1026d622f89e7903e9cb7bab64c — PASS
-IR-02 + Host scaling repair   6690461e1dca80096e4d4ba27e7acbed4f109f23 — PASS (engineering review)
-Owner UX closeout             REQUIRED — Composer ergonomics + Narrative richness
+IR-02 + Host scaling repair   6690461e1dca80096e4d4ba27e7acbed4f109f23 — PASS
+Owner UX closeout             81e7ce0dc7e60094f65b09c428649f49446cb49a — PASS (engineering review)
+G2-03                         READY FOR OWNER UAT
 G2-GATE                       NOT YET
 ```
 
 ---
 
-## 3. G2-03 已确认通过的工程事实
+## 3. G2-03 当前已确认工程事实
 
-`my-world/main == 6690461e1dca80096e4d4ba27e7acbed4f109f23` 时：
+当前 `my-world/main == 81e7ce0dc7e60094f65b09c428649f49446cb49a`。
 
-- real DeepSeek stream / Cancel / Regenerate / failure recovery 已有工程证据；
-- IR-01 completed→Regenerate duplicate player history 已修复；
-- IR-02 completed→Regenerate→Cancel/Fail→direct new-send history/context integrity 已修复；
-- maximized desktop 三 Host 约为 `18% / 60% / 22%`；
-- Player / World 保持可用 minimum width；
-- 1280×720 三栏、960×540 collapse/toggle 回归已证明；
-- 默认玩家启动为 Maximized Window（非 Exclusive Fullscreen）；
-- Narrative 正文已有 bounded readable width；
-- Windows export / run-game / secret / Git hygiene 已有工程证据。
+已确认：
 
-这些通过不等于 G2-03 Product PASS。
+- real DeepSeek streaming / Cancel / Regenerate / failure recovery；
+- IR-01 completed→Regenerate 不重复 player entry；
+- IR-02 completed→Regenerate→Cancel/Fail→direct new-send 时 history/context 保持完整；
+- 默认 Maximized Window，非 Exclusive Fullscreen；
+- 宽屏三 Host 约 `18% / 60% / 22%`，Player / World 有 minimum usable width；
+- 1280×720 三栏与 960×540 collapse/toggle 回归；
+- Narrative 正文 bounded readable width；
+- Composer responsive height：`clamp(viewport_height × 0.15, 104, 160)`；1280×720 基线 108px，最大化约 160px；
+- multiline input / resize preservation / Ctrl+Enter；
+- provisional GM prompt 已采用 `Narrative richness over artificial brevity` 的正向倾向；
+- Provider 请求没有 `max_tokens` / 固定字数 / UI 截断式输出限制；
+- focused/offline tests、real GUI DeepSeek tests、parse、Windows export、run-game、secret 与 Git hygiene 均有执行 Agent 证据；
+- Independent Review 抽查当前代码后未发现新的 G2-03 blocking defect。
 
----
-
-## 4. Owner UX Closeout｜当前唯一剩余工作
-
-### UX-01｜Composer 不能在最大化后仍是 64px 窄输入条
-
-Owner 已实际体验并指出：三栏比例修复后，最大化窗口中 Player input 仍然过矮，不符合自然语言 RPG 的输入需求。
-
-当前实现事实：
-
-```text
-src/main.tscn
-PlayerInput.custom_minimum_size.y = 64
-```
-
-且 `src/应用壳.gd` 没有按 viewport height 调整 Composer 高度的逻辑。
-
-因此本项属于 G2-03 功能性 usability feedback，不是 deferred visual polish。
-
-目标语义：
-
-```text
-Narrative First != Composer Tiny
-```
-
-第一代基线：
-
-- 1280×720：Composer / TextEdit 应至少舒适容纳约 3–4 行自然语言行动；
-- maximized 1080p/更高：输入区应适度增高，而不是始终保持 64px；
-- 推荐量级：约 `100–120px`（720p）→ `130–160px`（1080p/maximized），并设置合理上限，不能随超高分辨率无限增长；
-- 960×540 narrow 仍需保持 Narrative + Composer 可用，不被侧栏或按钮挤坏；
-- 不要求本阶段实现复杂 auto-growing editor、Splitter 或可持久化 UI preference。
-
-允许简单 responsive rule / clamp；目标是舒服输入长行动，而不是精确像素公式。
-
-### UX-02｜Narrative richness over artificial brevity
-
-Owner 明确产品偏好：**不要人为限制模型 Narrative 输出量。** 长一点的输出可以承载更多环境、人物、对话、后果与信息，提高沉浸感。
-
-当前 Provider Adapter 没有 `max_tokens` / 字符数硬上限，保持这一点。
-
-G2-03 provisional GM prompt 可增加正向倾向：
-
-> 充分展开对当前场景有价值的环境、人物、行动、对话与后果，不必刻意简短；根据场景节奏自然决定叙事篇幅。
-
-必须同时保持：
-
-```text
-no hard minimum length
-no fixed per-turn word count
-no artificial short-answer instruction
-no new max_tokens cap merely for UI / latency convenience
-```
-
-篇幅由模型、场景与可用 Context 自然决定。真正的 Narrative quality / length 将在 G2-05 Context Assembly 后继续通过 Owner gameplay 判断。
-
----
-
-## 5. Scope
-
-当前只允许 G2-03 Owner UX closeout：
-
-- Composer responsive height / multiline usability；
-- 与其直接相关的布局回归；
-- provisional GM prompt 的 Narrative-richness 微调；
-- focused tests / GUI evidence / export。
-
-禁止借机实现：
-
-- G2-04 formal Turn / Conversation Domain；
-- G2-05 formal Context Assembly；
-- Persistence / Save / Timeline / Branch；
-- generalized UI framework / Splitter preference system；
-- 大规模视觉美化；
-- Provider registry / output-length control platform。
-
----
-
-## 6. Owner UAT Gate
-
-工程完成后最高状态：
+这些工程事实只支持：
 
 > **READY FOR OWNER UAT**
 
-最终 Owner UAT 重点：
-
-1. 默认 maximized 启动后三栏比例是否自然；
-2. Composer 是否足够舒服地输入多行行动；
-3. 输入 / streaming Narrative / Cancel / Regenerate 是否自然；
-4. Narrative 是否没有被人为压成短回答；
-5. resize 到普通与窄窗口后仍可用。
-
-只有 Owner 明确 PASS 才关闭 G2-03 并推进 G2-04。
+不构成 Product PASS。
 
 ---
 
-## 7. 当前 waiting
+## 4. Owner UAT｜最终产品 Gate
+
+入口：
+
+`D:\AI\Projects\my-world\run-game.cmd`
+
+Owner 只需真实游玩，不承担工程验证。
+
+本轮重点判断：
+
+1. 默认最大化启动后，`Player | Narrative | World` 三栏比例是否自然，左右栏是否像未来真正能承载 RPG 信息的区域；
+2. Composer 是否足够舒服地输入多行行动 / 对白 / 计划，而不是一条过薄聊天输入框；
+3. 自然语言输入 → streaming Narrative → Cancel → Regenerate 的操作是否直觉、低操作税；
+4. GM Narrative 是否有充分展开空间，没有被系统人为压成机械短回答；
+5. 整体第一感是否已经开始像 AI RPG / interactive novel，而不是 Provider demo 或普通聊天客户端。
+
+如果需要，可顺手缩放一次窗口观察 responsive；不要求截图、命令、测试、Git 或日志。
+
+只有 Owner 明确 `PASS` 才关闭 G2-03 并生成 / 启动 G2-04 Task Packet。
+
+---
+
+## 5. 当前核心体验约束
+
+- `Model freedom first. Reversibility over prevention.`
+- `Narrative richness over artificial brevity.`
+- `Narrative First != Narrative Only.`
+- `Narrative First != Composer Tiny.`
+- `Context stays bounded, not starved.`
+- `Model authors the world; Runtime makes it durable; Player owns the timeline.`
+- `Reversibility != frictionless arbitrary rewind.`
+
+---
+
+## 6. 当前 waiting
 
 ```text
-Blocking: UX-01 Composer ergonomics
-Required closeout: UX-02 Narrative richness prompt / no artificial output cap
-Waiting: KimiCode K3 focused G2-03 UX repair → engineering evidence → Owner UAT
+Blocking: NONE KNOWN
+Waiting: Owner genuine gameplay UAT / PASS or feedback
+Next only after PASS: G2-04 Turn / Conversation Domain v0.1
 ```
+
+不得在 Owner UAT 结论前自动推进 G2-04。
