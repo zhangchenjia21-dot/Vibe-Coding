@@ -2,11 +2,11 @@
 title: my world｜声明式 UI Host 设计
 type: supporting-architecture
 status: active-supporting-design
-version: 1.2
+version: 1.3
 created: 2026-08-26
 updated: 2026-08-26
 canonical_map: ../../MY_WORLD_架构_CURRENT.md
-scope: G2-03 / G5 UI projection / G6 / G8
+scope: G2 / G5 UI projection / G6 / G8
 historical_evidence: SillyTavern G8 Runtime-extensible UI Host
 ---
 
@@ -154,7 +154,7 @@ Narrative Host 的总宽度可以增长，但正文行宽不应无限增长。
 
 长期建议：Host 内部保留独立 readable text column；在超宽桌面上，额外空间可用于 scene art、portrait、contextual UI、氛围与留白，而不是把每行 Narrative 横向拉满。
 
-当前 G2 如果低成本即可加入合理 max/readable width 可以实现；不因此建立复杂布局 framework。
+当前 G2 已采用 bounded readable width；后续可随真实视觉设计调整，不因此建立复杂布局 framework。
 
 ---
 
@@ -201,6 +201,7 @@ Host owns
 - Godot Control instantiation
 - layout / responsive
 - Theme
+- typography / font scaling
 - navigation / overflow
 - input / accessibility
 - safe intent dispatch
@@ -346,11 +347,48 @@ latest generation → Regenerate / Retry
 
 ---
 
-## 11. Player UI Preference
+## 11. Player UI Preference / Typography
 
-未来像 Surface 顺序、面板展开、可调 splitter 宽度等 UI Preference 可以持久化，但默认不属于 canonical World / Timeline State。
+UI Preference 默认独立于 canonical World / Timeline State。
 
-G6 只在真实需要时实现；G2 不为理论未来建设完整 preference framework。
+可属于 UI Preference 的长期候选包括：
+
+- Surface 顺序 / 展开状态；
+- 可调 splitter 宽度；
+- 字体大小 / UI scale；
+- 其它纯呈现偏好。
+
+### 11.1 当前字体基线
+
+G2-03 Owner UAT 指出第一版界面整体字号偏小，但不阻塞 Conversation Spine 功能正确性。
+
+当前裁定：
+
+> **第一代默认采用中等、偏可读的字体大小，而不是尽量缩小字号来换空间。**
+
+G2-04 允许做一次小型 typography baseline 调整，让标题、正文、按钮、侧栏说明、状态文本和 Composer 在桌面最大化与普通窗口下都达到舒适阅读量级。
+
+这是 bounded polish：
+
+- 不建立全局 Settings framework；
+- 不实现字体文件管理；
+- 不持久化字号选项；
+- 不为了调字号重构整个 Theme 系统。
+
+### 11.2 未来玩家可选字号
+
+进入真实 RPG Experience / UI Preference 阶段后，玩家应可以选择受支持的字体大小或 UI text scale，例如 `small / medium / large` 或等价的有限档位。
+
+原则：
+
+```text
+Default = medium readable baseline
+Player choice = supported UI preference
+Font size preference != World State
+Font size preference != Timeline history
+```
+
+具体档位、缩放算法、持久化位置由 G6 真实 UI UAT 决定，不在 G2 提前冻结。
 
 ---
 
@@ -389,7 +427,8 @@ Validator / Adapter / Authoring UX
 - 宽屏三栏共同伸缩；
 - 默认 Maximized Window；
 - 窄窗口合理折叠；
-- 不做通用 declarative renderer。
+- 默认 medium readable typography baseline；
+- 不做通用 declarative renderer / UI preference framework。
 
 ### G3–G5
 
@@ -404,7 +443,8 @@ Validator / Adapter / Authoring UX
 - Internal Declarative UI Host vertical proof；
 - bounded Action Intent；
 - responsive / Theme / navigation；
-- 根据真实需要评估 splitter / persisted UI preference。
+- 根据真实需要评估 splitter / persisted UI preference；
+- 支持玩家可选字体大小 / UI text scale，并保持其独立于 World / Timeline。
 
 ### G8
 
