@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 2.0
+version: 2.1
 created: 2026-08-26
 updated: 2026-08-26
-phase: G2 AI Conversation Spine
-current_task: G2-06 First Owner Playtest
+phase: G3 Persistent Game / Save / Timeline Foundation
+current_task: G3-01 Persistence Domain Architecture
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -27,86 +27,105 @@ implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ## 2. 当前状态
 
 ```text
-Current Phase                 G2 — AI Conversation Spine
-G2-01 Application/Game Shell PASS — Owner UAT
-G2-02 Provider Adapter v0.1  PASS — Engineering
-G2-03 Narrative View         PASS — Owner UAT
-G2-04 Turn/Conversation      PASS — Independent Review
-G2-05 Context Assembly       PASS — Independent Review
-Current Task                  G2-06 — First Owner Playtest
-G2-GATE                       NOT YET
+G1 Foundation                  PASS / CLOSED
+G2 AI Conversation Spine       PASS / CLOSED
+G2-06 Owner Playtest           PASS — Owner UAT
+G2-GATE                        PASS
+
+Current Phase                  G3 — Persistent Game / Save / Timeline Foundation
+Current Task                   G3-01 — Persistence Domain Architecture
+G3-GATE                        NOT YET
 ```
 
 ---
 
-## 3. G2-05｜CLOSED / PASS
+## 3. G2｜CLOSED / PASS
 
-实现 commit：
+G2 已完成：
+
+- G2-01 Application / Game Shell — PASS — Owner UAT
+- G2-02 Provider Adapter v0.1 — PASS — Engineering
+- G2-03 Narrative Conversation View — PASS — Owner UAT
+- G2-04 Turn / Conversation Domain v0.1 — PASS — Independent Review
+- G2-05 Context Assembly v0.1 — PASS — Independent Review
+- G2-06 First Owner Playtest — PASS — Owner UAT
+
+Owner 对真实 exported product path 的结论：**PASS，可以进入下一步。**
+
+因此 G2-GATE 正式通过。当前已证明的产品脊柱：
 
 ```text
-9c577811fd71d19f514ca4e9455e02321f0aa34d  Context Assembly v0.1
+启动游戏
+→ 自然语言输入
+→ AI GM real streaming Narrative
+→ 连续多回合
+→ Cancel / Regenerate / Retry
+→ bounded Context Assembly
+→ failure 后可继续
 ```
 
-Independent Review 结论：**PASS**。
-
-已成立：
-
-- `Conversation` 继续拥有 Turn / accepted player+GM truth / generation lifecycle；
-- `Conversation.get_context_projection()` 只返回 derived read model，不再负责 Provider message assembly；
-- 独立 `Context Assembly` 成为 GM/system instructions、Conversation working-set 与 Game Context request material 的组装 owner；
-- `Conversation.build_provider_messages()` 已退休，无 compatibility fallback；
-- 第一代 bounded policy = 最近 12 个完整 accepted Turn + current attempt；按完整 Turn 取舍，不截断单条玩家/GM文本；
-- new / retry / regenerate / correction request shape 已用 deterministic state matrix 覆盖；
-- Regenerate / Correction 会排除当前旧 accepted pair，request 以当前 user 结束，同时 Domain old accepted truth 在 replacement 成功前保持稳定；
-- cancelled / failed partial draft 不进入 Context；
-- non-empty `game_context_text` 只作为 system 中 `Current Game Context` derived material；production 当前为空，不伪造尚不存在的 World/NPC authoritative state；
-- Context/messages 是 derived copies，不可反向修改 Conversation truth；
-- `Narrative richness over artificial brevity` 保持；无 `max_tokens` / output-length cap；
-- IR-03 / IR-04、G2-04 Domain、G2-03 UI、G2-02 Adapter 与真实 DeepSeek / Windows export regressions 均保持通过；
-- 未越界实现 G3/G4/G5/G7 或 retrieval/summarization/long-memory platform。
-
-G2-05 是工程 ownership/context foundation，不单独要求 Owner UAT。
+G2 Gate 只证明 Conversation Spine 值得继续建设；它不声称当前已经拥有持久 World / Save / Timeline / World Pack / NPC/Faction runtime。
 
 ---
 
-## 4. Current Task｜G2-06 First Owner Playtest
+## 4. Current Phase｜G3 Persistent Game / Save / Timeline Foundation
 
-目标：由 Owner 在真实导出 EXE 中体验当前完整 G2 Conversation Spine，而不是继续做工程检查。
+G3 Outcome：建立长期世界的 durable backbone，让退出 / 重开、Save / Load / Restore、Context future isolation 和 recovery 成为原生能力。
 
-当前可真实评价：
+必须持续区分：
 
-- 自然语言行动输入是否舒服；
-- AI GM streaming / 多回合连续阅读是否自然；
-- Conversation working set 下的短局 continuity 是否可接受；
-- Narrative 篇幅、信息密度、沉浸感是否值得继续读；
-- Cancel / Regenerate / Retry 是否低摩擦；
-- medium typography、Composer、三 Host 布局是否适合持续游玩；
-- 整体交互骨架是否适合作为后续长期 AI RPG 的 Conversation Spine。
+```text
+Game
+World State
+Timeline
+Save Point
+Conversation
+Agent Context
+UI Preference
+```
 
-当前**不要求**评价：
+长期不变量：
 
-- 长期 World persistence / Save / Timeline；
-- 正式 Character/NPC/Faction/World state；
-- World Pack；
-- 长局 retrieval / summarization；
-- 完整 RPG 机制；
-- “现在是否已经像完整 AI RPG”。
-
-原因：production `game_context_text` 当前仍诚实为空；G2-05 只建立 Context owner / bounded working set / future Game Context seam，尚未实现正式 Game/World material。
-
-Owner Playtest 只需要真实玩，不需要运行测试、看日志、检查 Git 或验证内部 Context roles。
+- `Model authors the world; Runtime makes it durable; Player owns the timeline.`
+- `Save Point != Timeline Node.`
+- `Reversibility != frictionless arbitrary rewind.`
+- UI / Transcript / Markdown / Godot Resource 不得成为 authoritative gameplay DB。
+- Load 旧 Save 不应立即不可逆销毁当前 future。
+- Restore 后 Context 不得泄漏被回滚未来。
 
 ---
 
-## 5. 当前核心约束
+## 5. Current Task｜G3-01 Persistence Domain Architecture
 
-- `Model freedom first. Reversibility over prevention.`
-- `Narrative richness over artificial brevity.`
-- `Context stays bounded, not starved.`
-- `UI is a projection, not a second truth source.`
-- Context material / Provider messages are derived request material, not canonical World truth.
-- `Transcript != Timeline.`
-- G2-06 只做 Product Owner gameplay reality check，不借 UAT 偷做 G3+。
+目标不是立刻做 Save UI，而是先用真实 fixture / spike 冻结：
+
+```text
+Authoritative ownership
++ durable mutation transaction boundary
++ persistence storage candidate
++ checkpoint / snapshot role
++ migration boundary
++ interrupted-write / recovery boundary
++ future G3 task integration seams
+```
+
+当前首选评估候选仍是：
+
+```text
+JSON/files
+→ settings / small metadata / portable source / non-authoritative cache
+
+SQLite
+→ G3 authoritative World / Timeline 首选评估候选
+
+Event Log / Snapshot
+→ 可组合的 timeline/recovery semantic pattern
+→ 不默认 full event sourcing
+```
+
+SQLite 仍是 candidate，不是必须硬上的结论。如果在 Godot 4.7.2 Standard / non-.NET Windows x64 的真实 spike 中证明接入、事务、打包或恢复路径不成熟，G3-01 必须以证据重开存储选择，而不是为了服从旧偏好制造宿主债务。
+
+G3-01 不提前实现 G3-02 Durable World Mutation Path、G3-03 Resume、G3-04 Save/Load/Restore，也不建设任意 Turn rewind。
 
 ---
 
@@ -114,7 +133,7 @@ Owner Playtest 只需要真实玩，不需要运行测试、看日志、检查 G
 
 ```text
 Blocking: NONE KNOWN
-Current: Owner plays exported game and returns PASS / feedback
-Owner UAT entry: D:\AI\Projects\my-world\run-game.cmd
-Next after Owner PASS: close G2-06 → evaluate / close G2-GATE → proceed per roadmap
+Current: prepare / execute G3-01 repository-native architecture + technical-spike Task Packet
+Owner UAT: not required for G3-01
+Next after G3-01 Independent Review PASS: G3-02 Durable World Mutation Path
 ```
