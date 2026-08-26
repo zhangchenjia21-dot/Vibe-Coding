@@ -1,7 +1,7 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 1.1
+version: 1.2
 created: 2026-08-26
 updated: 2026-08-26
 phase: G2 AI Conversation Spine
@@ -33,7 +33,9 @@ Current Phase                 G2 — AI Conversation Spine
 G2-01 Application/Game Shell PASS — Owner UAT
 G2-02 Provider Adapter v0.1  PASS — Engineering
 Current Task                  G2-03 — Narrative Conversation View
-G2-03 Implementation          COMMITTED — awaiting closeout / Owner UAT
+G2-03 Implementation          COMMITTED at d736ac9
+Independent Review            RETURNED — completed-regenerate history defect
+Owner UAT                     NOT READY
 G2-GATE                       NOT YET
 ```
 
@@ -93,15 +95,62 @@ Right  = WorldSurfaceHost
 
 ### 当前实现事实
 
-2026-08-26 `my-world/main` 已出现 implementation commit：
+Implementation commit：
 
 `d736ac9389c2bf23f7f71b0270d6fd8f72db8461 — G2-03: add narrative conversation view`
 
-可见增量包括 Narrative View、玩家 `run-game` 启动路径与窗口基线调整。该 commit 的存在只表示实现已提交；**在执行 Agent Final Report / Engineering Evidence 与 Owner UAT 明确关闭前，G2-03 仍是 Current Task，不得自动标记 Product PASS 或推进 G2-04。**
+该实现之后的 `my-world/main` 增量仅修改 `AGENTS.md`、`README.md`、`docs/CORE_DESIGN_PRINCIPLES.md`，未覆盖 G2-03 游戏代码。
 
-G2-03 是产品面任务。最高 pre-UAT 状态：
+执行 Agent Final Report 报告：parse / offline tests / GUI real-DeepSeek tests / cancel / regenerate / second turn / export / run-game / secret checks 均通过，并返回 `READY FOR OWNER UAT`。
 
-> **READY FOR OWNER UAT**
+### Independent Review Finding｜IR-01 — BLOCKING
+
+静态 Review 对照 Task Packet AC-07 / AC-08 发现：
+
+```text
+completed history
+= [user, assistant]
+
+Regenerate completed generation
+→ pop assistant
+→ history becomes [user]
+→ start new generation
+→ on completed() unconditionally append user + assistant
+→ history becomes [user, user, assistant]
+```
+
+因此“**completed GM generation → Regenerate**”会重复写入同一个 player turn，违反：
+
+- AC-07：regenerate 不得重复制造第二个 player entry；
+- AC-08：旧 GM 与新 GM 不得形成错误 active context / provisional history。
+
+现有 GUI test 的 Regenerate 路径发生在 Cancel 之后，当时 history 为空，所以无法覆盖这个缺陷；其后直接发送 second turn，也没有测试“completed → regenerate”。
+
+### Required Repair
+
+执行 Agent必须做最小修复，不扩张到 G2-04 Domain：
+
+1. completed-generation regenerate 后，provisional history 必须仍恰好为同一个 `user + new assistant` 对；
+2. 不得重复 user；
+3. 新 Provider request context 只含一次该 user；
+4. 新增 focused regression test，明确覆盖：
+
+```text
+first turn completed
+→ regenerate completed turn
+→ history size == 2
+→ roles == [user, assistant]
+→ same player input appears exactly once
+→ second turn completed
+→ history size == 4
+```
+
+5. 重新运行相关 offline / GUI tests、parse、secret/git hygiene；若修复触及真实 Provider path，重新证明 real regenerate；
+6. 新 commit + push 后重新提交 Final Report。
+
+修复前：
+
+> **NOT READY FOR OWNER UAT**
 
 ---
 
@@ -150,8 +199,9 @@ latest generation → Regenerate / Retry
 ## 7. 当前 blocker / waiting
 
 ```text
-Blocking: NONE KNOWN
-Waiting: G2-03 Final Report / engineering review → Owner UAT
+Blocking: IR-01 completed-generation Regenerate duplicates player history entry
+Waiting: KimiCode K3 focused repair + regression evidence + revised Final Report
+Owner UAT: HOLD
 ```
 
-文档目录整理不改变 G2-03 Outcome / Scope，也不要求已提交实现返工。
+该返修只属于 G2-03 provisional session correctness，不授权 G2-04 / G2-05 / G3 实现。
