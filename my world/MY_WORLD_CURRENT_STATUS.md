@@ -1,7 +1,7 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 1.2
+version: 1.3
 created: 2026-08-26
 updated: 2026-08-26
 phase: G2 AI Conversation Spine
@@ -33,9 +33,11 @@ Current Phase                 G2 — AI Conversation Spine
 G2-01 Application/Game Shell PASS — Owner UAT
 G2-02 Provider Adapter v0.1  PASS — Engineering
 Current Task                  G2-03 — Narrative Conversation View
-G2-03 Implementation          COMMITTED at d736ac9
-Independent Review            RETURNED — completed-regenerate history defect
-Owner UAT                     NOT READY
+Base implementation           d736ac9389c2bf23f7f71b0270d6fd8f72db8461
+IR-01 repair                  774ab522e48ef1026d622f89e7903e9cb7bab64c
+IR-01                         PASS — completed regenerate duplication fixed
+IR-02                         RETURNED — regenerate cancel/fail then new-send history integrity
+Owner UAT                     RETURNED — wide-screen host scaling / startup mode
 G2-GATE                       NOT YET
 ```
 
@@ -48,8 +50,6 @@ G2-GATE                       NOT YET
 Implementation: `my-world@4a13deb29a2e9c354530843d23eb48422957033c`
 
 Owner UAT：**PASS**。
-
-Owner observation：功能整体正常但视觉较粗糙，记录为 **deferred visual polish / non-blocking**。
 
 ### G2-02｜Provider Adapter v0.1
 
@@ -84,77 +84,95 @@ Center = NarrativeHost
 Right  = WorldSurfaceHost
 ```
 
-当前约束：
+### 4.1 IR-01｜PASS
 
-- Center Narrative 是视觉 / 交互中心；
-- 宽窗口三 Host，窄窗口 Narrative 优先；
-- 左右只显示诚实最小空状态，不伪造 Character / World / Timeline 数据；
-- fixed handwritten Godot UI，不做 generalized Declarative Renderer；
-- 不做 G2-04 Turn Domain、G2-05 Context Assembly；
-- 不做 G3 Persistence / Save / Timeline / arbitrary rewind / branch。
+原缺陷：completed generation → Regenerate 会形成 `[user, user, new_assistant]`。
 
-### 当前实现事实
+修复 commit：
 
-Implementation commit：
+`774ab522e48ef1026d622f89e7903e9cb7bab64c`
 
-`d736ac9389c2bf23f7f71b0270d6fd8f72db8461 — G2-03: add narrative conversation view`
+复审确认当前实现使用 `_current_turn_in_history` 区分当前 player turn 是否已进入 provisional history；successful completed→regenerate 后 history 保持 `[same user, new assistant]`，并新增 provider-context 只读测试 seam 与回归测试。
 
-该实现之后的 `my-world/main` 增量仅修改 `AGENTS.md`、`README.md`、`docs/CORE_DESIGN_PRINCIPLES.md`，未覆盖 G2-03 游戏代码。
+当前 `my-world/main == 774ab522e48ef1026d622f89e7903e9cb7bab64c` 时该修复为最新实现事实。
 
-执行 Agent Final Report 报告：parse / offline tests / GUI real-DeepSeek tests / cancel / regenerate / second turn / export / run-game / secret checks 均通过，并返回 `READY FOR OWNER UAT`。
+### 4.2 IR-02｜BLOCKING
 
-### Independent Review Finding｜IR-01 — BLOCKING
-
-静态 Review 对照 Task Packet AC-07 / AC-08 发现：
+复审 IR-01 时发现同一 provisional-state 机制仍存在一个边缘路径：
 
 ```text
-completed history
-= [user, assistant]
-
-Regenerate completed generation
-→ pop assistant
-→ history becomes [user]
-→ start new generation
-→ on completed() unconditionally append user + assistant
-→ history becomes [user, user, assistant]
+completed turn
+→ Regenerate
+→ old assistant is popped from history
+→ new regeneration Cancel / Fail
+→ history temporarily remains [user]
+→ player chooses to send a new action instead of Retry
 ```
 
-因此“**completed GM generation → Regenerate**”会重复写入同一个 player turn，违反：
+此时新 `_on_send_pressed()` 会把 `_current_turn_in_history` 设为 false，但 `_build_messages()` 看到 history 末位已经是 `user`，不会 append 新 player input；结果可能出现：
 
-- AC-07：regenerate 不得重复制造第二个 player entry；
-- AC-08：旧 GM 与新 GM 不得形成错误 active context / provisional history。
+- provisional history 不再保持 completed player/GM pair；
+- 新玩家行动没有进入下一次 Provider context；
+- UI 显示的新行动与模型实际收到的 context 不一致。
 
-现有 GUI test 的 Regenerate 路径发生在 Cancel 之后，当时 history 为空，所以无法覆盖这个缺陷；其后直接发送 second turn，也没有测试“completed → regenerate”。
+这违反 G2-03 的 provisional history correctness / failure recovery 目标。
 
-### Required Repair
+要求最小修复，不引入 G2-04 Domain：
 
-执行 Agent必须做最小修复，不扩张到 G2-04 Domain：
-
-1. completed-generation regenerate 后，provisional history 必须仍恰好为同一个 `user + new assistant` 对；
-2. 不得重复 user；
-3. 新 Provider request context 只含一次该 user；
-4. 新增 focused regression test，明确覆盖：
+1. completed-turn Regenerate 的替换过程不得让 Cancel / Fail 后留下会污染下一请求的半对 history；
+2. 推荐语义：直到新 generation **成功完成**前，原 completed assistant 仍作为 active provisional context 的稳定版本；成功后再原子替换，或采用等价的最小正确实现；
+3. Cancel / Fail 后玩家无论选择 Retry 还是直接发送下一条行动，Provider context 与 provisional history 都必须保持一致；
+4. 新增 regression：
 
 ```text
-first turn completed
-→ regenerate completed turn
-→ history size == 2
-→ roles == [user, assistant]
-→ same player input appears exactly once
-→ second turn completed
-→ history size == 4
+turn1 completed
+→ regenerate
+→ cancel or deterministic fail
+→ directly send turn2 without retry
+→ provider context contains turn1 exactly once and turn2 exactly once
+→ no half-pair / duplicate user
+→ successful turn2 ends with valid [user,assistant,user,assistant] history
 ```
 
-5. 重新运行相关 offline / GUI tests、parse、secret/git hygiene；若修复触及真实 Provider path，重新证明 real regenerate；
-6. 新 commit + push 后重新提交 Final Report。
-
-修复前：
-
-> **NOT READY FOR OWNER UAT**
+不允许为此提前建设正式 Turn Domain / Session framework。
 
 ---
 
-## 5. 当前 Reversibility UX
+## 5. Owner UAT｜RETURNED：三栏伸缩与默认窗口
+
+Owner 已真实运行 exported EXE，并确认基础三栏方向成立，但发现最大化后的布局策略不满足长期 RPG 信息栏需求：
+
+- 默认窗口下比例尚可；
+- 最大化后新增横向空间几乎全部给 Narrative；
+- 左右 Host 基本只纵向拉高，横向仍接近细栏；
+- 左右说明文字出现空间不足 / 边界拥挤；
+- 这种行为会让 Player / World Host 在未来真实承载属性、人物、关系、任务、Save 等信息时不可用。
+
+该项是 **functional layout feedback**，不是 deferred visual polish。
+
+当前裁定已传播到 `MY_WORLD_架构_CURRENT.md` 与 `architecture/ui/声明式UIHost设计.md`：
+
+```text
+Narrative First != Narrative Only
+```
+
+修复要求：
+
+- 默认玩家启动使用 **Maximized Window**，不是 Exclusive Fullscreen；
+- 宽屏下三个 Host 全部参与横向 expansion；
+- 第一版比例基线约 `18% / 60% / 22%`；
+- Player / World 保持约 `250 / 310px` 量级 minimum usable width；
+- 空间不足时折叠侧 Host，不靠无限压窄维持三栏；
+- 所有侧栏文字正常 wrap / constrain，不越界；
+- 1280×720 继续作为 windowed regression；
+- 960×540 继续作为 narrow responsive regression；
+- 超宽 Narrative 正文避免无限拉长单行，低成本情况下加入 reasonable readable-width constraint。
+
+Owner 不需要在此修复前重复做 UAT。
+
+---
+
+## 6. 当前 Reversibility UX
 
 当前只需要：
 
@@ -169,39 +187,23 @@ latest generation → Regenerate / Retry
 >
 > **Save Point != Timeline Node.**
 
-因此：
-
-- 历史 Narrative 默认 read / scroll，不为每条放 `回到这里`；
-- Save / Load 是明确玩家意图；
-- Timeline 首先是 Runtime history / recovery foundation；
-- arbitrary per-turn rewind 当前 **DEFERRED**；
-- G3 优先 reliable persistence、resume、explicit Save、explicit Load/Restore、future-memory isolation 与误读档 recoverability。
-
-详细设计从 `MY_WORLD_架构_CURRENT.md` → `architecture/persistence/`。
-
----
-
-## 6. 当前核心约束
-
-- `Model freedom first. Reversibility over prevention.`
-- `Reversibility != frictionless arbitrary rewind.`
-- `Model authors the world; Runtime makes it durable; Player owns the timeline.`
-- `Save Point != Timeline Node.`
-- `Source provides inertia; actors create history.`
-- `Context stays bounded.`
-- `Host capability first; external asset protocol second.`
-- G2 product-facing Provider = DeepSeek `deepseek-v4-pro`；Kimi Code 是 Foundation alternate，不自动 fallback。
-- Secret 不进入 Git、日志、UI、截图或聊天。
-- Owner 不承担 routine Godot/Git/build/debug/QA；真实产品体验 Gate 才交给 Owner。
+历史 Narrative 默认 read / scroll，不为每条放 `回到这里`；Save / Load 是明确玩家意图；Timeline 首先是 Runtime history / recovery foundation。
 
 ---
 
 ## 7. 当前 blocker / waiting
 
 ```text
-Blocking: IR-01 completed-generation Regenerate duplicates player history entry
-Waiting: KimiCode K3 focused repair + regression evidence + revised Final Report
-Owner UAT: HOLD
+Blocking:
+- IR-02 completed-regenerate cancel/fail → direct new-send history/context integrity
+- Owner UAT wide-screen proportional Host scaling + default maximized startup
+
+Waiting:
+- KimiCode K3 focused G2-03 repair
+- engineering regression evidence
+- then Owner re-UAT
+
+Owner UAT: HOLD until repair
 ```
 
-该返修只属于 G2-03 provisional session correctness，不授权 G2-04 / G2-05 / G3 实现。
+该返修仍属于 G2-03，不授权 G2-04 / G2-05 / G3 实现，也不授权大规模 UI 美化。
