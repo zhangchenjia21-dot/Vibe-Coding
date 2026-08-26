@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 1.8
+version: 1.9
 created: 2026-08-26
 updated: 2026-08-26
 phase: G2 AI Conversation Spine
-current_task: G2-04 Turn / Conversation Domain v0.1
+current_task: G2-05 Context Assembly v0.1
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -31,159 +31,94 @@ Current Phase                 G2 — AI Conversation Spine
 G2-01 Application/Game Shell PASS — Owner UAT
 G2-02 Provider Adapter v0.1  PASS — Engineering
 G2-03 Narrative View         PASS — Owner UAT
-Current Task                  G2-04 — Turn / Conversation Domain v0.1
-G2-04 base implementation    0bf1f012366db7271664a192c1c30e60947cc5c9
-IR-03 repair                  d0d5d47f487fdb75f31de5349894517a830a51e8 — PASS
-Independent Review            RETURNED — IR-04 empty-completion accepted-truth defect
-G2-05 Context Assembly        HOLD
+G2-04 Turn/Conversation      PASS — Independent Review
+Current Task                  G2-05 — Context Assembly v0.1
+G2-06 Owner Playtest          NOT STARTED
 G2-GATE                       NOT YET
 ```
 
 ---
 
-## 3. G2-04 已确认通过的部分
+## 3. G2-04｜CLOSED / PASS
 
-当前 `my-world/main == d0d5d47f487fdb75f31de5349894517a830a51e8` 时：
+最终实现线：
 
-- Conversation / Turn Domain 成为正式 in-memory owner；
-- UI 已移除旧 `_history` / duplicated generation-state truth；
+```text
+0bf1f012366db7271664a192c1c30e60947cc5c9  Conversation / Turn Domain v0.1
+
+d0d5d47f487fdb75f31de5349894517a830a51e8  IR-03 regenerate Provider context repair
+
+d1acd2a58e00fd99b73ab98bc3ccdc3c79762951  IR-04 empty/whitespace completion integrity repair
+```
+
+Independent Review 结论：**PASS**。
+
+已成立：
+
+- Conversation / Turn Domain 是正式 in-memory conversation truth owner；
+- UI 不再维护独立 `_history` / duplicated generation-state truth；
 - Provider Adapter 保持 transport-only；
-- normal Turn / Retry / Regenerate / latest-turn correction 的 logical identity 与 accepted-truth 原子替换语义成立；
-- IR-01 / IR-02 回归保持；
-- **IR-03 已修复**：completed latest Turn 的 Regenerate Provider request 只保留 previous accepted pairs + current user，当前旧 assistant 不进入 replacement request，request 以 current `user` 结束；
-- typography medium baseline 已完成；
+- normal Turn / Retry / Regenerate / latest-turn correction 使用稳定 logical turn identity；
+- completed Regenerate / correction 成功前旧 accepted pair 保持稳定，成功后同 identity 原子替换；
+- IR-01 / IR-02 history/context correctness 保持；
+- IR-03：Regenerate replacement request = previous accepted pairs + current user，当前旧 assistant 不进入请求，request 以 user 结束；
+- IR-04：zero / whitespace-only completion 不得成为 accepted GM truth；它进入 `empty_generation` failed-equivalent，可同 Turn Retry；任何非空白内容（包括 1 字）仍可 accepted，不构成人为 Narrative 长度限制；
+- 中等可读 typography baseline 已完成；
 - 未越界实现 G2-05 / G3。
 
-这些部分不要求重做。
+G2-04 是工程 ownership / semantics 任务，不单独要求 Owner UAT；字体与整体体验在 G2-06 再由 Owner 观察。
 
 ---
 
-## 4. IR-04｜Empty completion must not become accepted GM truth — BLOCKING
+## 4. Current Task｜G2-05 Context Assembly v0.1
 
-IR-03 真实 GUI 回归中，执行 Agent 已观察到一次 DeepSeek 偶发快速 `[DONE]` / 近空响应：没有产生可接受的正文 draft，就结束了 stream。当前 Adapter 会正常发 `completed()`，而 `Conversation.complete_generation()` 无条件执行：
+Why now：G2-04 已建立稳定 Conversation owner，但当前 Provider messages 仍由 Conversation 内临时 `build_provider_messages()` 直接拼接。正式 Context Assembly 必须在 G2-06 Owner Playtest 前成为独立责任，否则 Conversation Domain 会继续承担 system prompt / working-set / game-context 选择职责。
 
-```text
-pending_player_text → accepted player_text
-draft_text          → accepted_gm_text
-has_accepted_response = true
-```
-
-因此空 / 纯空白 draft 也会成为 accepted GM truth。
-
-影响：
-
-### 新 Turn
+Outcome：
 
 ```text
-player action
-→ provider completed with no meaningful content
-→ accepted pair becomes [player, ""]
+GM/System Instructions
++
+Conversation read projection
++
+Current minimal Game Context material
++
+Bounded recent Conversation working set
+→ Context Assembly v0.1
+→ Provider messages
 ```
 
-玩家得到一个没有 GM Narrative 的“完成回合”。
+关键边界：
 
-### Regenerate / Correction
-
-更严重：
-
-```text
-old accepted pair stable
-→ regenerate/correct
-→ provider emits completed but zero/whitespace content
-→ old accepted GM is replaced by ""
-```
-
-这破坏了我们刚建立的“旧 accepted truth 在成功 replacement 前保持稳定”语义。
-
-现有 G2-04 T09 甚至把“没有任何 delta 仍 complete 成 accepted 空 GM”编码成合法行为，因此测试无法抓住它。
-
-### 产品边界
-
-这**不是 Narrative 长度限制**，也不得演化成 minimum-word-count guardrail。
-
-正式区分：
-
-```text
-1 character / very short content
-→ model-authored content
-→ allowed
-
-zero characters / whitespace-only content
-→ no GM Narrative produced
-→ generation attempt is not acceptable completion
-```
-
-`Narrative richness over artificial brevity` 继续成立；IR-04 只防止“完全没有输出”破坏 accepted truth。
+- `Context stays bounded, not starved.`
+- Context Assembly 是 derived request material，不是第二 truth source；
+- Conversation Domain 继续拥有 Turn/accepted truth，不拥有 prompt/context policy；
+- Provider Adapter 继续只接收已组装 messages，不拥有 Context 语义；
+- 当前最小 Game Context 只建立输入 seam / fixture，不伪造尚不存在的 World/NPC authoritative state；
+- G2-05 使用简单 recent-turn working set，不建设 retrieval / summarization / long-memory platform；
+- 不把 bounded context 误解成短回答：`Narrative richness over artificial brevity` 继续成立；
+- G3 Persistence、G4 World Pack、G5 World/NPC semantics、G7 long-session retrieval 均未授权。
 
 ---
 
-## 5. IR-04 Required Repair
+## 5. 当前核心约束
 
-只做 G2-04 focused integrity repair：
-
-1. Conversation Domain 在接受 generation completion 前检查当前 `draft_text` 是否存在非空白内容。
-2. 若 `draft_text.strip_edges().is_empty()`：
-   - **不得**写入/覆盖 `player_text`、`accepted_gm_text`、`has_accepted_response`；
-   - attempt 进入可 Retry 的 failed-equivalent state；
-   - 发出明确的 domain failure code，例如 `empty_generation`（命名可等价）；
-   - 对 Regenerate / completed Correction，旧 accepted pair 必须原样保留；
-   - 对新 Turn，仍无 accepted response，可直接 Retry 同一 logical Turn。
-3. UI 给 `empty_generation` 一个正常玩家可读错误，例如“本次没有生成有效叙事，可点击重新生成重试”；不要展示工程细节。
-4. 不设置最小字符数；任何非空白内容都允许 accepted。
-5. 增加 focused tests，至少覆盖：
-
-```text
-new turn → empty completion
-→ FAILED/retryable
-→ no accepted entry
-→ retry same turn → non-empty completion → accepted
-```
-
-```text
-completed turn → regenerate → empty completion
-→ old player + old GM unchanged
-→ same turn identity
-→ retry/regenerate again → non-empty completion → atomic replacement
-```
-
-```text
-completed latest correction → empty completion
-→ old accepted player + GM unchanged
-→ corrected text not partially accepted
-```
-
-以及 whitespace-only draft。
-6. 原 IR-03 request-context assertions、IR-01 / IR-02 / correction / typography / G2-03 regressions保持通过。
-7. Real DeepSeek 不要求强行复现偶发空响应；必须用 deterministic Domain test 证明该路径。真实 GUI 正常 completed→Regenerate 继续 smoke PASS 即可。
-8. 默认不修改 Provider Adapter；Adapter 的 `completed` 仍可表示 transport/API 正常结束，Domain 决定该 attempt 是否产生可接受的游戏 Narrative。
+- `Model freedom first. Reversibility over prevention.`
+- `Narrative richness over artificial brevity.`
+- `Context stays bounded, not starved.`
+- `UI is a projection, not a second truth source.`
+- Context material / Provider messages are derived request material, not canonical World truth.
+- `Transcript != Timeline.`
+- `Save Point != Timeline Node.`
+- G2-05 不得提前实现 G3 / G4 / G5 / G7。
 
 ---
 
-## 6. Scope
-
-允许：
-
-- `src/domain/会话.gd` 最小 completion acceptance 修复；
-- `src/ui/叙事对话视图.gd` 增加 `empty_generation` 玩家可读错误；
-- 直接相关 G2-04 / G2-03 tests。
-
-禁止：
-
-- arbitrary minimum length / word count；
-- Narrative quality classifier；
-- Provider retry platform；
-- 修改 Provider Adapter，除非发现独立、可证实的 transport bug 并先返回说明；
-- G2-05 Context Assembly；
-- G3 Persistence / Save / Timeline；
-- 大规模重构。
-
----
-
-## 7. 当前 waiting
+## 6. 当前 waiting
 
 ```text
-Blocking: IR-04 empty/whitespace completion can overwrite accepted truth
-Waiting: KimiCode K3 focused repair + deterministic regression evidence + revised Final Report
-Owner UAT: not required
-Next only after Independent Review PASS: close G2-04 → G2-05 Context Assembly v0.1
+Blocking: NONE KNOWN
+Current: prepare / execute G2-05 repository-native Task Packet
+Owner UAT: not required for G2-05 engineering closeout
+Next after G2-05 Independent Review PASS: G2-06 first Owner Playtest
 ```
