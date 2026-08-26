@@ -14,8 +14,8 @@ README.md
 
 ## 2. Canonical Owner
 
-- GPT 动态项目路由：`current/The_World_GPT项目源_GitHub动态路由_v1.2.md`
-- 正式延后事项：`current/延后裁定与待办_CURRENT.md`
+- GPT 动态项目路由：`current/GPT项目动态路由.md`
+- 正式延后事项：`current/延后裁定与待办.md`
 - 正式项目裁定：`decisions/`
 - 一次性实施/审核/交接过程：`tasks/`
 - 已 supersede 版本：仓库根 `99_归档/the-world/`
@@ -24,7 +24,7 @@ README.md
 
 - 不在本目录记录实现仓库 HEAD、运行状态、代码细节的第二份真相。
 - task packet 完成后保留为执行证据；其结论需要长期生效时，应回写 `decisions/` 或实现仓库对应 Owner。
-- current Owner 原位更新，不持续制造新的 `*_CURRENT.md`。
+- current Owner 使用稳定语义文件名并原位更新，不通过 `_CURRENT`、版本号或日期制造新权威副本。
 - 新裁定放 `decisions/`，不直接堆在本目录根层。
 - 新任务包放 `tasks/`；根层只保留 README / AGENTS 与稳定子目录。
 
