@@ -1,9 +1,9 @@
 ---
 title: my world｜独立版 Preflight 与第一阶段计划
 status: current-plan
-version: 1.3
+version: 1.4
 created: 2026-08-25
-updated: 2026-08-25
+updated: 2026-08-26
 stage: G1 Foundation & Project Bootstrap
 owner: Project Owner + GPT Architecture
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
@@ -168,14 +168,17 @@ stream = true
 default model = deepseek-v4-pro
 key env = DEEPSEEK_API_KEY
 
-Kimi / Moonshot AI
-POST https://api.moonshot.ai/v1/chat/completions
+Kimi Code API
+POST https://api.kimi.com/coding/v1/chat/completions
 stream = true
-default model = kimi-k3
-key env = MOONSHOT_API_KEY
+default model = k3
+key env = KIMI_CODE_API_KEY
+optional model override = MY_WORLD_G1_04_KIMI_MODEL
 ```
 
-两者复用极薄的 OpenAI-compatible HTTP/SSE seam，但 host/path/key/model 显式分离。**不建设自动路由、fallback mesh、负载均衡、Provider plugin framework 或 account system。**
+两者复用极薄的 OpenAI-compatible HTTP/SSE seam，但 host/path/key/model 显式分离。Kimi Code 替换当前 G1-04 的旧 concrete 配置，不保留兼容 fallback。**不建设自动路由、fallback mesh、负载均衡、Provider plugin framework 或 account system。**
+
+当前状态：DeepSeek real stream / cancel / retry 已 PASS；Kimi Code implementation/config correction pending Owner UAT；G1-04 overall NOT PASS，G1-05 保持 BLOCKED。当前最高结果为 READY FOR OWNER UAT。
 
 #### C. 后台工作与 UI 响应
 

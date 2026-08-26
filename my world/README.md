@@ -8,7 +8,7 @@
 - 实现仓库：`https://github.com/zhangchenjia21-dot/my-world`
 - Godot：`4.7.2.stable.official.ed1daf0bf` Standard / non-.NET Windows x64
 - 当前：`G1-04 — Real Provider Streaming / Cancel Foundation Spike`
-- G1-04 当前必须真实接通：**DeepSeek + Kimi**
+- G1-04 当前必须真实接通：**DeepSeek + Kimi Code**
 
 ## Authority
 
@@ -43,16 +43,16 @@ stream = true
 default model = deepseek-v4-pro
 key env = DEEPSEEK_API_KEY
 
-Kimi / Moonshot AI
-POST https://api.moonshot.ai/v1/chat/completions
+Kimi Code API
+POST https://api.kimi.com/coding/v1/chat/completions
 stream = true
-default model = kimi-k3
-key env = MOONSHOT_API_KEY
+default model = k3
+key env = KIMI_CODE_API_KEY
 ```
 
-这是 G1-04 exploratory execution scope，不冻结最终产品 Provider 架构。实现只保留一个极薄的共同 HTTP/SSE seam，并显式区分两家的 host/path/key/model；不建设自动路由、fallback mesh、负载均衡或 Provider 平台。
+这是 G1-04 exploratory execution scope，不冻结最终产品 Provider 架构。实现只保留一个极薄的共同 HTTP/SSE seam，并显式区分两家的 host/path/key/model；Kimi Code 不保留兼容 fallback，不建设自动路由、fallback mesh、负载均衡或 Provider 平台。
 
-G1-04 只有在 **DeepSeek 与 Kimi 都获得真实 HTTP 2xx + 增量 stream 证据**，并验证真实 cancel / UI responsiveness 后才能 PASS。
+G1-04 只有在 **DeepSeek 与 Kimi Code 都获得真实 HTTP 2xx + 增量 stream 证据**，并验证真实 cancel / UI responsiveness 后才能 PASS。当前状态为 NOT PASS，最高结果为 READY FOR OWNER UAT。
 
 ## 原则
 

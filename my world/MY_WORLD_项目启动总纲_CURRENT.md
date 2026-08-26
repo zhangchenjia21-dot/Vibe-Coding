@@ -1,9 +1,9 @@
 ---
 title: my world｜项目启动总纲
 status: current-canonical-product-spec
-version: 1.4
+version: 1.5
 created: 2026-08-25
-updated: 2026-08-25
+updated: 2026-08-26
 stage: G1 Foundation & Project Bootstrap
 product_definition_gate: PASS
 next: G1-04
@@ -434,7 +434,7 @@ cancel
 
 AI Runtime 必须支持流式文本，且后台模型 / 世界维护不能冻结玩家 UI。
 
-G1-04 当前 concrete exploratory Provider = **DeepSeek Chat Completions**：
+G1-04 当前 concrete exploratory Providers = **DeepSeek Chat Completions + Kimi Code API**：
 
 ```text
 POST https://api.deepseek.com/chat/completions
@@ -442,7 +442,17 @@ stream = true
 default model = deepseek-v4-pro
 ```
 
-这只是 Foundation Spike execution choice，不冻结第一代产品最终 Provider。API key 只从本地进程环境变量 `DEEPSEEK_API_KEY` 读取，UI 只能显示 key 是否存在，不得显示 key 值；不得把 key 写入 Git、场景、脚本、日志或聊天。Godot 当前使用 non-blocking `HTTPClient` 验证真实 stream / cancel / error / UI responsiveness；same-process networking 本身不等于 G1-06 Runtime boundary 裁定。
+Kimi Code API：
+
+```text
+POST https://api.kimi.com/coding/v1/chat/completions
+stream = true
+default model = k3
+key env = KIMI_CODE_API_KEY
+optional model override = MY_WORLD_G1_04_KIMI_MODEL
+```
+
+这两条路径都是 Foundation Spike 的 exploratory execution choice，不冻结第一代产品最终 Provider。API key 只从本地进程环境变量 `DEEPSEEK_API_KEY` / `KIMI_CODE_API_KEY` 读取，UI 只能显示 key 是否存在，不得显示 key 值；不得把 key 写入 Git、场景、脚本、日志或聊天。Kimi Code 仅替换当前 G1-04 的 concrete Provider 配置，不保留兼容 fallback。Godot 当前使用 non-blocking `HTTPClient` 验证真实 stream / cancel / error / UI responsiveness；same-process networking 本身不等于 G1-06 Runtime boundary 裁定。
 
 ---
 
@@ -554,9 +564,10 @@ default model = deepseek-v4-pro
 - **MW-DEC-12** Godot 是 Foundation Spike 的第一研究候选，但不是未经验证的最终锁定技术栈。
 - **MW-DEC-13** The World / DSH 是产品与经验参考实现，不是代码迁移模板。
 - **MW-DEC-14** 独立版必须重新设计 Persistence / Timeline / Agent Context，不继承 DSH consolidation 与 Session workaround。
-- **MW-DEC-15** 第一阶段 Provider 抽象保持薄，只优先跑通一个真实优秀模型。
+- **MW-DEC-15** 第一阶段 Provider seam 保持极薄；G1-04 因明确 Foundation coverage 要求验证两个 concrete Providers，但这不构成 generic multi-provider platform commitment。
 - **MW-DEC-16** 核心玩家体验优先于工程完整度；复杂系统必须证明自己没有让 RPG 比简单基线更差。
 - **MW-DEC-17** 正式大规模实现前先通过 Foundation Spike Gate。
+- **MW-DEC-18** G1-04 的第二个 concrete exploratory Provider = Kimi Code API；它只用于 Foundation evidence，最终 product-facing Provider boundary 留给 G1-06。
 
 ---
 
@@ -577,7 +588,25 @@ Current Task                  G1-04
 First Vertical Slice          NOT STARTED
 ```
 
-G1-03 已通过真实 Windows manual UAT。当前 G1-04 使用 DeepSeek Chat Completions / `deepseek-v4-pro` 作为 exploratory Provider，只为获得真实 stream / cancel / error / UI non-freezing evidence，不冻结最终 Provider 或 Runtime boundary。
+G1-03 已通过真实 Windows manual UAT。G1-04 当前状态为：
+
+```text
+DeepSeek:
+real stream PASS
+cancel PASS
+cancel → retry PASS
+
+Kimi Code:
+implementation/config correction pending Owner UAT
+
+G1-04 overall:
+NOT PASS
+
+G1-05:
+BLOCKED until Kimi Code real UAT passes
+```
+
+G1-04 仍只为获得 Foundation evidence，不冻结最终 Provider 或 Runtime boundary。当前最高结果是 READY FOR OWNER UAT。
 
 **当前下一步是 G1-04：运行真实 Provider 网络 UAT；没有真实 HTTP 2xx、增量 SSE、cancel 与 UI responsiveness 证据，不得判 PASS。**
 

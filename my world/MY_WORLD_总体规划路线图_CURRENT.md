@@ -1,9 +1,9 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 1.4
+version: 1.5
 created: 2026-08-25
-updated: 2026-08-25
+updated: 2026-08-26
 current_phase: G1
 next_task: G1-04
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
@@ -264,7 +264,7 @@ G9  Standalone Alpha / Release Validation
 
 证明：
 
-- 真正联网调用一个实际 Provider；
+- 真正联网调用两个 concrete Providers；
 - 流式 token/文本进入 UI；
 - cancel 可用；
 - 网络失败有明确错误；
@@ -274,18 +274,25 @@ Provider abstraction 保持极薄：`send / stream / cancel`。
 
 当前状态：**CURRENT / LOCAL REAL NETWORK UAT REQUIRED**。
 
-本轮 exploratory Provider：
+本轮 exploratory Providers：
 
 ```text
 DeepSeek Chat Completions
 POST https://api.deepseek.com/chat/completions
 stream = true
 default model = deepseek-v4-pro
+
+Kimi Code API
+POST https://api.kimi.com/coding/v1/chat/completions
+stream = true
+default model = k3
+key env = KIMI_CODE_API_KEY
+optional model override = MY_WORLD_G1_04_KIMI_MODEL
 ```
 
-实现采用 Godot non-blocking `HTTPClient` + `poll()` / incremental body reads，并提供 SSE 解析、Cancel、UI heartbeat、手动 UI response counter 与无凭据 deterministic connection-failure test。API key 只从本地 `DEEPSEEK_API_KEY` 环境变量读取；UI 只能显示是否设置，绝不显示 key 值。
+实现采用 Godot non-blocking `HTTPClient` + `poll()` / incremental body reads，并提供 SSE 解析、Cancel、UI heartbeat、手动 UI response counter 与无凭据 deterministic connection-failure test。API key 只从本地 `DEEPSEEK_API_KEY` / `KIMI_CODE_API_KEY` 环境变量读取；UI 只能显示是否设置，绝不显示 key 值。Kimi Code 是本阶段 concrete exploratory path，不保留兼容 fallback，也不构成 generic multi-provider platform commitment。
 
-这不是最终 Provider 产品决策，也不冻结 same-process vs local-runtime-process。G1-04 只有在真实 Provider HTTP 2xx、增量 SSE、真实 cancel、失败路径和 UI responsiveness 都经 Windows UAT 后才可 PASS。
+这不是最终 Provider 产品决策，也不冻结 same-process vs local-runtime-process。G1-04 只有在两个真实 Provider 都有 HTTP 2xx、增量 SSE、真实 cancel、失败路径和 UI responsiveness 的 Windows UAT 证据后才可 PASS。当前 DeepSeek 的 stream / cancel / retry 已 PASS，Kimi Code implementation/config correction pending Owner UAT；因此 G1-04 overall NOT PASS，G1-05 保持 BLOCKED。
 
 ### G1-05｜本地 IO / 图片 / Windows Export Spike
 
@@ -987,7 +994,7 @@ Current Task                 G1-04
 
 因此下一步是：
 
-> **G1-04：运行真实 DeepSeek Provider stream / cancel / failure / UI responsiveness UAT；没有真实网络证据不得进入 G1-05。**
+> **G1-04：完成 DeepSeek + Kimi Code 的真实 stream / cancel / failure / UI responsiveness UAT；没有两家真实网络证据不得进入 G1-05。当前最高结果为 READY FOR OWNER UAT。**
 
 ---
 

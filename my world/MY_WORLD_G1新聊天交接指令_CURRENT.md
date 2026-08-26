@@ -1,9 +1,9 @@
 ---
 title: my world｜G1 新聊天交接指令
 status: current-handoff
-version: 1.5
+version: 1.6
 created: 2026-08-25
-updated: 2026-08-25
+updated: 2026-08-26
 current_phase: G1
 current_task: G1-04
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
@@ -85,7 +85,7 @@ G1-03 已由用户人工 Windows UAT 确认 PASS：中文、长文本滚动、30
 
 用户已明确修正：G1-04 **不能只接 DeepSeek，还必须加入 Kimi**。
 
-因此当前 required real Providers = **DeepSeek + Kimi**。这项决定 supersede 任何旧的“G1-04 只接一个实际 Provider / 当前 concrete Provider 只有 DeepSeek”的表述。
+因此当前 required real Providers = **DeepSeek + Kimi Code**。这项决定 supersedes 任何旧的单 Provider current wording。
 
 ```text
 DeepSeek
@@ -95,15 +95,24 @@ default model = deepseek-v4-pro
 key env = DEEPSEEK_API_KEY
 optional model override = MY_WORLD_G1_04_DEEPSEEK_MODEL
 
-Kimi / Moonshot AI
-POST https://api.moonshot.ai/v1/chat/completions
+Kimi Code API
+POST https://api.kimi.com/coding/v1/chat/completions
 stream = true
-default model = kimi-k3
-key env = MOONSHOT_API_KEY
+default model = k3
+key env = KIMI_CODE_API_KEY
 optional model override = MY_WORLD_G1_04_KIMI_MODEL
 ```
 
-Kimi 当前官方 API 与 OpenAI API 格式兼容，并支持 `stream: true`。本轮只复用极薄的共同 HTTP/SSE seam，不建设通用多 Provider 平台。
+Kimi Code API 与 OpenAI API 格式兼容，并支持 `stream: true`。本轮只复用极薄的共同 HTTP/SSE seam，不建设通用多 Provider 平台，也不保留兼容 fallback。
+
+当前证据状态：
+
+```text
+DeepSeek 完整生成 / Cancel / Cancel 后重试  PASS
+Kimi Code 实现与配置修正                    pending Owner UAT
+G1-04 overall                              NOT PASS
+G1-05                                      BLOCKED
+```
 
 ### G1-04 实现边界
 
@@ -127,7 +136,7 @@ Kimi 当前官方 API 与 OpenAI API 格式兼容，并支持 `stream: true`。�
 
 ```text
 DEEPSEEK_API_KEY
-MOONSHOT_API_KEY
+KIMI_CODE_API_KEY
 ```
 
 UI 可以显示 `已设置 / 未设置`，**绝不能显示 key 值**。禁止把 key 写进 Git、`.gd` / `.tscn` / `project.godot`、console、截图或聊天。
@@ -148,7 +157,7 @@ UI 可以显示 `已设置 / 未设置`，**绝不能显示 key 值**。禁止�
 12. 正常退出；
 13. Git clean。
 
-**任一家没有真实 stream 证据，G1-04 都不能 PASS，也不能进入 G1-05。**
+**任一家没有真实 stream 证据，G1-04 都不能 PASS，也不能进入 G1-05。当前实现修正完成后的最高结果是 READY FOR OWNER UAT。**
 
 ### G1 剩余边界
 
