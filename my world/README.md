@@ -14,11 +14,14 @@
 ## Authority
 
 1. [`MY_WORLD_项目启动总纲_CURRENT.md`](./MY_WORLD_项目启动总纲_CURRENT.md)
-2. [`MY_WORLD_总体规划路线图_CURRENT.md`](./MY_WORLD_总体规划路线图_CURRENT.md)
-3. [`MY_WORLD_Foundation架构决策_v1.0_2026-08-26.md`](./MY_WORLD_Foundation架构决策_v1.0_2026-08-26.md)
-4. [`MY_WORLD_G1新聊天交接指令_CURRENT.md`](./MY_WORLD_G1新聊天交接指令_CURRENT.md)
-5. [`MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md`](./MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md)
-6. [`MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md`](./MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md)
+2. [`MY_WORLD_核心设计原则_CURRENT.md`](./MY_WORLD_核心设计原则_CURRENT.md)
+3. [`MY_WORLD_总体规划路线图_CURRENT.md`](./MY_WORLD_总体规划路线图_CURRENT.md)
+4. [`MY_WORLD_Foundation架构决策_v1.0_2026-08-26.md`](./MY_WORLD_Foundation架构决策_v1.0_2026-08-26.md)
+5. [`MY_WORLD_G1新聊天交接指令_CURRENT.md`](./MY_WORLD_G1新聊天交接指令_CURRENT.md)
+6. [`MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md`](./MY_WORLD_独立版Preflight与第一阶段计划_v1.0_2026-08-25.md)
+7. [`MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md`](./MY_WORLD_DSH经验继承矩阵_v1.0_2026-08-25.md)
+
+`MY_WORLD_核心设计原则_CURRENT.md` 汇总 SillyTavern / World OS / FC2、The World / DSH 与当前 Owner 裁定中跨阶段长期有效的产品与 Runtime 设计。它明确采用 **Model freedom first / Reversibility over prevention**，并修正旧的 prevention-first Narrative / Confirmation / No-Phantom 硬 Gate 解释；G1 已验证的 Godot / GDScript / same-process 等 Foundation 技术结论不受影响。
 
 ```text
 Current Phase = G2
@@ -46,12 +49,20 @@ G1 的真实 Windows 证据覆盖 Godot/Git 最小运行、中文长文本与输
 - 极薄 `send / stream / cancel` Provider adapter；G2 初始使用一个 concrete Provider；
 - headless parse、最小 focused tests、有界脱敏本地日志与 Windows exported-executable proof。
 
-## 原则
+## 核心产品 / Runtime 原则
 
 > **迁移经验，不迁移宿主债务。**
 
 > **Commodity Foundation, Owned Game Semantics.**
 
 > **Engine-native, not engine-semantic-coupled.**
+
+> **Model freedom first. Reversibility over prevention.**
+
+> **Model authors the world; Runtime makes it durable; Player owns the timeline.**
+
+> **Source provides inertia; actors create history.**
+
+> **Context stays bounded.**
 
 G2-01 必须由新的 current Task Packet 启动；G1-06 没有实现 G2。
