@@ -1,12 +1,12 @@
 ---
 title: my world｜项目启动总纲
 status: current-canonical-product-spec
-version: 1.5
+version: 1.6
 created: 2026-08-25
 updated: 2026-08-26
 stage: G1 Foundation & Project Bootstrap
 product_definition_gate: PASS
-next: G1-04
+next: G1-05
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 local_project_dir: D:\AI\Projects\my-world
 engine_candidate: Godot
@@ -333,7 +333,7 @@ G1-02 已 PASS：Godot CLI 已确认提供 `--export-release` / `--export-debug`
 
 G1-03 已由用户完成真实 Windows UAT 并确认 **PASS**：中文显示、长文本滚动、300 段批量追加、持续追加期间 UI 响应、中文输入、Ctrl+Enter、文本选择 / Ctrl+C、正常退出与 clean Git state 均通过。G1-03 的 timer-driven append 只证明本地 UI append seam，不构成真实 Provider streaming 证据。
 
-当前进入 G1-04。Windows Export 的完整功能性 proof 仍属于 G1-05；Runtime process boundary、persistence 与最终 Host/语言裁定仍保持开放。
+G1-04 已由 Owner Windows UAT 确认 PASS，当前进入 G1-05。Windows Export 的完整功能性 proof 仍属于 G1-05；Runtime process boundary、正式 persistence 与最终 Host/语言裁定仍保持开放。
 
 ---
 
@@ -568,6 +568,8 @@ optional model override = MY_WORLD_G1_04_KIMI_MODEL
 - **MW-DEC-16** 核心玩家体验优先于工程完整度；复杂系统必须证明自己没有让 RPG 比简单基线更差。
 - **MW-DEC-17** 正式大规模实现前先通过 Foundation Spike Gate。
 - **MW-DEC-18** G1-04 的第二个 concrete exploratory Provider = Kimi Code API；它只用于 Foundation evidence，最终 product-facing Provider boundary 留给 G1-06。
+- **MW-DEC-19** Owner Windows UAT 已证明 DeepSeek 与 Kimi Code 的真实 HTTP success、增量 stream、cancel、cancel 后重试、idle 切换、UI responsiveness、deterministic failure、正常退出与 Git clean；G1-04 = PASS。
+- **MW-DEC-20** 两家长输出约 30 秒的完整生成耗时不阻塞 G1-04；后续在 G2 按 TTFT 与 generation throughput 分开观察，不在 Foundation closeout 中优化。
 
 ---
 
@@ -583,32 +585,17 @@ Godot Toolchain               4.7.2 STANDARD X64 VERIFIED
 G1-01 Repository Bootstrap    PASS
 G1-02 Toolchain Confirmation  PASS
 G1-03 Text / Input Spike      PASS
+G1-04 Provider Stream/Cancel  PASS
 Current Phase                 G1
-Current Task                  G1-04
+Current Task                  G1-05
 First Vertical Slice          NOT STARTED
 ```
 
-G1-03 已通过真实 Windows manual UAT。G1-04 当前状态为：
+G1-04 已由 Owner 完成真实 Windows-local UAT：DeepSeek 与 Kimi Code 均获得 HTTP success、增量 stream、cancel、cancel 后重新发送、请求期间 heartbeat / UI 响应、idle Provider 切换、deterministic connection failure、正常退出与 Git clean 证据。两家约 30 秒的长输出完整生成耗时不是 G1-04 blocker；性能后续在 G2 拆分 TTFT 与 generation throughput 观察。
 
-```text
-DeepSeek:
-real stream PASS
-cancel PASS
-cancel → retry PASS
+G1-04 只形成 Foundation evidence，不冻结最终 Provider 或 Runtime boundary，也不构成 generic multi-provider platform commitment。
 
-Kimi Code:
-implementation/config correction pending Owner UAT
-
-G1-04 overall:
-NOT PASS
-
-G1-05:
-BLOCKED until Kimi Code real UAT passes
-```
-
-G1-04 仍只为获得 Foundation evidence，不冻结最终 Provider 或 Runtime boundary。当前最高结果是 READY FOR OWNER UAT。
-
-**当前下一步是 G1-04：运行真实 Provider 网络 UAT；没有真实 HTTP 2xx、增量 SSE、cancel 与 UI responsiveness 证据，不得判 PASS。**
+**当前下一步是 G1-05：验证最小 local IO、跨启动 probe、三类 filesystem dynamic image load 与 exported Windows executable runtime；不得提前冻结正式 persistence、World Pack 或 asset pipeline。**
 
 对应执行计划：
 

@@ -1,11 +1,11 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 1.5
+version: 1.6
 created: 2026-08-25
 updated: 2026-08-26
 current_phase: G1
-next_task: G1-04
+next_task: G1-05
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 local_project_dir: D:\AI\Projects\my-world
 engine: Godot v4.7.2
@@ -272,7 +272,7 @@ G9  Standalone Alpha / Release Validation
 
 Provider abstraction 保持极薄：`send / stream / cancel`。
 
-当前状态：**CURRENT / LOCAL REAL NETWORK UAT REQUIRED**。
+当前状态：**PASS**。
 
 本轮 exploratory Providers：
 
@@ -292,7 +292,7 @@ optional model override = MY_WORLD_G1_04_KIMI_MODEL
 
 实现采用 Godot non-blocking `HTTPClient` + `poll()` / incremental body reads，并提供 SSE 解析、Cancel、UI heartbeat、手动 UI response counter 与无凭据 deterministic connection-failure test。API key 只从本地 `DEEPSEEK_API_KEY` / `KIMI_CODE_API_KEY` 环境变量读取；UI 只能显示是否设置，绝不显示 key 值。Kimi Code 是本阶段 concrete exploratory path，不保留兼容 fallback，也不构成 generic multi-provider platform commitment。
 
-这不是最终 Provider 产品决策，也不冻结 same-process vs local-runtime-process。G1-04 只有在两个真实 Provider 都有 HTTP 2xx、增量 SSE、真实 cancel、失败路径和 UI responsiveness 的 Windows UAT 证据后才可 PASS。当前 DeepSeek 的 stream / cancel / retry 已 PASS，Kimi Code implementation/config correction pending Owner UAT；因此 G1-04 overall NOT PASS，G1-05 保持 BLOCKED。
+这不是最终 Provider 产品决策，也不冻结 same-process vs local-runtime-process。Owner Windows UAT 已证明 DeepSeek 与 Kimi Code 均具备真实 HTTP success、增量 SSE、真实 cancel、cancel 后重新发送、请求期间 heartbeat / UI 响应、idle Provider 切换、deterministic failure、正常退出与 Git clean，因此 G1-04 = PASS。两家长输出完整生成约 30 秒不是本 Gate blocker；后续在 G2 拆分 TTFT 与 generation throughput 观察。
 
 ### G1-05｜本地 IO / 图片 / Windows Export Spike
 
@@ -302,6 +302,8 @@ optional model override = MY_WORLD_G1_04_KIMI_MODEL
 - 动态加载立绘 / 场景 / 地图类图片；
 - 打包后的 Windows 程序仍可工作；
 - 不依赖编辑器才能运行核心路径。
+
+当前状态：**CURRENT / UNBLOCKED**。这是 Foundation exploration，不冻结正式 persistence、asset pipeline 或 World Pack schema。
 
 ### G1-06｜Foundation Architecture Decision
 
@@ -989,12 +991,13 @@ G1-01 Repository Bootstrap   PASS
 G1-02 Toolchain Confirmation PASS
 G1-03 Text / Input Spike     PASS
 Current Phase                G1
-Current Task                 G1-04
+G1-04 Provider Stream/Cancel PASS
+Current Task                 G1-05
 ```
 
 因此下一步是：
 
-> **G1-04：完成 DeepSeek + Kimi Code 的真实 stream / cancel / failure / UI responsiveness UAT；没有两家真实网络证据不得进入 G1-05。当前最高结果为 READY FOR OWNER UAT。**
+> **G1-05：完成最小 local IO、跨启动 probe、portrait / scene / map 三类 filesystem dynamic image load 与 functional Windows export proof。G1-04 已关闭，不在本任务做 Provider 性能优化。**
 
 ---
 

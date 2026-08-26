@@ -7,8 +7,8 @@
 - 本地项目目录：`D:\AI\Projects\my-world`
 - 实现仓库：`https://github.com/zhangchenjia21-dot/my-world`
 - Godot：`4.7.2.stable.official.ed1daf0bf` Standard / non-.NET Windows x64
-- 当前：`G1-04 — Real Provider Streaming / Cancel Foundation Spike`
-- G1-04 当前必须真实接通：**DeepSeek + Kimi Code**
+- 当前：`G1-05 — Local IO / Image / Windows Export Foundation Spike`
+- G1-04：**PASS**（DeepSeek + Kimi Code Owner Windows UAT）
 
 ## Authority
 
@@ -20,7 +20,8 @@
 
 ```text
 Current Phase = G1
-Current Task = G1-04
+G1-04 = PASS
+Current Task = G1-05
 G1-01 = PASS
 G1-02 = PASS
 G1-03 = PASS
@@ -32,28 +33,15 @@ G1-02 已证明 Godot CLI、Windows x86_64 export templates 与 ICU Data 可用�
 
 G1-03 已由用户人工 Windows UAT 确认 PASS：中文、长文本滚动、批量 / 持续追加、UI 响应、输入、选择 / 复制、正常退出与 Git clean 均通过。
 
-## G1-04
+## G1-04 Closeout
 
-Outcome：验证 Godot Foundation surface 对**两个真实 Provider**都能完成真实网络请求、SSE 增量输出、cancel、错误态和 UI 非冻结。
+Owner Windows UAT 已证明 DeepSeek 与 Kimi Code 的真实 HTTP success、增量 stream、cancel、cancel 后重新发送、请求期间 heartbeat / UI 响应、idle 切换、deterministic failure、正常退出与 Git clean。G1-04 = **PASS**。
 
-```text
-DeepSeek
-POST https://api.deepseek.com/chat/completions
-stream = true
-default model = deepseek-v4-pro
-key env = DEEPSEEK_API_KEY
+两家约 30 秒的长输出完整生成耗时不是 G1-04 blocker；后续在 G2 分开观察 TTFT 与 generation throughput。Provider seam 仍保持极薄，不构成 generic multi-provider platform commitment，也不冻结 G1-06 Runtime boundary。
 
-Kimi Code API
-POST https://api.kimi.com/coding/v1/chat/completions
-stream = true
-default model = k3
-key env = KIMI_CODE_API_KEY
-```
+## G1-05
 
-这是 G1-04 exploratory execution scope，不冻结最终产品 Provider 架构。实现只保留一个极薄的共同 HTTP/SSE seam，并显式区分两家的 host/path/key/model；Kimi Code 不保留兼容 fallback，不建设自动路由、fallback mesh、负载均衡或 Provider 平台。
-
-G1-04 只有在 **DeepSeek 与 Kimi Code 都获得真实 HTTP 2xx + 增量 stream 证据**，并验证真实 cancel / UI responsiveness 后才能 PASS。当前状态为 NOT PASS，最高结果为 READY FOR OWNER UAT。
-
+当前目标：用 Godot 原生能力证明最小 local IO、跨启动 probe、portrait / scene / map 三类真实 filesystem dynamic image load、Windows export 与 exported executable runtime。该 Spike 不冻结正式 persistence、asset pipeline、World Pack schema 或 Save 系统。
 ## 原则
 
 > **迁移经验，不迁移宿主债务。**

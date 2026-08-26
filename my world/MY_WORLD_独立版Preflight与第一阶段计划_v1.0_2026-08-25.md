@@ -1,7 +1,7 @@
 ---
 title: my world｜独立版 Preflight 与第一阶段计划
 status: current-plan
-version: 1.4
+version: 1.5
 created: 2026-08-25
 updated: 2026-08-26
 stage: G1 Foundation & Project Bootstrap
@@ -47,7 +47,7 @@ Preflight 完成后才进入大规模 Runtime / UI 实现。
 项目名：my world
 本地项目目录：D:\AI\Projects\my-world
 实现仓库：https://github.com/zhangchenjia21-dot/my-world
-当前 GitHub 状态：G1-01 / G1-02 / G1-03 已 PASS；G1-04 ACTIVE
+当前 GitHub 状态：G1-01 / G1-02 / G1-03 / G1-04 已 PASS；G1-05 ACTIVE
 
 Godot 本地位置：D:\AI\Engine
 Godot 版本：4.7.2.stable.official.ed1daf0bf
@@ -178,7 +178,7 @@ optional model override = MY_WORLD_G1_04_KIMI_MODEL
 
 两者复用极薄的 OpenAI-compatible HTTP/SSE seam，但 host/path/key/model 显式分离。Kimi Code 替换当前 G1-04 的旧 concrete 配置，不保留兼容 fallback。**不建设自动路由、fallback mesh、负载均衡、Provider plugin framework 或 account system。**
 
-当前状态：DeepSeek real stream / cancel / retry 已 PASS；Kimi Code implementation/config correction pending Owner UAT；G1-04 overall NOT PASS，G1-05 保持 BLOCKED。当前最高结果为 READY FOR OWNER UAT。
+Owner Windows UAT 已证明 DeepSeek 与 Kimi Code 的 real stream / cancel / cancel 后重试、请求期间 heartbeat / UI 响应、idle 切换、deterministic failure、正常退出与 Git clean；G1-04 = PASS，G1-05 已解除阻塞。两家长输出完整生成约 30 秒不是本 Gate blocker，后续在 G2 拆分 TTFT 与 generation throughput 观察。
 
 #### C. 后台工作与 UI 响应
 
@@ -503,8 +503,8 @@ PASS 条件：第 8、9 节完整路径实际通过，并由玩家人工确认�
 1. G1-01 Project Bootstrap                          PASS
 2. G1-02 Godot 工具链 / 语言候选确认               PASS
 3. G1-03 2D 中文长文本 / 输入 Foundation Spike    PASS
-4. G1-04 DeepSeek + Kimi real stream / cancel      CURRENT
-5. G1-05 local IO / image / Windows Export Spike
+4. G1-04 DeepSeek + Kimi real stream / cancel      PASS
+5. G1-05 local IO / image / Windows Export Spike   CURRENT
 6. G1-06 Runtime Boundary / Foundation Architecture Decision
 7. 实现 First Real Vertical
 8. 玩家真实试玩

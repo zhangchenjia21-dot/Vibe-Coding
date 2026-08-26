@@ -1,11 +1,11 @@
 ---
 title: my world｜G1 新聊天交接指令
 status: current-handoff
-version: 1.6
+version: 1.7
 created: 2026-08-25
 updated: 2026-08-26
 current_phase: G1
-current_task: G1-04
+current_task: G1-05
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 roadmap: MY_WORLD_总体规划路线图_CURRENT.md
 ---
@@ -18,7 +18,7 @@ roadmap: MY_WORLD_总体规划路线图_CURRENT.md
 
 你现在接手一个新的独立游戏项目：**my world**。
 
-不要依赖聊天记忆，也不要把前代 DSH 项目的实现直接搬过来。先按以下 Authority / Source Manifest 做 freshness 检查，然后从当前阶段 G1 / 当前任务 G1-04 继续。
+不要依赖聊天记忆，也不要把前代 DSH 项目的实现直接搬过来。先按以下 Authority / Source Manifest 做 freshness 检查，然后从当前阶段 G1 / 当前任务 G1-05 继续。
 
 ### 项目位置
 
@@ -54,7 +54,8 @@ G1-01 Repository Bootstrap                PASS
 G1-02 Toolchain & Language Confirmation   PASS
 G1-03 Chinese Long Text / Input Spike     PASS
 Current Phase                             G1
-Current Task                              G1-04
+G1-04 Provider Stream / Cancel Spike      PASS
+Current Task                              G1-05
 ```
 
 G1-01 已真实验证：普通 Windows PowerShell 下 Git metadata 与 Godot `user://` 可写；最小工程正常启动、显示、退出；exit code 0；Git clean。Codex 内早先的写权限失败是 sandbox-only。
@@ -81,89 +82,54 @@ G1-03 已由用户人工 Windows UAT 确认 PASS：中文、长文本滚动、30
 
 > Model authors candidates; Program / Domain Owner commits reality.
 
-### 当前 G1-04 修正决定
+### G1-04 关闭裁定
 
-用户已明确修正：G1-04 **不能只接 DeepSeek，还必须加入 Kimi**。
+Owner 已完成真实 Windows-local UAT，G1-04 = **PASS**：
 
-因此当前 required real Providers = **DeepSeek + Kimi Code**。这项决定 supersedes 任何旧的单 Provider current wording。
+```text
+DeepSeek 完整生成 / Cancel / Cancel 后重试  PASS
+Kimi Code 完整生成 / Cancel / Cancel 后重试 PASS
+请求期间 heartbeat / UI 响应 +1              PASS
+Provider idle 切换                           PASS
+deterministic 连接失败测试                   PASS
+正常退出 / Git clean                         PASS
+```
+
+现行 exploratory Provider 事实保持：
 
 ```text
 DeepSeek
 POST https://api.deepseek.com/chat/completions
-stream = true
 default model = deepseek-v4-pro
 key env = DEEPSEEK_API_KEY
-optional model override = MY_WORLD_G1_04_DEEPSEEK_MODEL
 
 Kimi Code API
 POST https://api.kimi.com/coding/v1/chat/completions
-stream = true
 default model = k3
 key env = KIMI_CODE_API_KEY
-optional model override = MY_WORLD_G1_04_KIMI_MODEL
 ```
 
-Kimi Code API 与 OpenAI API 格式兼容，并支持 `stream: true`。本轮只复用极薄的共同 HTTP/SSE seam，不建设通用多 Provider 平台，也不保留兼容 fallback。
+两家长输出完整生成约 30 秒不是 G1-04 blocker。后续在 G2 分开观察 TTFT 与 generation throughput；当前不优化 Provider latency，不建设 routing / fallback mesh / generic registry，也不冻结 G1-06 Runtime boundary。
 
-当前证据状态：
+### 当前 G1-05 边界
+
+G1-05｜本地 IO / 图片 / Windows Export Spike，目标只证明：
+
+- `FileAccess` / `DirAccess` 最小本地 probe 写入、读回与跨启动保留；
+- portrait / scene / map 三类图片从真实 filesystem path decode/load 后显示；
+- Godot 4.7.2 Windows export 成功；
+- exported executable 不依赖 Editor，仍能完成 IO 与三类图片 proof。
+
+这是 Foundation exploration：
 
 ```text
-DeepSeek 完整生成 / Cancel / Cancel 后重试  PASS
-Kimi Code 实现与配置修正                    pending Owner UAT
-G1-04 overall                              NOT PASS
-G1-05                                      BLOCKED
+NOT canonical persistence architecture
+NOT final asset pipeline
+NOT final World Pack schema
+NOT production save system
 ```
 
-### G1-04 实现边界
-
-- provisional GDScript；
-- Godot non-blocking `HTTPClient`；
-- `poll()` 驱动网络状态；
-- incremental response body → SSE `data:`；
-- `data: [DONE]` 完成；
-- Provider 下拉框显式选择 DeepSeek / Kimi；
-- 两家 host/path/key/model 分开配置；
-- real streamed text 直接追加到 Godot reading surface；
-- cancel 通过关闭活动 transport 验证中断与 UI recovery；
-- UI heartbeat + 手动 response counter 验证主循环；
-- `127.0.0.1:1` 无凭据 deterministic failure path；
-- 不做自动路由、fallback mesh、负载均衡、账户系统、通用 Provider registry；
-- same-process networking 不等于 G1-06 Runtime boundary。
-
-### Secret 规则
-
-真实 key 只允许存在于用户本机进程环境变量：
-
-```text
-DEEPSEEK_API_KEY
-KIMI_CODE_API_KEY
-```
-
-UI 可以显示 `已设置 / 未设置`，**绝不能显示 key 值**。禁止把 key 写进 Git、`.gd` / `.tscn` / `project.godot`、console、截图或聊天。
-
-### G1-04 PASS 必须由真实 Windows UAT 证明
-
-1. UI 只显示两个 key 是否已设置，不显示值；
-2. DeepSeek 返回真实 HTTP 2xx；
-3. DeepSeek 内容在生成未完成时增量出现；
-4. Kimi 返回真实 HTTP 2xx；
-5. Kimi 内容在生成未完成时增量出现；
-6. 两家请求期间 heartbeat 持续增加，`UI 响应 +1` 可点击；
-7. 对一个真实活动生成执行 Cancel，生成停止且 UI 立即恢复；
-8. Cancel 后至少再成功完成一次真实请求；
-9. idle 时可在 DeepSeek / Kimi 间切换，无需重启；
-10. deterministic failure path 明确且不冻结；
-11. Provider/API 错误可读；
-12. 正常退出；
-13. Git clean。
-
-**任一家没有真实 stream 证据，G1-04 都不能 PASS，也不能进入 G1-05。当前实现修正完成后的最高结果是 READY FOR OWNER UAT。**
-
-### G1 剩余边界
-
-G1-05：local IO / dynamic portrait-scene-map images / functional Windows export。
-
-G1-06：根据真实 Spike 裁定 Godot Host、Standard/.NET、GDScript/C#/mixed、Provider/product configuration boundary、Runtime process boundary 与第一阶段 persistence candidate range。
+不得开始 G1-06、G2，不得重构已通过的 Provider seam。执行 Agent 的最高状态是 `READY FOR OWNER UAT`；Owner 只承担 5 步以内的 exported EXE 体验确认。
 
 ### 工作方式
 
@@ -176,4 +142,4 @@ focused exploration
 → next task
 ```
 
-聊天无法运行用户本机 Godot / Provider 时，只完成 GitHub-side implementation 并给出普通 Windows PowerShell 最小验证命令，不得假装本地网络 PASS。
+聊天无法运行用户本机 exported EXE 时，只完成可自动验证的实现与准确命令，不得假装 Windows runtime PASS。
