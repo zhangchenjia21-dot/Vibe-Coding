@@ -302,6 +302,39 @@ new current created
 
 已关闭的 Task Spec、Exit checklist、阶段更新 Ledger、阶段复盘默认进入 `99_归档/` 对应分类，不与 current 架构文件平铺。
 
+### 8.5 Owner 文档结构偏好｜少数核心入口 + 专题下沉
+
+项目文档默认采用：
+
+> **Root is map; subfolders are depth.**
+>
+> **顶层负责让人快速理解整个项目；子目录负责让执行者深入具体领域。**
+
+Owner 明确偏好：**默认更新少数已有核心文档，而不是每次讨论都新建一份顶层 `*_CURRENT.md`。**
+
+项目级 active 顶层推荐长期只保留约 4–6 个稳定入口，例如：
+
+```text
+README.md
+项目 / 产品总纲_CURRENT.md
+核心设计原则_CURRENT.md
+架构_CURRENT.md
+总体规划路线图_CURRENT.md
+CURRENT_STATUS.md
+```
+
+规则：
+
+1. 新事实优先写入已有 canonical owner：产品问题进总纲，跨阶段原则进核心设计原则，系统边界进架构 CURRENT，先后顺序进路线图，短周期执行事实进固定 `CURRENT_STATUS`；
+2. 不为每个 Stage 新建 `G2_CURRENT_STATUS / G3_CURRENT_STATUS / ...`，优先维护一个永久固定路径；
+3. 专题只有在内容会明显污染核心文档、能够独立演化、会被多个 Task 重复引用、或需要保存详细 trade-off / contract / migration 时才新建 supporting doc；
+4. supporting doc 放进明确子目录，例如 `architecture/`、`decisions/`、`experience/`，并由顶层核心文档导航；
+5. 已关闭阶段的 Preflight、handoff、Task/Exit/过程记录进入 `99_归档/`，不继续占据 active 顶层；
+6. 同一事实不能人工维护在多份文件中；顶层 core 保存结论与导航，专题文件保存深度，不制造多个同级真相源；
+7. 新建正式文档前先回答：**现有 canonical 文档是否能自然承载这项事实？** 若能，默认更新而不是新建。
+
+这是一项长期 AI 协作偏好：AI 应主动控制项目文档数量和顶层认知负担，而不是把“多写文件”当作治理完整度。
+
 ## 9. 人类治理文档版本号
 
 本仓库的人类可读治理 / 规划 / 裁定文档使用一位小版本序列：
@@ -327,6 +360,7 @@ v1.0 → ... → v1.8 → v1.9 → v2.0 → v2.1
 → 查 GitHub current / Skill current / implementation HEAD
 → Freshness + Decision Propagation
 → 使用 active current，不把 99_归档 当现行事实
+→ 优先更新少数核心文档，专题深度下沉子目录
 → 若生成 Agent 指令，使用 agent-task-packet
 → 实施 / 审核
 → pre-push HEAD revalidation
@@ -341,4 +375,4 @@ v1.0 → ... → v1.8 → v1.9 → v2.0 → v2.1
 >
 > **完整规范留在 Canonical Source，执行 Prompt 只携带必要 Digest 与 Execution Envelope。**
 >
-> **active 目录只保留 current；历史集中归档。**
+> **active 顶层只保留少数稳定核心入口；专题下沉子目录，历史集中归档。**
