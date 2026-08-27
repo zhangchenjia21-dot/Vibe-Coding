@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 2.2
+version: 2.3
 created: 2026-08-26
-updated: 2026-08-26
+updated: 2026-08-27
 phase: G3 Persistent Game / Save / Timeline Foundation
-current_task: G3-02 Durable World Mutation Path
+current_task: G3-02 Durable World Mutation Path — IR-01 focused repair
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -33,7 +33,7 @@ G2-GATE                        PASS
 
 Current Phase                  G3 — Persistent Game / Save / Timeline Foundation
 G3-01 Persistence Architecture PASS — Independent Review
-Current Task                   G3-02 — Durable World Mutation Path
+G3-02 Durable World Mutation   RETURNED — IR-01 focused repair
 G3-GATE                        NOT YET
 ```
 
@@ -58,78 +58,60 @@ SQLite
 + GDScript / same-process Runtime
 ```
 
-真实 spike 已证明：
+真实 spike 已证明 open/reopen、parameter binding、COMMIT/ROLLBACK、pre-COMMIT crash/reopen、transactional migration failure rollback、corrupt fail-loud、Timeline/Save/recovery reference 关系和 Windows exported EXE packaging。
 
-- SQLite open / schema / parameter binding / close / reopen；
-- stable Game / Timeline fixture identity 跨 reopen 保持；
-- multi-record transaction COMMIT / explicit ROLLBACK；
-- transaction 已写但未 COMMIT 时 exact-PID 终止，reopen 后只有 last committed state；
-- schema migration success 与 intentional mid-migration failure rollback；
-- missing-path 显式创建与 corrupt DB fail-loud；
-- Save Point → Timeline Node reference、旧 future recovery reference 与新 future parent relationship；
-- GDExtension 能随 Windows exported main EXE 打包并完成 open/write/reopen/read；
-- dependency provenance / MIT license / upstream release digest 已记录并核对。
-
-正式结论：
-
-> **SQLite 从“G3 preferred evaluation candidate”升级为 G3 v0.1 accepted authoritative persistence storage route。**
-
-但本次 `g3_fixture_*` schema、每 mutation 一个 snapshot 等 spike 形态**不是 production schema**，不冻结 G5 NPC/Faction/Item/World 数据结构。
-
-### Independent Review canonicalization clarification
-
-存储层不因为“负责把对象写进 SQLite”就成为所有业务语义的 canonical owner。
-
-正式 ownership 方向：
-
-```text
-Game Domain / lifecycle
-→ owns Game identity and active-game semantics
-
-World Domain
-→ owns game-local authoritative World meaning/state
-
-Timeline / Save Domain
-→ owns Timeline Node / Save Point / restore semantics
-
-Conversation Domain
-→ owns accepted conversation truth
-
-Persistence
-→ owns durable representation, transaction, migration, backup/recovery mechanics
-→ does not redefine Game/World/Conversation semantics
-```
-
-这只是对 task working note 中 `Persistence Domain owns Game lifecycle` 表述的收口修正；G3-01 spike 代码无需返修。
+正式 ownership：Game/World/Timeline-Save/Conversation 各自拥有业务语义；Persistence 只拥有 SQLite durable representation、transaction、schema/migration、backup/recovery mechanics。
 
 ---
 
-## 4. Current Task｜G3-02 Durable World Mutation Path
+## 4. G3-02｜Independent Review RETURNED
 
-Outcome：把 G3-01 已证明的 SQLite/transaction 能力变成第一条正式 production durable mutation path。
-
-目标链：
+实现 commit：
 
 ```text
-Game-local World mutation input
-→ stable mutation / node identity
-→ authoritative current World materialization changes
-→ new Timeline Node
-→ Game active head changes
-→ one SQLite transaction
-→ COMMIT 后才 publish success
+bda2a8877297c51365cd6581536875b68c81cb85  G3-02 production durable World mutation kernel
 ```
 
-G3-02 只建立最小 Game/World/Timeline persistence kernel，不提前设计完整 NPC/Faction/Item schema，也不实现 Resume、Save/Load UI、Restore product flow 或 arbitrary rewind。
+已通过且无需重做：
 
-关键边界：
+- production schema 与 G3-01 fixture 分离；
+- current World 是唯一 writable live materialization，Timeline snapshot 是 immutable recovery anchor；
+- Game + World + Timeline Node + active head 同一 SQLite transaction；
+- expected-head stale writer rejection；
+- stable mutation identity、exact replay、conflicting reuse；
+- late-step SQL failure 全量 rollback；
+- post-COMMIT lost-ACK exact-PID replay 不重复 effect/node；
+- opaque JSON World materialization，不提前冻结 G5 NPC/Faction/Item schema；
+- 无 ORM/DI/EventBus/full event sourcing/G3-03+ 越界。
 
-- storage transaction != business semantic owner；
-- World mutation 原子提交，不允许 half-new/half-old；
-- stale / replayed mutation 必须有明确处理，不能因 crash-after-commit ambiguity 重复制造 Timeline Node；
-- Snapshot / checkpoint 不得成为第二 live truth；
-- SQLite binding / provenance 继续使用 G3-01 已验证路线；
-- Conversation / Context 仍保持 G2 ownership，不在 G3-02 偷做持久化 resume。
+### IR-01｜BLOCKING — Query failure propagation
+
+当前 L1 `query_rows()` 对两种完全不同的结果都返回空 Array：
+
+```text
+SELECT 成功，但 0 rows
+SELECT/SQLite 执行失败
+```
+
+L2 因此可能：
+
+- 把真实 storage/query failure 错报成 `not_found`；
+- 在 mutation replay/head preflight 中把失败读误解成“没有记录”；
+- `timeline_node_count()` 在 query failure 后访问空 rows，产生 runtime error，而不是稳定 `storage_failure`。
+
+这违反 Persistence hard boundary：**physical/storage failure 必须 fail-loud，并与正常业务 absence 区分。** G3-03 Resume 将直接依赖这些 read APIs，因此不能把该缺口带入下一任务。
+
+Focused repair packet：
+
+```text
+docs/tasks/G3-02_IR-01_QUERY_FAILURE_PROPAGATION_REPAIR.md
+```
+
+repair packet commit：
+
+```text
+dd9ac9797a65d241f454f872269748ab44c204f2
+```
 
 ---
 
@@ -139,16 +121,16 @@ G3-02 只建立最小 Game/World/Timeline persistence kernel，不提前设计�
 - `Save Point != Timeline Node.`
 - `Reversibility != frictionless arbitrary rewind.`
 - UI / Transcript / Markdown / Godot Resource 不得成为 authoritative gameplay DB。
-- Persistence hard integrity focuses on atomicity / migration / recovery, not Narrative censorship。
-- G3-02 不提前实现 G3-03+ 或 G5 production World schema。
+- Persistence hard integrity focuses on atomicity / explicit failure / migration / recovery, not Narrative censorship。
+- G3-02 IR-01 只修 query success/empty/failure contract；不得借机开始 G3-03+ 或重设计 production schema。
 
 ---
 
 ## 6. 当前 waiting
 
 ```text
-Blocking: NONE KNOWN
-Current: prepare / execute G3-02 repository-native Task Packet
-Owner UAT: not required for G3-02 engineering closeout
-Next after G3-02 Independent Review PASS: G3-03 Game Reopen / Resume
+Blocking: IR-01 query failure propagation
+Current: G3-02 focused repair
+Owner UAT: not required
+G3-03: HOLD until G3-02 Independent Review PASS
 ```
