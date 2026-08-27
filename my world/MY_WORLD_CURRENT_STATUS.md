@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 2.4
+version: 2.5
 created: 2026-08-26
 updated: 2026-08-27
 phase: G3 Persistent Game / Save / Timeline Foundation
-current_task: G3-03 Game Reopen / Resume
+current_task: G3-03 Game Reopen / Resume — READY FOR OWNER UAT
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -34,7 +34,7 @@ G2-GATE                        PASS
 Current Phase                  G3 — Persistent Game / Save / Timeline Foundation
 G3-01 Persistence Architecture PASS — Independent Review
 G3-02 Durable World Mutation   PASS — Independent Review
-Current Task                   G3-03 — Game Reopen / Resume
+G3-03 Game Reopen / Resume     ENGINEERING PASS — READY FOR OWNER UAT
 G3-GATE                        NOT YET
 ```
 
@@ -64,56 +64,70 @@ bda2a8877297c51365cd6581536875b68c81cb85  production durable World mutation kern
 ee768ca6ec8abdb2d65c994da4e7287886153bff  IR-01 query failure propagation repair
 ```
 
-Independent Review 最终结论：**PASS**。
+Independent Review：**PASS**。
 
-已证明并冻结的 production persistence kernel：
-
-- production schema 与 G3-01 fixture 分离；
-- current World 是唯一 writable live materialization；Timeline snapshot 是 immutable recovery anchor；
-- initial Game / root anchor 创建为原子事务；
-- World + Timeline Node + active head 同一 SQLite transaction；
-- expected-head stale writer rejection；
-- stable mutation identity、exact replay、conflicting mutation-id reuse；
-- late-step SQL failure 全量 rollback；
-- post-COMMIT lost-ACK exact-PID replay 不重复 node/effect；
-- opaque JSON World materialization，不提前冻结 G5 NPC/Faction/Item schema；
-- physical query failure 与 successful zero-row 明确区分：storage failure fail-loud，正常 absence 才是 `not_found`；
-- L3 read API 不以空结果或 runtime error 隐藏 SQLite failure。
-
-G3-02 没有实现 Resume、Conversation persistence、Save/Load/Restore、Timeline browser 或 G5 World semantics。
+已冻结：atomic World/Timeline/head transaction、expected-head CAS、replay-safe mutation identity、immutable recovery anchors、physical query failure fail-loud 与 successful zero-row 分离。
 
 ---
 
-## 5. Current Task｜G3-03 Game Reopen / Resume
+## 5. G3-03｜ENGINEERING PASS / READY FOR OWNER UAT
 
-Outcome：让真实产品路径第一次拥有跨进程的同一 Game continuity：
+实现 commit：
 
 ```text
-启动 / 首次建立 Game
-→ 连续 accepted Conversation
-→ accepted truth durable
-→ 正常退出
-→ 重新启动
-→ 恢复同一 Game identity
-→ 恢复 current World materialization
-→ 恢复 accepted Conversation
-→ Context 从 restored truth 重建
-→ 可以继续下一 Turn
+929f4ff1e1253a808522d8f559a3cadd01b8d5db  G3-03 current Game reopen / resume
 ```
 
-第一代边界：
+Independent Review：**PASS — no engineering blocker found**。
 
-- 只恢复 accepted Conversation truth；streaming draft、cancelled/failed partial attempt 不作为 accepted resume truth；
-- Agent Context / Provider messages 不持久化为 truth，启动后从 restored Conversation + 当前可用 Game material 重建；
-- 当前 production 还没有正式 World semantic context renderer，因此不得把 opaque World JSON 直接倾倒进 Prompt 充当新语义；
-- Conversation Domain 继续拥有 accepted Turn semantics；Persistence 只保存 durable representation；
-- accepted Conversation durability 必须 fail-loud，不能出现“UI 已宣布成功但 durable write 失败仍继续玩”的静默分叉；
-- G3-03 只解决 current resume，不实现旧 Save Restore / historical Conversation visibility / future-memory isolation；这些属于 G3-04；
-- 不提前做多 Game picker / World Pack / G5 schema / arbitrary Timeline rewind。
+已证明：
+
+- production schema v1 → v2 additive transactional migration；intentional mid-migration failure rollback 保持 v1 Game/World/Timeline 数据与 version；
+- current-only `conversation_materializations` 保存有序 accepted Conversation，不保存 Provider messages / Context / partial stream；
+- Application runtime 接管 current Game lifecycle，Narrative UI 不再在正常产品路径自建独立 Conversation truth；
+- first run 只在 DB 文件真实不存在时创建一个稳定 Game/root identity；existing zero/multi/corrupt/unsupported state 均 fail-loud，不生成替代空白新局；
+- Provider completion 采用 prospective candidate → durable Conversation COMMIT → Domain accepted 的 persist-before-accept 顺序；
+- New / Regenerate / Correction 的 durable write failure 均保持旧 Domain + DB accepted truth，并进入 retryable persistence failure；
+- cancelled / failed / streaming-only partial attempt 不在 reopen 后成为 accepted history；
+- 两个独立 OS process 可恢复 exact same Game/head/World/Conversation 并继续下一 Turn；
+- 14-Turn reopen 后 Context 仍从 restored Conversation 按 recent-12 规则重建，不读取 stored Prompt，也不把 opaque World JSON 直接塞入 Prompt；
+- restored Narrative UI 从 Conversation projection 重绘，latest Regenerate 复用同一 logical Turn/GM block；
+- real DeepSeek resumed-history GUI、Windows export、两次 launcher reopen 均已有 Agent evidence。
+
+### Non-blocking follow-up risk
+
+当前 G3-03 验证的是**顺序重启/恢复**。one-current-Game DB 尚未专门冻结“双开两个产品进程同时写 current Conversation”的互斥或 revision-CAS 语义。该问题不阻塞 G3-03 Owner UAT，但进入 G3-06 / standalone hardening 前必须明确选择 single-instance lock、stale-session rejection 或等价最小保护，避免并发实例 last-writer-wins。
 
 ---
 
-## 6. 当前核心约束
+## 6. Owner UAT｜CURRENT
+
+只验证真实产品价值，不要求查看日志/数据库：
+
+```text
+run-game.cmd
+→ 连续完成 2–3 个真实 Turn
+→ 记住最后剧情
+→ 正常退出
+→ 再次 run-game.cmd
+→ 确认旧 Narrative 完整恢复且顺序正确
+→ 再发一个新行动
+→ 确认 AI 自然承接重启前剧情
+→ 可选：对重启前最后一个 Turn 做一次 Regenerate
+```
+
+PASS 关注：
+
+- 直观上确实是“同一局游戏”；
+- 旧 Narrative 没有丢失、重复或乱序；
+- 下一 Turn 自然承接；
+- 没有出现空白替代新局、明显卡死或旧/新内容错乱。
+
+Owner UAT PASS 前不得开始 G3-04。
+
+---
+
+## 7. 当前核心约束
 
 - `Model authors the world; Runtime makes it durable; Player owns the timeline.`
 - `Save Point != Timeline Node.`
@@ -124,11 +138,11 @@ Outcome：让真实产品路径第一次拥有跨进程的同一 Game continuity
 
 ---
 
-## 7. 当前 waiting
+## 8. 当前 waiting
 
 ```text
-Blocking: NONE KNOWN
-Current: prepare / execute G3-03 repository-native Task Packet
-Owner UAT: required after Engineering + Independent Review, because restart/resume is now a real product path
-Next after G3-03 PASS: G3-04 Explicit Save / Load / Restore + Context Rebuild
+Blocking: Owner UAT not yet completed
+Current: G3-03 Owner UAT
+G3-04: HOLD
+Next after Owner UAT PASS: G3-04 Explicit Save / Load / Restore + Context Rebuild
 ```
