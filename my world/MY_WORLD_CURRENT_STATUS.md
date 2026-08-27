@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 2.6
+version: 2.7
 created: 2026-08-26
 updated: 2026-08-27
 phase: G3 Persistent Game / Save / Timeline Foundation
-current_task: G3-04 Explicit Save / Load / Restore + Context Rebuild
+current_task: G3-04 Explicit Save / Load / Restore + Context Rebuild — READY FOR OWNER UAT
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -35,7 +35,7 @@ Current Phase                  G3 — Persistent Game / Save / Timeline Foundati
 G3-01 Persistence Architecture PASS — Independent Review
 G3-02 Durable World Mutation   PASS — Independent Review
 G3-03 Game Reopen / Resume     PASS — Owner UAT
-Current Task                   G3-04 — Explicit Save / Load / Restore + Context Rebuild
+G3-04 Save / Load / Restore    ENGINEERING PASS — READY FOR OWNER UAT
 G3-GATE                        NOT YET
 ```
 
@@ -66,64 +66,74 @@ SQLite
 
 Independent Review：**PASS**。Owner UAT（2026-08-27）：**PASS**。
 
-Owner 已真实验证：
-
-```text
-run-game.cmd
-→ 连续真实 Turn
-→ 正常退出
-→ 再次启动
-→ 旧 Narrative 恢复
-→ 继续下一 Turn
-```
-
-产品结论：顺序重启后直观上仍是同一局 Game，Narrative continuity / resumed Context 主路径成立。
-
-已冻结 G3-03 事实：
-
-- production schema v2；
-- one-current-Game runtime composition；
-- current accepted Conversation durable materialization；
-- prospective candidate → durable COMMIT → Domain accepted；
-- New / Regenerate / Correction 写失败不会产生 accepted/durable silent divergence；
-- only accepted truth resumes；
-- Context / Provider messages 不持久化为 truth；
-- existing corrupt/schema/ambiguous state fail-loud，不创建替代空局。
+已冻结：production schema v2、one-current-Game runtime、current accepted Conversation durable materialization、persist-before-accept、only accepted truth resumes、Context/Provider messages derived/rebuildable、existing corrupt/schema/ambiguous state fail-loud。
 
 Non-blocking follow-up：双开两个产品进程同时写 current Game 的保护仍需在 G3-06 / standalone hardening 前冻结。
 
 ---
 
-## 5. Current Task｜G3-04 Explicit Save / Load / Restore + Context Rebuild
+## 5. G3-04｜ENGINEERING PASS / READY FOR OWNER UAT
 
-Outcome：第一次提供玩家明确可操作的长期恢复点，并证明 Restore 后 World、Conversation 与 AI working context 同时回到目标历史状态：
+实现 commit：
 
 ```text
-当前进度
-→ 创建命名 Save Point S1
-→ 继续产生后续 World / Conversation future
-→ 明确选择并 Load S1
-→ current World 回到 S1 的 Timeline anchor
-→ accepted Conversation 回到 S1 snapshot
-→ Context 从 restored truth 重建
-→ 被回滚未来不进入下一次 Provider request
-→ 从恢复点继续新的当前进度
+618fa0f2238114cbe4fc0fe790a1d60c43e99b45  G3-04 explicit Save / Load / Restore + Context rebuild
 ```
 
-第一代边界：
+Independent Review：**PASS — no engineering blocker found**。
 
-- `Save Point != Timeline Node`；Save 是玩家命名恢复引用，不复制整份 World DB；
-- World restore 使用已有 immutable Timeline snapshot；Save 还必须携带该时刻的 accepted Conversation recovery material，否则 future-memory isolation 不成立；
-- Restore 的 World/head/current Conversation durable change 必须是一个原子边界；COMMIT 后才让 in-memory Conversation/UI 切换；
-- Context / Prompt 仍然 derived/rebuildable，不作为 Save payload truth；
-- Load 是高影响明确意图，UI 必须清楚显示正在读取哪个 Save；active generation 中不得静默 Restore；
-- 历史 Timeline Node 不因 Load 物理删除；但“未显式保存的 pre-Load current future 自动恢复”属于紧接着的 G3-05，不在 G3-04 宣称完成；
-- arbitrary per-Turn rewind / Timeline debugger 继续 Deferred；
-- 不提前实现 G4/G5/G7。
+已证明：
+
+- production schema v2 → v3 additive transactional migration；intentional mid-migration failure rollback 保持 v2 current truth；
+- immutable `save_points` 使用 stable `save_id`，display name 不承担 identity；
+- Save 在单一 transaction 内捕获 durable active head + accepted Conversation，且不改变 current World/head/Conversation；
+- Save Point 引用 Timeline Node immutable World snapshot，不复制第二份 World live truth；
+- Restore 在一个 SQLite transaction 内原子更新 current World materialization、Game.active_head 与 current accepted Conversation；任一步失败全部 rollback；
+- Conversation Domain 提供 non-mutating validation 与 COMMIT 后 accepted replacement；Persistence 不拥有 accepted Turn 语义；
+- Restore COMMIT 后才切 runtime/in-memory/UI；若内存 apply 极端失败，runtime 进入 reopen-required blocking state；
+- exact-PID crash-after-Restore-COMMIT / before memory-UI apply 后 reopen 能恢复 durable restored truth；
+- future-only marker `FUTURE_ONLY_SECRET_G304` 在 Restore 后从 accepted Conversation 与下一次 Provider messages 中消失；recent-12 与 current-user exactly-once/last 保持成立；
+- Context/Prompt 不作为 Save truth，raw opaque World JSON 不直接进入 Prompt；
+- historical Timeline Nodes 与其它 Save Points 在 Load 后保留，不实现任意历史 rewind；
+- World Surface 提供最小命名 Save、选择、明确 Load confirmation；active generation 中 Save/Load 禁用；
+- Restore 后 Narrative UI 从 Conversation projection 全量重绘；
+- real DeepSeek post-Restore continuation、Windows export、launcher smoke 与 G3/G2 regressions均已有 Agent evidence。
+
+G3-04 未实现 automatic pre-Load recovery checkpoint、恢复未显式保存的旧 current future、Timeline browser、任意 Turn rewind、Save rename/delete/overwrite manager、G4/G5/G7。
 
 ---
 
-## 6. 当前核心约束
+## 6. Owner UAT｜CURRENT
+
+只验证真实产品价值，不要求查看日志/数据库：
+
+```text
+run-game.cmd
+→ 玩出一个容易记住的剧情节点
+→ 在右侧“世界”区域创建命名 Save Point S1
+→ 再继续玩 1–2 Turn，明确制造一个只有未来才知道的信息/事件
+→ 读取 S1，并确认 Load confirmation 文案清楚
+→ Narrative 回到 S1 时刻，未来 Turn 不再出现
+→ 再输入一个新行动/问题
+→ 确认 AI 自然从 S1 继续，且不泄漏刚才 future-only 信息
+→ 正常退出并重新打开
+→ 确认仍停留在 Restore 后的新当前进度
+```
+
+PASS 关注：
+
+- Save/Load 操作是否直观，选中的 Save 是否明确；
+- 读取后 World/Narrative 直观上确实回到目标进度；
+- 被回滚未来没有残留、重复或泄漏；
+- 下一 Turn 的 AI 不知道未来信息；
+- 退出重开后仍保持 Restore 后状态；
+- 没有空白局、半恢复、明显卡死或错乱。
+
+Owner UAT PASS 前不得开始 G3-05。
+
+---
+
+## 7. 当前核心约束
 
 - `Model authors the world; Runtime makes it durable; Player owns the timeline.`
 - `Save Point != Timeline Node.`
@@ -131,16 +141,15 @@ Outcome：第一次提供玩家明确可操作的长期恢复点，并证明 Res
 - 局部错误低成本纠正；重大历史恢复必须表达明确玩家意图。
 - UI / Transcript / Markdown / Godot Resource 不得成为 authoritative gameplay DB。
 - Context 是 derived/rebuildable material，不是另一份存档。
-- Restore 后 future-memory isolation 是 G3-04 的 blocking acceptance，而不是后续 polish。
+- Restore 后 future-memory isolation 是 G3-04 blocking acceptance。
 
 ---
 
-## 7. 当前 waiting
+## 8. 当前 waiting
 
 ```text
-Blocking: NONE KNOWN
-Current: G3-04 repository-native Task Packet / implementation
-Owner UAT: required after Engineering + Independent Review
+Blocking: Owner UAT not yet completed
+Current: G3-04 Owner UAT
 G3-05: HOLD
-Next after G3-04 PASS: G3-05 Recovery / Timeline Foundation
+Next after Owner UAT PASS: G3-05 Recovery / Timeline Foundation
 ```
