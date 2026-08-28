@@ -33,19 +33,19 @@ description: Design, discuss, create, revise, migrate, audit, and maintain Taver
 
 | Owner | Repository | 职责 |
 |---|---|---|
-| Skill | `zhangchenjia21-dot/Skill` | 跨项目 Skill；本 Skill current = `skill/gpt/tavern-asset/SKILL.md` |
+| Governance / Skill | `zhangchenjia21-dot/Vibe-Coding` | 跨项目治理与可复用 Skill；本 Skill current = `skill/gpt/tavern-asset/SKILL.md` |
 | Game | `zhangchenjia21-dot/the-world` | The World（DSH-native RPG 宿主）：产品 / 架构 / World Core / 资产消费侧语义 |
 | Assets | `zhangchenjia21-dot/sillytavern-assets` | World Pack / Character Card / Expansion / 资产族 / 通用资产库 / 创作规范 |
 
 路由：
 
 ```text
-Skill → Skill repo
+Skill / cross-project governance → Vibe-Coding/skill + Vibe-Coding current governance
 宿主产品 / 架构 / World Core → the-world
 资产语义 / 创作规范 / 治理工作区 → sillytavern-assets
 ```
 
-资产消费侧语义的权威来源是 the-world 的两份 CURRENT 文档；资产正文如何写作的内容权威是资产仓库的 `创作规范/`。两者冲突时先升级裁定，不得自行调和。
+资产消费侧语义的权威来源是 the-world 的两份 CURRENT 文档；资产正文如何写作的内容权威是资产仓库的 `创作规范/`。两者冲突时先升级裁定，不得自行调和。通用 Skill 不能覆盖项目已经冻结的 current 决策。
 
 ## 1.1 Remote-current-first
 
@@ -253,6 +253,6 @@ G18 Architecture Reflection
 - 资产写作内容权威移交 `sillytavern-assets/创作规范/`，本 Skill 收敛为方法、流程与仓库治理；
 - Context Contract / Router / Feature-Module / Program Authority / Surface Ownership / Registry Projection 等旧机器上下文体系删除，保留其语义内核（Full Asset ≠ Prompt、知识边界、不拍平机制）并并入宿主语义基线与机制纪律；
 - 依赖表达改为自然语言三类写法 + Required / Recommended / Optional 段落式分级；
-- Repository Registry 更新：`the-world` 成为 Game 仓库；旧 `sillytavern` Runtime 与 `Vibe-Coding` 治理线不再是资产任务的权威来源；
+- Repository Registry 更新：`Vibe-Coding/skill/` 成为 Skill current authority，`the-world` 成为 Game 仓库；
 - Gate Set 由 26 项旧机器门重构为 18 项语义门；
 - v1.0 全文留档于 Git history。
