@@ -1,10 +1,10 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 1.9
+version: 2.0
 created: 2026-08-25
-updated: 2026-08-26
-current_phase: G2
+updated: 2026-08-28
+current_phase: G4
 current_status_source: MY_WORLD_CURRENT_STATUS.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
@@ -31,6 +31,8 @@ implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 原则：
 
 > **先跑通真实核心循环，再扩展外围能力。**
+>
+> **先让玩家有稳定产品入口，再让内容选择进入产品。**
 
 ---
 
@@ -59,8 +61,10 @@ G9  Standalone Alpha / Release Validation
 第一条真正产品脊柱：
 
 ```text
-启动游戏
-→ AI GM 自然语言互动
+启动应用
+→ 主菜单
+→ Continue 已有 Game / New Game
+→ 进入 AI GM 自然语言互动
 → 世界产生 durable change
 → 退出 / 重开仍是同一 Game
 → 明确 Save
@@ -118,29 +122,15 @@ DeepSeek `deepseek-v4-pro` 的薄 `stream / cancel / completion / failure` seam�
 
 ### G2-03｜Narrative Conversation View + Host Slots
 
-第一份真正改变玩家主路径的 UI：
-
-- Player natural-language input；
-- GM Narrative；
-- real streaming；
-- cancel；
-- regenerate/retry latest generation；
-- error recovery；
-- 长篇阅读友好的中央 Narrative；
-- `Player Host | Narrative Host | World Surface Host` 稳定布局；
-- 宽窗口三栏，窄窗口 Narrative 优先。
-
-当前只做 fixed Godot UI + Host Slots；不做通用 Declarative Renderer、Save/Timeline、World/NPC。
+第一份真正改变玩家主路径的 UI：Player natural-language input、GM Narrative、real streaming、cancel、regenerate/retry、error recovery、长篇阅读友好的中央 Narrative，以及 `Player Host | Narrative Host | World Surface Host` 稳定布局。
 
 ### G2-04｜Turn / Conversation Domain v0.1
 
-冻结：Player Turn、GM Turn、Conversation Entry、Generation State，以及 Retry / Regenerate / latest-turn correction 的最小正式语义。
-
-Transcript 不等于 Timeline。
+冻结 Player Turn、GM Turn、Conversation Entry、Generation State，以及 Retry / Regenerate / latest-turn correction 的最小正式语义。Transcript 不等于 Timeline。
 
 ### G2-05｜Context Assembly v0.1
 
-先实现 system/GM instructions + 当前 Conversation working set + 当前最小 game context；不做复杂 retrieval/long-memory platform。
+system/GM instructions + 当前 Conversation working set + 当前最小 game context；不做复杂 retrieval/long-memory platform。
 
 ### G2-06｜第一轮 Owner Playtest
 
@@ -150,9 +140,7 @@ Transcript 不等于 Timeline。
 
 Engineering：多回合、stream/cancel/retry、failure recovery、UI response 可靠。
 
-Product Value：
-
-> **作为 AI RPG 对话核心，是否已经值得继续玩，而不是工程 demo。**
+Product Value：作为 AI RPG 对话核心，已经值得继续玩，而不是工程 demo。
 
 ---
 
@@ -180,61 +168,13 @@ UI Preference
 >
 > **Reversibility != frictionless arbitrary rewind.**
 
-## Tasks
+## Tasks / Result
 
-### G3-01｜Persistence Domain Architecture
+`G3-01 ... G3-07` 与 `G3-GATE`：**PASS / CLOSED**。
 
-用真实 fixture 评估 SQLite + durable mutation + checkpoint/snapshot 等最小组合，冻结 authoritative ownership、事务与 migration/recovery 边界。
+已证明 SQLite authoritative persistence、atomic durable mutation、accepted Conversation durability、reopen/resume、named Save、atomic Load/Restore、future-memory isolation、Recovery Checkpoint、single-writer、verified physical backup、staged corruption recovery 与真实 Provider continuation。
 
-### G3-02｜Durable World Mutation Path
-
-模型可以广泛 author 世界；Runtime 把需要长期存在的内容可靠落成 stable identity、atomic durable state。
-
-### G3-03｜Game Reopen / Resume
-
-退出再开，恢复同一 Game、current World 与必要 Conversation/Context。
-
-### G3-04｜Explicit Save / Load / Restore + Context Rebuild
-
-- 玩家明确创建 Save Point；
-- 明确 Load/Restore；
-- World 与 Context 一致恢复；
-- future-memory isolation；
-- UI/Transcript 不成为第二 truth。
-
-### G3-05｜Recovery / Timeline Foundation
-
-优先解决：
-
-- Load 旧 Save 时保留可恢复的旧 current future；
-- recovery checkpoint / old-head / internal branch 等最小可靠语义；
-- Retry/Regenerate/latest-turn correction 与 persistence boundary 对齐；
-- 玩家理解当前 active progress。
-
-**arbitrary per-turn rewind = Deferred**，除非后续长局 UAT 证明必须。
-
-### G3-06｜Crash / Interrupted Write Recovery
-
-防止半提交、物理损坏、不可恢复写入。
-
-### G3-07｜Persistence Reality Test
-
-真实完成：
-
-```text
-游玩
-→ durable change
-→ 退出 / 重开
-→ Save
-→ 推进未来
-→ Load / Restore
-→ Context 无未来泄漏
-→ 必要时恢复误读档前的 current future
-```
-
-## G3-GATE
-
-可靠 persistence、resume、Save/Load/Restore、future-memory isolation、recovery 成立；不要求任意 Turn 回档 UI。
+Arbitrary per-turn rewind / Timeline browser / backup browser 继续 Deferred。
 
 ---
 
@@ -242,35 +182,176 @@ UI Preference
 
 ## Outcome
 
-让产品不硬编码为一个世界，正式建立 `Reusable Source → Game-local Reality`。
+让产品从“只有一个正在自动打开的 Game”升级为真正的**多世界本地 AI RPG Host**：玩家先进入稳定主菜单，可以继续已有 Game 或创建新 Game；新 Game 从可复用 World Pack Source 与明确的建局选择形成独立 game-local reality。
+
+Canonical chain：
+
+```text
+Application Main Menu
+↓ New Game
+World Pack Source Generation
++ Game Creation Composition
+↓ materialize
+Game-local Canonical Reality
+↓ Runtime
+Current Game World
+```
+
+核心边界：
+
+> **World Pack Source != Game Creation Composition != Game-local Reality != Runtime State.**
+>
+> **Source 定义开始前的参考世界；游戏开始后，game-local reality 优先。**
+>
+> **Source provides inertia; actors create history.**
 
 ## Tasks
 
-### G4-01｜World Pack v0.1
+### G4-01｜Product Entry Shell / Main Menu
 
-只冻结当前真实需要的 metadata、world instructions、source lore、initial characters、authored map、portrait/scene assets、必要 mechanic declarations。
+先建立应用级玩家入口，而不是先做临时 Pack selector。
 
-不冻结外部声明式 UI schema。
+第一代目标：
 
-### G4-02｜Source → Game-local Instance
+- 应用启动进入 Main Menu，而不是无条件直接进入当前 Game；
+- `Continue`：继续 G3 已有 current Game，不破坏现有 persistence / recovery 语义；
+- `New Game`：进入稳定的 New Game creation surface/host，后续 G4-03 在这里接真实 World Pack / Entry / protagonist 选择；
+- `Quit`；
+- 游戏内可安全返回 Main Menu，再继续当前 Game；
+- existing startup failure / safe-backup recovery 仍然可发现、可用；
+- 1280×720、960×540、Maximized Windows 产品路径真实验证。
 
-新局从 Source 建立自己的本局现实；Source 更新不得静默改写旧局。
+本任务不实现 Pack discovery、不创建多 Game DB、不冻结 World Pack contract。它只建立**产品导航与生命周期壳**。
 
-### G4-03｜Pack Discovery / Install / Load
+### G4-02｜World Pack Source v0.1 + Contract Reality Check
 
-本地发现、安装、选择、载入；不做在线商店。
+冻结并实现当前真实需要的 reusable Source contract / explicit-root loader：
 
-### G4-04｜Asset Resolution
+- metadata / stable identity / author version / schema version；
+- world / GM instructions；
+- ordered source lore；
+- initial character source seeds；
+- authored map declaration；
+- portrait / scene / map asset declarations；
+- necessary mechanic declarations；
+- optional `entry_points` / T0 Source seeds：`entry_id + display_name + authored source text`。
 
-portrait / scene / map 通过 World Pack 解析，不写死核心工程。
+Entry Point 只描述“这一局可以从哪里/何种 T0 前提开始”，**不是 Opening Scenario 状态机**。不冻结 year/month/calendar/region/beat/precondition/branch DSL。
 
-### G4-05｜Second Pack Fixture
+G4-02 关闭前必须做 **Contract Reality Check**：用两个 compact、差异明显的 Pack fixture（历史/低魔型 + 高魔型）真实编写并加载，验证 contract 没有强迫不同世界迁就单一早期 Schema。未发布阶段若 v0.1 设计错误，优先直接修正，不建立兼容层森林。
 
-第二个小世界证明产品不是首个世界特例。
+### G4-03｜Game Creation Composition v0.1 + New Game Flow
+
+在 G4-01 的 New Game surface 中建立第一代建局选择语义。
+
+v0.1 只冻结最小必要组合：
+
+```text
+selected World Pack exact generation
+selected Entry / T0 seed
+protagonist seed
+```
+
+`selected World Pack exact generation` 至少能唯一表达 pack identity + author version + exact content fingerprint/generation，不能只靠 display name 或文件夹名。
+
+第一代先让玩家完成：
+
+```text
+New Game
+→ 选择 World Pack
+→ 选择 Entry（若 Pack 提供多个）
+→ 定义/确认 protagonist seed
+→ 创建 Game
+```
+
+历史上验证过的世界口径/profile、Expansion/mechanic 组合、主角操控模式等保留为候选，不因旧项目已有就全部塞入 v0.1；只有首个真实 Pack 建局证明必须时才增量加入。
+
+### G4-04｜Source → Game-local Instance
+
+从已确认 Composition 形成独立 Game-local reality。
+
+必须持久化/绑定足够 provenance：
+
+```text
+pack_id
+pack_version
+exact source fingerprint/generation
+selected entry
+必要的 game-local Source ancestry
+```
+
+Source 后续更新不得静默改写已有 Game。剧情后续 runtime-generated NPC / Place / Item 可以只有 game-local identity 与 `runtime_generated` provenance，不要求伪造 Source ID。
+
+Source character 被 materialize **不等于玩家已经认识他**，也不等于自动进入 UI/普通 Context；Player-known semantics 留给 G5/G6 的正式知识/Projection owner。
+
+### G4-05｜Local Pack Library + Minimal Game Library
+
+把 G3 的 one-current-Game 第一代约束升级为真正产品可用的本地 Game lifecycle：
+
+- 本地 Pack discovery / install / load / selection；
+- 多个独立 Game 共存；
+- Main Menu 能列出/继续已有 Game；
+- New Game 不覆盖已有 Game；
+- 玩家可以从 Main Menu 在已有 Game 间切换；
+- 不做在线商店、账户、云同步。
+
+`每 Game 一个 SQLite` vs `共享 DB + game_id` 等物理形态在本任务开始前以最简单、可靠、可迁移 G3 current Game 的方案专项裁定；不要为了理论扩展性预建服务层。
+
+### G4-06｜Asset Resolution
+
+portrait / scene / authored map 通过 World Pack / game-local provenance 解析并由 Godot 真实加载，不写死核心工程。
+
+本任务只解决资产定位、类型、缺失/fallback、Windows filesystem/export 路径与 UI 消费 seam；不升级成完整地图 gameplay/topology/travel system。
+
+### G4-07｜Two-Pack Playable Reality Test
+
+不再以“第二个 fixture 能 parse”作为 G4 最终证明。
+
+至少使用两个差异明显的真实 compact World Pack：
+
+```text
+Pack A：历史/低魔型
+Pack B：高魔/幻想型
+```
+
+分别完成：
+
+```text
+Main Menu
+→ New Game
+→ Pack / Entry / protagonist 选择
+→ 创建独立 Game
+→ 真实 DeepSeek 进入该世界继续互动
+→ durable progression
+→ exit / reopen / Continue
+→ 两个 Game 可切换且互不污染
+→ Source 修改/升级不静默改变已有 Game
+→ portrait / scene / authored map refs 来自正确 Pack
+```
+
+G4-07 必须有 Owner UAT。Product success 不是只看到两个不同 `pack_id`，而是玩家能明确感觉“我真的进入了两个不同世界”。
 
 ## G4-GATE
 
-至少两个 World Pack 能建立独立新游戏，Source/Instance 分离且旧局安全。
+G4-GATE 至少要求：
+
+```text
+稳定 Main Menu / New Game / Continue
++
+两个真实 World Pack
++
+两个独立 Game 可长期共存/切换
++
+Source exact generation / game-local provenance 清楚
++
+Source 更新不静默改写旧 Game
++
+真实 Provider 可以在两个世界中继续游玩
++
+Owner UAT PASS
+```
+
+G4 不要求现在完成 Character Card / Expansion Pack / Reference Library 的完整外部协议，也不要求 Creator、Opening Scenario Runtime、Map gameplay engine 或在线内容商店。
 
 ---
 
@@ -406,17 +487,7 @@ Mod 能扩展内容和受控 UI，而不会获得任意 Runtime/OS 权限或制�
 
 证明第一代可以作为独立长期 AI RPG 使用，而不是只通过单次演示。
 
-覆盖：
-
-- Windows build / startup / upgrade；
-- long-play stability；
-- Save/Load/Recovery；
-- Context/performance；
-- World Pack install/use；
-- Provider failure；
-- UI usability；
-- Product Value UAT；
-- 与 The World / DSH simple baseline 的真实比较。
+覆盖：Windows build/startup/upgrade、long-play stability、Save/Load/Recovery、Context/performance、World Pack install/use、Provider failure、UI usability、Product Value UAT，以及与 The World / DSH simple baseline 的真实比较。
 
 ## G9-GATE
 
@@ -431,4 +502,5 @@ Mod 能扩展内容和受控 UI，而不会获得任意 Runtime/OS 权限或制�
 - 默认不因新 Stage 新建新的 status 文档；
 - 正式 implementation/review 仍使用 repository-native Task Packet；
 - 小 bug / polish 不必强行升级成完整架构事件；
-- Product-facing Task 的 Engineering Acceptance 不替代 Owner Product UAT。
+- Product-facing Task 的 Engineering Acceptance 不替代 Owner Product UAT；
+- 旧项目中有价值但当前未授权的能力统一进入 `experience/备选开发方向候选池_2026-08-28.md`，不得因为“以前做过”自动成为当前 Roadmap commitment。
