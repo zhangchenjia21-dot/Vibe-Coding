@@ -1,7 +1,7 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 5.0
+version: 5.1
 created: 2026-08-26
 updated: 2026-08-28
 phase: G4 Primary Source Assets & Local Game Creation
@@ -113,7 +113,7 @@ G4-11 Two Primary Asset Families Reality Test
 G4-GATE
 ```
 
-所有旧的 G4-01 World Pack task packet / Main-Menu-only handoff 均 **SUPERSEDED BEFORE EXECUTION**。新的 G4-01 Task Packet 必须重新签发。
+所有旧的 G4-01 World Pack task packet / Main-Menu-only handoff 均 **SUPERSEDED BEFORE EXECUTION**。当前正式 G4-01 Task Packet 已重新签发给 Codex。
 
 ---
 
@@ -250,7 +250,13 @@ Return to Main Menu
 
 本任务不做真实 Source selector / multi-Game storage / Source contracts。
 
-推荐执行：**KimiCode K3**，因为是 Godot UI + Windows local lifecycle/navigation。Independent Review 标准不降低。
+Owner 已指定执行 Agent：**Codex**。正式 Task Packet：
+
+`my-world/docs/tasks/G4-01_APPLICATION_SHELL_GAME_SESSION_LIFECYCLE_TASK.md`
+
+Task Packet 初始签发 commit：`14aa113640cc5cb894e23e7625094b71330a11bd`。
+
+Independent Review 标准不降低。
 
 ---
 
@@ -279,8 +285,10 @@ Return to Main Menu
 ```text
 Blocking: NONE KNOWN
 Current: G4-01 Application Shell / Main Menu + Game Session Lifecycle
-Recommended Owner: KimiCode K3
-Formal G4-01 Task Packet: TO BE REISSUED after current route propagation
+Implementation Owner: Codex
+Formal G4-01 Task Packet: ISSUED — docs/tasks/G4-01_APPLICATION_SHELL_GAME_SESSION_LIFECYCLE_TASK.md
+Packet commit: 14aa113640cc5cb894e23e7625094b71330a11bd
+Waiting: Codex implementation → READY FOR INDEPENDENT REVIEW
 Older G4-01 packets/handoffs: SUPERSEDED BEFORE EXECUTION
 G4-02+: HOLD until G4-01 closes
 G4-GATE: NOT YET
