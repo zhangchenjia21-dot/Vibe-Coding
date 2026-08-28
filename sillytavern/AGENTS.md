@@ -9,6 +9,7 @@ README.md
 → current/README.md
 → 与任务直接相关的 current Owner
 → 必要的 architecture 裁定
+→ 需要跨项目执行方法时读 Vibe-Coding/skill/ 下相关 Skill
 → 只有追溯/审计时才读 stages
 → 实现问题再去 zhangchenjia21-dot/sillytavern
 ```
@@ -23,6 +24,7 @@ README.md
 - 单一阶段的规格、Review、Correction、Gate 证据：`stages/<stage>/`
 - Draft / optional / 尚未批准内容：`discussion/`
 - 被新版本 supersede 且只需追溯的内容：仓库根 `99_归档/sillytavern/`
+- 跨项目可复用执行方法：仓库根 `skill/`
 
 ## 3. 写入流程
 
@@ -33,6 +35,7 @@ Freshness
 → 必要时更新 current 路由
 → 检查是否有 superseded 文件应归档
 → 检查实现仓库是否需要同步任务或事实
+→ 若产生跨项目可复用方法，再按 skill/AGENTS.md 判断是否上提 Skill
 → 集中汇报
 ```
 
@@ -44,9 +47,10 @@ Freshness
 
 ## 5. 边界
 
-- `Vibe-Coding/sillytavern` = 规划、产品、架构与治理事实源。
+- `Vibe-Coding/sillytavern` = SillyTavern 规划、产品、架构与治理事实源。
+- `Vibe-Coding/skill` = 跨项目可复用执行方法，不保存 SillyTavern 专属 current 状态。
+- `Vibe-Coding/项目经验` = 跨项目经验与复盘，不保存 SillyTavern 专属 current 状态。
 - `zhangchenjia21-dot/sillytavern` = 代码、测试、构建与运行事实源。
 - `zhangchenjia21-dot/sillytavern-assets` = 资产正文事实源。
-- `Vibe-Coding/项目经验` = 跨项目可复用方法，不保存 SillyTavern 专属 current 状态。
 
-如果同一个事实跨仓库出现，只能有一个 canonical Owner，其他地方做路由。
+如果同一个事实跨仓库或跨子树出现，只能有一个 canonical Owner，其他地方只做路由。通用 Skill 不得覆盖项目已经批准的 current 产品 / 架构裁定。
