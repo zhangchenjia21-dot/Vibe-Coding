@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 3.0
+version: 3.1
 created: 2026-08-26
 updated: 2026-08-28
 phase: G3 Persistent Game / Save / Timeline Foundation
-current_task: G3-06 Crash / Interrupted Write Recovery
+current_task: G3-06 Crash / Interrupted Write Recovery — READY FOR OWNER UAT
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -37,15 +37,15 @@ G3-02 Durable World Mutation   PASS — Independent Review
 G3-03 Game Reopen / Resume     PASS — Owner UAT
 G3-04 Save / Load / Restore    PASS — Owner UAT
 G3-05 Recovery / Timeline      PASS — Owner UAT
-Current Task                   G3-06 — Crash / Interrupted Write Recovery
+G3-06 Crash / Write Recovery   ENGINEERING PASS — READY FOR OWNER UAT
 G3-GATE                        NOT YET
 ```
 
 ---
 
-## 3. G3-01 / G3-02｜CLOSED
+## 3. G3-01..G3-05｜CLOSED
 
-已接受第一代 persistence route：
+已接受并逐步验证第一代 persistence route：
 
 ```text
 SQLite
@@ -54,104 +54,97 @@ SQLite
 + GDScript / same-process Runtime
 ```
 
-已冻结：Game/World/Timeline-Save/Conversation 各自拥有业务语义；Persistence 只拥有 durable representation / transaction / schema / migration / backup-recovery mechanics。G3-02 已证明 atomic World/Timeline/head transaction、expected-head CAS、replay-safe mutation identity、immutable Timeline recovery anchors 与 physical query failure fail-loud。
+G3-03、G3-04、G3-05 均已通过 Independent Review + Owner UAT。
+
+已冻结：current Game resume、persist-before-accept、immutable named Save Point、atomic World/head/Conversation Restore、future-memory isolation、Recovery Checkpoint、reciprocal Recover、historical Timeline retention / internal branch correctness。
 
 ---
 
-## 4. G3-03 / G3-04｜CLOSED / PASS — Owner UAT
-
-```text
-929f4ff1e1253a808522d8f559a3cadd01b8d5db  G3-03 current Game reopen / resume
-618fa0f2238114cbe4fc0fe790a1d60c43e99b45  G3-04 explicit Save / Load / Restore + Context rebuild
-```
-
-G3-03、G3-04 均已通过 Independent Review + Owner UAT。
-
-已冻结：current Game cross-process resume、persist-before-accept、immutable named Save Point、atomic World/head/Conversation Restore、COMMIT-before-memory/UI switch、Restore Context rebuild/future-memory isolation，以及 historical Timeline retention。
-
----
-
-## 5. G3-05｜CLOSED / PASS — Owner UAT
+## 4. G3-06｜ENGINEERING PASS / READY FOR OWNER UAT
 
 实现 commit：
 
 ```text
-bf8c35fdf76c4ea3b8ad2560d93c89c2f84c07b0  G3-05 Recovery / Timeline Foundation
+7e2e622f03782a1d66f5f8837d739f900615b775  G3-06 crash / interrupted-write recovery hardening
 ```
 
-Independent Review：**PASS**。Owner UAT（2026-08-28）：**PASS**。
+Independent Review：**PASS — no engineering blocker found**。
 
-Owner 按规定真实产品路径完成 UAT 并返回 PASS。
+已证明：
 
-已冻结 G3-05 事实：
+- dedicated sibling SQLite coordination DB 使用 process-lifetime `BEGIN IMMEDIATE` 实现 single-writer；第二 product process 在 gameplay DB mutation/migration 前 fail-fast，首实例 normal exit / exact-PID crash 后锁由 SQLite/Windows 自动释放；不依赖裸 PID / wall-clock lease；
+- gameplay DB 不持有 lifetime transaction；
+- production physical backup 使用 godot-sqlite v4.9 `SQLite.backup_to(path)`，replacement staging 使用 `SQLite.restore_from(path)`；不 ordinary-copy open WAL DB；
+- `latest.sqlite` / `previous.sqlite` / `backup-staging.sqlite` staged publication：staging 先完成 SQLite open、quick_check、foreign_key_check、schema、current truth 与 JSON structural verification 后才发布；
+- first READY 建立初始 verified backup；明确 player Save 成功后刷新；graceful close 尽力刷新；backup refresh failure 不撤销已 committed Save，UI 返回准确 warning，旧 verified backup 保留；
+- existing schema migration 前 verified pre-migration backup 是 blocking gate；backup creation/verification failure 时 migration 不开始；intentional migration failure 后 current old schema + prebackup 均保持有效；
+- startup 区分 normal missing、already running、physical corruption、unsupported newer schema、logical invalid 与 ordinary storage failure；physical corruption 不会变成 first-run blank Game；
+- disaster recovery 只从 verified whole-DB generation 恢复：先构造并验证 replacement staging，再 quarantine corrupt current，最后 publish replacement；成功后进入 reopen-required，不让旧 Runtime 继续；
+- invalid latest 可 fallback verified previous；无 verified backup 时 fail-loud 且不创建空局；
+- backup staging/rotation、quarantine/replacement publication 等 exact-PID interruption 后仍至少保留 current-corrupt / verified backup / staged replacement 中的安全可重试组合；
+- normal SQLite pre-COMMIT / post-COMMIT crash 继续由 transaction/WAL/replay 语义恢复，不误触 physical-corruption UX；
+- Windows Desktop exported EXE 已验证 single-instance、crash-release、staged recovery 与 coherent reopen；
+- G3-05..G3-01 与 G2 核心离线/进程/UI回归通过。
 
-- production schema v4；
-- immutable internal `Recovery Checkpoint != Save Point`；
-- Load/Recover 均在单一 transaction 内先捕获 displaced current，再原子切换 current World/head/accepted Conversation；
-- no-op progress switch 不制造 Recovery；
-- reciprocal Recovery 允许最近两个 active futures 安全往返，historical recovery rows 不 consume/delete；
-- durable monotonic recovery ordering 不依赖 wall-clock；
-- existing immutable Timeline DAG 可自然承载 internal branch，不新增 branch registry/browser；
-- Regenerate / Correction 最终 accepted truth 可 exact recovery，partial/cancelled/failed material 不进入 Recovery；
-- Recover 后 Context 对另一条 future 保持隔离；
-- crash-after-COMMIT / before memory-UI apply 后 reopen 仍以 durable switched state 为准。
+本轮额外尝试的既有 G3-05 real-provider continuation 返回 `transport`，因此没有冒充 real-provider PASS。G3-06 SQLite/single-writer/backup/recovery Engineering Acceptance 不依赖真实 Provider；G3-07 Persistence Reality Test 必须重新验证真实 Provider continuation。
+
+G3-06 未实现 cloud sync、backup/history browser、manual import/export platform、backup encryption、Timeline browser、G4/G5/G7。
 
 ---
 
-## 6. Current Task｜G3-06 Crash / Interrupted Write Recovery
+## 5. Owner UAT｜CURRENT
 
-Outcome：把已经成立的 durable Game/Save/Recovery 从“正常路径正确”硬化成第一代灾难恢复能力。产品必须在异常退出、物理 DB 损坏或重复启动另一个写进程时，优先保护长期进度，而不是继续运行在歧义或损坏状态。
-
-第一代目标路径：
+必须使用 implementation repository 提供的隔离 fixture，不破坏真实 `user://my-world/current-game.sqlite`：
 
 ```text
-healthy current Game
-→ only one product writer may own it
-→ SQLite-native verified recovery backup exists
-→ process / write interruption does not create half truth
-→ next startup validates current DB before trusting it
-→ if current DB is physically corrupt, do not create blank Game
-→ if a verified backup exists, offer explicit disaster recovery
-→ preserve corrupt original + recover through staged verified copy
-→ reopen into one coherent Game/World/Timeline/Save/Recovery/Conversation truth
+PowerShell:
+& 'tests\g3_06\启动隔离Owner_UAT.ps1'
+
+→ real product UI 打开 task-owned corrupted current DB
+→ 明确看到“当前数据损坏 / 可恢复安全备份 / 备份后进度可能丢失 / 损坏原件保留”
+→ 点击“恢复最近安全备份”
+→ 阅读二次确认并确认
+→ 应进入“恢复完成，需要重新打开”状态
+
+随后：
+& 'tests\g3_06\启动隔离Owner_UAT.ps1' -Reopen
+
+→ recovered fixture 正常打开
+→ Narrative / Save / Recovery 状态与 backup generation 一致
+→ 可以继续正常使用
 ```
 
-冻结方向：
+PASS 关注：
 
-- `Physical Backup != Save Point != Recovery Checkpoint`；whole-DB backup 只服务灾难恢复，不进入普通 Save/Recovery UI；
-- `godot-sqlite v4.9` 已提供 SQLite online `backup_to` / `restore_from` API，production 不直接在打开的 WAL 数据库上做普通文件复制；
-- before any schema-changing migration，先建立并验证可恢复 backup；backup 失败则 migration 不开始；
-- healthy runtime 至少保留一个 verified last-known-good backup；第一代允许 latest + previous 两代与 staging 文件，具体命名由 G3-06 最小实现冻结；
-- backup refresh 必须先生成 staging、验证成功后再发布，失败/崩溃不得摧毁旧 verified backup；
-- startup 必须区分 physical corruption、unsupported newer schema、normal absence 与 logical/application failure；不能把所有失败都解释成“用备份覆盖”；
-- current DB 物理损坏时必须 fail-loud；只有存在 verified recovery copy 时才暴露明确恢复动作；没有有效 backup 时不得创建空白替代 Game；
-- disaster recovery 必须保留/隔离损坏原件，再通过 staged verified copy 恢复；不得一开始就覆盖唯一 current DB；
-- double-running 两个 product processes 必须在 G3-06 冻结为 single-writer safety：第二个写实例应在接触 gameplay DB mutation/migration 前被阻止；首实例 crash 后 guard 必须由 OS/SQLite 自动释放，不采用仅靠 wall-clock lease 或裸 PID 文件的脆弱方案；
-- 不允许通过在 gameplay DB 上持有整局 lifetime write transaction 来实现 single-instance；
-- G3-06 不实现 cloud sync、backup browser、手工导入导出平台、加密备份或 G4/G5/G7。
+- 灾难恢复文案是否清楚、保守，不像普通 Save/Load；
+- 不需要玩家找 `.sqlite`、跑 SQL 或理解 WAL；
+- 恢复后不是空白局、半历史或混合 generations；
+- reopen 后产品路径正常；
+- 整个 UAT 明确只作用于 `build/g3_06_owner_uat`。
+
+Owner UAT PASS 前不得进入 G3-07。
 
 ---
 
-## 7. 当前核心约束
+## 6. 当前核心约束
 
 - `Model authors the world; Runtime makes it durable; Player owns the timeline.`
 - `Save Point != Timeline Node.`
 - `Recovery Checkpoint != Save Point.`
 - `Physical Backup != Save Point / Recovery Checkpoint.`
-- authoritative current DB 仍是 live truth；backup 只是 verified recovery copy，不得成为并行 fallback truth。
+- authoritative current DB 是唯一 live truth；backup/quarantine/staging 只服务恢复。
 - physical integrity failure / ambiguous concurrent writer 必须 fail-loud，不能静默开新局或继续写。
 - migration / backup / restore recovery 都必须保留明确原子边界和可重试性。
-- UI / Transcript / Prompt / Cache 不得参与灾难恢复 authoritative reconstruction。
-- destructive test 只允许 task-owned isolated DB，不得损坏真实 `user://my-world/current-game.sqlite`。
+- UI / Transcript / Prompt / Cache 不参与灾难恢复 authoritative reconstruction。
 
 ---
 
-## 8. 当前 waiting
+## 7. 当前 waiting
 
 ```text
-Blocking: NONE KNOWN
-Current: G3-06 repository-native Task Packet / implementation
-Owner UAT: required after Engineering + Independent Review via isolated recovery fixture
+Blocking: Owner UAT not yet completed
+Current: G3-06 Owner UAT
 G3-07: HOLD
 Next after G3-06 PASS: G3-07 Persistence Reality Test
+Next implementation agent: do not assume Codex; user authorized Grok Build or KimiCode due current Codex quota exhaustion
 ```
