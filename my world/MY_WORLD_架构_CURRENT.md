@@ -1,10 +1,10 @@
 ---
 title: my world｜架构总览
 status: current-canonical-architecture-map
-version: 1.2
+version: 1.3
 created: 2026-08-26
-updated: 2026-08-26
-current_phase: G3
+updated: 2026-08-28
+current_phase: G4
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -53,6 +53,7 @@ NPC != Node
 Save != Resource dump
 Timeline != Scene history
 Database row/table != automatic business owner
+World Pack Source != current Game World
 ```
 
 ---
@@ -68,10 +69,10 @@ Language         GDScript
 Runtime          Godot same-process Runtime
 Provider         DeepSeek deepseek-v4-pro
 Config / Source  JSON/files where appropriate
-Persistence      SQLite via 2shady4u/godot-sqlite v4.9 — G3 v0.1 ACCEPTED
+Persistence      SQLite via 2shady4u/godot-sqlite v4.9 — ACCEPTED
 ```
 
-G3-01 已用真实 Windows fixture / crash / migration / export evidence 将 SQLite 从候选升级为第一代 authoritative persistence storage route。它证明的是 binding、transaction、migration、crash/reopen 与 packaging 能力，不冻结 G5 的 World/NPC schema。
+G3 已 **PASS / CLOSED**。SQLite 第一代 authoritative persistence route 已通过真实 Windows fixture、transaction、migration、Save/Restore/Recovery、single-writer、backup/corruption recovery、real Provider continuity 与 Owner UAT。
 
 继续保持：
 
@@ -92,14 +93,17 @@ Persistence 深度设计：`architecture/persistence/时间线存档与可逆性
 重要对象先区分业务 owner 与 durable storage responsibility：
 
 ```text
+Reusable Source / World Pack
+→ pre-game authored reference material / source identity
+
 Game Domain / lifecycle
 → Game identity / active-game semantics
 
 World Domain
 → game-local authoritative World meaning/state
 
-Timeline / Save Domain
-→ Timeline Node / Save Point / Restore semantics
+Timeline / Save / Recovery Domain
+→ Timeline Node / Save Point / Recovery Checkpoint / Restore semantics
 
 Conversation Domain
 → accepted player + GM conversation truth
@@ -123,7 +127,7 @@ Derived / Snapshot / Cache / Transcript 默认不可反向成为第二 live trut
 
 ---
 
-## 4. Runtime 真相与世界演化
+## 4. Reusable Source → Game-local Reality
 
 长期事实模型：
 
@@ -131,20 +135,40 @@ Derived / Snapshot / Cache / Transcript 默认不可反向成为第二 live trut
 Reusable Source Assets
 World Pack / Character / Expansion
 ↓ new game / bind
-Game-local Canonical Assets
+Game-local Canonical Reality
 ↓ current runtime
 Runtime State
 ```
 
-- Source 提供 T0 前材料与惯性；
+核心边界：
+
+> **World Pack Source != Game-local Instance != Runtime World State.**
+>
+> **Source 定义开始前的参考世界；游戏开始后，game-local reality 优先。**
+>
+> **Source provides inertia; actors create history.**
+
+因此：
+
+- Source 提供 T0 前材料、作者意图与惯性；
 - 开局后 game-local reality 权威；
+- Source 更新不得静默改写已有 Game；
 - 模型可创造 NPC / 地点 / 物品 / 事件与开放式后果；
 - durable 内容需要 stable identity / provenance；
-- UI 只投影当前真相。
+- UI 只投影当前真相；
+- World Pack 内容不能因“可扩展”而自动获得 Runtime / OS 任意代码执行权。
 
-> **Source provides inertia; actors create history.**
->
-> **Off-screen != Inactive.**
+G4 当前顺序：
+
+```text
+G4-01 World Pack Source contract v0.1
+→ G4-02 Source → Game-local Instance
+→ G4-03 Pack Discovery / Install / Load
+→ G4-04 Asset Resolution
+→ G4-05 Second Pack Fixture
+```
+
+G4-01 只冻结 reusable Source contract / explicit-root loader：metadata、world instructions、Source lore、initial character Source seeds、authored map declaration、portrait/scene/map asset declarations、必要 mechanic declarations。它不冻结 G5 NPC/Faction/Knowledge/Relationship schema，不执行 mechanic code，不定义 external declarative UI contract，也不把 Source 写进当前 Game。
 
 ---
 
@@ -169,7 +193,7 @@ required authoritative World changes
 
 失败 rollback；不得由 UI / Transcript / Context 补成“看起来成功”。
 
-G3-02 需要补齐 stable mutation identity / replay-safe semantics，处理 crash-after-COMMIT 但 caller 未收到成功时的重复提交歧义。
+G3 已关闭 stable mutation identity / replay-safe semantics、Save/Restore/Recovery、crash/backup 等基础能力。G4 Source loading 默认不得绕过或重定义这些 owner。
 
 ---
 
@@ -190,7 +214,9 @@ Asset Library
 Runtime Relevant != Model Visible
 ```
 
-G2-05 当前第一代策略：最近 12 个完整 accepted Turns + current attempt。Context/messages 是 derived request material，不是 durable truth；Restore 后未来 Context 必须失效/重建，不能泄漏被回滚 future。
+G2-05 第一代策略：最近 12 个完整 accepted Turns + current attempt。Context/messages 是 derived request material，不是 durable truth；Restore 后未来 Context 必须失效/重建，不能泄漏被回滚 future。
+
+World Pack Source 也**不是自动 Model Context**。G4/G5 后续必须经过 game-local materialization、relevance/knowledge 等正式边界后，才决定哪些材料进入模型 working set。
 
 目标仍是：
 
@@ -213,17 +239,27 @@ Save Point
 Load / Restore
 = 明确高影响操作，改变 active future
 
+Recovery Checkpoint
+= Runtime 自动保护 displaced current progress
+
 Timeline Node
 = Runtime durable recovery anchor
+
+Physical Backup
+= storage disaster recovery copy
 ```
 
 核心不变量：
 
 > **Save Point != Timeline Node.**
 >
+> **Recovery Checkpoint != Save Point.**
+>
+> **Physical Backup != Save Point / Recovery Checkpoint.**
+>
 > **Reversibility != frictionless arbitrary rewind.**
 
-Load 旧 Save 不应立即物理删除当前 future；旧 current head 必须有可恢复引用。Arbitrary per-turn rewind 继续 Deferred。
+G3-GATE 已 PASS。Arbitrary per-turn rewind、Timeline browser、backup browser 继续 Deferred。
 
 SQLite / Timeline / backup / migration 深度：`architecture/persistence/时间线存档与可逆性设计.md`。
 
@@ -253,6 +289,8 @@ G8    external World Pack / Mod declarative UI contract
 
 > **Definition declares what should be expressed; Host owns how it is rendered.**
 
+G4 World Pack 不因内容包能力而提前获得 external UI schema；该能力仍留到 G8。
+
 详细设计：`architecture/ui/声明式UIHost设计.md`。
 
 ---
@@ -271,6 +309,8 @@ L0 公理层
 
 向下跳层允许；向上依赖禁止；跨业务模块只通过对方公开 L3；Bootstrap 是 composition root；不为形式完整创建空层、空类或总线。
 
+G4-01 可采用一个小型 `src/world_pack/` production module；不要为了四层命名形式创建空壳层。
+
 ---
 
 ## 10. 专题导航 / 维护规则
@@ -287,5 +327,7 @@ architecture/
 experience/
 └─ DSH经验继承矩阵_v1.0_2026-08-25.md
 ```
+
+G4-01 先通过 Task Packet / implementation evidence 冻结最小 Source contract；只有产生需要长期维护的 trade-off / migration / public contract 深度时，再在 `architecture/world-pack/` 建 supporting doc，并从本 Map 导航。不要为了阶段编号机械新建文档。
 
 新架构事实先更新本 Map；需要详细 trade-off / contract / migration / evidence 时再更新对应 `architecture/<domain>/` supporting doc。Current Task 只看 `MY_WORLD_CURRENT_STATUS.md`，不要新建每阶段顶层 CURRENT 文件。
