@@ -1,7 +1,7 @@
 ---
 title: my world｜架构总览
 status: current-canonical-architecture-map
-version: 1.3
+version: 1.4
 created: 2026-08-26
 updated: 2026-08-28
 current_phase: G4
@@ -26,7 +26,8 @@ implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 
 ```text
 RPG Experience Layer
-玩家看到、阅读和操作的游戏体验
+Application Main Menu / New Game / Continue
++ in-game Player / Narrative / World surfaces
 ↓
 The World Runtime
 Game / World / Timeline / Save / Conversation / NPC / Faction /
@@ -54,7 +55,10 @@ Save != Resource dump
 Timeline != Scene history
 Database row/table != automatic business owner
 World Pack Source != current Game World
+Main Menu != Game truth
 ```
+
+Main Menu 属于 Application-level product surface：它负责表达 Game lifecycle intent（Continue / New Game / switch / quit），不持有第二份 Game、Pack 或 Save 真相。
 
 ---
 
@@ -94,10 +98,13 @@ Persistence 深度设计：`architecture/persistence/时间线存档与可逆性
 
 ```text
 Reusable Source / World Pack
-→ pre-game authored reference material / source identity
+→ pre-game authored reference material / source identity / source generation
+
+Game Creation Composition
+→ one New Game's explicit player-selected source generation / entry / protagonist seed
 
 Game Domain / lifecycle
-→ Game identity / active-game semantics
+→ Game identity / active-game semantics / open-close-switch semantics
 
 World Domain
 → game-local authoritative World meaning/state
@@ -115,8 +122,11 @@ Persistence
 → SQLite representation
 → transaction / migration / backup / corruption recovery mechanics
 
-UI
-→ player-safe projection / intent dispatch
+Application UI
+→ Main Menu / New Game / Continue lifecycle intent projection
+
+In-game UI
+→ player-safe gameplay projection / intent dispatch
 ```
 
 正式原则：
@@ -127,14 +137,16 @@ Derived / Snapshot / Cache / Transcript 默认不可反向成为第二 live trut
 
 ---
 
-## 4. Reusable Source → Game-local Reality
+## 4. Reusable Source → Composition → Game-local Reality
 
-长期事实模型：
+长期事实模型正式升级为：
 
 ```text
 Reusable Source Assets
-World Pack / Character / Expansion
-↓ new game / bind
+World Pack / future Character / future Expansion
+↓ select exact source generation
+Game Creation Composition
+↓ materialize / bind
 Game-local Canonical Reality
 ↓ current runtime
 Runtime State
@@ -142,37 +154,91 @@ Runtime State
 
 核心边界：
 
-> **World Pack Source != Game-local Instance != Runtime World State.**
+> **World Pack Source != Game Creation Composition != Game-local Instance != Runtime World State.**
 >
 > **Source 定义开始前的参考世界；游戏开始后，game-local reality 优先。**
 >
 > **Source provides inertia; actors create history.**
 
-因此：
+### Source Generation / Provenance
 
-- Source 提供 T0 前材料、作者意图与惯性；
-- 开局后 game-local reality 权威；
-- Source 更新不得静默改写已有 Game；
-- 模型可创造 NPC / 地点 / 物品 / 事件与开放式后果；
-- durable 内容需要 stable identity / provenance；
-- UI 只投影当前真相；
-- World Pack 内容不能因“可扩展”而自动获得 Runtime / OS 任意代码执行权。
-
-G4 当前顺序：
+新 Game 不能只记一个人类可读 pack 名称。至少需要能唯一定位创建时使用的 Source generation：
 
 ```text
-G4-01 World Pack Source contract v0.1
-→ G4-02 Source → Game-local Instance
-→ G4-03 Pack Discovery / Install / Load
-→ G4-04 Asset Resolution
-→ G4-05 Second Pack Fixture
+stable pack_id
++ author-controlled pack_version
++ exact content fingerprint / generation identity
 ```
 
-G4-01 只冻结 reusable Source contract / explicit-root loader：metadata、world instructions、Source lore、initial character Source seeds、authored map declaration、portrait/scene/map asset declarations、必要 mechanic declarations。它不冻结 G5 NPC/Faction/Knowledge/Relationship schema，不执行 mechanic code，不定义 external declarative UI contract，也不把 Source 写进当前 Game。
+物理实现可以简单，但产品语义必须保证：Source 后续编辑/升级不会静默改写旧 Game。
+
+### Game Creation Composition v0.1
+
+第一代只冻结当前真实需要：
+
+```text
+selected World Pack exact generation
+selected Entry / T0 seed
+protagonist seed
+```
+
+世界口径/profile、Expansion/mechanic 组合、主角操控模式等过去真实使用过的选项不被否定，但当前只作为候选方向；等真实 New Game UAT 证明需要后再进入正式 Composition。
+
+### Entry Point / T0 Source Seed
+
+World Pack v0.1 可以提供 `0..N` 个轻量 Entry：
+
+```text
+entry_id
+human display name
+authored source text / seed
+```
+
+Entry 只回答“这一局可以从怎样的 T0 前提开始”。它不是 Scenario Runtime，也不提前冻结 year/month/calendar/region/beat/precondition/branch 等通用 DSL。
+
+### Runtime-generated reality
+
+Source 只是惯性来源。游戏进行中由模型/Runtime 合法 materialize 的 NPC / Place / Item / Event 可以只有 game-local stable identity 与 `runtime_generated` provenance，不要求每个实体都伪造 Source ancestry。
+
+### Player-known boundary
+
+Source 中存在 Character、甚至 Character 已进入 game-local reality，**都不等于玩家已经认识他**。未来人物资料 Surface / Context 必须由 Player Knowledge / Encounter evidence 投影，不能把 Source catalog 当玩家通讯录。
 
 ---
 
-## 5. Model / Runtime / Persistence 边界
+## 5. G4 Product Entry / Multi-Game lifecycle
+
+G3 为了先证明 persistence，第一代 intentionally 使用一个 `current-game.sqlite` 路径与单 current Game 体验。G4 第一次真正需要多个 World Pack / 多个独立新局，因此现在才升级 Game lifecycle，而不是在 G3 提前平台化。
+
+正确产品入口：
+
+```text
+Application Start
+↓
+Main Menu
+├─ Continue existing Game
+├─ New Game
+│   ↓
+│   World Pack / Entry / protagonist composition
+│   ↓
+│   Create independent Game
+└─ Quit
+```
+
+G4-01 先建立 Main Menu / navigation shell；G4-05 才把真实 Local Pack Library 与 Minimal Game Library 接入。
+
+Main Menu 的第一代原则：
+
+- 不复制 Game state；
+- Continue 复用 G3 已关闭的 reopen/resume truth；
+- startup failure / safe-backup recovery 不能因为增加 Main Menu 被藏掉；
+- 从 Game 返回 Main Menu 必须先完成正确 runtime cleanup；
+- New Game UI 是 Composition 的产品入口，不把 Source contract 与 UI widget 写死成同一层；
+- 多 Game 物理存储形态等到 G4-05 依据现有 SQLite 证据专项裁定。
+
+---
+
+## 6. Model / Runtime / Persistence 边界
 
 > **Model freedom first. Reversibility over prevention.**
 >
@@ -193,11 +259,11 @@ required authoritative World changes
 
 失败 rollback；不得由 UI / Transcript / Context 补成“看起来成功”。
 
-G3 已关闭 stable mutation identity / replay-safe semantics、Save/Restore/Recovery、crash/backup 等基础能力。G4 Source loading 默认不得绕过或重定义这些 owner。
+G3 已关闭 stable mutation identity / replay-safe semantics、Save/Restore/Recovery、crash/backup 等基础能力。G4 Source / Composition / Game Library 不得绕过或重定义这些 owner。
 
 ---
 
-## 6. Context 架构
+## 7. Context 架构
 
 必须保持：
 
@@ -227,7 +293,7 @@ ordinary Turn model context ≈ bounded
 
 ---
 
-## 7. Save / Timeline / Reversibility 架构
+## 8. Save / Timeline / Reversibility 架构
 
 ```text
 Cancel / Regenerate / latest correction
@@ -265,7 +331,22 @@ SQLite / Timeline / backup / migration 深度：`architecture/persistence/时间
 
 ---
 
-## 8. UI Host 架构
+## 9. UI Host 架构
+
+UI 正式分成两个层次。
+
+### 9.1 Application-level Product Surface
+
+```text
+Main Menu
+New Game flow
+Continue / Game Library
+future Settings / authoring entry as needed
+```
+
+G4 开始建立这层。它拥有导航与 lifecycle intent，不拥有 gameplay truth。
+
+### 9.2 In-game RPG Surface
 
 长期桌面骨架：
 
@@ -278,9 +359,13 @@ Wide/maximized baseline 约 `18 / 60 / 22`；Player Host min ~250px，World Host
 演化顺序：
 
 ```text
-G2    fixed Godot UI + stable Host Slots
+G2    fixed in-game Godot UI + stable Host Slots
 ↓
-G3–G5 real Domain / player-safe projections
+G3    persistence/recovery integrated into real UI
+↓
+G4    Application Main Menu + New Game / Game lifecycle surfaces
+↓
+G5    real World Domain / player-safe projections
 ↓
 G6    Internal Declarative UI Host
 ↓
@@ -295,7 +380,24 @@ G4 World Pack 不因内容包能力而提前获得 external UI schema；该能�
 
 ---
 
-## 9. 业务模块内部 L3 → L0
+## 10. G4 current execution order
+
+```text
+G4-01 Product Entry Shell / Main Menu
+→ G4-02 World Pack Source v0.1 + two-shape Contract Reality Check
+→ G4-03 Game Creation Composition v0.1 + New Game Flow
+→ G4-04 Source → Game-local Instance
+→ G4-05 Local Pack Library + Minimal Game Library
+→ G4-06 Asset Resolution
+→ G4-07 Two-Pack Playable Reality Test
+→ G4-GATE
+```
+
+旧的 `G4-01 World Pack v0.1` task packet 在执行前被本路线 supersede；World Pack Source 工作顺延为 G4-02，且新增 lightweight Entry/T0 seed 与双形态 contract reality check。
+
+---
+
+## 11. 业务模块内部 L3 → L0
 
 ```text
 L3 外交层
@@ -309,11 +411,11 @@ L0 公理层
 
 向下跳层允许；向上依赖禁止；跨业务模块只通过对方公开 L3；Bootstrap 是 composition root；不为形式完整创建空层、空类或总线。
 
-G4-01 可采用一个小型 `src/world_pack/` production module；不要为了四层命名形式创建空壳层。
+G4-02 可采用一个小型 `src/world_pack/` production module；G4-01 产品导航应复用现有 Application/Game Shell，不另建平行 App framework。
 
 ---
 
-## 10. 专题导航 / 维护规则
+## 12. 专题导航 / 维护规则
 
 ```text
 architecture/
@@ -325,9 +427,10 @@ architecture/
    └─ 声明式UIHost设计.md
 
 experience/
-└─ DSH经验继承矩阵_v1.0_2026-08-25.md
+├─ DSH经验继承矩阵_v1.0_2026-08-25.md
+└─ 备选开发方向候选池_2026-08-28.md
 ```
 
-G4-01 先通过 Task Packet / implementation evidence 冻结最小 Source contract；只有产生需要长期维护的 trade-off / migration / public contract 深度时，再在 `architecture/world-pack/` 建 supporting doc，并从本 Map 导航。不要为了阶段编号机械新建文档。
+`experience/备选开发方向候选池_2026-08-28.md` 记录旧项目中有价值、但当前不授权实施的能力与 revisit trigger。它不是 Roadmap，也不能自动提升为 Task。
 
 新架构事实先更新本 Map；需要详细 trade-off / contract / migration / evidence 时再更新对应 `architecture/<domain>/` supporting doc。Current Task 只看 `MY_WORLD_CURRENT_STATUS.md`，不要新建每阶段顶层 CURRENT 文件。
