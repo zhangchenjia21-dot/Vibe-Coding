@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 2.8
+version: 2.9
 created: 2026-08-26
-updated: 2026-08-27
+updated: 2026-08-28
 phase: G3 Persistent Game / Save / Timeline Foundation
-current_task: G3-05 Recovery / Timeline Foundation
+current_task: G3-05 Recovery / Timeline Foundation — READY FOR OWNER UAT
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -36,7 +36,7 @@ G3-01 Persistence Architecture PASS — Independent Review
 G3-02 Durable World Mutation   PASS — Independent Review
 G3-03 Game Reopen / Resume     PASS — Owner UAT
 G3-04 Save / Load / Restore    PASS — Owner UAT
-Current Task                   G3-05 — Recovery / Timeline Foundation
+G3-05 Recovery / Timeline      ENGINEERING PASS — READY FOR OWNER UAT
 G3-GATE                        NOT YET
 ```
 
@@ -83,58 +83,74 @@ Independent Review：**PASS**。Owner UAT（2026-08-27）：**PASS**。
 
 Owner 已真实验证：命名 Save、继续产生未来、明确 Load、Narrative 回退、AI future-memory isolation、Restore 后继续游戏与退出重开均符合预期。
 
-已冻结 G3-04 事实：
-
-- production schema v3；
-- immutable player Save Point 使用 stable `save_id` + display name + Timeline anchor + accepted Conversation recovery material；
-- Save 捕获 coherent durable head + accepted Conversation，不复制第二份 World truth；
-- Restore 原子切换 current World + Game.active_head + accepted Conversation；
-- Conversation recovery material 由 Conversation Domain 预验证；
-- durable COMMIT 先于 memory/UI switch；
-- crash-after-Restore-COMMIT / before UI apply 可通过 reopen 恢复 durable restored truth；
-- Restore 后 Context 重新组装，被回滚 future 不进入 Provider request；
-- historical Timeline Nodes / unrelated Save Points 不因 Load 删除；
-- Save/Load 是明确高影响操作，不提供 arbitrary per-Turn rewind。
-
-Non-blocking follow-up：双开两个产品进程同时写 current Game 的保护仍需在 G3-06 / standalone hardening 前冻结。
+已冻结：production schema v3、immutable player Save Point、atomic World/head/Conversation Restore、Conversation-owned recovery validation、COMMIT-before-memory/UI switch、crash-after-commit reopen correctness、future-memory isolation、historical Timeline retention 与明确高影响 Load UX。
 
 ---
 
-## 6. Current Task｜G3-05 Recovery / Timeline Foundation
+## 6. G3-05｜ENGINEERING PASS / READY FOR OWNER UAT
 
-Outcome：让“读取旧存档”本身也可恢复。玩家不需要为了防止一次误读档而事先知道自己必须另存当前未来。
-
-第一代目标路径：
+实现 commit：
 
 ```text
-current progress Fcurrent
-→ player explicitly Loads old Save S1
-→ Runtime atomically preserves Fcurrent as internal Recovery Checkpoint R1
-→ current switches to S1
-→ player realizes this was the wrong Restore
-→ explicit Recover Previous Progress
-→ World/head/Conversation atomically return to R1
-→ Context rebuilds from recovered truth
-→ AI continues from the recovered future
+bf8c35fdf76c4ea3b8ad2560d93c89c2f84c07b0  G3-05 Recovery / Timeline Foundation
 ```
 
-冻结方向：
+Independent Review：**PASS — no engineering blocker found**。
 
-- Recovery Checkpoint != player Save Point；它是 Runtime 自动创建的 safety material，不进入普通 Save 列表；
-- 每次真正发生高影响 progress switch 前，在**同一个 SQLite transaction**里先捕获被替换的 durable `active_head + accepted Conversation`，再切换目标状态；如果 switch 失败，Recovery Checkpoint 也不得单独留下；
-- Recovery Checkpoint 引用已有 immutable Timeline Node 作为 World anchor，并保存该时刻 accepted Conversation recovery material；不复制整份 World DB；
-- 第一代允许 append-retained internal recovery records，但普通 UI 只暴露最近一个“恢复读取前进度”入口，不做 recovery history browser；
-- successful recovery switch 也应保护被替换的当前进度，使最近两条 active futures 可以安全来回切换，而不是恢复一次就销毁另一边；
-- no-op Load/Recover（目标 head + Conversation 已等于 current）不得覆盖或制造无意义 recovery material；
-- historical Timeline Nodes 保留；从 restored old node 继续新的 World mutation 时允许自然形成 internal branch，旧 future 不删除；不建设 branch graph / branch picker；
-- Retry / Regenerate / latest-turn Correction 在 Load/Recover 前后仍遵守 durable accepted truth 边界；Recovery 必须恢复这些已经 accepted 的最终版本，而不是旧 draft/partial；
-- active generation 中不得执行 Load/Recover；
-- Context/Prompt 继续 derived/rebuildable，Recover 后也必须满足 future-memory isolation；
-- G3-06 的物理 DB corruption/backup、interrupted-write hardening、双进程并发保护不在本任务提前实现。
+已证明：
+
+- production schema v3 → v4 additive transactional migration；intentional mid-migration failure rollback 保持 v3 current/Save/Timeline truth；
+- immutable `recovery_checkpoints` 使用 stable `recovery_id`；`AUTOINCREMENT recovery_sequence` 仅用于 durable monotonic latest ordering，不承担业务 identity；
+- Load old Save 时，Recovery capture + World/head/Conversation switch 位于同一个 SQLite transaction；INSERT/World/head/Conversation/COMMIT 任一步失败均 rollback，且不留下 orphan Recovery；
+- Recover Previous Progress 也是同样的 protected switch：先捕获被替换 current 为 reciprocal Recovery，再原子切回 latest Recovery target；历史 Recovery 不 consume/delete；
+- exact no-op Load/Recover 返回 `already_current`，不提交、不增加 Recovery、不改变 latest useful Recovery；
+- transaction 内重新解析并 exact 校验 latest Recovery，防止 Runtime 预检与 COMMIT 之间目标漂移；
+- latest Recovery 依据 durable monotonic sequence，不依赖 wall-clock；同一秒连续 Load/Recover 仍保持无歧义顺序；
+- historical Timeline DAG 直接承载 internal branch：从 H1 恢复后可形成 H1→H2 与 H1→H3 两个 immutable future，不新增 branch registry/browser；
+- Regenerate / Correction 的最终 durable accepted truth 可被 Recovery exact round-trip；cancelled/failed partial 不进入 Recovery；
+- Recover 后 Context 对另一条 displaced future 保持对称隔离，recent-12 / current-user exactly-once-last 仍成立，Prompt/raw World JSON 不作为 truth；
+- protected Load 与 Recover 的 crash-after-COMMIT / before memory-UI apply 均可在 exact-PID termination 后 reopen 到正确 target，并保留 displaced Recovery；
+- World Surface 只暴露 latest “恢复上一进度”入口，与 named Save 分离；使用明确 confirmation，active generation 时禁用；正常 reopen 后 availability 从 durable truth 重建；
+- real DeepSeek post-Recover continuation、Windows export、launcher smoke 与 G3/G2 regressions均已有 Agent evidence。
+
+G3-05 未实现 Recovery history browser、branch picker、arbitrary per-Turn rewind、G3-06 backup/corruption/interrupted-write hardening、双进程并发保护或 G4/G5/G7。
 
 ---
 
-## 7. 当前核心约束
+## 7. Owner UAT｜CURRENT
+
+只验证真实产品价值，不要求查看日志/数据库：
+
+```text
+run-game.cmd
+→ 在当前进度创建一个旧 Save S1
+→ 从 S1 之后继续玩 1–2 Turn，形成容易辨认的 Future A
+→ 不为 Future A 额外 Save
+→ Load S1
+→ 确认 UI 出现“可恢复上一进度”能力
+→ 在 S1 上继续 1 Turn，形成明显不同的 Future B
+→ Recover Previous Progress
+→ 确认 Narrative 完整回到 Future A，Future B 不残留
+→ 再 Recover Previous Progress
+→ 确认又能完整回到 Future B
+→ 正常退出并重开
+→ 确认当前进度与 Recovery availability 都仍正确
+```
+
+PASS 关注：
+
+- 玩家不必事先另存 Future A，也能在误读档后找回；
+- Load 与 Recover 的确认和“上一进度”概念直观，不像 Timeline debugger；
+- A↔B 往返时 Narrative 没有叠加、重复或混线；
+- AI 在每条 current future 中只记得该 future 的 accepted history，不泄漏另一边；
+- 退出重开后 current 与 Recovery 能力仍成立；
+- 没有 half-switch、空白局、明显卡死或错乱。
+
+Owner UAT PASS 前不得开始 G3-06。
+
+---
+
+## 8. 当前核心约束
 
 - `Model authors the world; Runtime makes it durable; Player owns the timeline.`
 - `Save Point != Timeline Node.`
@@ -148,12 +164,11 @@ current progress Fcurrent
 
 ---
 
-## 8. 当前 waiting
+## 9. 当前 waiting
 
 ```text
-Blocking: NONE KNOWN
-Current: G3-05 repository-native Task Packet / implementation
-Owner UAT: required after Engineering + Independent Review
+Blocking: Owner UAT not yet completed
+Current: G3-05 Owner UAT
 G3-06: HOLD
-Next after G3-05 PASS: G3-06 Crash / Interrupted Write Recovery
+Next after Owner UAT PASS: G3-06 Crash / Interrupted Write Recovery
 ```
