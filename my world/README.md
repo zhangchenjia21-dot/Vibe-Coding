@@ -30,12 +30,16 @@
 ## 当前状态
 
 ```text
-Phase       G2 — AI Conversation Spine
-G2-01       PASS — Owner UAT
-G2-02       PASS — Engineering
-Current     G2-03 — Narrative Conversation View
-G2-GATE     NOT YET
+G1 Foundation                         PASS / CLOSED
+G2 AI Conversation Spine              PASS / CLOSED
+G3 Persistent Game / Save / Timeline PASS / CLOSED
+G3-GATE                               PASS
+Current Phase                         G4 — World Pack & Local Content Foundation
+Current Task                          G4-01 — Product Entry Shell / Main Menu
+G4-GATE                               NOT YET
 ```
+
+G4 已正式改为 **Main Menu first**：先建立应用级主菜单与 New Game/Continue 产品入口，再把 World Pack、建局组合和多 Game 生命周期接入；不先做临时 Pack selector。
 
 实时状态只以 [`MY_WORLD_CURRENT_STATUS.md`](./MY_WORLD_CURRENT_STATUS.md) 为准。
 
@@ -51,6 +55,7 @@ Godot          4.7.2 Standard / non-.NET Windows x64
 第一代语言     GDScript
 Runtime        Godot same-process Runtime
 当前 Provider  DeepSeek deepseek-v4-pro
+Persistence    SQLite via godot-sqlite v4.9
 ```
 
 ---
@@ -75,6 +80,10 @@ Runtime        Godot same-process Runtime
 >
 > **Context stays bounded.**
 
+G4 新增边界：
+
+> **World Pack Source != Game Creation Composition != Game-local Reality != Runtime State.**
+
 ---
 
 ## 架构专题
@@ -95,14 +104,19 @@ architecture/
 
 ---
 
-## 经验资料
+## 经验 / 备选方向
 
 ```text
 experience/
-└─ DSH经验继承矩阵_v1.0_2026-08-25.md
+├─ DSH经验继承矩阵_v1.0_2026-08-25.md
+└─ 备选开发方向候选池_2026-08-28.md
 ```
 
-经验文件用于回答“过去验证过什么 / 踩过什么坑”，不自动覆盖 current 产品与架构裁定。
+`DSH经验继承矩阵` 用于回答“过去验证过什么 / 踩过什么坑”。
+
+`备选开发方向候选池` 保存 Character Card、Expansion、Reference Library、Creator、Opening Scenario、Player-known Directory、Map gameplay、专用机制 UI、advanced Timeline 等历史上有价值但**当前尚未授权实施**的方向与 revisit trigger。
+
+经验文件不自动覆盖 current 产品与架构裁定，也不得因为“过去做过”自动生成 Task。
 
 ---
 
