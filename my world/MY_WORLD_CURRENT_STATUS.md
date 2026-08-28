@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 5.2
+version: 5.3
 created: 2026-08-26
 updated: 2026-08-28
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-01 Application Shell / Main Menu + Game Session Lifecycle
+current_task: G4-02 World Pack + Character Card Source Contracts v0.1
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -33,9 +33,10 @@ G2 AI Conversation Spine              PASS / CLOSED
 G2-GATE                               PASS
 G3 Persistent Game / Save / Timeline PASS / CLOSED
 G3-GATE                               PASS
+G4-01 Application Shell / Lifecycle  PASS / CLOSED
 
 Current Phase                         G4 — Primary Source Assets & Local Game Creation
-Current Task                          G4-01 — Application Shell / Main Menu + Game Session Lifecycle
+Current Task                          G4-02 — World Pack + Character Card Source Contracts v0.1
 G4-GATE                               NOT YET
 ```
 
@@ -113,7 +114,7 @@ G4-11 Two Primary Asset Families Reality Test
 G4-GATE
 ```
 
-所有旧的 G4-01 World Pack task packet / Main-Menu-only handoff 均 **SUPERSEDED BEFORE EXECUTION**。当前正式 G4-01 Task Packet 已重新签发给 Codex。
+所有旧的 G4-01 World Pack task packet / Main-Menu-only handoff 均 **SUPERSEDED BEFORE EXECUTION**。
 
 ---
 
@@ -212,61 +213,76 @@ G4 不建设 generic external Expansion UI framework；真实 mechanism UI 留�
 
 ---
 
-## 8. Current Task｜G4-01
+## 8. G4-01｜PASS / CLOSED
 
 正式名称：
 
 > **G4-01 — Application Shell / Main Menu + Game Session Lifecycle**
 
-Outcome：把已有“启动就自动进入 current Game”的壳升级为真正 Application 产品生命周期。
-
-最低链路：
-
-```text
-Launch
-→ Main Menu READY
-├─ Continue
-├─ New Game stable surface
-└─ Quit
-
-Continue
-→ open Game Session
-
-Return to Main Menu
-→ close Game Session safely
-→ Application remains READY
-```
-
-关键验收：
-
-- Main Menu 不只是 overlay；
-- Application boot 不等于 Game DB boot；
-- Continue 复用 G3 reopen truth；
-- Game → Menu → Continue 不丢状态；
-- generation/cancel/cleanup 正确；
-- corruption / safe-backup recovery 不被菜单藏掉；
-- Windows Maximized、1280×720、960×540；
-- Owner UAT。
-
-本任务不做真实 Source selector / multi-Game storage / Source contracts。
-
-Owner 已指定执行 Agent：**Codex**。正式 Task Packet：
-
-`my-world/docs/tasks/G4-01_APPLICATION_SHELL_GAME_SESSION_LIFECYCLE_TASK.md`
-
-Task Packet 初始签发 commit：`14aa113640cc5cb894e23e7625094b71330a11bd`。
-
 Implementation commit：`d193268be10082df15ce4d8f610de6ebdc7e58ac`。
 
 2026-08-28 Independent Review：**PASS**。
 
-Review 已核对真实 implementation diff、Application/Game Session ownership、Provider cancel / View unbind / Runtime close ordering、writer-lock release proof、same durable Game reopen、corruption recovery production UI、G2/G3 harness 适配与 G4-02 scope exclusion。未发现需要 correction 的 P0/P1 engineering issue。
+2026-08-28 Owner UAT：**PASS**。
 
-当前最高状态：**READY FOR OWNER UAT**。Engineering PASS 不等于 Product PASS；只有 Owner 实际体验启动、Continue、Return、New Game placeholder 与窗口尺寸后才能关闭 G4-01。
+已正式证明：
+
+```text
+Application Launch
+→ Main Menu READY without Game DB open/lock
+→ Continue
+→ current Game Session
+→ Return to Main Menu
+→ Provider/View/Runtime/SQLite/writer cleanup
+→ Application remains READY
+→ Continue again
+→ same durable Game truth
+```
+
+同时保留 G3 Save / Load / Recovery、single-writer、corruption recovery 与 responsive Windows product path。
+
+结论：**G4-01 PASS / CLOSED**。
 
 ---
 
-## 9. 当前核心约束
+## 9. Current Task｜G4-02
+
+正式名称：
+
+> **G4-02 — World Pack + Character Card Source Contracts v0.1**
+
+Outcome：建立第一代两个低复杂度 Primary Source contract，并通过真实差异内容做 Contract Reality Check，为 G4-03 Managed Source Library 提供可验证输入边界。
+
+必须保持：
+
+```text
+World Pack != Character Card
+stable Source identity != exact immutable generation
+Source != Game-local Reality != Runtime State
+```
+
+Shared identity seam 只允许最薄共同部分：
+
+```text
+asset_id
+asset_type
+version
+exact immutable generation / content fingerprint
+```
+
+World Pack 至少表达：world / GM instructions、ordered Source Lore、0..N lightweight Entry/T0 seed、authored portrait/scene/map declarations 与必要 Source material。
+
+Character Card 至少表达：stable/display identity、public profile、GM/private Source profile、portrait reference、player-character eligibility；不得携带 live location/current relationship/current injury/current knowledge 等 Runtime state。
+
+Contract Reality Check 必须使用至少两个风格/规则显著不同的 compact World Source，以及足以覆盖 Player Character / Guaranteed NPC 用途的 Character Source，证明 contract 不是只对单一示例成立。
+
+本任务不做 Managed Source Library、Game Library、New Game selector、Final Create、Expansion Pack 或 Runtime Asset Resolution。
+
+当前状态：**READY TO ISSUE TASK PACKET**。
+
+---
+
+## 10. 当前核心约束
 
 - `Commodity Foundation, Owned Game Semantics.`
 - `Model freedom first. Reversibility over prevention.`
@@ -286,19 +302,13 @@ Review 已核对真实 implementation diff、Application/Game Session ownership�
 
 ---
 
-## 10. 当前 waiting
+## 11. 当前 waiting
 
 ```text
 Blocking: NONE KNOWN
-Current: G4-01 Application Shell / Main Menu + Game Session Lifecycle
-Implementation Owner: Codex — implementation complete
-Formal G4-01 Task Packet: ISSUED — docs/tasks/G4-01_APPLICATION_SHELL_GAME_SESSION_LIFECYCLE_TASK.md
-Packet commit: 14aa113640cc5cb894e23e7625094b71330a11bd
-Implementation commit: d193268be10082df15ce4d8f610de6ebdc7e58ac
-Independent Review: PASS — 2026-08-28
-Current State: READY FOR OWNER UAT
-Waiting: Owner UAT
-Older G4-01 packets/handoffs: SUPERSEDED BEFORE EXECUTION
-G4-02+: HOLD until G4-01 closes
+G4-01: PASS / CLOSED — Engineering + Independent Review + Owner UAT PASS
+Current: G4-02 World Pack + Character Card Source Contracts v0.1
+G4-02 State: READY TO ISSUE TASK PACKET
+G4-03+: HOLD until G4-02 closes
 G4-GATE: NOT YET
 ```
