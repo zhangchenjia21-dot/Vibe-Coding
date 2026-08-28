@@ -1,6 +1,6 @@
 # Skill Repository Consolidation｜Migration Provenance
 
-Status: completed snapshot migration  
+Status: **migration finalized / current authority switched**  
 Migration date: 2026-08-28  
 Source repository: `zhangchenjia21-dot/Skill`  
 Source branch: `main`  
@@ -16,7 +16,7 @@ Source HEAD: `f3051774be80dce9509aca3bac9c1a457c6b9794`
 Vibe-Coding/skill/
 = current reusable Skill authority
 
-old zhanchengjia21-dot/Skill
+old zhangchenjia21-dot/Skill
 = historical source only; no new authoritative writes
 ```
 
@@ -64,7 +64,7 @@ This consolidation preserves the **current source snapshot and exact source HEAD
 
 Therefore, if the old `zhangchenjia21-dot/Skill` repository is permanently deleted, its repository-specific historical commits will no longer be available from GitHub. If that history matters, archive the old repository instead of permanently deleting it, or keep an external mirror/bundle.
 
-Current operation does not depend on the old repository after the consolidated paths and stale references are updated.
+Current operation no longer depends on the old repository.
 
 ## 5. Authority After Migration
 
@@ -79,13 +79,47 @@ User current instruction
 
 Same repository does not imply same semantic ownership.
 
-## 6. Completion Checks
+## 6. Finalization Audit
 
-Migration is complete only after:
+The consolidation was finalized only after both source migration and consumer-routing cleanup.
 
-- all current Skill files exist under `Vibe-Coding/skill/`;
-- root `AGENTS.md` and `README.md` point to the new subtree;
-- `skill/AGENTS.md` and `skill/README.md` define subtree authority;
-- active project / implementation navigation no longer depends on the old Skill repository;
-- stale-reference audit is completed;
-- old repository receives no further authoritative writes.
+Verified current structure:
+
+```text
+Vibe-Coding/
+├─ AGENTS.md
+├─ README.md
+├─ skill/
+│  ├─ AGENTS.md
+│  ├─ README.md
+│  ├─ MIGRATION_PROVENANCE.md
+│  ├─ gpt/
+│  └─ dsh/
+├─ 项目经验/
+├─ my world/
+├─ sillytavern/
+└─ the-world/
+```
+
+Current/active navigation was updated so reusable Skill routing resolves to `zhangchenjia21-dot/Vibe-Coding/main/skill/`. High-value consumers audited include:
+
+- `Vibe-Coding/AGENTS.md` and root `README.md`;
+- `Vibe-Coding/skill/AGENTS.md` and `skill/README.md`;
+- `Vibe-Coding/项目经验/README.md` and `项目经验/AGENTS.md`;
+- `Vibe-Coding/sillytavern/AGENTS.md`;
+- `my-world/README.md` and current `AGENTS.md` routing;
+- `sillytavern/AGENTS.md` and `docs/CURRENT_SOURCES.md`;
+- `sillytavern-assets/AGENTS.md`;
+- imported Skill files whose own repository registries previously pointed at the standalone Skill repository.
+
+Historical/archive material is **not rewritten merely because it names the former repository**. This file intentionally retains the old repository name, source HEAD, and source blob SHAs as provenance rather than as current navigation.
+
+## 7. Deletion / Archive Decision
+
+From a **current-authority, navigation, and execution** perspective, the standalone `zhangchenjia21-dot/Skill` repository is no longer required.
+
+It is therefore safe to archive or delete **without breaking the current Skill authority path**, subject to one explicit trade-off:
+
+> Permanent deletion also removes the old repository's standalone GitHub commit history. The migrated current snapshot and provenance remain in `Vibe-Coding`, but the old independent commit graph does not.
+
+No further authoritative writes should be made to the old repository.
