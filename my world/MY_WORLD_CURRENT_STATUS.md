@@ -1,7 +1,7 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 5.1
+version: 5.2
 created: 2026-08-26
 updated: 2026-08-28
 phase: G4 Primary Source Assets & Local Game Creation
@@ -256,7 +256,13 @@ Owner 已指定执行 Agent：**Codex**。正式 Task Packet：
 
 Task Packet 初始签发 commit：`14aa113640cc5cb894e23e7625094b71330a11bd`。
 
-Independent Review 标准不降低。
+Implementation commit：`d193268be10082df15ce4d8f610de6ebdc7e58ac`。
+
+2026-08-28 Independent Review：**PASS**。
+
+Review 已核对真实 implementation diff、Application/Game Session ownership、Provider cancel / View unbind / Runtime close ordering、writer-lock release proof、same durable Game reopen、corruption recovery production UI、G2/G3 harness 适配与 G4-02 scope exclusion。未发现需要 correction 的 P0/P1 engineering issue。
+
+当前最高状态：**READY FOR OWNER UAT**。Engineering PASS 不等于 Product PASS；只有 Owner 实际体验启动、Continue、Return、New Game placeholder 与窗口尺寸后才能关闭 G4-01。
 
 ---
 
@@ -285,10 +291,13 @@ Independent Review 标准不降低。
 ```text
 Blocking: NONE KNOWN
 Current: G4-01 Application Shell / Main Menu + Game Session Lifecycle
-Implementation Owner: Codex
+Implementation Owner: Codex — implementation complete
 Formal G4-01 Task Packet: ISSUED — docs/tasks/G4-01_APPLICATION_SHELL_GAME_SESSION_LIFECYCLE_TASK.md
 Packet commit: 14aa113640cc5cb894e23e7625094b71330a11bd
-Waiting: Codex implementation → READY FOR INDEPENDENT REVIEW
+Implementation commit: d193268be10082df15ce4d8f610de6ebdc7e58ac
+Independent Review: PASS — 2026-08-28
+Current State: READY FOR OWNER UAT
+Waiting: Owner UAT
 Older G4-01 packets/handoffs: SUPERSEDED BEFORE EXECUTION
 G4-02+: HOLD until G4-01 closes
 G4-GATE: NOT YET
