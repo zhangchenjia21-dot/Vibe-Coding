@@ -40,19 +40,19 @@ whenToUse: 酒馆（SillyTavern 系）世界包、人物卡、拓展包、资产
 
 | Owner | Repository | 职责 |
 |---|---|---|
-| Skill | `zhangchenjia21-dot/Skill` | GPT / DSH Skill；本 Skill current = `skill/gpt/tavern-asset/SKILL.md` |
+| Governance / Skill | `zhangchenjia21-dot/Vibe-Coding` | 项目治理、Lifecycle / Harness 与 GPT / DSH Skill；本 Skill current = `skill/dsh/tavern-asset/SKILL.md` |
 | Game | `zhangchenjia21-dot/sillytavern` | Runtime / Product UI / 当前代码与测试 |
 | Assets | `zhangchenjia21-dot/sillytavern-assets` | World Pack / Character Card / Expansion / Asset Family / Generic Library |
-| Vibe-Coding | `zhangchenjia21-dot/Vibe-Coding` | 项目治理、阶段、核心裁定、Lifecycle / Harness |
 
 路由：
 
 ```text
-Skill → Skill repo
+Skill / cross-project governance → Vibe-Coding/skill + Vibe-Coding current governance
 Game runtime / implementation → sillytavern
 Asset semantics / workspaces → sillytavern-assets
-Project / lifecycle governance → Vibe-Coding
 ```
+
+通用 Skill 不覆盖项目已经冻结的 current 产品 / 架构裁定；发生冲突时按 Vibe-Coding 根 `AGENTS.md` 的 Authority 顺序处理。
 
 ## 1.1 Remote-current-first
 
@@ -730,4 +730,4 @@ G25 Architecture Reflection / Future Explosion Audit
 - 授权门（Discussion / Explicit Authorization）：用 `ask_user_question`，一次一问、附推荐项；已授权批次不重复确认。
 - 跨资产审核 / 独立复核 / 收敛审核：用 `subagent_fork` 隔离审核，不依据单资产自述。
 - 资产来源需联网核验：用 `web_search` 附 URL；GitHub 事实核验用 git / GitHub API（Freshness）。
-- 仓库同步义务：本 Skill 的权威源是 `zhangchenjia21-dot/Skill` 仓库 current；本机安装版落后时应按用户规则升级并同步。
+- 仓库同步义务：本 Skill 的权威源是 `zhangchenjia21-dot/Vibe-Coding/main/skill/dsh/tavern-asset/SKILL.md`；本机安装版落后时应按用户规则升级并同步。
