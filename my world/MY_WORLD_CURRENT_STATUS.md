@@ -1,7 +1,7 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 5.3
+version: 5.4
 created: 2026-08-26
 updated: 2026-08-28
 phase: G4 Primary Source Assets & Local Game Creation
@@ -278,7 +278,15 @@ Contract Reality Check 必须使用至少两个风格/规则显著不同的 comp
 
 本任务不做 Managed Source Library、Game Library、New Game selector、Final Create、Expansion Pack 或 Runtime Asset Resolution。
 
-当前状态：**READY TO ISSUE TASK PACKET**。
+Implementation Owner：**Codex**。
+
+正式 Task Packet：
+
+`my-world/docs/tasks/G4-02_WORLD_CHARACTER_SOURCE_CONTRACTS_TASK.md`
+
+Task Packet commit：`60a0139c8e7facc019fc63bd6593ef2000261284`。
+
+当前状态：**ISSUED — waiting Codex implementation → READY FOR INDEPENDENT REVIEW**。
 
 ---
 
@@ -308,7 +316,10 @@ Contract Reality Check 必须使用至少两个风格/规则显著不同的 comp
 Blocking: NONE KNOWN
 G4-01: PASS / CLOSED — Engineering + Independent Review + Owner UAT PASS
 Current: G4-02 World Pack + Character Card Source Contracts v0.1
-G4-02 State: READY TO ISSUE TASK PACKET
+Implementation Owner: Codex
+Formal G4-02 Task Packet: ISSUED — docs/tasks/G4-02_WORLD_CHARACTER_SOURCE_CONTRACTS_TASK.md
+Packet commit: 60a0139c8e7facc019fc63bd6593ef2000261284
+Waiting: Codex implementation → READY FOR INDEPENDENT REVIEW
 G4-03+: HOLD until G4-02 closes
 G4-GATE: NOT YET
 ```
