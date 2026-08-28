@@ -7,13 +7,13 @@
 默认只需要先读下面五份。专题文件只有任务真实涉及对应领域时再深入。
 
 1. [`MY_WORLD_项目启动总纲_CURRENT.md`](./MY_WORLD_项目启动总纲_CURRENT.md)  
-   **产品是什么、为什么做、核心体验与范围。**
+   **产品是什么、为什么做、核心体验、第一代建局方式与范围。**
 2. [`MY_WORLD_核心设计原则_CURRENT.md`](./MY_WORLD_核心设计原则_CURRENT.md)  
    **跨阶段不能丢失的产品 / Runtime 原则。**
 3. [`MY_WORLD_架构_CURRENT.md`](./MY_WORLD_架构_CURRENT.md)  
-   **当前系统架构地图，以及所有专题设计导航。**
+   **当前系统架构地图、Source/Game/Runtime 边界，以及专题设计导航。**
 4. [`MY_WORLD_总体规划路线图_CURRENT.md`](./MY_WORLD_总体规划路线图_CURRENT.md)  
-   **G1–G9 的先后顺序、Task DAG 与 Stage Gate。**
+   **G1–G9 的先后顺序、Task DAG、Stage Gate 与为什么这样排。**
 5. [`MY_WORLD_CURRENT_STATUS.md`](./MY_WORLD_CURRENT_STATUS.md)  
    **现在做到哪里、当前 Task、PASS / UAT / blocker。**
 
@@ -34,12 +34,23 @@ G1 Foundation                         PASS / CLOSED
 G2 AI Conversation Spine              PASS / CLOSED
 G3 Persistent Game / Save / Timeline PASS / CLOSED
 G3-GATE                               PASS
-Current Phase                         G4 — World Pack & Local Content Foundation
-Current Task                          G4-01 — Product Entry Shell / Main Menu
+Current Phase                         G4 — Primary Source Assets & Local Game Creation
+Current Task                          G4-01 — Application Shell / Main Menu + Game Session Lifecycle
 G4-GATE                               NOT YET
 ```
 
-G4 已正式改为 **Main Menu first**：先建立应用级主菜单与 New Game/Continue 产品入口，再把 World Pack、建局组合和多 Game 生命周期接入；不先做临时 Pack selector。
+G4 当前正式采用 **asset-only first-generation creation**：
+
+```text
+World Pack
++ Character Card
++ optional Expansion Pack
+→ explicit Composition
+→ atomic Final Create
+→ independent Game-local Reality
+```
+
+第一代不支持无 World Pack / 无 Character Card / AI 空白世界直接建局。真实 World + Character 先做 First Playable A；通过后再加入真实 Expansion 做 First Playable B。
 
 实时状态只以 [`MY_WORLD_CURRENT_STATUS.md`](./MY_WORLD_CURRENT_STATUS.md) 为准。
 
@@ -70,7 +81,7 @@ Persistence    SQLite via godot-sqlite v4.9
 >
 > **Model freedom first. Reversibility over prevention.**
 >
-> **Reversibility ≠ frictionless arbitrary rewind.**
+> **Narrative richness over artificial brevity.**
 >
 > **Model authors the world; Runtime makes it durable; Player owns the timeline.**
 >
@@ -78,11 +89,38 @@ Persistence    SQLite via godot-sqlite v4.9
 >
 > **Source provides inertia; actors create history.**
 >
-> **Context stays bounded.**
+> **Context stays bounded, not starved.**
 
-G4 新增边界：
+G4 新增长期边界：
 
-> **World Pack Source != Game Creation Composition != Game-local Reality != Runtime State.**
+> **Application Lifetime != Game Session Lifetime.**
+>
+> **Source Library != Game Library.**
+>
+> **Source stable identity != exact immutable generation.**
+>
+> **Guaranteed NPC != Opening NPC != Player-known NPC.**
+>
+> **Expansion binding != real gameplay effect.**
+
+---
+
+## 第一代 New Game 路径
+
+```text
+Main Menu
+→ New Game
+→ Exactly 1 World Pack
+→ Entry / T0
+→ Expansion 0..N（可 none）
+→ Exactly 1 Player Character Card
+→ 0..N Guaranteed NPC Character Cards
+→ Game name / Control Mode / optional opening supplement
+→ Compatibility Review
+→ Atomic Final Create
+```
+
+Character Card 是 reusable Character Source，不是“主角专用卡”。玩家选择某个 NPC Character Card，代表该角色从建局起属于本局 canonical cast，但不保证第一幕出现，也不代表玩家已经认识他。
 
 ---
 
@@ -104,17 +142,28 @@ architecture/
 
 ---
 
-## 经验 / 备选方向
+## 经验 / 跨项目复用
 
 ```text
 experience/
 ├─ DSH经验继承矩阵_v1.0_2026-08-25.md
+├─ AI_RPG开发路径与阶段设计经验_v1.0_2026-08-28.md
 └─ 备选开发方向候选池_2026-08-28.md
 ```
 
-`DSH经验继承矩阵` 用于回答“过去验证过什么 / 踩过什么坑”。
+### `AI_RPG开发路径与阶段设计经验`
 
-`备选开发方向候选池` 保存 Character Card、Expansion、Reference Library、Creator、Opening Scenario、Player-known Directory、Map gameplay、专用机制 UI、advanced Timeline 等历史上有价值但**当前尚未授权实施**的方向与 revisit trigger。
+这是**未来开发类似 AI RPG 时优先参考的完整经验入口**。它已经把旧项目的重要开发步骤、返修模式、资产路线、Owner UAT、Independent Review、Source pinning、Final Create、Expansion、Creator、Living World 等经验收敛到 `my world`。
+
+未来新项目不需要先拼读旧 SillyTavern / The World 的大量历史过程文档；旧文档继续承担历史证据角色。
+
+### `DSH经验继承矩阵`
+
+用于回答 The World / DSH 真实长局验证过什么、哪些宿主债务不能迁移。
+
+### `备选开发方向候选池`
+
+只保存当前**尚未授权**的能力和 revisit trigger。Character Card、Expansion Pack、Protagonist Control Mode、Managed Source Library、Multi-Game 已经进入 CURRENT，不再属于 Deferred。
 
 经验文件不自动覆盖 current 产品与架构裁定，也不得因为“过去做过”自动生成 Task。
 
@@ -122,7 +171,7 @@ experience/
 
 ## 历史 / 归档
 
-已关闭阶段过程、旧 handoff、Preflight、被 supersede 的 current 等，统一进入仓库根的：
+已关闭阶段过程、旧 handoff、Preflight、被 supersede 的 current 等，统一进入仓库根：
 
 `99_归档/my world/`
 
@@ -139,5 +188,11 @@ Vibe-Coding/AGENTS.md
 + 本目录五份核心文档中的任务相关最小集合
 + 实现仓库 AGENTS.md / 当前代码 / 当前 Task Packet
 ```
+
+如果任务是：
+
+- **规划新阶段 / 审计任务顺序 / 启动未来同类项目**：额外读 `experience/AI_RPG开发路径与阶段设计经验_v1.0_2026-08-28.md`；
+- **讨论延后功能**：读 `experience/备选开发方向候选池_2026-08-28.md`；
+- **涉及 DSH 长局经验**：读 `experience/DSH经验继承矩阵_v1.0_2026-08-25.md`。
 
 不要默认“阅读整个治理目录”。只有 `MY_WORLD_架构_CURRENT.md` 指向某个专题且当前 Task 真正触及时，再进入对应 `architecture/` 或 `experience/` 文件。
