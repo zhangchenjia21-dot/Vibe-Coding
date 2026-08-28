@@ -1,38 +1,62 @@
 # Vibe-Coding
 
-AI 驱动开发项目的治理、方法论、项目核心资料与复盘仓库。
+AI 驱动开发项目的统一治理、方法论、可复用 Skill、项目核心资料与复盘仓库。
 
 ## AI 入口
 
-任何 GPT、Codex、Grok 或其它 Agent 开始工作前，先读 [`AGENTS.md`](./AGENTS.md)。
+任何 GPT、Codex、Grok、KimiCode 或其它 Agent 开始正式工作前，先读 [`AGENTS.md`](./AGENTS.md)。
 
 ```text
 AGENTS.md
-→ 动态事实源、权威顺序、Freshness、Agent 指令与仓库治理
+→ 总 Authority / Freshness / Decision Propagation / 文档治理
+
+skill/
+→ 跨项目可复用执行方法与模板
 
 项目经验/
-→ 跨项目 Lifecycle、Harness、复盘与通用开发规范
-
-sillytavern/
-→ 酒馆游戏当前路线、裁定、阶段状态与项目核心资料
-
-the-world/
-→ The World（DSH-native Agent RPG）规划、裁定、任务包与延后记录
+→ 跨项目 Lifecycle、复盘与通用开发经验
 
 my world/
-→ my world 独立单人 AI RPG 的产品总纲、独立版 Preflight、Foundation 决策与 DSH 经验继承资料
+→ my world 项目 Product / Principles / Architecture / Roadmap / Current Status
+
+sillytavern/
+→ SillyTavern 项目治理与历史核心资料
+
+the-world/
+→ The World 项目治理、裁定与经验
 
 99_归档/
-→ superseded 版本与已关闭过程资料，不构成 current authority
+→ superseded / closed process evidence，不构成 current authority
 ```
+
+## Skill
+
+原独立 `zhangchenjia21-dot/Skill` 仓库的 current Skill 已并入：
+
+`skill/<runtime>/<skill-name>/SKILL.md`
+
+常用入口：
+
+- `skill/gpt/lifecycle-dev-process/SKILL.md` — 项目生命周期、阶段与路线审计；
+- `skill/gpt/agent-task-packet/SKILL.md` — 正式 Agent Task Packet；
+- `skill/gpt/lifecycle-templates/SKILL.md` — 生命周期/架构治理模板；
+- `skill/gpt/长上下文交接/SKILL.md` — 长线程交接；
+- `skill/dsh/` — DeepSeek Harness 适配版本。
+
+Skill 子树规则见 [`skill/AGENTS.md`](./skill/AGENTS.md)，迁移 provenance 见 [`skill/MIGRATION_PROVENANCE.md`](./skill/MIGRATION_PROVENANCE.md)。
 
 ## 仓库边界
 
-- 酒馆游戏当前代码、测试与运行事实：`zhangchenjia21-dot/sillytavern`
-- The World 项目本体（代码、产品规格、游戏工作区）：`zhangchenjia21-dot/the-world`
-- my world 独立游戏项目本体（代码、测试、Godot 工程与运行事实）：`zhangchenjia21-dot/my-world`
-- 世界包、人物卡、拓展包与资产族：`zhangchenjia21-dot/sillytavern-assets`
-- 可复用执行 Skill：`zhangchenjia21-dot/Skill`
-- 项目治理与正式项目裁定：本仓库
+- 项目治理、跨项目经验、可复用 Skill：**本仓库**；
+- `my world` 代码/测试/Godot 运行事实：`zhangchenjia21-dot/my-world`；
+- SillyTavern 当前实现事实：`zhangchenjia21-dot/sillytavern`；
+- The World 实现与游戏工作区：`zhangchenjia21-dot/the-world`；
+- 世界包、人物卡、拓展包与资产内容：`zhangchenjia21-dot/sillytavern-assets`。
 
-正式 Agent 指令由 `Skill/skill/gpt/agent-task-packet/SKILL.md` 约束；不要把完整项目文档重复复制进每条 Prompt。
+同仓库不等于同 Authority：项目 current 决策高于通用 Skill 默认规则，实现事实仍以对应 implementation repository 为准。
+
+## 文档原则
+
+> **Root is map; subfolders are depth.**
+
+顶层保持少数稳定入口；项目深度进入各项目子目录；跨项目方法进入 `skill/`；经验进入 `项目经验/`；历史进入 `99_归档/`。
