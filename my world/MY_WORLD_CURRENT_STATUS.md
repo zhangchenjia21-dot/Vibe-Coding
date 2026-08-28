@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 3.2
+version: 3.3
 created: 2026-08-26
 updated: 2026-08-28
 phase: G3 Persistent Game / Save / Timeline Foundation
-current_task: G3-07 Persistence Reality Test
+current_task: G3-07 Persistence Reality Test — IR-01 focused repair
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -38,7 +38,7 @@ G3-03 Game Reopen / Resume     PASS — Owner UAT
 G3-04 Save / Load / Restore    PASS — Owner UAT
 G3-05 Recovery / Timeline      PASS — Owner UAT
 G3-06 Crash / Write Recovery   PASS — Owner UAT
-Current Task                   G3-07 — Persistence Reality Test
+G3-07 Persistence Reality Test RETURNED — IR-01 focused evidence repair
 G3-GATE                        NOT YET
 ```
 
@@ -70,80 +70,48 @@ G3-06 实现 commit：
 
 G3-06 Independent Review：**PASS**。Owner UAT（2026-08-28）：**PASS**。
 
-Owner 使用隔离 damaged-current fixture 完成真实产品恢复体验并确认 recovery 正常。Owner 同时提出一个非阻塞 UI polish：全屏/宽屏下“恢复最近安全备份”按钮位于右下角过于不显眼；应在 G3-07 中把该按钮移动到中央“无法恢复当前游戏/当前数据损坏”提示之后，使阻断性恢复动作与问题说明形成直接视觉连续关系。该调整属于小型 UI 修正，不单独拆 Task。
-
-G3-06 已冻结：
-
-- dedicated sibling SQLite coordination DB + process-lifetime SQLite lock 实现 single-writer；
-- physical backup 使用 `SQLite.backup_to` / `restore_from`；
-- verified `latest / previous / staging` 发布与回退；
-- pre-migration verified backup gate；
-- physical corruption / logical invalid / newer schema / normal missing 分离；
-- corrupt current 不创建空白 Game；
-- disaster recovery 经 staged verified replacement + corrupt-original quarantine；
-- backup/recovery interruption 后仍保留可重试 recovery material；
-- normal SQLite crash 不误触 corruption recovery。
+Owner 使用隔离 damaged-current fixture 完成真实产品恢复体验并确认 recovery 正常。Owner 同时提出的中央 recovery action 可发现性修正在 G3-07 implementation 中已完成，Independent Review 未发现该 UI 修改的工程 blocker。
 
 ---
 
-## 4. Current Task｜G3-07 Persistence Reality Test
+## 4. G3-07｜RETURNED — IR-01 focused evidence repair
 
-Outcome：把 G3-01..G3-06 已分别证明的能力串成一条真实产品路径，确认它们组合运行时仍然像一个可靠、可长期继续的 AI RPG，而不是一组彼此孤立的 persistence tests。
-
-必须真实完成至少：
+Implementation commit：
 
 ```text
-fresh isolated Game
-→ real Provider continuous play
-→ durable accepted history
-→ exit / reopen same Game
-→ named Save
-→ continue Future A
-→ Load old Save
-→ Context excludes Future A
-→ continue Future B
-→ Recover Previous Progress
-→ recover Future A exactly
-→ optional reciprocal Recover back to B
-→ abrupt process interruption / reopen stays coherent
-→ physical safety backup remains valid
+4529338728e7db91a2ce73b4dc8eec21c5530d0e  G3-07 persistence reality test + central recovery button placement
 ```
 
-G3-07 还必须完成 Owner 已确认的小 UI 修正：
+Independent Review 对 production/UI/persistence 主体未发现新 blocker：
+
+- 唯一 `恢复最近安全备份` action 已从右下角移到中央 startup-failure overlay 的说明正下方；healthy/no-backup visibility 分支正确；
+- deterministic integrated Reality Test 已证明 recent-12、Save → Future A → Load → Future B → Recover → reciprocal Recover → reopen 的 durable truth 与 A/B marker isolation；
+- real DeepSeek R1/R2/R3 均已真实 accepted，Restore/Recover 后继续生成、durable 与 reopen continuity 已有 evidence；
+- G3/G2 regression、single-writer、backup/recovery、Windows export 与 reality metrics 已通过 Agent validation。
+
+IR-01 只针对一个**真实 Provider evidence defect**：
 
 ```text
-physical-corruption startup failure
-→ central player-readable failure message
-→ immediately below it: [恢复最近安全备份]
-→ confirmation
+MARKER_R2 = G307_REAL_LOAD_TURN
 ```
 
-宽屏/全屏下不得再把唯一灾难恢复入口藏在右下角；普通 healthy READY 状态不得显示该按钮。
+在 `tests/g3_07/真实续玩现实测试.gd` 中被用于断言 Recover 后 accepted Conversation / R3 request 不含 displaced B marker，但当前 R2 玩家输入实际没有插入该 marker。因此这些 `not contains(MARKER_R2)` 断言天然为真，不能作为真实 Provider path 的 B-future isolation 证据。
 
-### Reality-test requirements
+该发现当前不证明 production persistence 有 bug；deterministic `G307_FUTURE_A_ONLY / G307_FUTURE_B_ONLY` 测试已经真实覆盖 A/B isolation。但 G3-GATE 前不接受 vacuous assertion 进入最终 evidence chain。
 
-- 真实 DeepSeek continuation 是 G3-07 blocking evidence。G3-06 曾遇到一次 `transport`；本轮必须重新验证成功。若 Provider 在合理重试后持续不可用，返回 `BLOCKED_EXTERNAL_PROVIDER` / `BLOCKED`，不得用离线结果替代 G3-GATE 证据。
-- Context 必须继续 bounded；跨 recent-12 边界验证 current user exactly-once/last，不能持久化 Prompt/Provider messages/raw World JSON 当 truth。
-- Save / Load / Recover / reopen 后 Narrative 不重复、不混线，AI 不泄漏另一条 future。
-- single-writer、verified backup、normal crash vs physical corruption classification 继续通过 focused regression；不要求再次破坏 Owner 真实数据。
-- 记录长一点的现实路径中 DB size、Save backup refresh latency、graceful-close latency；只采证据，不因轻微性能问题提前建设 G7 平台。
-- 如 Reality Test 暴露 bounded bug，可在 G3-07 内做最小修复；若需要重开 persistence architecture 或增加新产品能力，停止并返回 `BLOCKED`。
+正式 focused repair packet：
 
----
+```text
+docs/tasks/G3-07_IR-01_REAL_PROVIDER_MARKER_EVIDENCE_REPAIR.md
+```
 
-## 5. Agent / Owner
-
-G3-07 implementation / validation Owner：**KimiCode K3**。
-
-原因：本任务主要是 Windows/Godot 本地真实执行、跨进程、GUI、export、Provider 与完整产品路径验证，并只包含一个小型 UI 布局修正。当前 Codex 5 小时额度已用尽；用户明确授权后续任务改用 Grok Build 或 KimiCode。
-
-如果 G3-07 暴露复杂跨模块 persistence semantic defect，可在重新派发 repair 时考虑 Grok Build；不得因为 Agent 切换而降低验收标准。
+Repair 要求仅：把 unique B-only marker 实际放入 R2 accepted player history，真实 DeepSeek 重跑 R2/R3，证明 Recover 后 accepted truth 与下一次真实 Provider request 都排除 B marker，同时 R3 durable + reopen；同步修正工程证据记录。默认不改 production code/UI/schema，不重跑无关全量回归。
 
 ---
 
-## 6. G3-GATE 候选标准
+## 5. G3-GATE 候选标准
 
-G3-07 Engineering + Independent Review + Owner UAT 全部 PASS 后，才可评估 G3-GATE：
+G3-07 IR-01 repair → Independent Review PASS → Owner UAT PASS 后，才可评估 G3-GATE：
 
 - reliable current Game persistence；
 - reopen/resume；
@@ -161,13 +129,13 @@ G3-07 Engineering + Independent Review + Owner UAT 全部 PASS 后，才可评�
 
 ---
 
-## 7. 当前 waiting
+## 6. 当前 waiting
 
 ```text
-Blocking: NONE KNOWN
-Current: G3-07 repository-native Task Packet / execution
-Owner UAT: required after Engineering + Independent Review
+Blocking: G3-07 IR-01 real Provider marker evidence repair
+Current: G3-07 IR-01 focused repair
+Owner: KimiCode K3
+Owner UAT: HOLD until Independent Review PASS
 G3-GATE: HOLD until G3-07 PASS
 G4: HOLD until G3-GATE PASS
-Next implementation agent: KimiCode K3
 ```
