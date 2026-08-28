@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 4.1
+version: 5.0
 created: 2026-08-26
 updated: 2026-08-28
-phase: G4 World Pack & Local Content Foundation
-current_task: G4-01 Product Entry Shell / Main Menu
+phase: G4 Primary Source Assets & Local Game Creation
+current_task: G4-01 Application Shell / Main Menu + Game Session Lifecycle
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -21,6 +21,7 @@ implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 - 跨阶段原则：`MY_WORLD_核心设计原则_CURRENT.md`
 - 架构地图：`MY_WORLD_架构_CURRENT.md`
 - 阶段 / Task DAG：`MY_WORLD_总体规划路线图_CURRENT.md`
+- 开发路径经验：`experience/AI_RPG开发路径与阶段设计经验_v1.0_2026-08-28.md`
 
 ---
 
@@ -33,8 +34,8 @@ G2-GATE                               PASS
 G3 Persistent Game / Save / Timeline PASS / CLOSED
 G3-GATE                               PASS
 
-Current Phase                         G4 — World Pack & Local Content Foundation
-Current Task                          G4-01 — Product Entry Shell / Main Menu
+Current Phase                         G4 — Primary Source Assets & Local Game Creation
+Current Task                          G4-01 — Application Shell / Main Menu + Game Session Lifecycle
 G4-GATE                               NOT YET
 ```
 
@@ -63,119 +64,197 @@ SQLite authoritative persistence
 + real Provider continuation after Restore / Recover
 ```
 
-最终 Reality Test / evidence line：
-
-```text
-4529338728e7db91a2ce73b4dc8eec21c5530d0e  G3-07 reality test + central recovery action
-dbc6167598ecbde3578778e638e2494bffc48244  G3-07 IR-01 real Provider B-marker evidence repair
-```
-
 明确 Deferred：任意 Turn 一键 rewind、Timeline browser、backup browser。
 
 ---
 
-## 4. G4 Route｜已按 Owner 审核更新
+## 4. G4 Route｜Owner-approved v3
 
-历史仓库回溯与 Owner 审核后，G4 不再从 Source contract 直接开始。原因：World Pack 选择、创建新 Game、继续 Game 与多 Game 切换都需要稳定的 Application-level 产品入口；不应先做临时 Pack selector，再在后续重做正式主菜单。
+2026-08-28 经过第二轮跨项目历史开发步骤审计与 Owner 讨论，G4 再次收敛。
+
+本轮不是增加更多功能，而是修正开发顺序与第一代产品范围：
+
+1. 第一代只有 asset-only New Game 主路径；
+2. World Pack / Character Card / Expansion Pack 升级为 Primary Source Trio；
+3. Character Card 不限于玩家角色；建局为 `Exactly 1 Player + 0..N Guaranteed NPC`；
+4. Expansion 数量 `0..N`，允许 none；
+5. 第一次资产试玩只验证 World + Character；通过后才加入真实 Expansion；
+6. Main Menu 任务必须包含 `Application Lifetime != Game Session Lifetime`，不能只画视觉菜单；
+7. Managed Source Library 必须先于 New Game Wizard；
+8. Multi-Game / Game Library 必须在正式 New Game 前成立；
+9. Source generation immutable，existing Game exact pin；
+10. First Playable A / B 在 G4 中途分别进行 Owner UAT，不等到整个 G4 最后才第一次试玩。
 
 新 G4 Task DAG：
 
 ```text
-G4-01 Product Entry Shell / Main Menu
+G4-01 Application Shell / Main Menu + Game Session Lifecycle
 ↓
-G4-02 World Pack Source v0.1 + Contract Reality Check
+G4-02 World Pack + Character Card Source Contracts v0.1
 ↓
-G4-03 Game Creation Composition v0.1 + New Game Flow
+G4-03 Managed Local Source Library v0.1
 ↓
-G4-04 Source → Game-local Instance
+G4-04 Multi-Game Lifecycle / Game Library Foundation
 ↓
-G4-05 Local Pack Library + Minimal Game Library
+G4-05 Asset-only New Game Wizard v0.1
 ↓
-G4-06 Asset Resolution
+G4-06 Atomic Final Create + World/Character Materialization
 ↓
-G4-07 Two-Pack Playable Reality Test
+G4-07 First Playable A — World + Character Owner UAT
+↓
+G4-08 Expansion Pack v0.1 + First Real Runtime Vertical
+↓
+G4-09 First Playable B — Expansion Owner UAT
+↓
+G4-10 Runtime Asset Resolution
+↓
+G4-11 Two Primary Asset Families Reality Test
 ↓
 G4-GATE
 ```
 
-旧 `docs/tasks/G4-01_WORLD_PACK_V0_1_TASK.md` **在执行前 superseded**。不得把该旧任务包发送给 Grok Build/KimiCode；World Pack Source 工作已顺延为 G4-02，并新增 lightweight Entry/T0 seed 与 two-shape Contract Reality Check。
+所有旧的 G4-01 World Pack task packet / Main-Menu-only handoff 均 **SUPERSEDED BEFORE EXECUTION**。新的 G4-01 Task Packet 必须重新签发。
 
 ---
 
-## 5. Current Task｜G4-01 Product Entry Shell / Main Menu
+## 5. 第一代 New Game 产品冻结
 
-Outcome：把 G2/G3 已有“直接进入游戏”的应用壳升级为第一代真正玩家主菜单，使后续 New Game / World Pack / multi-Game 有稳定产品入口。
+正式路径：
 
-第一代产品路径：
+```text
+Main Menu
+→ New Game
+→ Exactly 1 World Pack
+→ Entry / T0
+→ Expansion Pack 0..N（可 none）
+→ Exactly 1 Player Character Card
+→ 0..N Guaranteed NPC Character Cards
+→ Minimal Settings
+→ Compatibility Review
+→ Atomic Final Create
+→ Game-local Reality
+→ real AI GM Opening
+```
+
+Minimal Settings 当前批准：
+
+- Game display name；
+- Protagonist Control Mode：Full / Light / Narrative；
+- optional opening supplement。
+
+默认推荐 Light Delegation。
+
+第一代不支持：
+
+- 无 World Pack 建局；
+- 无 Character Card 的玩家角色建局；
+- AI 从空白自由文本直接生成世界并开局；
+- Draft / arbitrary external file 直接成为 Game Source；
+- historical Source version picker；
+- complex Expansion feature/module chooser；
+- Creator 在 G4 进入关键路径。
+
+---
+
+## 6. Character Card 当前语义
+
+Character Card 是 reusable Character Source。
+
+第一代建局：
+
+```text
+Exactly 1 Player Character
+0..N Guaranteed NPC Characters
+```
+
+Guaranteed NPC：
+
+> 被玩家明确选择后，从 Final Create 起就是本局 canonical cast 的一部分。
+
+但：
+
+```text
+Guaranteed in Game
+!= Opening appearance
+!= same scene
+!= player-known
+!= relationship
+!= automatic context inclusion
+```
+
+具体出现时间/地点/关系由 G5 世界因果与 Runtime 决定。
+
+---
+
+## 7. Expansion 当前语义
+
+第一代允许 `0..N` Expansion Pack。
+
+开发顺序冻结：
+
+```text
+First Playable A
+World + Character
+→ Owner UAT
+
+then
+
+Expansion v0.1
+→ exact binding
+→ real observable Runtime effect
+→ First Playable B
+→ Owner UAT
+```
+
+不接受 `Source / Manifest / Binding 存在` 就宣称 Expansion 已工作。
+
+G4 不建设 generic external Expansion UI framework；真实 mechanism UI 留给 G6，external declarative UI contract 留给 G8。
+
+---
+
+## 8. Current Task｜G4-01
+
+正式名称：
+
+> **G4-01 — Application Shell / Main Menu + Game Session Lifecycle**
+
+Outcome：把已有“启动就自动进入 current Game”的壳升级为真正 Application 产品生命周期。
+
+最低链路：
 
 ```text
 Launch
-→ Main Menu
-├─ Continue current Game
-├─ New Game
-│  └─ reserved creation surface / host
+→ Main Menu READY
+├─ Continue
+├─ New Game stable surface
 └─ Quit
+
+Continue
+→ open Game Session
+
+Return to Main Menu
+→ close Game Session safely
+→ Application remains READY
 ```
 
-同时必须支持从正在玩的 Game 安全返回 Main Menu，并能再次 Continue。
+关键验收：
 
-G4-01 主要边界：
+- Main Menu 不只是 overlay；
+- Application boot 不等于 Game DB boot；
+- Continue 复用 G3 reopen truth；
+- Game → Menu → Continue 不丢状态；
+- generation/cancel/cleanup 正确；
+- corruption / safe-backup recovery 不被菜单藏掉；
+- Windows Maximized、1280×720、960×540；
+- Owner UAT。
 
-- 不实现真实 Pack discovery/selection；G4-03/G4-05 再接入；
-- 不修改/重建 G3 persistence semantics；Continue 必须复用已关闭的 reopen/resume truth；
-- startup corruption / safe-backup recovery 不能因 Main Menu 被隐藏或降级；
-- `New Game` 先建立稳定 creation surface/host，不用临时测试窗口替代正式产品入口；
-- 不做 Settings framework、在线账号、云同步、商店；
-- UI 仍只是 lifecycle intent / projection，不成为 Game truth；
-- Windows Maximized、1280×720、960×540 必须真实验证。
+本任务不做真实 Source selector / multi-Game storage / Source contracts。
 
-由于本任务是 Godot UI + Windows 本地生命周期/导航工作，执行优先使用 **KimiCode K3**；G4-02 Source contract/cross-module semantics 再优先考虑 **Grok Build**。Agent 变化不降低 Independent Review / Windows evidence 标准。
-
-G4-01 是 product-facing UI task：Engineering / Independent Review 通过后建议安排 Owner UAT，重点验证“启动 → 主菜单 → Continue → 返回主菜单”的自然性与恢复按钮可发现性。
+推荐执行：**KimiCode K3**，因为是 Godot UI + Windows local lifecycle/navigation。Independent Review 标准不降低。
 
 ---
 
-## 6. G4 已批准的新架构结论
-
-### Main Menu first
-
-先建立正式应用入口，再把 World Pack / New Game 选择接进去；不创建临时 Pack selector 作为产品主路径。
-
-### World Pack Entry / T0 seed
-
-G4-02 World Pack v0.1 支持 optional lightweight `Entry Point`：stable entry identity + display name + authored source seed/text。它不是 Opening Scenario 状态机，也不冻结通用时间/场景/Beat DSL。
-
-### Game Creation Composition
-
-新 Game 不是“选了 Pack 就结束”。G4-03 明确区分：
-
-```text
-World Pack Source Generation
-+ selected Entry
-+ protagonist seed
-→ Game Creation Composition
-→ Game-local Reality
-```
-
-历史上真实使用过的 world profile、Expansion/mechanic selection、protagonist control mode 记录为候选，不默认进入 v0.1。
-
-### Exact Source provenance
-
-Game-local reality 至少知道创建时使用的 pack stable identity、author version、exact content fingerprint/generation 与 selected Entry。Source 后续更新不得静默改写旧 Game。
-
-Runtime 新生成实体允许 `runtime_generated` provenance，不要求一切都来自 Source。
-
-### Multi-Game becomes a G4 need
-
-G3 的 one-current-Game 是有意的第一代范围；G4 现在需要多个 Pack 建立多个独立 Game，因此 G4-05 才正式升级 Local Game Library / switching，不回头把 G3 当失败重做。
-
-### Two-pack real product proof
-
-G4 最终验证不再只是 second fixture parse PASS；G4-07 必须用两个差异明显的 World Pack，真实 New Game、真实 DeepSeek、durable progression、reopen/switch、Source isolation，并由 Owner UAT 判断是否真的像两个不同世界。
-
----
-
-## 7. 当前核心约束
+## 9. 当前核心约束
 
 - `Commodity Foundation, Owned Game Semantics.`
 - `Model freedom first. Reversibility over prevention.`
@@ -186,20 +265,23 @@ G4 最终验证不再只是 second fixture parse PASS；G4-07 必须用两个差
 - `World Truth != NPC Knowledge != Player Knowledge.`
 - `Context stays bounded, not starved.`
 - UI / Transcript / Prompt / Cache 不是 authoritative truth。
-- `World Pack Source != Game Creation Composition != Game-local Reality != Runtime State`。
-- Source character exists/materialized != Player knows character。
-- 不因为旧项目曾经实现某能力就自动带入当前 G4；deferred 候选见 `experience/备选开发方向候选池_2026-08-28.md`。
+- `Application Lifetime != Game Session Lifetime`。
+- `Source Library != Game Library`。
+- `Source stable identity != exact immutable generation`。
+- `World / Character / Expansion Source != Game-local Reality != Runtime State`。
+- `Guaranteed NPC != Opening NPC != Player-known NPC`。
+- `Expansion binding != real gameplay effect`。
 
 ---
 
-## 8. 当前 waiting
+## 10. 当前 waiting
 
 ```text
 Blocking: NONE KNOWN
-Current: G4-01 Product Entry Shell / Main Menu
+Current: G4-01 Application Shell / Main Menu + Game Session Lifecycle
 Recommended Owner: KimiCode K3
-Formal G4-01 Task Packet: TO BE REISSUED for the new route
-Old G4-01 World Pack Task Packet: SUPERSEDED BEFORE EXECUTION
-G4-02: HOLD until G4-01 closes
+Formal G4-01 Task Packet: TO BE REISSUED after current route propagation
+Older G4-01 packets/handoffs: SUPERSEDED BEFORE EXECUTION
+G4-02+: HOLD until G4-01 closes
 G4-GATE: NOT YET
 ```
