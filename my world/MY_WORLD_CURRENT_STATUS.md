@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 3.1
+version: 3.2
 created: 2026-08-26
 updated: 2026-08-28
 phase: G3 Persistent Game / Save / Timeline Foundation
-current_task: G3-06 Crash / Interrupted Write Recovery — READY FOR OWNER UAT
+current_task: G3-07 Persistence Reality Test
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -37,114 +37,137 @@ G3-02 Durable World Mutation   PASS — Independent Review
 G3-03 Game Reopen / Resume     PASS — Owner UAT
 G3-04 Save / Load / Restore    PASS — Owner UAT
 G3-05 Recovery / Timeline      PASS — Owner UAT
-G3-06 Crash / Write Recovery   ENGINEERING PASS — READY FOR OWNER UAT
+G3-06 Crash / Write Recovery   PASS — Owner UAT
+Current Task                   G3-07 — Persistence Reality Test
 G3-GATE                        NOT YET
 ```
 
 ---
 
-## 3. G3-01..G3-05｜CLOSED
+## 3. G3-01..G3-06｜CLOSED
 
-已接受并逐步验证第一代 persistence route：
+第一代 persistence backbone 已逐步建立并通过对应 Independent Review / Owner UAT：
 
 ```text
-SQLite
-+ 2shady4u/godot-sqlite v4.9 GDExtension
-+ Godot 4.7.2 Standard / non-.NET Windows x64
-+ GDScript / same-process Runtime
+SQLite authoritative persistence
++ atomic durable World/Timeline mutation
++ current Game reopen/resume
++ accepted Conversation durability
++ named Save / atomic Load / Restore
++ future-memory isolation
++ internal Recovery Checkpoint / reciprocal Recover
++ immutable internal Timeline branching
++ single-writer process safety
++ SQLite-native verified physical backup
++ staged corruption recovery / quarantine
 ```
 
-G3-03、G3-04、G3-05 均已通过 Independent Review + Owner UAT。
-
-已冻结：current Game resume、persist-before-accept、immutable named Save Point、atomic World/head/Conversation Restore、future-memory isolation、Recovery Checkpoint、reciprocal Recover、historical Timeline retention / internal branch correctness。
-
----
-
-## 4. G3-06｜ENGINEERING PASS / READY FOR OWNER UAT
-
-实现 commit：
+G3-06 实现 commit：
 
 ```text
 7e2e622f03782a1d66f5f8837d739f900615b775  G3-06 crash / interrupted-write recovery hardening
 ```
 
-Independent Review：**PASS — no engineering blocker found**。
+G3-06 Independent Review：**PASS**。Owner UAT（2026-08-28）：**PASS**。
 
-已证明：
+Owner 使用隔离 damaged-current fixture 完成真实产品恢复体验并确认 recovery 正常。Owner 同时提出一个非阻塞 UI polish：全屏/宽屏下“恢复最近安全备份”按钮位于右下角过于不显眼；应在 G3-07 中把该按钮移动到中央“无法恢复当前游戏/当前数据损坏”提示之后，使阻断性恢复动作与问题说明形成直接视觉连续关系。该调整属于小型 UI 修正，不单独拆 Task。
 
-- dedicated sibling SQLite coordination DB 使用 process-lifetime `BEGIN IMMEDIATE` 实现 single-writer；第二 product process 在 gameplay DB mutation/migration 前 fail-fast，首实例 normal exit / exact-PID crash 后锁由 SQLite/Windows 自动释放；不依赖裸 PID / wall-clock lease；
-- gameplay DB 不持有 lifetime transaction；
-- production physical backup 使用 godot-sqlite v4.9 `SQLite.backup_to(path)`，replacement staging 使用 `SQLite.restore_from(path)`；不 ordinary-copy open WAL DB；
-- `latest.sqlite` / `previous.sqlite` / `backup-staging.sqlite` staged publication：staging 先完成 SQLite open、quick_check、foreign_key_check、schema、current truth 与 JSON structural verification 后才发布；
-- first READY 建立初始 verified backup；明确 player Save 成功后刷新；graceful close 尽力刷新；backup refresh failure 不撤销已 committed Save，UI 返回准确 warning，旧 verified backup 保留；
-- existing schema migration 前 verified pre-migration backup 是 blocking gate；backup creation/verification failure 时 migration 不开始；intentional migration failure 后 current old schema + prebackup 均保持有效；
-- startup 区分 normal missing、already running、physical corruption、unsupported newer schema、logical invalid 与 ordinary storage failure；physical corruption 不会变成 first-run blank Game；
-- disaster recovery 只从 verified whole-DB generation 恢复：先构造并验证 replacement staging，再 quarantine corrupt current，最后 publish replacement；成功后进入 reopen-required，不让旧 Runtime 继续；
-- invalid latest 可 fallback verified previous；无 verified backup 时 fail-loud 且不创建空局；
-- backup staging/rotation、quarantine/replacement publication 等 exact-PID interruption 后仍至少保留 current-corrupt / verified backup / staged replacement 中的安全可重试组合；
-- normal SQLite pre-COMMIT / post-COMMIT crash 继续由 transaction/WAL/replay 语义恢复，不误触 physical-corruption UX；
-- Windows Desktop exported EXE 已验证 single-instance、crash-release、staged recovery 与 coherent reopen；
-- G3-05..G3-01 与 G2 核心离线/进程/UI回归通过。
+G3-06 已冻结：
 
-本轮额外尝试的既有 G3-05 real-provider continuation 返回 `transport`，因此没有冒充 real-provider PASS。G3-06 SQLite/single-writer/backup/recovery Engineering Acceptance 不依赖真实 Provider；G3-07 Persistence Reality Test 必须重新验证真实 Provider continuation。
-
-G3-06 未实现 cloud sync、backup/history browser、manual import/export platform、backup encryption、Timeline browser、G4/G5/G7。
+- dedicated sibling SQLite coordination DB + process-lifetime SQLite lock 实现 single-writer；
+- physical backup 使用 `SQLite.backup_to` / `restore_from`；
+- verified `latest / previous / staging` 发布与回退；
+- pre-migration verified backup gate；
+- physical corruption / logical invalid / newer schema / normal missing 分离；
+- corrupt current 不创建空白 Game；
+- disaster recovery 经 staged verified replacement + corrupt-original quarantine；
+- backup/recovery interruption 后仍保留可重试 recovery material；
+- normal SQLite crash 不误触 corruption recovery。
 
 ---
 
-## 5. Owner UAT｜CURRENT
+## 4. Current Task｜G3-07 Persistence Reality Test
 
-必须使用 implementation repository 提供的隔离 fixture，不破坏真实 `user://my-world/current-game.sqlite`：
+Outcome：把 G3-01..G3-06 已分别证明的能力串成一条真实产品路径，确认它们组合运行时仍然像一个可靠、可长期继续的 AI RPG，而不是一组彼此孤立的 persistence tests。
+
+必须真实完成至少：
 
 ```text
-PowerShell:
-& 'tests\g3_06\启动隔离Owner_UAT.ps1'
-
-→ real product UI 打开 task-owned corrupted current DB
-→ 明确看到“当前数据损坏 / 可恢复安全备份 / 备份后进度可能丢失 / 损坏原件保留”
-→ 点击“恢复最近安全备份”
-→ 阅读二次确认并确认
-→ 应进入“恢复完成，需要重新打开”状态
-
-随后：
-& 'tests\g3_06\启动隔离Owner_UAT.ps1' -Reopen
-
-→ recovered fixture 正常打开
-→ Narrative / Save / Recovery 状态与 backup generation 一致
-→ 可以继续正常使用
+fresh isolated Game
+→ real Provider continuous play
+→ durable accepted history
+→ exit / reopen same Game
+→ named Save
+→ continue Future A
+→ Load old Save
+→ Context excludes Future A
+→ continue Future B
+→ Recover Previous Progress
+→ recover Future A exactly
+→ optional reciprocal Recover back to B
+→ abrupt process interruption / reopen stays coherent
+→ physical safety backup remains valid
 ```
 
-PASS 关注：
+G3-07 还必须完成 Owner 已确认的小 UI 修正：
 
-- 灾难恢复文案是否清楚、保守，不像普通 Save/Load；
-- 不需要玩家找 `.sqlite`、跑 SQL 或理解 WAL；
-- 恢复后不是空白局、半历史或混合 generations；
-- reopen 后产品路径正常；
-- 整个 UAT 明确只作用于 `build/g3_06_owner_uat`。
+```text
+physical-corruption startup failure
+→ central player-readable failure message
+→ immediately below it: [恢复最近安全备份]
+→ confirmation
+```
 
-Owner UAT PASS 前不得进入 G3-07。
+宽屏/全屏下不得再把唯一灾难恢复入口藏在右下角；普通 healthy READY 状态不得显示该按钮。
+
+### Reality-test requirements
+
+- 真实 DeepSeek continuation 是 G3-07 blocking evidence。G3-06 曾遇到一次 `transport`；本轮必须重新验证成功。若 Provider 在合理重试后持续不可用，返回 `BLOCKED_EXTERNAL_PROVIDER` / `BLOCKED`，不得用离线结果替代 G3-GATE 证据。
+- Context 必须继续 bounded；跨 recent-12 边界验证 current user exactly-once/last，不能持久化 Prompt/Provider messages/raw World JSON 当 truth。
+- Save / Load / Recover / reopen 后 Narrative 不重复、不混线，AI 不泄漏另一条 future。
+- single-writer、verified backup、normal crash vs physical corruption classification 继续通过 focused regression；不要求再次破坏 Owner 真实数据。
+- 记录长一点的现实路径中 DB size、Save backup refresh latency、graceful-close latency；只采证据，不因轻微性能问题提前建设 G7 平台。
+- 如 Reality Test 暴露 bounded bug，可在 G3-07 内做最小修复；若需要重开 persistence architecture 或增加新产品能力，停止并返回 `BLOCKED`。
 
 ---
 
-## 6. 当前核心约束
+## 5. Agent / Owner
 
-- `Model authors the world; Runtime makes it durable; Player owns the timeline.`
-- `Save Point != Timeline Node.`
-- `Recovery Checkpoint != Save Point.`
-- `Physical Backup != Save Point / Recovery Checkpoint.`
-- authoritative current DB 是唯一 live truth；backup/quarantine/staging 只服务恢复。
-- physical integrity failure / ambiguous concurrent writer 必须 fail-loud，不能静默开新局或继续写。
-- migration / backup / restore recovery 都必须保留明确原子边界和可重试性。
-- UI / Transcript / Prompt / Cache 不参与灾难恢复 authoritative reconstruction。
+G3-07 implementation / validation Owner：**KimiCode K3**。
+
+原因：本任务主要是 Windows/Godot 本地真实执行、跨进程、GUI、export、Provider 与完整产品路径验证，并只包含一个小型 UI 布局修正。当前 Codex 5 小时额度已用尽；用户明确授权后续任务改用 Grok Build 或 KimiCode。
+
+如果 G3-07 暴露复杂跨模块 persistence semantic defect，可在重新派发 repair 时考虑 Grok Build；不得因为 Agent 切换而降低验收标准。
+
+---
+
+## 6. G3-GATE 候选标准
+
+G3-07 Engineering + Independent Review + Owner UAT 全部 PASS 后，才可评估 G3-GATE：
+
+- reliable current Game persistence；
+- reopen/resume；
+- named Save；
+- atomic Load/Restore；
+- future-memory isolation；
+- Recovery of displaced current future；
+- crash/interrupted-write correctness；
+- single-writer safety；
+- physical corruption recovery；
+- real Provider continuation through restored/recovered durable history；
+- 玩家不需要理解 SQLite/WAL/手工修文件。
+
+任意 Turn 一键回档、Timeline browser、backup browser 不属于 G3-GATE。
 
 ---
 
 ## 7. 当前 waiting
 
 ```text
-Blocking: Owner UAT not yet completed
-Current: G3-06 Owner UAT
-G3-07: HOLD
-Next after G3-06 PASS: G3-07 Persistence Reality Test
-Next implementation agent: do not assume Codex; user authorized Grok Build or KimiCode due current Codex quota exhaustion
+Blocking: NONE KNOWN
+Current: G3-07 repository-native Task Packet / execution
+Owner UAT: required after Engineering + Independent Review
+G3-GATE: HOLD until G3-07 PASS
+G4: HOLD until G3-GATE PASS
+Next implementation agent: KimiCode K3
 ```
