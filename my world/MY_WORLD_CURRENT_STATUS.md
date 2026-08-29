@@ -1,7 +1,7 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 5.9
+version: 6.0
 created: 2026-08-26
 updated: 2026-08-29
 phase: G4 Primary Source Assets & Local Game Creation
@@ -51,13 +51,7 @@ G4-GATE                               NOT YET
 
 G3 persistence backbone 已成立：SQLite authoritative persistence、atomic durable mutation、accepted Conversation durability、Save/Restore/Recovery、single-writer、verified physical backup、staged corruption recovery 与 real Provider continuation。
 
-G4-01 建立：
-
-```text
-Application Lifetime != Game Session Lifetime
-Launch → Main Menu → explicit Continue → Game Session
-Game → Return → complete cleanup → Main Menu
-```
+G4-01 建立 `Application Lifetime != Game Session Lifetime`。
 
 G4-02 建立 World Pack / Character Card v0.1 contract、真实 filesystem validation 与 content-sensitive exact generation fingerprint。
 
@@ -113,8 +107,6 @@ G4-06+ HOLD until G4-05 closes。
 
 ## 5. 第一代 New Game 产品冻结
 
-正式路径：
-
 ```text
 Main Menu
 → New Game
@@ -132,42 +124,21 @@ Main Menu
 → real AI GM Opening
 ```
 
-第一代不支持 no-World / no-Character / blank-world direct create / arbitrary Draft direct-to-Game / historical Source version picker / complex Expansion chooser / Creator critical path。
-
 Selection authority：
 
 > **Chooser open / list visibility / mode != authoritative selection. Only explicit click on a concrete Source item selects an exact generation.**
+
+第一代不支持 no-World / no-Character / blank-world direct create / arbitrary Draft direct-to-Game / historical Source version picker / complex Expansion chooser / Creator critical path。
 
 ---
 
 ## 6. G4-04｜PASS / CLOSED
 
-正式名称：
-
-> **G4-04 — Multi-Game Lifecycle / Game Library Foundation**
-
 Implementation commit：`67decaa23903803d34d97e6ea04adeeab0d7fe53`。
 
-2026-08-29 Independent Review：**PASS**。
+2026-08-29 Independent Review：**PASS**。Task Packet `owner_uat_required: false`；无需 Owner UAT。
 
-Task Packet `owner_uat_required: false`；无需 Owner UAT。
-
-Review 确认：
-
-- topology 为已冻结的 per-Game SQLite，未引入 shared SQLite；
-- managed Game path 为 `user://my-world/games/<game_id>/game.sqlite`；
-- Game Library metadata 与 gameplay DB truth 分离；
-- Continue/select 只打开 existing DB，missing 不 mint replacement Game；
-- record 与 DB internal `game_id` 在每次 open 时交叉验证；
-- current 只在 Runtime READY + identity match 后原子提交；
-- A → B switch 先完整关闭 A / release writer，再打开 B；
-- same-Game writer 拒绝、different-Game writer 独立；
-- B corruption/recovery 不修改 A；
-- G3 legacy `current-game.sqlite` 原位 adopt，不移动/复制，World/Conversation/Save/Recovery 证据保持；
-- corrupt legacy 只有 recovery + successful reopen 后才登记；
-- record/current publication failure、restart、invalid current 均 fail-loud/replay-safe；
-- G3/G4-01 regressions 与 Windows GUI/export lifecycle evidence PASS；
-- 未修改 SQLite schema，未启动 G4-05、Source pin/materialization 或 Provider。
+Review 确认：per-Game SQLite；existing-only open；record/DB identity cross-check；current after Runtime READY；A-close-before-B-open；same-Game writer block + different-Game isolation；B recovery 不改 A；legacy 原位 adoption 且保留 World/Conversation/Save/Recovery；metadata failure/restart fail-loud；G3/G4-01 与 Windows GUI/export lifecycle evidence PASS；无 SQLite schema / G4-05 / Source pin / Provider 泄漏。
 
 结论：**G4-04 PASS / CLOSED**。
 
@@ -179,38 +150,51 @@ Review 确认：
 
 > **G4-05 — Asset-only New Game Wizard v0.1**
 
-Outcome：第一次把 G4-03 Managed Source Library 真正接到玩家的 New Game 产品路径，建立明确、可回退的 Game Creation Composition 与 Compatibility Review，但 **不创建 Game**。
+Outcome：第一次把 G4-03 Managed Source Library 接到真实玩家 New Game 路径，建立明确、可回退的 Game Creation Composition 与 Compatibility Review，但 **不创建 Game**。
 
-必须至少成立：
+必须成立：
 
 ```text
 Main Menu → New Game
-→ select exact current World generation
-→ optional Entry/T0 from that World
-→ Expansion none in current first vertical
-→ select exactly one Player Character exact generation
-→ select 0..N Guaranteed NPC Character generations
+→ explicit exact World selection
+→ optional Entry/T0
+→ honest Expansion none
+→ exactly one eligible Player Character
+→ 0..N Guaranteed NPC Characters
 → minimal settings
-→ Compatibility Review
+→ exact deterministic Compatibility Review
 ```
 
-Composition 必须保存 exact generation identity，而不是只保存 `asset_id` 或“当前版本”的动态含义。Wizard navigation/list visibility 不得自动构成选择。
+Composition 保存 exact generation identity，而不是只保存 `asset_id` 或“当前版本”的动态含义。选中 generation X 后，即使同 identity 的 generation Y 后来成为 current，也不得静默漂移到 Y。
 
-G4-05 不创建 SQLite、不登记 Game Library record、不 materialize World/Character、不调用 Provider。Final Create 属于 G4-06。
+G4-05 不创建 SQLite、不登记/切换 Game Library current、不 materialize World/Character、不调用 Provider。Final Create 属于 G4-06。
+
+Implementation Owner：**Codex**。
+
+正式 Task Packet：
+
+`my-world/docs/tasks/G4-05_ASSET_ONLY_NEW_GAME_WIZARD_TASK.md`
+
+Task Packet commit：`3984e9b84f3fa8d3034f062bd74a2a723076958a`。
+
+当前状态：**ISSUED — waiting Codex implementation → READY FOR INDEPENDENT REVIEW**。
+
+本任务虽为 product-facing UI，但完整建局尚未成立；正式 Owner UAT 仍按 DAG 在 G4-07 First Playable A 执行。G4-05 必须有真实 Windows GUI/product-value evidence，但 `owner_uat_required: false`。
 
 ---
 
 ## 8. Real-asset reality policy
 
-Synthetic compact fixtures 保留用于 deterministic failure/unit tests，但不能再作为唯一 Reality evidence。
+Synthetic compact fixtures 继续用于 deterministic failure/unit tests，但不能再作为唯一 Reality evidence。
 
-已定位历史真实资产仓库：
+历史真实资产 evidence source：
 
-`zhangchenjia21-dot/sillytavern-assets`
+```text
+repo: zhangchenjia21-dot/sillytavern-assets
+snapshot: 4a5364a042e41f4c8a69621fc4467956a78703c0
+```
 
-G4-05 起使用其历史资产内容作为 read-only semantic pressure source；**迁移内容事实与复杂性，不迁移旧 schema**。
-
-当前可用的两个真实资产族：
+G4-05 mandatory real families：
 
 ```text
 World: 世界包/汉末三国_天下未定_World_Pack_v0.2.3.md
@@ -220,9 +204,9 @@ World: 世界包/埃瑟维亚_诸界余辉_World_Pack_v0.1.3.md
 Characters: 人物卡/诸界余辉/...
 ```
 
-G4-05/06 将其语义重新封装为 current v0.1 Source packages，先通过 G4-02 contract，再发布到 G4-03 Managed Source Library；不得新增 production legacy importer/compatibility framework。
+G4-05/06 将其**真实内容事实与复杂性**重新封装为 current v0.1 Source packages → G4-02 validate → G4-03 Managed Library。禁止新增 production legacy importer/compatibility framework。
 
-G4-07 First Playable A 必须主要使用这些真实有产品价值的 World/Character 输入，而不是继续只靠 Agent 自创 compact fixtures。
+G4-07 First Playable A 必须主要使用真实有产品价值的 World/Character 输入，而不是继续只靠 Agent 自创 compact fixtures。
 
 > **Migrate real content/complexity, not legacy schema debt.**
 
@@ -238,10 +222,9 @@ G4-07 First Playable A 必须主要使用这些真实有产品价值的 World/Ch
 - `Off-screen != Inactive.`
 - `World Truth != NPC Knowledge != Player Knowledge.`
 - `Context stays bounded, not starved.`
-- UI / Transcript / Prompt / Cache 不是 authoritative truth。
 - `Application Lifetime != Game Session Lifetime`。
 - `Source Library != Game Library`。
-- `One Game = One SQLite`（G4 first generation）。
+- `One Game = One SQLite`。
 - `Game Library metadata != gameplay truth`。
 - `Source stable identity != exact immutable generation`。
 - `Source Generation != Game Creation Composition != Game-local Reality != Runtime State`。
@@ -255,11 +238,12 @@ G4-07 First Playable A 必须主要使用这些真实有产品价值的 World/Ch
 ```text
 Blocking: NONE KNOWN
 G4-01..G4-04: PASS / CLOSED
-G4-04 implementation: 67decaa23903803d34d97e6ea04adeeab0d7fe53
-G4-04 Independent Review: PASS; Owner UAT not required
 Current: G4-05 Asset-only New Game Wizard v0.1
-Real asset evidence source: zhangchenjia21-dot/sillytavern-assets
-Waiting: formal G4-05 Task Packet issuance
+Implementation Owner: Codex
+Formal G4-05 Task Packet: ISSUED — docs/tasks/G4-05_ASSET_ONLY_NEW_GAME_WIZARD_TASK.md
+Packet commit: 3984e9b84f3fa8d3034f062bd74a2a723076958a
+Historical real-asset source: sillytavern-assets@4a5364a042e41f4c8a69621fc4467956a78703c0
+Waiting: Codex implementation → READY FOR INDEPENDENT REVIEW
 G4-06+: HOLD until G4-05 closes
 G4-GATE: NOT YET
 ```
