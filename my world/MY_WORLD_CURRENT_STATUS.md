@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 6.4
+version: 6.5
 created: 2026-08-26
 updated: 2026-08-29
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-02R1 World / Character Source Semantic Re-audit — T0-SCOPED CONTRACT REVISION
+current_task: G4-02R1 World / Character Source Semantic Re-audit — T0-SCOPED REAL-ASSET PRESSURE
 current_owner: GPT
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
@@ -31,6 +31,7 @@ Current Task                          G4-02R1
 Semantic audit                        COMPLETE
 v0.2 base semantic contract           FROZEN / IMPLEMENTATION PENDING
 T0-scoped correction                  FROZEN as v0.2 revision 2
+Current migration spec                v0.2-r2 CURRENT
 Current subtask                       GPT temporal pressure remigration: 孙权 + 汉末三国 World first
 Current Owner                         GPT
 Codex                                 NO ACTIVE TASK
@@ -260,13 +261,19 @@ G4-02R1 explicitly checked against prior SillyTavern / The World / DSH failures:
 
 ## 8. Current subtask｜Temporal pressure remigration
 
-Migration authority remains:
+Current migration authority:
 
-`my-world/docs/source/G4-02R1_REAL_ASSET_V0_2_MIGRATION_SPEC.md`
+`my-world/docs/source/G4-02R1_REAL_ASSET_V0_2_R2_MIGRATION_SPEC.md`
 
-but temporal/T0 rules are superseded where conflicting by:
+Old r1 migration spec:
 
-`my-world/docs/source/G4-02R1_T0_SCOPED_SOURCE_CONTRACT_ADDENDUM.md`
+`my-world/docs/source/G4-02R1_REAL_ASSET_V0_2_MIGRATION_SPEC.md` — **SUPERSEDED / design evidence only**.
+
+Current r2 rule:
+
+> **preserve → re-home → T0-scope → explicitly omit only when owner is wrong.**
+
+Stable identity is frozen; this migration must not rename the existing `ashtervia` asset IDs merely to improve spelling.
 
 Current pressure order:
 
@@ -331,6 +338,9 @@ World / Character v0.2 base semantic freeze
 DONE
 T0-scoped Source / Post-T0 Canon Quarantine decision + v0.2-r2 addendum
 ↓
+DONE
+v0.2-r2 real-asset migration specification / stable identity audit
+↓
 NOW
 GPT temporal pressure remigration: 孙权 + 汉末三国 World
 ↓
@@ -363,6 +373,7 @@ Owner: GPT
 Semantic audit: COMPLETE
 v0.2 base semantic contract: FROZEN
 T0-scoped addendum: FROZEN
+r2 migration spec: FROZEN
 Game-local evolvable semantics: FROZEN
 Codex active task: NONE
 G4-05R1: SUPERSEDED / DO NOT EXECUTE
