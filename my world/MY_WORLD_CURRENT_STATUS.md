@@ -1,7 +1,7 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 5.5
+version: 5.6
 created: 2026-08-26
 updated: 2026-08-29
 phase: G4 Primary Source Assets & Local Game Creation
@@ -307,7 +307,13 @@ current installed generation != historical generation deletion
 
 Implementation Owner：**Codex**。
 
-Formal Task Packet：**PENDING ISSUE**。
+正式 Task Packet：
+
+`my-world/docs/tasks/G4-03_MANAGED_LOCAL_SOURCE_LIBRARY_TASK.md`
+
+Task Packet commit：`775d6c2b11b90e1e9667d590350a5f57c03dffdf`。
+
+当前状态：**ISSUED — waiting Codex implementation → READY FOR INDEPENDENT REVIEW**。
 
 ---
 
@@ -339,7 +345,9 @@ G4-01: PASS / CLOSED — Engineering + Independent Review + Owner UAT PASS
 G4-02: PASS / CLOSED — Engineering + Independent Review PASS; Owner UAT not required
 Current: G4-03 Managed Local Source Library v0.1
 Implementation Owner: Codex
-Formal G4-03 Task Packet: PENDING ISSUE
+Formal G4-03 Task Packet: ISSUED — docs/tasks/G4-03_MANAGED_LOCAL_SOURCE_LIBRARY_TASK.md
+Packet commit: 775d6c2b11b90e1e9667d590350a5f57c03dffdf
+Waiting: Codex implementation → READY FOR INDEPENDENT REVIEW
 G4-04+: HOLD until G4-03 closes
 G4-GATE: NOT YET
 ```
