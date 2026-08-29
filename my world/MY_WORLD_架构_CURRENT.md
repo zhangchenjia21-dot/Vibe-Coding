@@ -1,9 +1,9 @@
 ---
 title: my world｜架构总览
 status: current-canonical-architecture-map
-version: 2.0
+version: 2.1
 created: 2026-08-26
-updated: 2026-08-28
+updated: 2026-08-29
 current_phase: G4
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
@@ -14,15 +14,14 @@ implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 
 本文件拥有 `my world` 的**当前架构地图与专题导航**。
 
-它回答：系统现在如何分层、核心 owner / boundary 是什么、Primary Source 与 Game 如何连接、应用与 Game Session 如何分离、深入专题时去哪里读。
+它回答：系统如何分层、核心 owner / boundary 是什么、Primary Source 如何进入某一局、Application 与 Game Session 如何分离，以及深入专题时去哪里读。
 
 其它 Owner：
 
 - 产品目的：`MY_WORLD_项目启动总纲_CURRENT.md`；
 - 跨阶段原则：`MY_WORLD_核心设计原则_CURRENT.md`；
 - 阶段 DAG：`MY_WORLD_总体规划路线图_CURRENT.md`；
-- Current Task / PASS：`MY_WORLD_CURRENT_STATUS.md`；
-- 开发路径复用经验：`experience/AI_RPG开发路径与阶段设计经验_v1.0_2026-08-28.md`。
+- Current Task / PASS：`MY_WORLD_CURRENT_STATUS.md`。
 
 正式文档结构：
 
@@ -48,7 +47,7 @@ Godot / Mature Game Foundation
 Window / Control / 2D / Input / Font / Image / Audio / Packaging / Debug
 ```
 
-原则：
+核心原则：
 
 > **Commodity Foundation, Owned Game Semantics.**
 >
@@ -70,9 +69,7 @@ Application Lifetime != Game Session Lifetime
 
 ---
 
-## 2. 第一代 Foundation / Infrastructure 冻结结果
-
-当前采用：
+## 2. 技术基线
 
 ```text
 Host             Godot 4.7.2
@@ -80,18 +77,18 @@ Distribution     Standard / non-.NET Windows x64
 Language         GDScript
 Runtime          Godot same-process Runtime
 Provider         DeepSeek deepseek-v4-pro
-Config / Source  JSON/files where appropriate
-Persistence      SQLite via 2shady4u/godot-sqlite v4.9 — ACCEPTED
+Source           JSON manifest + package-local files where appropriate
+Persistence      SQLite via 2shady4u/godot-sqlite v4.9
+Game topology    One Game = One SQLite
+Source Library   managed immutable filesystem generations
 ```
-
-G3 已 **PASS / CLOSED**。SQLite 第一代 authoritative persistence route 已通过真实 Windows fixture、transaction、migration、Save/Restore/Recovery、single-writer、backup/corruption recovery、real Provider continuity 与 Owner UAT。
 
 继续保持：
 
 - Domain 不依赖 Scene / Node / Resource 生命周期；
 - Provider Adapter 极薄；
 - Persistence storage 与业务 Domain / UI 分离；
-- UI、Transcript、Markdown、Godot Resource 不作为 authoritative gameplay database；
+- UI、Transcript、Prompt、Cache、Markdown、Godot Resource 不自动成为 authoritative gameplay truth；
 - 不建设 IPC、通用 ORM、DI/EventBus 或 persistence framework forest。
 
 ---
@@ -101,13 +98,13 @@ G3 已 **PASS / CLOSED**。SQLite 第一代 authoritative persistence route 已�
 ```text
 Primary Source Assets
 World Pack / Character Card / Expansion Pack
-→ reusable authored pre-game source identity / immutable generation
+→ reusable authored pre-game source + exact immutable generations
 
 Managed Source Library
 → installed Source inventory / validation / immutable generation retention
 
 Game Creation Composition
-→ one New Game's explicit selected Source generations + Entry + roles + settings
+→ one New Game's explicit exact selections + Entry/T0 + roles + settings
 
 Application Lifecycle
 → Main Menu / Game Session open-close-switch / application quit
@@ -115,8 +112,8 @@ Application Lifecycle
 Game Domain
 → Game identity / current lifecycle / game-local provenance
 
-World Domain
-→ game-local authoritative World meaning/state
+World / Character / other gameplay Domains
+→ game-local authoritative lived reality
 
 Timeline / Save / Recovery Domain
 → Timeline Node / Save Point / Recovery Checkpoint / Restore semantics
@@ -141,11 +138,11 @@ In-game UI
 
 > **Persisted by SQLite != owned semantically by Persistence.**
 
-Derived / Snapshot / Cache / Transcript 默认不可反向成为第二 live truth。
+Derived / Snapshot / Cache / Transcript / Prompt 默认不可反向成为第二 live truth。
 
 ---
 
-## 4. Primary Source Architecture
+## 4. Primary Source Architecture｜v0.2-r2
 
 第一代正式主资产：
 
@@ -156,138 +153,213 @@ Primary Source Assets
 └─ Expansion Pack
 ```
 
-三类资产共享最薄 identity seam：
+三类资产只共享最薄 identity / exact-generation seam；不得为了统一而建立巨大 universal asset schema。
+
+正式长期分层：
 
 ```text
-asset_id
-asset_type
-version
-exact immutable generation / content fingerprint
+Reusable immutable Source
+↓ exact selection + selected Entry/T0
+T0-scoped Source Projection
+↓ Final Create
+Game-local Canonical Reality
+↓ current execution
+Runtime State
 ```
 
-但不使用一个巨大 universal asset schema 强迫三类内容拥有相同字段。
+核心不变量：
 
-### 4.1 World Pack
+> **Source defines the starting reference; game-local reality owns lived history.**
+>
+> **Source provides inertia; actors create history.**
 
-拥有：
+### 4.1 Rich semantic sections
 
-- 世界身份、作者版本、schema version；
-- world / GM instructions；
-- Source Lore；
-- optional Entry / T0 seeds；
-- authored asset declarations；
-- 开局前世界材料。
+World / Character v0.2-r2 采用：
 
-World Source 不拥有游戏开始后的历史。
+```text
+thin identity / catalog metadata
++ ordered rich semantic_sections
++ disclosure = gm_reference | gm_private
++ package-local UTF-8 Markdown/TXT content files
++ exact fingerprint over every declared package byte
+```
 
-### 4.2 Character Card
+`section_type` 是开放 semantic hint，不是封闭 ontology。
+
+真实长篇 World / Character prose、表格、技能/法术/行为/关系/知识边界可以继续作为 first-class authored Source bytes；不得为了 parser 便利压缩成 `summary/traits/background/drives`，也不得反向造“万能 78 字段 Character schema”。
+
+### 4.2 World Pack
+
+World Pack 可以拥有：
+
+- identity / version / schema version / display metadata；
+- `catalog_summary`；
+- compact world / GM instructions；
+- top-level always-safe rich semantic sections；
+- `entries[]`，每个 Entry 可拥有自己的 rich semantic sections；
+- authored asset declarations。
+
+World selected projection：
+
+```text
+top-level always-safe semantic sections
++
+exact selected Entry semantic sections
+```
+
+其它 Entry 的 bytes 仍属于 exact generation / fingerprint，但不因此成为当前 Game 的普通 Runtime 可见内容。
+
+### 4.3 Character Card
 
 Character Card 是 reusable Character Source，不是“玩家角色专用卡”。
 
-第一代建局角色用途只有两个产品概念：
+可拥有：
+
+- identity / version / display metadata；
+- `catalog_summary`；
+- top-level always-safe rich semantic sections；
+- zero or more `t0_profiles[]`；
+- optional portrait；
+- explicit `player_character_supported`。
+
+每个 T0 profile 可以显式绑定一个或多个 `(world_asset_id, entry_id)`，并拥有自己的 rich semantic sections。
+
+Character selected projection：
 
 ```text
-Exactly 1 Player Character
-0..N Guaranteed NPC Characters
+top-level always-safe semantic sections
++
+exact matching T0 profile semantic sections
 ```
 
-Guaranteed NPC 的语义：
+禁止：
 
 ```text
-selected exact Character Source
-→ Final Create materializes a game-local canonical Character definition
-→ character belongs to this Game's cast from T0
+latest profile fallback
+nearest-year fallback
+later-profile fallback
+complete-life biography fallback
+same-family guessing
 ```
 
-它不自动建立：
+如果 Character 对某 World 已声明 profile coverage，则：
 
-- opening placement；
-- player-known state；
-- relationship；
-- shared scene；
-- automatic current Context inclusion。
+```text
+exact Entry binding exists → temporally compatible
+selected Entry binding missing → hard temporal incompatibility
+```
 
-因此：
+如果对该 World 完全没有 profile coverage，则不得因为“不同家族”自动 hard-block；只保留可区分的 no-exact-profile / always-safe-only 状态，让后续真实 Compatibility consumer 决定产品呈现。
 
-> **Guaranteed in Game != Guaranteed in Opening != Player Knows Character.**
+### 4.4 Fixed-T0 multiple Entry binding
 
-### 4.3 Expansion Pack
+同一个 T0 profile 可以绑定同 T0 的多个 World Entry。
 
-Expansion 是额外机制 / GM / Runtime capability Source。
+Binding 表示 authored starting compatibility，不表示：
 
-第一代数量：`0..N`。
+- current location；
+- opening appearance；
+- current relationship；
+- recommended-scene score；
+- 当前契约/任务。
+
+### 4.5 Disclosure != Knowledge
+
+`gm_reference` = 普通 GM-facing authored reference。  
+`gm_private` = explicit backstage/secret Source truth。
+
+二者都不自动等于 player-known / Character-known。
+
+Character knowledge 必须由 Game-local evidence / Knowledge ownership 产生，而不是从 Source disclosure 推导。
+
+---
+
+## 5. T0-scoped Source / Post-T0 Canon Quarantine
+
+正式不变量：
+
+> **Do not show the model a post-T0 answer and then ask it to forget that answer.**
 
 必须区分：
 
 ```text
-Expansion Source identity
-!= selected Game binding
-!= Program Runtime capability identity
-!= current mechanic state
-!= UI contribution
+Immutable Source Package Total Content
+!= Selected T0 Source Projection
+!= Game-local Canonical Reality
+!= Runtime Relevant Set
+!= Model-visible Working Set
 ```
 
-G4 只要求第一个真实 Expansion 产生可观察 Runtime effect；G6 才要求真实 mechanic state → Internal UI；G8 才外部化受控 UI contract。
+T0 quarantine 是**信息 authority / Context boundary**，不是 Narrative state machine。
+
+它隔离 post-T0 authored future answer，但必须保留截至 T0 已真实形成的：
+
+- 人格惯性与矛盾；
+- 已发生经历及影响；
+- 能力、局限、专业风格；
+- 关系历史与社会位置；
+- 当时合理知识与来源；
+- 制度、资源、地理、文化与冲突压力；
+- 开放目标、风险与 deliberate blanks。
+
+> **Quarantine future answers; preserve present depth.**
+
+不增加 convergence force，也不增加 divergence force。当前因果自然重现原历史是允许的；关键前提改变后，原历史没有特殊收敛权重。
+
+Canonical decision：
+
+`architecture/source/G4_T0_SCOPED_SOURCE_AND_POST_T0_CANON_QUARANTINE_DECISION.md`
 
 ---
 
-## 5. Managed Source Library / Immutable Generation
-
-第一代 asset-only New Game 要求先有 Managed Source Library。
+## 6. Managed Source Library / Immutable Generation
 
 ```text
 external/local source package
 → validate
-→ install/publish immutable generation
+→ staged verified publish
+→ immutable generation
 → Source Library inventory
 → New Game exact selection
 ```
 
-Library 必须能表达：
+必须长期区分：
 
 ```text
-stable identity
-+ semantic version / author version
-+ exact generation fingerprint
-+ current installed generation for future New Game
-+ historical generation retained while any Game pins it
+stable Source identity
+!= exact immutable generation
 ```
 
-### 5.1 为什么 generation 必须 immutable
+Exact generation fingerprint 覆盖所有 declared bytes，包括：
 
-只保存 `pack_id + version` 但运行时继续读取被覆盖的外部目录，会导致旧 Game 的：
+- canonical manifest；
+- top-level rich section files；
+- 所有 Entry-scoped section files；
+- 所有 Character T0 profile section files；
+- authored assets；
+- optional portrait when declared。
 
-- Lore；
-- Character definition；
-- portrait；
-- scene；
-- authored map；
-- Expansion behavior declaration
+正式不变量：
 
-在 Source 更新后静默变化。
+> **Fingerprint coverage != Runtime visibility.**
 
-因此：
+一个未选 Entry、later profile 或 `gm_private` 文件即使不进入当前 projection，bytes 变化仍必须改变 generation fingerprint。
 
-> **Existing Game pins exact Source generation, not mutable folder meaning.**
+已有 Game pins exact Source generation；Source update 不得静默改变旧 Game。
 
-### 5.2 第一代不做历史版本 picker
-
-Source Library 可以内部保存多个 generation，但 New Game UI 默认只展示当前安装版本。
-
-玩家点击具体资产时 Program pin exact generation。已有 Game 继续引用旧 generation。
-
-这样避免旧项目曾出现的 sibling-version selected-state 混淆，同时不牺牲旧 Game 可重复性。
+第一代 New Game UI 不提供 historical generation picker；Library 可内部保留历史 generation 以服务旧 Game exact resolution。
 
 ---
 
-## 6. Game Creation Composition
+## 7. Game Creation Composition
 
 第一代固定 asset-only composition：
 
 ```text
 Exactly 1 World Pack exact generation
-+ selected Entry/T0
-+ 0..N Expansion exact generations
++ Entry/T0 0..1
++ Expansion 0..N (G4-05 current honest implementation remains none-only)
 + Exactly 1 Player Character exact generation
 + 0..N Guaranteed NPC Character generations
 + Game display name
@@ -303,38 +375,27 @@ Light
 Narrative
 ```
 
-默认推荐 Light。
+默认 Light。
 
-### Selection authority
+Selection authority：
 
-必须保持：
+> **Chooser open / focus / list visibility != selection.**
 
-> **Chooser open / source mode / list visibility != selection.**
+只有显式点击具体 Source item 才写 authoritative Composition，并 pin exact generation。
 
-只有玩家点击一个具体 Source item 才写入 authoritative Composition。
+World 改变时必须清除 dependent Entry。Player Character 必须满足 explicit eligibility；同一 exact Character 不得同时作为 Player + Guaranteed NPC。
 
-Final Compatibility Review 是 Final Create 前的最后产品投影；它必须展示实际将被 pin 的 World / Entry / Character / Expansion / settings。
-
-### 第一代明确不做
-
-- no-World creation；
-- no-Character player creation；
-- free-text AI blank-world creation；
-- Draft 直接进入 Game；
-- Final Create 时自动 Publish Source；
-- arbitrary World-specific form DSL；
-- historical Source version picker；
-- Expansion feature/module complex chooser。
+Guaranteed NPC 只表示 Final Create 后属于本局 canonical cast；不自动表示 opening appearance、same scene、player knowledge、relationship 或 automatic current Context inclusion。
 
 ---
 
-## 7. Final Create / Materialization Boundary
+## 8. Atomic Final Create / Materialization Boundary
 
 ```text
 Source Library inventory
-↓ explicit player selection
+↓ explicit exact selection
 Game Creation Composition
-↓ Final Review
+↓ Compatibility Review
 Atomic Final Create
 ↓
 Game-local Canonical Reality
@@ -342,7 +403,7 @@ Game-local Canonical Reality
 Runtime State
 ```
 
-Final Create 必须是 Program-owned durable transaction flow，而不是 Wizard 每一步直接创建/改写 Game。
+Final Create 必须是 Program-owned durable transaction flow，不允许 Wizard 每一步直接创建/改写 Game。
 
 至少需要：
 
@@ -364,40 +425,60 @@ created state
 - different intent → fail closed；
 - Source Library never receives Runtime writeback。
 
-### World materialization
-
-World Source 形成本局 T0 reference / game-local world ancestry。
-
-### Character materialization
-
-Player Character → exactly one game-local player identity。
-
-Guaranteed NPC → exactly one game-local canonical Character definition per selected exact Source。
-
-### Expansion binding
-
-G4 第一阶段可以为 none。第二阶段通过正式 binding 将 selected Expansion 接到 Program capability，并证明真实 observable effect。
+G4-06 才实现这一边界；G4-02R1M1 不提前做 materialization。
 
 ---
 
-## 8. Runtime-generated Reality
+## 9. Game-local Evolvable Semantics
 
-Source 只是惯性来源。
+正式原则：
 
-游戏进行中由模型/Runtime materialize 的 NPC / Place / Item / Event 可以拥有：
+> **Source schema is not the possibility ceiling of the Living World. Game-local semantic structure is evolvable.**
+
+Final Create 之后：
+
+```text
+exact immutable Source ancestry
++
+stable Program-owned game-local kernel
++
+evolvable Game-local semantics
+```
+
+Program-owned kernel 至少概念上保护：
+
+- game-local stable identity；
+- object/entity type；
+- source provenance / exact generation ancestry when source-backed；
+- lifecycle / timeline ownership；
+- durable mutation identity / integrity。
+
+模型/Runtime 可以让本局产生 Source 未预见的新长期语义，例如新的誓言、创伤、政治伦理、学派、制度或其它真正由 lived history 产生的 meaning。
+
+但：
+
+- 不修改原始 Source；
+- 不修改 global Source contract；
+- 不允许模型 `ALTER TABLE` 或创建任意 production schema；
+- 已有 Location / Relationship / Knowledge / Injury / Inventory / Faction / Timeline 等 canonical Domain 时，必须使用对应 Domain，不创建 duplicate generic truth；
+- local semantic evolution 必须 durable、Save/Restore/Timeline reversible。
+
+Canonical decision：
+
+`architecture/source/G4_GAME_LOCAL_EVOLVABLE_SEMANTICS_DECISION.md`
+
+---
+
+## 10. Runtime-generated Reality / Knowledge Boundary
+
+Runtime-created NPC / Place / Item / Institution / Event 可以只有：
 
 ```text
 game-local stable identity
 provenance = runtime_generated
 ```
 
-不要求所有新实体都映射回一个 Source card。
-
-游戏中动态产生的角色与创建时 Guaranteed NPC 共用同一个 Game-local Character owner；区别在 provenance，不在 Runtime 物种。
-
----
-
-## 9. Player-known Boundary
+不要求伪造 Source ancestry。
 
 必须长期区分：
 
@@ -409,15 +490,15 @@ Source exists
 != Model visible
 ```
 
-Guaranteed NPC 被建局 materialize，也不自动成为玩家通讯录成员。
+Guaranteed NPC 被建局 materialize 也不自动成为玩家通讯录成员。
 
-G5 Knowledge / Encounter owner 决定玩家何时认识、知道什么；G6 People Surface 只投影 player-safe knowledge。
+Knowledge / Encounter owner 决定玩家何时知道什么；UI 只投影 player-safe knowledge。
 
 ---
 
-## 10. Application / Game Session Lifecycle
+## 11. Application / Game Session Lifecycle
 
-G4-01 正式建立：
+G4-01 已正式建立：
 
 ```text
 Application Lifetime
@@ -431,101 +512,114 @@ Launch EXE
 → Application READY / Main Menu
 
 Continue or Select Game
-→ open Game Session
+→ open exact Game Session
 → enter in-game UI
 
 Return to Main Menu
-→ finish/cancel generation safely
-→ flush required state / close Game-owned runtime resources
-→ release Game-specific writer/connection ownership as designed
+→ safely finish/cancel generation
+→ flush/close Game-owned resources
+→ release Game-specific writer/connection ownership
 → Application remains READY
 ```
 
-Main Menu 不能只是盖在一个已经自动打开的 current Game 上面。
-
-这条 seam 是后续 multi-Game 的前置条件。
+Main Menu 不能只是盖在自动打开的 current Game 上。
 
 ---
 
-## 11. Multi-Game / Game Library
+## 12. Multi-Game / Game Library｜G4-04 FROZEN
 
-G3 故意先证明 one-current-Game persistence。G4 才第一次有真实 multi-Game 产品需求。
+G4-04 已正式裁定：
 
-Game Library 最少拥有：
+> **One Game = One SQLite.**
 
-- Game identity；
-- player-safe display metadata projection；
-- open / close / switch lifecycle；
-- Continue / latest Game；
-- legacy G3 Game adoption；
-- no overwrite on New Game。
+Managed Game path：
 
-物理存储在 G4-04 开始前专项裁定：
+`user://my-world/games/<game_id>/game.sqlite`
+
+Historical G3 Game path：
+
+`user://my-world/current-game.sqlite`
+
+Game Library / Application index 只拥有 application-level metadata / discovery，不拥有 gameplay truth。
+
+必须保持：
 
 ```text
-per-Game SQLite
-vs
-shared SQLite + game_id
+Application index metadata != gameplay truth
+Application Lifetime != Game Session Lifetime
+Game A DB != Game B DB
 ```
 
-判断依据优先：G3 evidence reuse、single-writer isolation、backup/recovery、迁移复杂度、Windows 文件生命周期和产品简单性。
+Existing-only open 必须做 Game identity cross-check；current Game commit 只能在 Runtime ready 后发生；切换 Game 时先关闭 A 再打开 B；legacy Game 可被原地 adoption，不要求复制进 managed path。
 
-不要从“未来可能有很多 Game”直接推导出数据库服务层。
+G4-04 已 PASS / CLOSED；Source v0.2-r2 不得重新打开这项 topology 决策。
+
+Canonical decision：
+
+`architecture/persistence/G4-04_MULTI_GAME_STORAGE_TOPOLOGY_DECISION.md`
 
 ---
 
-## 12. Model / Runtime / Persistence Boundary
+## 13. Model / Runtime / Persistence Boundary
 
 > **Model freedom first. Reversibility over prevention.**
 >
 > **Model authors the world; Runtime makes it durable; Player owns the timeline.**
 
-模型可以广泛 author Narrative、行为、事件、新实体和后果。
+模型可以广泛 author Narrative、NPC 行为/动机、事件、新实体、新语义与后果。
 
-Runtime 的强约束集中在：stable identity、atomic durability、Save/Restore correctness、filesystem/database integrity、secrets/OS authority 与可恢复性，而不是建立 Narrative 审查器。
+Runtime 强约束集中在：
 
-G3 第一代 durable mutation 原子边界继续有效；G4 的 Source / Game Library / Final Create 不得绕过或重定义 G3 Owner。
+- stable identity；
+- permission / authority；
+- atomic durability；
+- Save / Restore / Timeline；
+- filesystem/database integrity；
+- secrets / OS authority；
+- crash/retry/recovery correctness。
+
+Runtime 不应膨胀成 Narrative 审查委员会。
 
 ---
 
-## 13. Context Architecture
+## 14. Context Architecture
 
 必须保持：
 
 ```text
 Managed Source Library
 != Game Selected Source Set
+!= T0-scoped Source Projection
 != Game-local Entity Set
 != Player-known Set
 != Runtime Relevant Set
-!= Model Visible Working Set
+!= Model-visible Working Set
 ```
 
 以及：
 
 ```text
-Runtime Relevant != Model Visible
+System Total State
+!= Runtime Relevant Set
+!= Model-visible Working Set
 ```
 
-G2-05 当前策略仍是最近 12 个完整 accepted Turns + current attempt。Context/messages 是 derived request material，不是 durable truth。
+> **Bounded context != starved context.**
 
-G4 First Playable A 要证明 World + Character Source 能形成足够具体的 Setup Context；G5 再负责真实 world semantic materialization、relevance 与 knowledge boundary。
+G4-02R1M1 只需要提供安全的 exact selected Source projection seam；不在该任务中预造完整通用 Context Retrieval platform。
 
-目标：
-
-```text
-Game State / Event History / Source Library ↑↑↑
-ordinary Turn model context ≈ bounded
-```
+G4 First Playable A 必须证明 rich World + Character T0 projection 实际形成具体、非贫血的 GM Setup Context；G5 再继续拉出更完整 world relevance / knowledge / long-lived semantic retrieval。
 
 ---
 
-## 14. Expansion Capability Layers
+## 15. Expansion Capability Layers
 
-历史项目证明“Source / Manifest / Binding 都存在”仍可能没有真实玩法效果。因此 Expansion 必须逐层证明：
+Expansion 第一代数量仍是 `0..N`，但 G4-05 当前 honest implementation 是 none-only，真实 Expansion contract/runtime 在 G4-08 才进入。
+
+演化顺序：
 
 ```text
-G4
+G4-08
 Expansion Source
 → exact selected binding
 → real observable Runtime/Context/mechanic effect
@@ -543,11 +637,11 @@ proven internal capability
 → external authoring / UI declaration contract
 ```
 
-不允许倒序：不能为了未来 Mod UI 在 G4 预造任意外部 UI schema。
+不允许为了未来 Mod/Creator 在当前 G4 提前造 universal protocol / arbitrary UI schema。
 
 ---
 
-## 15. Save / Timeline / Reversibility
+## 16. Save / Timeline / Reversibility
 
 ```text
 Cancel / Regenerate / latest correction
@@ -579,13 +673,13 @@ Physical Backup
 >
 > **Reversibility != frictionless arbitrary rewind.**
 
-Multi-Game 不能破坏这些已关闭语义。
+Game-local semantic evolution同样必须进入 Timeline/Save/Restore，而不是游离在其外。
 
 ---
 
-## 16. UI Host Architecture
+## 17. UI Host Architecture
 
-### Application-level Product Surface
+Application-level surface：
 
 ```text
 Main Menu
@@ -596,13 +690,11 @@ future Settings / authoring entry
 
 拥有 navigation / lifecycle intent，不拥有 gameplay truth。
 
-### In-game RPG Surface
+In-game surface：
 
 ```text
 Player Host | Narrative Host | World Surface Host
 ```
-
-Wide/maximized baseline 约 `18 / 60 / 22`；Player Host min ~250px，World Host min ~310px；空间不足时折叠侧 Host，Narrative 保持主区域。正文 readable width 约 <= 920px；默认 Maximized Window；1280×720 与 960×540 继续作为回归尺寸。
 
 演化顺序：
 
@@ -615,30 +707,52 @@ G2 fixed in-game Godot UI
 → G8 external declarative contract
 ```
 
+详细 UI host 设计继续由 `architecture/ui/` supporting docs 拥有。
+
 ---
 
-## 17. G4 Current Execution Order
+## 18. G4 Current Execution Order
 
 ```text
 G4-01 Application Shell / Main Menu + Game Session Lifecycle
-→ G4-02 World Pack + Character Card Source Contracts
-→ G4-03 Managed Local Source Library
-→ G4-04 Multi-Game Lifecycle / Game Library Foundation
-→ G4-05 Asset-only New Game Wizard
-→ G4-06 Atomic Final Create + World/Character Materialization
-→ G4-07 First Playable A — World + Character Owner UAT
-→ G4-08 Expansion Pack v0.1 + Real Runtime Vertical
-→ G4-09 First Playable B — Expansion Owner UAT
-→ G4-10 Runtime Asset Resolution
-→ G4-11 Two Primary Asset Families Reality Test
-→ G4-GATE
+  PASS / CLOSED
+↓
+G4-02 original World/Character v0.1 engineering
+  HISTORICAL PASS
+↓
+G4-02R1 semantic re-audit + v0.2-r2 real-asset full-fidelity correction
+  SEMANTIC/FIDELITY PASS / FROZEN
+↓
+G4-02R1M1 Source v0.2-r2 mechanism correction
+  CURRENT — CODEX
+↓
+GPT Independent Review
+↓
+G4-05 Asset-only New Game Wizard
+  resume closure only if mechanism/fidelity regressions PASS
+↓
+G4-06 Atomic Final Create + World/Character Materialization
+↓
+G4-07 First Playable A — World + Character Owner UAT
+↓
+G4-08 Expansion Pack v0.1 + First Real Runtime Vertical
+↓
+G4-09 First Playable B — Expansion Owner UAT
+↓
+G4-10 Runtime Asset Resolution
+↓
+G4-11 Two Primary Asset Families Reality Test
+↓
+G4-GATE
 ```
 
-旧的 `G4-01 World Pack v0.1` task packet 与前一版 `Main Menu-only` 路线都被本轮 Owner-approved review supersede；新的 G4-01 必须包含 Application / Game Session lifecycle seam，而不是只添加视觉菜单。
+G4-03 Managed Source Library 与 G4-04 Multi-Game/Game Library 已 **PASS / CLOSED**，不是被跳过；它们的已验证工程继续作为当前纵向基础。
+
+Current Task 只看 `MY_WORLD_CURRENT_STATUS.md`。
 
 ---
 
-## 18. 业务模块内部 L3 → L0
+## 19. 业务模块内部 L3 → L0
 
 ```text
 L3 外交层
@@ -652,29 +766,38 @@ L0 公理层
 
 向下跳层允许；向上依赖禁止；跨业务模块只通过对方公开 L3；Bootstrap 是 composition root；不为形式完整创建空层、空类或总线。
 
-G4 预计会逐步出现 `source_library` / `game_library` / `game_creation` 等业务边界，但只有真实任务需要时才创建；禁止先造完整“Asset Platform Framework”。
+当前 Source mechanism 应 repair/extend existing Source layers，而不是另造 parallel loader stack。
 
 ---
 
-## 19. 专题导航 / 维护规则
+## 20. 专题导航
 
 ```text
 architecture/
 ├─ foundation/
 │  └─ Foundation架构决策_v1.0_2026-08-26.md
 ├─ persistence/
-│  └─ 时间线存档与可逆性设计.md
+│  ├─ 时间线存档与可逆性设计.md
+│  └─ G4-04_MULTI_GAME_STORAGE_TOPOLOGY_DECISION.md
+├─ source/
+│  ├─ G4_SOURCE_SEMANTIC_OWNERSHIP_AND_REAUDIT_DECISION.md
+│  ├─ G4_GAME_LOCAL_EVOLVABLE_SEMANTICS_DECISION.md
+│  └─ G4_T0_SCOPED_SOURCE_AND_POST_T0_CANON_QUARANTINE_DECISION.md
 └─ ui/
    └─ 声明式UIHost设计.md
-
-experience/
-├─ DSH经验继承矩阵_v1.0_2026-08-25.md
-├─ AI_RPG开发路径与阶段设计经验_v1.0_2026-08-28.md
-└─ 备选开发方向候选池_2026-08-28.md
 ```
 
-`AI_RPG开发路径与阶段设计经验` 是未来同类项目优先复用的完整开发顺序/反模式/验证方法参考；旧项目文档继续保留历史证据，但未来新项目不应被迫重新拼读全部历史才能获得这些结论。
+Implementation-repo Source contract / real-fixture authority：
 
-`备选开发方向候选池` 只记录尚未进入 CURRENT 的能力；Character Card / Expansion Pack / Protagonist Control Mode 已被本轮提升为 CURRENT，不再属于 deferred candidate。
+```text
+my-world/docs/source/World Pack与Character Card合同v0.2_SEMANTIC_FREEZE.md
+my-world/docs/source/G4-02R1_T0_SCOPED_SOURCE_CONTRACT_ADDENDUM.md
+my-world/docs/source/G4-02R1_T0_CHARACTER_INDIVIDUALITY_ADDENDUM.md
+my-world/docs/source/G4-02R1_FIXED_T0_MULTI_ENTRY_CHARACTER_BINDING_CLARIFICATION.md
+my-world/docs/source/G4-02R1_REAL_ASSET_V0_2_R2_MIGRATION_SPEC.md
+my-world/docs/source/G4-02R1_HAN_FAMILY_JOINT_FULL_FIDELITY_AUDIT.md
+my-world/docs/source/G4-02R1_AFTERGLOW_FAMILY_JOINT_FULL_FIDELITY_AUDIT.md
+my-world/docs/source/G4-02R1_CROSS_FAMILY_PACKAGE_SHAPE_STABILITY_DECISION.md
+```
 
-新架构事实先更新本 Map；需要详细 trade-off / contract / migration / evidence 时再更新对应 supporting doc。Current Task 只看 `MY_WORLD_CURRENT_STATUS.md`。
+新架构事实先更新本 Map；需要详细 trade-off / contract / migration / evidence 时再更新 supporting doc。历史版本依赖 Git history / archive，不并列多个 current。
