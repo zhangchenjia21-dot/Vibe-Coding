@@ -1,7 +1,7 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 5.7
+version: 5.8
 created: 2026-08-26
 updated: 2026-08-29
 phase: G4 Primary Source Assets & Local Game Creation
@@ -224,11 +224,31 @@ multiple independent Games coexist
 
 Game Library record 必须在 open 时与数据库内部 `game_id` 交叉验证；metadata 不是 gameplay truth。
 
-当前状态：**Storage Design Gate PASS — Task Packet pending issuance**。
+Implementation Owner：**Codex**。
+
+正式 Task Packet：
+
+`my-world/docs/tasks/G4-04_MULTI_GAME_GAME_LIBRARY_FOUNDATION_TASK.md`
+
+Task Packet commit：`5c5ae75a4010a3b0b420e0a8aa2f89cb43b68d0e`。
+
+当前状态：**ISSUED — waiting Codex implementation → READY FOR INDEPENDENT REVIEW**。
 
 ---
 
-## 9. 当前核心约束
+## 9. Real-asset reality policy
+
+Synthetic compact fixtures 继续用于 deterministic contract/failure tests，但不能作为长期唯一 Reality evidence。
+
+G4-04 不再创建 Source fixture，因为 Source content 不是本任务变量。
+
+G4-05/06 开始应把历史真实资产的**内容与复杂性**按 current Source contract 重新封装，而不是迁移旧 schema；G4-07 First Playable A 必须主要使用真实有产品价值的 World/Character 进行 Reality/UAT。
+
+> **Migrate real content/complexity, not legacy schema debt.**
+
+---
+
+## 10. 当前核心约束
 
 - `Commodity Foundation, Owned Game Semantics.`
 - `Model freedom first. Reversibility over prevention.`
@@ -249,7 +269,7 @@ Game Library record 必须在 open 时与数据库内部 `game_id` 交叉验证�
 
 ---
 
-## 10. 当前 waiting
+## 11. 当前 waiting
 
 ```text
 Blocking: NONE KNOWN
@@ -259,7 +279,10 @@ G4-03: PASS / CLOSED — implementation b227ff9; IR PASS; Owner UAT not required
 Current: G4-04 Multi-Game Lifecycle / Game Library Foundation
 Storage Design Gate: PASS — per-Game SQLite
 Architecture decision: architecture/persistence/G4-04_MULTI_GAME_STORAGE_TOPOLOGY_DECISION.md
-Waiting: formal G4-04 Task Packet issuance
+Formal G4-04 Task Packet: ISSUED — docs/tasks/G4-04_MULTI_GAME_GAME_LIBRARY_FOUNDATION_TASK.md
+Packet commit: 5c5ae75a4010a3b0b420e0a8aa2f89cb43b68d0e
+Implementation Owner: Codex
+Waiting: Codex implementation → READY FOR INDEPENDENT REVIEW
 G4-05+: HOLD until G4-04 closes
 G4-GATE: NOT YET
 ```
