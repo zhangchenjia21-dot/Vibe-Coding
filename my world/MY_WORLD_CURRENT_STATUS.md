@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 6.0
+version: 6.1
 created: 2026-08-26
 updated: 2026-08-29
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-05 Asset-only New Game Wizard v0.1
+current_task: G4-05 Asset-only New Game Wizard v0.1 — REWORK / G4-05R1
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -41,7 +41,8 @@ G4-04 Multi-Game / Game Library      PASS / CLOSED
 G4-04 Storage Design Gate             PASS — per-Game SQLite
 
 Current Phase                         G4 — Primary Source Assets & Local Game Creation
-Current Task                          G4-05 — Asset-only New Game Wizard v0.1
+Current Task                          G4-05 — Asset-only New Game Wizard v0.1 — REWORK
+Active Correction                     G4-05R1 — Historical Real-Asset Fidelity Correction
 G4-GATE                               NOT YET
 ```
 
@@ -84,7 +85,7 @@ G4-03 Managed Local Source Library v0.1 — CLOSED
 ↓
 G4-04 Multi-Game Lifecycle / Game Library Foundation — CLOSED
 ↓
-G4-05 Asset-only New Game Wizard v0.1 — CURRENT
+G4-05 Asset-only New Game Wizard v0.1 — REWORK / G4-05R1 ACTIVE
 ↓
 G4-06 Atomic Final Create + World/Character Materialization
 ↓
@@ -144,48 +145,72 @@ Review 确认：per-Game SQLite；existing-only open；record/DB identity cross-
 
 ---
 
-## 7. Current Task｜G4-05
+## 7. Current Task｜G4-05 — REWORK
 
 正式名称：
 
 > **G4-05 — Asset-only New Game Wizard v0.1**
 
-Outcome：第一次把 G4-03 Managed Source Library 接到真实玩家 New Game 路径，建立明确、可回退的 Game Creation Composition 与 Compatibility Review，但 **不创建 Game**。
+Original implementation candidate：`145c3e1192b443f6284da7f36aee74619adad5bf`。
 
-必须成立：
+2026-08-29 Independent Review：**REWORK**。
+
+### 已通过审查的部分
+
+当前 implementation 已证明以下主路径语义，未发现 P0/P1：
 
 ```text
-Main Menu → New Game
-→ explicit exact World selection
-→ optional Entry/T0
+Managed Source Library current inventory
+→ no implicit first-row selection
+→ explicit exact World / Entry / Player / NPC selection
 → honest Expansion none
-→ exactly one eligible Player Character
-→ 0..N Guaranteed NPC Characters
 → minimal settings
-→ exact deterministic Compatibility Review
+→ deterministic Compatibility Review
 ```
 
-Composition 保存 exact generation identity，而不是只保存 `asset_id` 或“当前版本”的动态含义。选中 generation X 后，即使同 identity 的 generation Y 后来成为 current，也不得静默漂移到 Y。
+并证明：
 
-G4-05 不创建 SQLite、不登记/切换 Game Library current、不 materialize World/Character、不调用 Provider。Final Create 属于 G4-06。
+- Composition 保存 `asset_type + asset_id + version + generation_fingerprint`；
+- World 变化清除旧 Entry；
+- Player 必须 `player_character_supported=true`；
+- same exact Character 不可同时 Player/NPC；
+- selected generation X 后 current 变 Y，Composition 不静默漂移；
+- Review 重新 exact lookup X，tamper/missing fail-loud；
+- 完整 Wizard→Review 不创建 Game SQLite、不改 Game Library、不调用 Provider；
+- Cancel 回到 `MENU_READY / Session ABSENT`；
+- relevant G4-01/G4-03/G4-04 regression 与 Windows GUI evidence PASS。
 
-Implementation Owner：**Codex**。
+### P1 阻断项｜Historical real-asset fidelity
 
-正式 Task Packet：
+原 Task Packet 明确要求历史资产作为 **primary real-content / complexity pressure**，并禁止为了方便把真实 lore 改写成 synthetic summary。
 
-`my-world/docs/tasks/G4-05_ASSET_ONLY_NEW_GAME_WIZARD_TASK.md`
+当前转换包虽然来自固定 historical snapshot，且 2 World + 6 Character 均能通过 G4-02 validate、G4-03 install/exact lookup，但实际内容被高度摘要化：大型 World 的多层世界资料被压缩为少量 instructions/lore；Character 原卡中的能力/局限、决策逻辑、关系/自主性、语言表现、知识边界、T0/历史使用边界等大量稳定 GM-useful 语义被压缩成简短 summary/background + traits/drives。
 
-Task Packet commit：`3984e9b84f3fa8d3034f062bd74a2a723076958a`。
+因此现有 evidence 只能证明：
 
-当前状态：**ISSUED — waiting Codex implementation → READY FOR INDEPENDENT REVIEW**。
+> **根据真实资产写出的 compact fixture 能通过 current contract**
 
-本任务虽为 product-facing UI，但完整建局尚未成立；正式 Owner UAT 仍按 DAG 在 G4-07 First Playable A 执行。G4-05 必须有真实 Windows GUI/product-value evidence，但 `owner_uat_required: false`。
+还不能证明：
+
+> **current Source contract + Managed Library + Wizard 能承载真实资产的 substantive content/complexity**
+
+这会绕过本轮真实资产 Reality pressure 的目的，所以 G4-05 不得关闭。
+
+Active correction：
+
+`my-world/docs/tasks/G4-05R1_REAL_ASSET_FIDELITY_CORRECTION_TASK.md`
+
+Correction base：`145c3e1192b443f6284da7f36aee74619adad5bf`。
+
+Correction 只修真实资产内容保真、section-level mapping / omission audit 与 fidelity evidence；不得推倒已通过的 Wizard/Composition 主结构，也不得开始 G4-06。
+
+Task Packet `owner_uat_required: false`；G4-05 完整 Owner UAT 仍按 DAG 留在 G4-07 First Playable A。
 
 ---
 
 ## 8. Real-asset reality policy
 
-Synthetic compact fixtures 继续用于 deterministic failure/unit tests，但不能再作为唯一 Reality evidence。
+Synthetic compact fixtures 继续用于 deterministic failure/unit tests，但不能作为真实资产 Reality evidence 的替代品。
 
 历史真实资产 evidence source：
 
@@ -204,7 +229,11 @@ World: 世界包/埃瑟维亚_诸界余辉_World_Pack_v0.1.3.md
 Characters: 人物卡/诸界余辉/...
 ```
 
-G4-05/06 将其**真实内容事实与复杂性**重新封装为 current v0.1 Source packages → G4-02 validate → G4-03 Managed Library。禁止新增 production legacy importer/compatibility framework。
+必须迁移的是**真实内容事实与复杂性**，不是旧 schema。G4-05R1 要把属于 current Source owner 的 substantive GM-useful sections 实质保留，并逐项记录 mapping / omission reason。
+
+World 至少审计真实的 world operation/T0/history/social/institutional/geographic/material/knowledge/GM-use semantics；Character 至少审计 identity、personality contradictions、abilities/limitations、behavior logic、relationship/autonomy、language/expression、knowledge boundary、T0/historical-use guidance。
+
+若 current v0.1 真有重要稳定 Source 概念无法合理表达，必须 `BLOCKED` 并报告最小 contract gap；不得用摘要规避，也不得建立 production legacy importer/compatibility framework。
 
 G4-07 First Playable A 必须主要使用真实有产品价值的 World/Character 输入，而不是继续只靠 Agent 自创 compact fixtures。
 
@@ -236,14 +265,16 @@ G4-07 First Playable A 必须主要使用真实有产品价值的 World/Characte
 ## 10. 当前 waiting
 
 ```text
-Blocking: NONE KNOWN
+Blocking: P1 — G4-05 historical real-asset fidelity
 G4-01..G4-04: PASS / CLOSED
-Current: G4-05 Asset-only New Game Wizard v0.1
+Current: G4-05 Asset-only New Game Wizard v0.1 — REWORK
+Implementation candidate reviewed: 145c3e1192b443f6284da7f36aee74619adad5bf
+Independent Review: REWORK — Wizard/Composition semantics accepted; real-asset conversion fidelity insufficient
+Active correction: G4-05R1 Historical Real-Asset Fidelity Correction
+Correction packet: docs/tasks/G4-05R1_REAL_ASSET_FIDELITY_CORRECTION_TASK.md
+Historical source: sillytavern-assets@4a5364a042e41f4c8a69621fc4467956a78703c0
 Implementation Owner: Codex
-Formal G4-05 Task Packet: ISSUED — docs/tasks/G4-05_ASSET_ONLY_NEW_GAME_WIZARD_TASK.md
-Packet commit: 3984e9b84f3fa8d3034f062bd74a2a723076958a
-Historical real-asset source: sillytavern-assets@4a5364a042e41f4c8a69621fc4467956a78703c0
-Waiting: Codex implementation → READY FOR INDEPENDENT REVIEW
+Waiting: G4-05R1 correction implementation → READY FOR INDEPENDENT REVIEW
 G4-06+: HOLD until G4-05 closes
 G4-GATE: NOT YET
 ```
