@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 6.2
+version: 6.3
 created: 2026-08-26
 updated: 2026-08-29
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-02R1 World / Character Source Semantic Re-audit
+current_task: G4-02R1 World / Character Source Semantic Re-audit — REAL ASSET MIGRATION
 current_owner: GPT
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
@@ -21,83 +21,52 @@ G2-GATE                               PASS
 G3 Persistent Game / Save / Timeline PASS / CLOSED
 G3-GATE                               PASS
 G4-01 Application Shell / Lifecycle  PASS / CLOSED
-G4-02 Engineering implementation      HISTORICAL PASS
+G4-02 Engineering implementation      HISTORICAL PASS for v0.1
 G4-02 Semantic adequacy               REOPENED as G4-02R1
 G4-03 Managed Local Source Library   PASS / CLOSED
 G4-04 Multi-Game / Game Library      PASS / CLOSED
 G4-05 Asset-only New Game Wizard     REWORK / HOLD
 
-Current Task                          G4-02R1 — World / Character Source Semantic Re-audit
+Current Task                          G4-02R1
+Semantic audit                        COMPLETE
+v0.2 semantic contract                FROZEN / IMPLEMENTATION PENDING
+Current subtask                       GPT faithful real-asset v0.2 migration
 Current Owner                         GPT
 Codex                                 NO ACTIVE TASK
 G4-06+                                HOLD
 G4-GATE                               NOT YET
 ```
 
-Canonical decision:
-
-`architecture/source/G4_SOURCE_SEMANTIC_OWNERSHIP_AND_REAUDIT_DECISION.md`
-
-Implementation task record:
-
-`my-world/docs/tasks/G4-02R1_SOURCE_SEMANTIC_REAUDIT_TASK.md`
-
 ---
 
 ## 2. Why G4-02 semantics were reopened
 
-G4-02 originally proved real filesystem loading, validation, safe Source boundaries and content-sensitive exact generation fingerprint. That engineering evidence remains valid for the contract that existed at the time.
+G4-02 v0.1 correctly proved filesystem loading, validation, safe paths, Source/Game live-state boundary and content-sensitive exact generation fingerprint for its original contract.
 
-G4-05 later supplied stronger evidence: real historical World / Character assets. Independent Review found that the converted assets had been heavily summarized. The tests proved that compact packages could pass the contract and Managed Library, but did **not** prove the current Source contract could naturally carry the substantive complexity of the real assets.
+G4-05 later exposed a stronger product fact: real `汉末三国` / `诸界余辉` assets were compressed into compact `summary/traits/background/drives` and small World summaries. Load/install PASS therefore proved only that a compact derivative fixture fit v0.1, not that the Source contract naturally carried real authored complexity.
 
-This exposes a semantic-design ownership problem rather than a reason to erase engineering history.
-
-Owner decision on 2026-08-29:
+Owner decision:
 
 > **GPT owns Meaning; Codex owns Mechanism.**
 
-Therefore G4-02 semantic adequacy is reopened as **G4-02R1**, owned by GPT.
+No destructive rollback is allowed. Preserve G4-03/G4-04 and accepted G4-05 Wizard engineering; correct Source semantics/content forward on `main`.
+
+Canonical ownership decision:
+
+`architecture/source/G4_SOURCE_SEMANTIC_OWNERSHIP_AND_REAUDIT_DECISION.md`
 
 ---
 
-## 3. No destructive rollback
+## 3. G4-02R1 semantic audit result｜2026-08-29
 
-Do **not** reset Git to pre-G4-02 and do not discard G4-03/G4-04/G4-05 engineering work.
-
-Preservation rationale:
-
-- G4-03 owns managed immutable Source generations, install, exact lookup, current metadata and tamper detection. Its architecture is mostly independent of how many authored semantic sections a Character Card contains.
-- G4-04 owns Multi-Game / per-Game SQLite and is independent of Source prose semantics.
-- G4-05 Wizard has already independently proven important selection semantics: no implicit first-row selection, exact-generation pinning, X→Y current drift protection, Entry dependency, Character role cardinality, exact Review lookup, Cancel, and no Game/Provider side effect.
-
-Correct route:
-
-```text
-preserve verified engineering
-→ reopen Source semantic design
-→ correct contract/content forward on main
-→ repair only concrete affected code
-→ rerun affected regressions
-```
-
----
-
-## 4. Current task｜G4-02R1
-
-Formal name:
-
-> **G4-02R1 — World / Character Source Semantic Re-audit**
-
-Owner: **GPT**.
-
-Primary evidence source:
+Primary evidence was re-read from exact historical snapshot:
 
 ```text
 zhangchenjia21-dot/sillytavern-assets
 @ 4a5364a042e41f4c8a69621fc4467956a78703c0
 ```
 
-At minimum audit:
+Audited at minimum:
 
 ```text
 World
@@ -113,123 +82,234 @@ Character
 - 杜恩·石痕
 ```
 
-The re-audit must decide, section by section:
+Formal audit:
+
+`my-world/docs/source/G4-02R1_SOURCE_SEMANTIC_AUDIT.md`
+
+Verdict:
+
+> **Current v0.1 is NOT semantically adequate. Contract correction required.**
+
+### Character v0.1 failure
+
+`public_profile.summary/traits + gm_private_profile.background/drives` is too thin for real stable authored semantics such as personality contradictions, abilities/limitations, behavior logic, relationship/autonomy, expression, knowledge boundaries, T0/history/player-takeover guidance and rich tables.
+
+Required portrait is also semantically wrong for real text-only historical cards because it encourages fake Source placeholders.
+
+### World v0.1 failure
+
+`source_lore` has raw text capacity, but no section-level disclosure/semantic retrieval boundary. Arbitrary mandatory `source_material` is a catch-all without a real consumer and already enabled provenance-only / over-summary misuse.
+
+### Rejected correction
+
+Do **not** replace the thin profile with a giant Character field forest. Real characters share broad semantic categories, but their internal shapes differ materially.
+
+---
+
+## 4. World / Character Source v0.2｜SEMANTIC FREEZE
+
+Frozen semantic contract:
+
+`my-world/docs/source/World Pack与Character Card合同v0.2_SEMANTIC_FREEZE.md`
+
+Status:
+
+> **semantic-contract-frozen-implementation-pending**
+
+Core shape:
 
 ```text
-historical authored semantic
-→ reusable World Source
- | reusable Character Source
- | Entry/T0
- | Expansion
- | Game-local / Runtime live state
- | legacy-only omission
-→ required preservation depth
-→ current contract representation
-→ natural fit / awkward fit / impossible
+thin Source identity
++ catalog_summary
++ compact always-on instructions where appropriate
++ ordered rich semantic_sections
++ explicit gm_reference / gm_private disclosure
++ package-local UTF-8 Markdown/TXT content files
++ exact fingerprint over all declared content bytes
 ```
 
-Do not assume the current schema is correct. Do not create a giant universal schema either.
+### World v0.2
 
-Current core principles remain:
+Keeps:
 
-- `Narrative richness over artificial brevity.`
-- `Model freedom first.`
-- `玩法应该拉出 Schema；不要让玩法迁就先写好的万能 Schema。`
-- unreleased v0.1 may be corrected directly if wrong; no compatibility forest for nonexistent users.
-- Source never owns current location/relationship/injury/current knowledge/inventory/player-known/opening placement.
+- `world_instructions`;
+- `gm_instructions`;
+- `entries[]`;
+- `authored_assets[]`.
 
----
+Changes:
 
-## 5. Semantic ownership split from now on
+- `source_lore` → rich `semantic_sections`;
+- remove generic mandatory `source_material` catch-all;
+- hidden World truth can be explicit `gm_private` section;
+- section content is first-class exact Source bytes rather than compact JSON summaries.
 
-### GPT owns
+### Character v0.2
 
-- World Pack / Character Card / Expansion Pack semantic design;
-- authored information ownership and Source/Game/Runtime boundaries;
-- real historical asset semantic migration;
-- GM instructions / character personality / autonomy / knowledge / behavior semantics;
-- semantic fidelity review;
-- deciding whether a schema field is actually needed.
+Changes:
 
-### Codex owns after semantic freeze
+- replace `public_profile` / `gm_private_profile` compression with rich `semantic_sections`;
+- broad recommended types include identity/personality/capabilities/behavior/relationships_autonomy/expression/knowledge/t0_boundary, but this is not a closed universal ontology;
+- section internals remain rich authored text/tables until a real mechanic consumer proves a machine schema is needed;
+- portrait becomes optional;
+- `player_character_supported` semantics remain unchanged.
 
-- GDScript implementation;
-- validator / loader / fingerprint mechanics;
-- filesystem / Managed Library;
-- SQLite / Runtime / lifecycle;
-- UI wiring;
-- automated tests, failure injection, build/export/Windows engineering evidence.
+Important:
 
-Codex must not independently compress or redesign complex narrative assets in order to make implementation easier.
+> `catalog_summary` and `gm_reference` do **not** mean player-known or Character-known.
 
 ---
 
-## 6. G4-05 disposition
+## 5. Game-local evolvable semantics｜FROZEN
+
+Owner explicitly approved DSH-like local semantic evolution.
+
+Canonical decision:
+
+`architecture/source/G4_GAME_LOCAL_EVOLVABLE_SEMANTICS_DECISION.md`
+
+Formal invariant:
+
+> **Source schema is not the possibility ceiling of the Living World. Game-local semantic structure is evolvable.**
+
+After Final Create:
+
+- exact Source generation remains immutable;
+- Game-local canonical object has stable Program-owned identity/provenance/lifecycle kernel;
+- model/runtime may add/update/remove previously unanticipated local semantic facets;
+- model does not rewrite Source, global Source contract, or physical SQLite schema;
+- if an existing canonical Domain owns the concept (Location/Relationship/Knowledge/Injury/Inventory/Faction/etc.), that Domain wins and generic duplicate truth is prohibited;
+- local semantic evolution must be durable and Timeline/Save/Restore reversible;
+- repeated facets are promoted to a formal Domain only after a real mechanic/UI/query consumer appears.
+
+This preserves:
+
+> **Model authors the world; Runtime makes it durable; Player owns the timeline.**
+
+---
+
+## 6. Reference Audit guardrails retained
+
+G4-02R1 explicitly checked against prior SillyTavern / The World / DSH failures:
+
+- no compact-summary self-proof;
+- no giant schema forest;
+- no universal asset protocol before consumers;
+- no `public == player-known` leak;
+- no Source future-script authority;
+- no paper-personality-equals-agency assumption;
+- no total-state prompt dump;
+- no generic `source_material` second schema;
+- no forced fake historical portrait;
+- no machine skill/spell ontology before mechanic consumer;
+- no local evolution outside durability/timeline;
+- no generic facet duplicating formal Domain truth;
+- no binding-only evidence substituting for real materialization / playable proof.
+
+---
+
+## 7. Current subtask｜GPT real-asset migration
+
+Migration authority:
+
+`my-world/docs/source/G4-02R1_REAL_ASSET_V0_2_MIGRATION_SPEC.md`
+
+Rule:
+
+> **preserve → re-home → explicitly omit only when owner is wrong.**
+
+Required real packages remain:
+
+```text
+2 World
+- 汉末三国：天下未定
+- 埃瑟维亚：诸界余辉
+
+6 Character
+- 刘备
+- 曹操
+- 孙权
+- 莉维娅·塞兰
+- 阿德里安·维尔克
+- 杜恩·石痕
+```
+
+The migrated packages must preserve substantive original chapters/tables/private truth and cannot replace them with short summaries.
+
+Codex still has **no active task**. Loader/validator implementation is intentionally not started until GPT finishes the real content/package shape against the frozen contract.
+
+---
+
+## 8. G4-05 disposition
 
 Implementation candidate:
 
 `145c3e1192b443f6284da7f36aee74619adad5bf`
 
-Independent Review result: **REWORK**, but Wizard/Composition engineering is preserved as provisional accepted evidence.
-
-Accepted engineering includes:
+Independent Review: **REWORK**, while the following Wizard/Composition engineering remains provisionally accepted:
 
 - explicit click is authoritative selection;
-- exact identity includes generation fingerprint;
 - no implicit first-row selection;
-- selected generation X does not drift to newer current Y;
+- exact generation identity / X→Y drift protection;
+- World change clears Entry;
+- Player eligibility / Player-NPC overlap;
 - exact Review lookup / tamper fail-loud;
-- World change clears dependent Entry;
-- Player eligibility and Player/NPC overlap rules;
-- complete Wizard→Review creates no SQLite, Game Library mutation or Provider call;
+- Wizard→Review creates no Game DB, no Game Library mutation, no Provider call;
 - Cancel returns Main Menu / no Session.
 
-G4-05 cannot close until G4-02R1 freezes the semantic contract and real assets are migrated faithfully through it.
-
-Previous correction packet:
+Old packet:
 
 `my-world/docs/tasks/G4-05R1_REAL_ASSET_FIDELITY_CORRECTION_TASK.md`
 
-Status: **SUPERSEDED / DO NOT EXECUTE** by Owner decision. Its fidelity finding remains evidence; its Codex ownership/execution route is retired.
+Status:
+
+> **SUPERSEDED / DO NOT EXECUTE**
+
+G4-05 cannot close until v0.2 mechanism support + faithful real asset packages + regressions + GPT Independent Review are complete.
 
 ---
 
-## 7. Next execution order
+## 9. Next execution order
 
 ```text
+DONE
+G4-02R1 real-source semantic audit
+↓
+DONE
+World / Character v0.2 semantic freeze
+↓
 NOW
-G4-02R1 GPT semantic re-audit
+GPT faithful 2 World + 6 Character v0.2 package migration
 ↓
-freeze corrected World / Character semantic contract
+THEN
+narrow Codex v0.2 loader/validator/fingerprint implementation correction
 ↓
-GPT-owned faithful real-asset semantic migration
+Codex automated/filesystem/Windows regression evidence
 ↓
-if loader/validator code changes are required:
-    issue a narrow Codex engineering correction
-else:
-    Codex may be used only for engineering regression/evidence
+GPT engineering IR + source fidelity review
 ↓
-GPT Independent Review of engineering + content fidelity
-↓
-close/resume G4-05
+G4-05 PASS/CLOSE if evidence holds
 ↓
 G4-06 Atomic Final Create
 ↓
 G4-07 First Playable A — Owner UAT
 ```
 
-G4-03 remains PASS unless a concrete corrected-contract regression appears; repair forward if needed. G4-04 remains PASS/CLOSED.
+G4-03 remains PASS unless corrected v0.2 exposes a concrete Library regression; repair forward if needed. G4-04 remains PASS/CLOSED.
 
 ---
 
-## 8. Current blockers / waiting
+## 10. Current blockers / waiting
 
 ```text
-Blocking: Source semantic adequacy must be re-audited against real assets
-Current: G4-02R1
+Blocking: faithful real v0.2 Source packages are not yet complete
+Current: G4-02R1 real-asset migration
 Owner: GPT
+Semantic audit: COMPLETE
+v0.2 semantic contract: FROZEN
+Game-local evolvable semantics: FROZEN
 Codex active task: NONE
 G4-05R1: SUPERSEDED / DO NOT EXECUTE
-G4-05: REWORK / HOLD; preserve implementation candidate
+G4-05: REWORK / HOLD
 G4-06+: HOLD
 ```
