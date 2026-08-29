@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 5.6
+version: 5.7
 created: 2026-08-26
 updated: 2026-08-29
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-03 Managed Local Source Library v0.1
+current_task: G4-04 Multi-Game Lifecycle / Game Library Foundation
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -20,6 +20,7 @@ implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 - 产品目的：`MY_WORLD_项目启动总纲_CURRENT.md`
 - 跨阶段原则：`MY_WORLD_核心设计原则_CURRENT.md`
 - 架构地图：`MY_WORLD_架构_CURRENT.md`
+- 专项架构裁定：`architecture/`
 - 阶段 / Task DAG：`MY_WORLD_总体规划路线图_CURRENT.md`
 - 开发路径经验：`experience/AI_RPG开发路径与阶段设计经验_v1.0_2026-08-28.md`
 
@@ -35,21 +36,19 @@ G3 Persistent Game / Save / Timeline PASS / CLOSED
 G3-GATE                               PASS
 G4-01 Application Shell / Lifecycle  PASS / CLOSED
 G4-02 World + Character Contracts    PASS / CLOSED
+G4-03 Managed Local Source Library   PASS / CLOSED
 
 Current Phase                         G4 — Primary Source Assets & Local Game Creation
-Current Task                          G4-03 — Managed Local Source Library v0.1
+Current Task                          G4-04 — Multi-Game Lifecycle / Game Library Foundation
+G4-04 Storage Design Gate             PASS — per-Game SQLite
 G4-GATE                               NOT YET
 ```
 
 ---
 
-## 3. G3｜PASS / CLOSED
+## 3. Closed foundation summary
 
-G3-01..G3-07 已完成对应 Engineering / Independent Review / Owner UAT。G3-07 Owner UAT（2026-08-28）：**PASS**。
-
-G3-GATE：**PASS**。
-
-第一代 persistence backbone 已成立：
+G3 persistence backbone 已正式成立：
 
 ```text
 SQLite authoritative persistence
@@ -57,8 +56,7 @@ SQLite authoritative persistence
 + accepted Conversation durability
 + current Game reopen/resume
 + named Save / atomic Load / Restore
-+ future-memory isolation
-+ internal Recovery Checkpoint / reciprocal Recover
++ Recovery Checkpoint / reciprocal Recover
 + immutable internal Timeline branching
 + single-writer process safety
 + SQLite-native verified physical backup
@@ -66,37 +64,40 @@ SQLite authoritative persistence
 + real Provider continuation after Restore / Recover
 ```
 
-明确 Deferred：任意 Turn 一键 rewind、Timeline browser、backup browser。
+G4-01 已建立：
+
+```text
+Application Lifetime != Game Session Lifetime
+Launch → Main Menu → explicit Continue → Game Session
+Game → Return → complete cleanup → Main Menu
+```
+
+G4-02 已建立 World Pack / Character Card v0.1 contracts、真实 filesystem validation 与 content-sensitive exact generation fingerprint。
+
+G4-03 已建立 Managed Local Source Library：
+
+```text
+external mutable package
+→ G4-02 validate
+→ staged contract-owned copy
+→ exact-generation revalidation
+→ append-only managed generation
+→ explicit current metadata
+→ restart-stable inventory / exact lookup
+```
 
 ---
 
 ## 4. G4 Route｜Owner-approved v3
 
-2026-08-28 经过第二轮跨项目历史开发步骤审计与 Owner 讨论，G4 再次收敛。
-
-本轮不是增加更多功能，而是修正开发顺序与第一代产品范围：
-
-1. 第一代只有 asset-only New Game 主路径；
-2. World Pack / Character Card / Expansion Pack 升级为 Primary Source Trio；
-3. Character Card 不限于玩家角色；建局为 `Exactly 1 Player + 0..N Guaranteed NPC`；
-4. Expansion 数量 `0..N`，允许 none；
-5. 第一次资产试玩只验证 World + Character；通过后才加入真实 Expansion；
-6. Main Menu 任务必须包含 `Application Lifetime != Game Session Lifetime`，不能只画视觉菜单；
-7. Managed Source Library 必须先于 New Game Wizard；
-8. Multi-Game / Game Library 必须在正式 New Game 前成立；
-9. Source generation immutable，existing Game exact pin；
-10. First Playable A / B 在 G4 中途分别进行 Owner UAT，不等到整个 G4 最后才第一次试玩。
-
-新 G4 Task DAG：
-
 ```text
-G4-01 Application Shell / Main Menu + Game Session Lifecycle
+G4-01 Application Shell / Main Menu + Game Session Lifecycle — CLOSED
 ↓
-G4-02 World Pack + Character Card Source Contracts v0.1
+G4-02 World Pack + Character Card Source Contracts v0.1 — CLOSED
 ↓
-G4-03 Managed Local Source Library v0.1
+G4-03 Managed Local Source Library v0.1 — CLOSED
 ↓
-G4-04 Multi-Game Lifecycle / Game Library Foundation
+G4-04 Multi-Game Lifecycle / Game Library Foundation — CURRENT
 ↓
 G4-05 Asset-only New Game Wizard v0.1
 ↓
@@ -115,7 +116,7 @@ G4-11 Two Primary Asset Families Reality Test
 G4-GATE
 ```
 
-所有旧的 G4-01 World Pack task packet / Main-Menu-only handoff 均 **SUPERSEDED BEFORE EXECUTION**。
+G4-05+ HOLD until G4-04 closes。
 
 ---
 
@@ -131,193 +132,103 @@ Main Menu
 → Expansion Pack 0..N（可 none）
 → Exactly 1 Player Character Card
 → 0..N Guaranteed NPC Character Cards
-→ Minimal Settings
+→ Game display name
+→ Protagonist Control Mode: Full / Light / Narrative
+→ optional opening supplement
 → Compatibility Review
 → Atomic Final Create
-→ Game-local Reality
+→ independent Game-local Reality
 → real AI GM Opening
 ```
 
-Minimal Settings 当前批准：
-
-- Game display name；
-- Protagonist Control Mode：Full / Light / Narrative；
-- optional opening supplement。
-
-默认推荐 Light Delegation。
-
-第一代不支持：
-
-- 无 World Pack 建局；
-- 无 Character Card 的玩家角色建局；
-- AI 从空白自由文本直接生成世界并开局；
-- Draft / arbitrary external file 直接成为 Game Source；
-- historical Source version picker；
-- complex Expansion feature/module chooser；
-- Creator 在 G4 进入关键路径。
+第一代不支持 no-World / no-Character / blank-world direct create / arbitrary Draft direct-to-Game / historical Source version picker / complex Expansion chooser / Creator critical path。
 
 ---
 
-## 6. Character Card 当前语义
+## 6. Current architecture locks relevant to G4-04
 
-Character Card 是 reusable Character Source。
-
-第一代建局：
+长期保持：
 
 ```text
-Exactly 1 Player Character
-0..N Guaranteed NPC Characters
+Source Library != Game Library
+Source Generation != Game-local Reality != Runtime State
+Application Lifetime != Game Session Lifetime
+Game Library metadata != gameplay truth
 ```
 
-Guaranteed NPC：
+2026-08-29 G4-04 Storage Design Gate 已正式裁定：
 
-> 被玩家明确选择后，从 Final Create 起就是本局 canonical cast 的一部分。
+> **One Game = One SQLite database.**
 
-但：
+Supporting architecture decision：
 
-```text
-Guaranteed in Game
-!= Opening appearance
-!= same scene
-!= player-known
-!= relationship
-!= automatic context inclusion
-```
+`architecture/persistence/G4-04_MULTI_GAME_STORAGE_TOPOLOGY_DECISION.md`
 
-具体出现时间/地点/关系由 G5 世界因果与 Runtime 决定。
+Decision commit：`15118de0edd2d6a179c047d2c409c9819be29924`。
+
+选择依据：当前 Runtime 已接受 explicit database path；writer lock、backup、recovery 都按 DB path 隔离。shared SQLite + `game_id` 会重写 G3 已验证的 one-current verification、backup/recovery blast radius、writer ownership 与大量 persistence query scope，因此第一代拒绝。
+
+Legacy G3 `user://my-world/current-game.sqlite` 默认优先 non-destructive adopt in place；新 Games 目标采用独立 per-Game storage。G4-04 不授权 production SQLite schema migration。
 
 ---
 
-## 7. Expansion 当前语义
-
-第一代允许 `0..N` Expansion Pack。
-
-开发顺序冻结：
-
-```text
-First Playable A
-World + Character
-→ Owner UAT
-
-then
-
-Expansion v0.1
-→ exact binding
-→ real observable Runtime effect
-→ First Playable B
-→ Owner UAT
-```
-
-不接受 `Source / Manifest / Binding 存在` 就宣称 Expansion 已工作。
-
-G4 不建设 generic external Expansion UI framework；真实 mechanism UI 留给 G6，external declarative UI contract 留给 G8。
-
----
-
-## 8. G4-01｜PASS / CLOSED
-
-正式名称：
-
-> **G4-01 — Application Shell / Main Menu + Game Session Lifecycle**
-
-Implementation commit：`d193268be10082df15ce4d8f610de6ebdc7e58ac`。
-
-2026-08-28 Independent Review：**PASS**。
-
-2026-08-28 Owner UAT：**PASS**。
-
-已正式证明：
-
-```text
-Application Launch
-→ Main Menu READY without Game DB open/lock
-→ Continue
-→ current Game Session
-→ Return to Main Menu
-→ Provider/View/Runtime/SQLite/writer cleanup
-→ Application remains READY
-→ Continue again
-→ same durable Game truth
-```
-
-同时保留 G3 Save / Load / Recovery、single-writer、corruption recovery 与 responsive Windows product path。
-
-结论：**G4-01 PASS / CLOSED**。
-
----
-
-## 9. G4-02｜PASS / CLOSED
-
-正式名称：
-
-> **G4-02 — World Pack + Character Card Source Contracts v0.1**
-
-Implementation commit：`d8405e046ee2134361ec7ab1257f98c7a86c24a8`。
-
-2026-08-29 Independent Review：**PASS**。
-
-Task Packet 明确 `owner_uat_required: false`；本任务是 Source contract foundation，不要求 Owner UAT。
-
-已正式证明：
-
-```text
-World Pack v0.1 + Character Card v0.1
-→ explicit package path
-→ production filesystem loader / validator
-→ deterministic exact-generation fingerprint
-→ typed Source projection
-```
-
-并通过两个 materially different World fixtures 与两个 Character fixtures 证明 contract 非单例过拟合；声明 visual/file bytes 进入 exact generation，path traversal / absolute escape / missing/script-like reference fail-loud；shared layer 未演化为 giant universal asset schema，也未提前实现 Managed Source Library。
-
-结论：**G4-02 PASS / CLOSED**。
-
----
-
-## 10. Current Task｜G4-03
+## 7. G4-03｜PASS / CLOSED
 
 正式名称：
 
 > **G4-03 — Managed Local Source Library v0.1**
 
-Outcome：让已经成立的 World Pack / Character Card contract 第一次进入 Program 管理的本地 Source Library，形成可验证、不可静默覆盖的 immutable generation inventory，为后续 New Game exact Source selection 提供稳定输入。
+Implementation commit：`b227ff9043a25b3ebf7581eb340f3e2f9006a919`。
 
-必须证明：
+2026-08-29 Independent Review：**PASS**。
 
-```text
-explicit local package
-→ validate through G4-02 production contract
-→ stage/copy contract-owned content
-→ verify exact generation
-→ publish immutable generation into managed local library
-→ inventory current installed generation
-→ restart/reload yields same inventory truth
-```
+Task Packet `owner_uat_required: false`；无需 Owner UAT。
 
-关键边界：
+Review 确认：
 
-```text
-Source Library != Game Library
-stable Source identity != exact generation
-external mutable package != managed immutable generation
-current installed generation != historical generation deletion
-```
+- publish chain 为 G4-02 validate → staging → staged fingerprint revalidation → append-only final generation → atomic current metadata；
+- duplicate exact install idempotent；
+- same version / different fingerprint 可并存；
+- external 修改/删除不改变 managed generation；
+- restart 新进程恢复 current inventory 与 retained exact generation；
+- copy interruption / fingerprint race / current commit failure / retry / stale staging 均有失败语义；
+- managed missing/tamper fail-loud，不信 fingerprint 目录名、不从 external 自动修复；
+- tests 使用 task-owned root，未触碰 Owner production Source Library；
+- 未启动 G4-04、Game pin、SQLite Game schema 或 Provider。
 
-第一代不需要历史版本 picker；安装新 generation 不得覆盖旧 generation。G4-03 不实现 Game pin registry、multi-Game、New Game selector、Final Create、Expansion Pack 或 Runtime Asset Resolution。
-
-Implementation Owner：**Codex**。
-
-正式 Task Packet：
-
-`my-world/docs/tasks/G4-03_MANAGED_LOCAL_SOURCE_LIBRARY_TASK.md`
-
-Task Packet commit：`775d6c2b11b90e1e9667d590350a5f57c03dffdf`。
-
-当前状态：**ISSUED — waiting Codex implementation → READY FOR INDEPENDENT REVIEW**。
+结论：**G4-03 PASS / CLOSED**。
 
 ---
 
-## 11. 当前核心约束
+## 8. Current Task｜G4-04
+
+正式名称：
+
+> **G4-04 — Multi-Game Lifecycle / Game Library Foundation**
+
+Outcome：在不重写 G3 persistence 的前提下，让多个独立 Game coexist，并让 Application 通过 Game Library metadata 选择 exact existing Game database path，再复用 G4-01 Session lifecycle 打开/关闭/切换。
+
+必须至少成立：
+
+```text
+multiple independent Games coexist
++ per-Game SQLite
++ Game Library player-safe metadata
++ Continue/latest Game
++ select/open/switch
++ legacy G3 current-game.sqlite non-destructive adoption
++ missing/corrupt Game fail-loud
++ one writable Game Session at a time
++ new Game cannot overwrite existing Game
+```
+
+Game Library record 必须在 open 时与数据库内部 `game_id` 交叉验证；metadata 不是 gameplay truth。
+
+当前状态：**Storage Design Gate PASS — Task Packet pending issuance**。
+
+---
+
+## 9. 当前核心约束
 
 - `Commodity Foundation, Owned Game Semantics.`
 - `Model freedom first. Reversibility over prevention.`
@@ -330,24 +241,25 @@ Task Packet commit：`775d6c2b11b90e1e9667d590350a5f57c03dffdf`。
 - UI / Transcript / Prompt / Cache 不是 authoritative truth。
 - `Application Lifetime != Game Session Lifetime`。
 - `Source Library != Game Library`。
+- `One Game = One SQLite`（G4 first generation）。
+- `Game Library metadata != gameplay truth`。
 - `Source stable identity != exact immutable generation`。
-- `World / Character / Expansion Source != Game-local Reality != Runtime State`。
 - `Guaranteed NPC != Opening NPC != Player-known NPC`。
 - `Expansion binding != real gameplay effect`。
 
 ---
 
-## 12. 当前 waiting
+## 10. 当前 waiting
 
 ```text
 Blocking: NONE KNOWN
-G4-01: PASS / CLOSED — Engineering + Independent Review + Owner UAT PASS
-G4-02: PASS / CLOSED — Engineering + Independent Review PASS; Owner UAT not required
-Current: G4-03 Managed Local Source Library v0.1
-Implementation Owner: Codex
-Formal G4-03 Task Packet: ISSUED — docs/tasks/G4-03_MANAGED_LOCAL_SOURCE_LIBRARY_TASK.md
-Packet commit: 775d6c2b11b90e1e9667d590350a5f57c03dffdf
-Waiting: Codex implementation → READY FOR INDEPENDENT REVIEW
-G4-04+: HOLD until G4-03 closes
+G4-01: PASS / CLOSED
+G4-02: PASS / CLOSED
+G4-03: PASS / CLOSED — implementation b227ff9; IR PASS; Owner UAT not required
+Current: G4-04 Multi-Game Lifecycle / Game Library Foundation
+Storage Design Gate: PASS — per-Game SQLite
+Architecture decision: architecture/persistence/G4-04_MULTI_GAME_STORAGE_TOPOLOGY_DECISION.md
+Waiting: formal G4-04 Task Packet issuance
+G4-05+: HOLD until G4-04 closes
 G4-GATE: NOT YET
 ```
