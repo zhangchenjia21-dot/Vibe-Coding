@@ -1,7 +1,7 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 6.7
+version: 6.8
 created: 2026-08-26
 updated: 2026-08-29
 phase: G4 Primary Source Assets & Local Game Creation
@@ -9,6 +9,7 @@ current_task: G4-02R1M1 Source v0.2-r2 Mechanism Correction
 current_owner: Codex
 parent_task: G4-02R1
 semantic_owner: GPT
+context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -50,7 +51,7 @@ Formal Governance Base used by the packet:
 
 `e2423cb50800129fc0bff6d1edc31701023f0f28`
 
-That Governance Base is the synchronized architecture/roadmap freeze point for this mechanism task. Later status-only handoff propagation may sit on a newer governance HEAD without changing the semantic/route base.
+That Governance Base is the synchronized architecture/roadmap freeze point for this mechanism task. Later status/handoff-only propagation may sit on a newer governance HEAD without changing the semantic/route base.
 
 Current execution owner: **Codex**.  
 Independent Review owner after Codex return: **GPT**.  
@@ -165,6 +166,14 @@ Immutable Source Package Total Content
 ```
 
 Fingerprint coverage remains broader than Runtime visibility.
+
+### Character starting individuality
+
+T0 quarantine must not collapse early Characters into generic age templates.
+
+> **Age / developmental stage is a capability boundary, not a personality template.**
+
+Each T0 profile must preserve the Character-specific starting individuality that is justified at that T0: family position, lived experience, attachment/education/socialization, observable temperament/habits, knowledge sources, capabilities/limits and open growth space. Do not backfill childhood from adult stereotypes or later canon.
 
 ---
 
@@ -291,3 +300,28 @@ G4-05R1: SUPERSEDED / DO NOT EXECUTE
 G4-05: REWORK / HOLD
 G4-06+: HOLD
 ```
+
+---
+
+## 9. GPT context takeover checkpoint
+
+Current navigation handoff:
+
+`handoff/GPT_CONTEXT_HANDOFF_CURRENT.md`
+
+This handoff exists because conversational context can become too long to be a reliable execution source. It is a **navigation / takeover digest only**, not a new canonical Product/Architecture owner.
+
+A replacement GPT must:
+
+```text
+refresh both GitHub main HEADs
+→ read Governance AGENTS + Product + Principles + Architecture + Roadmap + Status
+→ read implementation AGENTS + current parent/task packet
+→ only then continue
+```
+
+Do not ask the Owner to restate project history that is already present in current repositories.
+
+If Codex has not returned, the replacement GPT must not duplicate `G4-02R1M1` implementation or reopen frozen semantics without new evidence/Owner decision.
+
+If Codex has returned, the replacement GPT's next primary responsibility is **Independent Review**, with special attention to real-fixture projection assertions, future-canon leakage, fingerprint-vs-visibility, closed temporal coverage, cross-world zero-coverage, G4-03 regression, preserved G4-05 mechanics and frozen-fixture integrity.
