@@ -1,12 +1,14 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 6.5
+version: 6.6
 created: 2026-08-26
 updated: 2026-08-29
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-02R1 World / Character Source Semantic Re-audit — T0-SCOPED REAL-ASSET PRESSURE
-current_owner: GPT
+current_task: G4-02R1M1 Source v0.2-r2 Mechanism Correction
+current_owner: Codex
+parent_task: G4-02R1
+semantic_owner: GPT
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -22,36 +24,49 @@ G3 Persistent Game / Save / Timeline PASS / CLOSED
 G3-GATE                               PASS
 G4-01 Application Shell / Lifecycle  PASS / CLOSED
 G4-02 Engineering implementation      HISTORICAL PASS for v0.1
-G4-02 Semantic adequacy               REOPENED as G4-02R1
-G4-03 Managed Local Source Library   PASS / CLOSED
-G4-04 Multi-Game / Game Library      PASS / CLOSED
-G4-05 Asset-only New Game Wizard     REWORK / HOLD
-
-Current Task                          G4-02R1
-Semantic audit                        COMPLETE
-v0.2 base semantic contract           FROZEN / IMPLEMENTATION PENDING
-T0-scoped correction                  FROZEN as v0.2 revision 2
-Current migration spec                v0.2-r2 CURRENT
-Current subtask                       GPT temporal pressure remigration: 孙权 + 汉末三国 World first
-Current Owner                         GPT
-Codex                                 NO ACTIVE TASK
+G4-02R1 Semantic/full-fidelity phase  PASS / FROZEN FOR MECHANISM
+G4-02R1 Overall                       IMPLEMENTATION PENDING
+G4-02R1M1 Mechanism Correction        ACTIVE — CODEX
+G4-03 Managed Local Source Library    PASS / CLOSED
+G4-04 Multi-Game / Game Library       PASS / CLOSED
+G4-05 Asset-only New Game Wizard      REWORK / HOLD
 G4-06+                                HOLD
 G4-GATE                               NOT YET
 ```
+
+Formal mechanism packet:
+
+`my-world/docs/tasks/G4-02R1M1_SOURCE_V0_2_R2_MECHANISM_CORRECTION_TASK.md`
+
+Packet commit:
+
+`238dfecb6bdfc056a4ceb4115b247e8a8f18b674`
+
+Semantic freeze / Formal Code Base:
+
+`f1950d615864fd0e780764fa1a50cfcbf1a5c507`
+
+Governance Base used by the packet:
+
+`6ac202eca576496e93eb0f4b317ef5b0bffc7399`
+
+Current execution owner: **Codex**.  
+Independent Review owner after Codex return: **GPT**.  
+Return ceiling for Codex: **READY FOR INDEPENDENT REVIEW**.
 
 ---
 
 ## 2. Why G4-02 semantics were reopened
 
-G4-02 v0.1 correctly proved filesystem loading, validation, safe paths, Source/Game live-state boundary and content-sensitive exact generation fingerprint for its original contract.
+G4-02 v0.1 engineering correctly proved loading, validation, safe paths and content-sensitive exact-generation fingerprint for its original compact contract.
 
-G4-05 later exposed a stronger product fact: real `汉末三国` / `诸界余辉` assets were compressed into compact `summary/traits/background/drives` and small World summaries. Load/install PASS therefore proved only that a compact derivative fixture fit v0.1, not that the Source contract naturally carried real authored complexity.
+G4-05 later exposed the product failure: real `汉末三国` / `诸界余辉` World and Character assets had been compressed into short summaries. Engineering PASS therefore did not prove that the Source contract naturally preserved real authored richness.
 
 Owner decision:
 
 > **GPT owns Meaning; Codex owns Mechanism.**
 
-No destructive rollback is allowed. Preserve G4-03/G4-04 and accepted G4-05 Wizard engineering; correct Source semantics/content forward on `main`.
+No destructive rollback is allowed. Verified G4-03/G4-04 and provisionally accepted G4-05 Wizard/Composition engineering are preserved and corrected forward only when the frozen v0.2-r2 contract exposes a concrete regression.
 
 Canonical ownership decision:
 
@@ -59,23 +74,23 @@ Canonical ownership decision:
 
 ---
 
-## 3. G4-02R1 semantic audit result｜2026-08-29
+## 3. G4-02R1 semantic/full-fidelity result｜PASS / FROZEN
 
-Primary evidence was re-read from exact historical snapshot:
+Historical evidence is pinned read-only:
 
 ```text
-zhangchenjia21-dot/sillytavern-assets
-@ 4a5364a042e41f4c8a69621fc4467956a78703c0
+repo: zhangchenjia21-dot/sillytavern-assets
+snapshot: 4a5364a042e41f4c8a69621fc4467956a78703c0
 ```
 
-Audited at minimum:
+Primary audited/migrated assets:
 
 ```text
-World
-- 汉末三国_天下未定_World_Pack_v0.2.3.md
-- 埃瑟维亚_诸界余辉_World_Pack_v0.1.3.md
+World x2
+- 汉末三国：天下未定
+- 埃瑟维亚：诸界余辉
 
-Character
+Character x6
 - 刘备
 - 曹操
 - 孙权
@@ -84,79 +99,82 @@ Character
 - 杜恩·石痕
 ```
 
-Formal audit:
+Completed semantic evidence includes:
 
-`my-world/docs/source/G4-02R1_SOURCE_SEMANTIC_AUDIT.md`
+- v0.1 semantic adequacy: **FAIL**;
+- v0.2 rich-section base contract frozen;
+- T0-scoped Source / Post-T0 Canon Quarantine frozen as v0.2 revision 2;
+- Game-local evolvable semantics frozen;
+- early Character individuality addendum frozen;
+- fixed-T0 multi-Entry Character binding clarified;
+- full Han World + 刘备 / 曹操 / 孙权 rich temporal packages;
+- Han temporal isolation, same-stage differentiation, closed temporal coverage and joint no-shrinkage audit;
+- full fixed-1287 Afterglow World with rich `gm_reference` / `gm_private` material and three Entry snapshots;
+- full 莉维娅 / 阿德里安 / 杜恩 rich fixed-1287 profiles;
+- fantasy-family disclosure / knowledge / complex-ability / no-shrinkage audit;
+- final cross-family 2 World + 6 Character package-shape stability decision.
 
-Verdict:
+Canonical freeze decision:
 
-> **Current v0.1 is NOT semantically adequate. Contract correction required.**
+`my-world/docs/source/G4-02R1_CROSS_FAMILY_PACKAGE_SHAPE_STABILITY_DECISION.md`
 
-### Character v0.1 failure
+Semantic phase verdict:
 
-`public_profile.summary/traits + gm_private_profile.background/drives` is too thin for real stable authored semantics such as personality contradictions, abilities/limitations, behavior logic, relationship/autonomy, expression, knowledge boundaries, T0/history/player-takeover guidance and rich tables.
+> **PASS / FROZEN FOR MECHANISM.**
 
-Required portrait is also semantically wrong for real text-only historical cards because it encourages fake Source placeholders.
-
-### World v0.1 failure
-
-`source_lore` has raw text capacity, but no section-level disclosure/semantic retrieval boundary. Arbitrary mandatory `source_material` is a catch-all without a real consumer and already enabled provenance-only / over-summary misuse.
-
-### Rejected correction
-
-Do **not** replace the thin profile with a giant Character field forest. Real characters share broad semantic categories, but their internal shapes differ materially.
+This does **not** close G4-02R1. Mechanism implementation and GPT Independent Review are still required.
 
 ---
 
-## 4. World / Character Source v0.2｜BASE SEMANTIC FREEZE
+## 4. Frozen Source v0.2-r2 architecture
 
 Base contract:
 
 `my-world/docs/source/World Pack与Character Card合同v0.2_SEMANTIC_FREEZE.md`
 
-Core shape:
-
-```text
-thin Source identity
-+ catalog_summary
-+ compact always-on instructions where appropriate
-+ ordered rich semantic_sections
-+ explicit gm_reference / gm_private disclosure
-+ package-local UTF-8 Markdown/TXT content files
-+ exact fingerprint over all declared content bytes
-```
-
-World keeps `world_instructions`, `gm_instructions`, `entries[]`, `authored_assets[]`; replaces compact `source_lore` with rich sections and removes generic mandatory `source_material`.
-
-Character replaces compressed public/private profile objects with rich sections; broad types remain open vocabulary; section internals stay authored text/tables until a real mechanic consumer proves machine structure is needed; portrait is optional; `player_character_supported` stays explicit.
-
-Important:
-
-> `catalog_summary` and `gm_reference` do **not** mean player-known or Character-known.
-
----
-
-## 5. T0-scoped Source / Post-T0 Canon Quarantine｜FROZEN 2026-08-29
-
-New canonical decision:
-
-`architecture/source/G4_T0_SCOPED_SOURCE_AND_POST_T0_CANON_QUARANTINE_DECISION.md`
-
-Implementation-repo contract addendum:
+T0 correction:
 
 `my-world/docs/source/G4-02R1_T0_SCOPED_SOURCE_CONTRACT_ADDENDUM.md`
 
-Together with the base semantic freeze, this is current **v0.2 revision 2**.
+Character individuality:
 
-Reason:
+`my-world/docs/source/G4-02R1_T0_CHARACTER_INDIVIDUALITY_ADDENDUM.md`
 
-DSH long-play evidence showed that prose rules such as “history is not a script” are insufficient if ordinary GM Context still exposes complete post-T0 canon / later character biography. The model may use that lower-cost future template and converge the Game back toward source history.
+Fixed-T0 multi-Entry binding clarification:
+
+`my-world/docs/source/G4-02R1_FIXED_T0_MULTI_ENTRY_CHARACTER_BINDING_CLARIFICATION.md`
+
+Core package shape:
+
+```text
+thin identity / catalog metadata
++ ordered rich semantic_sections
++ disclosure = gm_reference | gm_private
++ package-local UTF-8 Markdown/TXT content files
++ Entry-scoped World sections where needed
++ T0-profile-scoped Character sections where needed
++ exact immutable generation fingerprint over every declared byte
+```
+
+World selected projection:
+
+```text
+top-level always-safe semantic sections
++ exact selected Entry semantic sections
+```
+
+Character selected projection:
+
+```text
+top-level always-safe semantic sections
++ exact matching T0 profile semantic sections
+```
+
+Never fallback to latest / nearest / later / complete-life biography.
 
 Formal invariant:
 
 > **Do not show the model a post-T0 answer and then ask it to forget that answer.**
-
-Therefore:
 
 ```text
 Immutable Source Package Total Content
@@ -166,48 +184,11 @@ Immutable Source Package Total Content
 != Model-visible Working Set
 ```
 
-### World
-
-- top-level sections must be cross-T0/always-safe;
-- selected Entry/T0 may own Entry-scoped rich sections;
-- ordinary Runtime gets top-level always-safe + selected Entry sections only;
-- later Entry snapshots remain in exact generation but are quarantined from current Game Context.
-
-### Character
-
-- top-level sections must be always-safe;
-- optional `t0_profiles[]` may bind explicit `world_asset_id + entry_id` to rich Character sections;
-- ordinary Runtime gets always-safe + exact matching profile only;
-- no matching profile must never fallback to latest/nearest/later/complete-life biography;
-- same Character `asset_id` remains stable across T0 profiles.
-
-### Model freedom self-check
-
-PASS. This is an information authority/Context boundary, not a Narrative restriction.
-
-Do not add:
-
-- anti-history state machine;
-- divergence score;
-- fixed output format/length;
-- “must differ from canon” rule;
-- canon/slight-change/radical-change probability quota。
-
-T0 projection must retain rich present depth: personality inertia, pre-T0 experiences, capabilities/limits, relationships, knowledge provenance, institutions/resources/geography and open goals.
-
-> **Quarantine future answers; preserve present depth.**
-
-### No convergence force / no divergence force
-
-If current causality naturally recreates an original historical outcome, it is valid. If premises changed, canon has no special convergence privilege. Randomness applies to current uncertainty, not to a lottery over “follow history or not”.
-
-### Provider pretraining knowledge
-
-Post-T0 pretrained/external canon has no authority as Game fact, character motive or future prediction. Keep this as a short authority invariant; do not enumerate future events in Prompt.
+Fingerprint coverage remains broader than Runtime visibility.
 
 ---
 
-## 6. Game-local evolvable semantics｜FROZEN
+## 5. Game-local evolvable semantics｜FROZEN
 
 Canonical decision:
 
@@ -220,98 +201,81 @@ Formal invariant:
 After Final Create:
 
 - exact Source generation remains immutable;
-- Game-local canonical object has stable Program-owned identity/provenance/lifecycle kernel;
-- model/runtime may add/update/remove previously unanticipated local semantic facets;
-- model does not rewrite Source, global Source contract, or physical SQLite schema;
-- if an existing canonical Domain owns the concept (Location/Relationship/Knowledge/Injury/Inventory/Faction/etc.), that Domain wins and generic duplicate truth is prohibited;
-- local semantic evolution must be durable and Timeline/Save/Restore reversible;
-- repeated facets are promoted to a formal Domain only after a real mechanic/UI/query consumer appears.
+- Game-local canonical objects keep stable Program-owned identity/provenance/lifecycle kernels;
+- model/runtime may add, update or remove previously unanticipated local semantic facets;
+- existing canonical Domains such as Location / Relationship / Knowledge / Injury / Inventory / Faction win over duplicate generic truth;
+- the model does not mutate Source, the global Source contract or physical SQLite schema;
+- local semantic evolution must be durable and Timeline/Save/Restore reversible.
 
-T0 quarantine and local evolvability are complementary:
+---
+
+## 6. Current mechanism task｜G4-02R1M1
+
+Formal packet:
+
+`my-world/docs/tasks/G4-02R1M1_SOURCE_V0_2_R2_MECHANISM_CORRECTION_TASK.md`
+
+Owner: **Codex**.
+
+Required mechanism outcome:
 
 ```text
-T0 quarantine removes leaked future answers
-+
-Game-local evolvability provides post-T0 creative capacity
+rich immutable Source package
+→ deterministic exact-generation validation/fingerprint
+→ exact selected World Entry / Character T0 profile projection
+→ explicit temporal compatibility result
+→ no fallback / no hidden same-family restriction
 ```
 
----
+Primary acceptance evidence is the frozen real **2 World + 6 Character** full-fidelity fixture set. Codex must consume those packages unchanged.
 
-## 7. Reference Audit guardrails retained
+Scope is deliberately narrow:
 
-G4-02R1 explicitly checked against prior SillyTavern / The World / DSH failures:
+- validator / loader / fingerprint;
+- exact selected Source projection;
+- explicit temporal compatibility state;
+- localized Source Library repair only if a real corrected-contract regression appears;
+- G4-03 and preserved G4-05 regression evidence;
+- Godot/Windows engineering evidence.
 
-- no compact-summary self-proof;
-- no giant schema forest;
-- no universal asset protocol before consumers;
-- no `public == player-known` leak;
-- no Source future-script authority;
-- no post-T0 canon exposed to ordinary Runtime with prompt-only “ignore it” protection;
-- no paper-personality-equals-agency assumption;
-- no total-state prompt dump;
-- no generic `source_material` second schema;
-- no forced fake historical portrait;
-- no machine skill/spell ontology before mechanic consumer;
-- no local evolution outside durability/timeline;
-- no generic facet duplicating formal Domain truth;
-- no binding-only evidence substituting for real materialization / playable proof;
-- no forced anti-history divergence mechanism.
+Codex must not:
 
----
+- redesign Source semantics;
+- compress/paraphrase the frozen fixtures;
+- invent same-family restrictions;
+- add profile fallback;
+- create a giant universal ontology;
+- implement G4-06 Final Create;
+- resume or close G4-05;
+- create fake Source portraits;
+- destructively roll back prior verified engineering.
 
-## 8. Current subtask｜Temporal pressure remigration
-
-Current migration authority:
-
-`my-world/docs/source/G4-02R1_REAL_ASSET_V0_2_R2_MIGRATION_SPEC.md`
-
-Old r1 migration spec:
-
-`my-world/docs/source/G4-02R1_REAL_ASSET_V0_2_MIGRATION_SPEC.md` — **SUPERSEDED / design evidence only**.
-
-Current r2 rule:
-
-> **preserve → re-home → T0-scope → explicitly omit only when owner is wrong.**
-
-Stable identity is frozen; this migration must not rename the existing `ashtervia` asset IDs merely to improve spelling.
-
-Current pressure order:
-
-```text
-1. 孙权
-   prove early/late personality does not leak backward
-
-2. 汉末三国：天下未定
-   prove selected Entry only exposes facts valid at that T0
-
-3. re-audit 刘备 / 曹操 historical temporal packages
-
-4. continue fixed-1287 诸界余辉 characters/world
-```
-
-Already-created pre-r2 fixtures are design evidence only and are not final packages until revalidated against T0 quarantine.
-
-Required real packages remain 2 World + 6 Character.
-
-Codex still has **no active task**. Loader/validator implementation is intentionally not started until GPT proves the r2 package shape against real content.
+If implementation exposes a real semantic ambiguity that cannot be resolved mechanically from frozen sources, Codex returns **BLOCKED to GPT** instead of inventing a rule.
 
 ---
 
-## 9. G4-05 disposition
+## 7. G4-03 / G4-04 / G4-05 disposition
 
-Implementation candidate:
+### G4-03
 
-`145c3e1192b443f6284da7f36aee74619adad5bf`
+**PASS / CLOSED.** Preserve immutable generation, staged verified publish, restart truth, exact generation lookup and tamper/missing fail-loud semantics. Repair forward only if v0.2-r2 proves a concrete regression.
 
-Independent Review: **REWORK**, while the following Wizard/Composition engineering remains provisionally accepted:
+### G4-04
 
-- explicit click is authoritative selection;
-- no implicit first-row selection;
-- exact generation identity / X→Y drift protection;
-- World change clears Entry;
-- Player eligibility / Player-NPC overlap;
-- exact Review lookup / tamper fail-loud;
-- Wizard→Review creates no Game DB, no Game Library mutation, no Provider call;
+**PASS / CLOSED.** One Game = One SQLite and Game Library topology are unchanged by Source semantic correction.
+
+### G4-05
+
+**REWORK / HOLD.** Candidate `145c3e1192b443f6284da7f36aee74619adad5bf` remains provisional accepted Wizard/Composition engineering evidence.
+
+Preserved seams include:
+
+- chooser visibility/focus != selection;
+- explicit click pins exact generation;
+- World change clears dependent Entry;
+- Player eligibility and Player/NPC overlap rules;
+- exact Review re-resolution and tamper/missing fail-loud;
+- Wizard→Review creates no Game DB, Game Library mutation or Provider call;
 - Cancel returns Main Menu / no Session.
 
 Old packet:
@@ -322,60 +286,52 @@ Status:
 
 > **SUPERSEDED / DO NOT EXECUTE**
 
-G4-05 cannot close until v0.2-r2 mechanism support + faithful T0-scoped real asset packages + regressions + GPT Independent Review are complete.
-
 ---
 
-## 10. Next execution order
+## 8. Current execution order
 
 ```text
 DONE
-G4-02R1 real-source semantic audit
+G4-02R1 semantic audit + v0.2-r2 contract correction
 ↓
 DONE
-World / Character v0.2 base semantic freeze
-↓
-DONE
-T0-scoped Source / Post-T0 Canon Quarantine decision + v0.2-r2 addendum
-↓
-DONE
-v0.2-r2 real-asset migration specification / stable identity audit
+2 World + 6 Character faithful full-fidelity migration and cross-family shape freeze
 ↓
 NOW
-GPT temporal pressure remigration: 孙权 + 汉末三国 World
+G4-02R1M1 Codex mechanism correction
 ↓
-GPT faithful remaining 2 World + 6 Character v0.2-r2 packages
+Codex automated / filesystem / Godot-Windows regression evidence
 ↓
-THEN
-narrow Codex v0.2-r2 loader/validator/fingerprint implementation correction
+GPT Independent Review
+- engineering assertions
+- real-fixture consumption
+- exact T0 projection
+- temporal blocking
+- fingerprint-vs-visibility
+- Source fidelity / no semantic drift
 ↓
-Codex automated/filesystem/Windows regression evidence
-↓
-GPT engineering IR + source fidelity + T0 leakage review
-↓
-G4-05 PASS/CLOSE if evidence holds
+if PASS
+resume G4-05 closure/regression
 ↓
 G4-06 Atomic Final Create
 ↓
-G4-07 First Playable A — Owner UAT + anti-convergence pressure test
+G4-07 First Playable A — Owner UAT
 ```
 
-G4-03 remains PASS unless corrected v0.2-r2 exposes a concrete Library regression; repair forward if needed. G4-04 remains PASS/CLOSED.
+G4-07 must still include Narrative richness, Character individuality and anti-convergence product pressure. Engineering PASS cannot substitute for that future Owner UAT.
 
 ---
 
-## 11. Current blockers / waiting
+## 9. Current blockers / waiting
 
 ```text
-Blocking: v0.2-r2 T0-scoped real packages are not yet proven
-Current: 孙权 + 汉末三国 World temporal pressure remigration
-Owner: GPT
-Semantic audit: COMPLETE
-v0.2 base semantic contract: FROZEN
-T0-scoped addendum: FROZEN
-r2 migration spec: FROZEN
-Game-local evolvable semantics: FROZEN
-Codex active task: NONE
+Blocking G4-02R1 close: v0.2-r2 mechanism not yet implemented / independently reviewed
+Current task: G4-02R1M1
+Current execution owner: Codex
+Semantic owner / next reviewer: GPT
+Semantic phase: PASS / FROZEN FOR MECHANISM
+Formal Code Base: f1950d615864fd0e780764fa1a50cfcbf1a5c507
+Task packet commit: 238dfecb6bdfc056a4ceb4115b247e8a8f18b674
 G4-05R1: SUPERSEDED / DO NOT EXECUTE
 G4-05: REWORK / HOLD
 G4-06+: HOLD
