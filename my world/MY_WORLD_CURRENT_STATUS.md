@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 5.4
+version: 5.5
 created: 2026-08-26
-updated: 2026-08-28
+updated: 2026-08-29
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-02 World Pack + Character Card Source Contracts v0.1
+current_task: G4-03 Managed Local Source Library v0.1
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -34,9 +34,10 @@ G2-GATE                               PASS
 G3 Persistent Game / Save / Timeline PASS / CLOSED
 G3-GATE                               PASS
 G4-01 Application Shell / Lifecycle  PASS / CLOSED
+G4-02 World + Character Contracts    PASS / CLOSED
 
 Current Phase                         G4 — Primary Source Assets & Local Game Creation
-Current Task                          G4-02 — World Pack + Character Card Source Contracts v0.1
+Current Task                          G4-03 — Managed Local Source Library v0.1
 G4-GATE                               NOT YET
 ```
 
@@ -245,52 +246,72 @@ Application Launch
 
 ---
 
-## 9. Current Task｜G4-02
+## 9. G4-02｜PASS / CLOSED
 
 正式名称：
 
 > **G4-02 — World Pack + Character Card Source Contracts v0.1**
 
-Outcome：建立第一代两个低复杂度 Primary Source contract，并通过真实差异内容做 Contract Reality Check，为 G4-03 Managed Source Library 提供可验证输入边界。
+Implementation commit：`d8405e046ee2134361ec7ab1257f98c7a86c24a8`。
 
-必须保持：
+2026-08-29 Independent Review：**PASS**。
 
-```text
-World Pack != Character Card
-stable Source identity != exact immutable generation
-Source != Game-local Reality != Runtime State
-```
+Task Packet 明确 `owner_uat_required: false`；本任务是 Source contract foundation，不要求 Owner UAT。
 
-Shared identity seam 只允许最薄共同部分：
+已正式证明：
 
 ```text
-asset_id
-asset_type
-version
-exact immutable generation / content fingerprint
+World Pack v0.1 + Character Card v0.1
+→ explicit package path
+→ production filesystem loader / validator
+→ deterministic exact-generation fingerprint
+→ typed Source projection
 ```
 
-World Pack 至少表达：world / GM instructions、ordered Source Lore、0..N lightweight Entry/T0 seed、authored portrait/scene/map declarations 与必要 Source material。
+并通过两个 materially different World fixtures 与两个 Character fixtures 证明 contract 非单例过拟合；声明 visual/file bytes 进入 exact generation，path traversal / absolute escape / missing/script-like reference fail-loud；shared layer 未演化为 giant universal asset schema，也未提前实现 Managed Source Library。
 
-Character Card 至少表达：stable/display identity、public profile、GM/private Source profile、portrait reference、player-character eligibility；不得携带 live location/current relationship/current injury/current knowledge 等 Runtime state。
-
-Contract Reality Check 必须使用至少两个风格/规则显著不同的 compact World Source，以及足以覆盖 Player Character / Guaranteed NPC 用途的 Character Source，证明 contract 不是只对单一示例成立。
-
-本任务不做 Managed Source Library、Game Library、New Game selector、Final Create、Expansion Pack 或 Runtime Asset Resolution。
-
-Implementation Owner：**Codex**。
-
-正式 Task Packet：
-
-`my-world/docs/tasks/G4-02_WORLD_CHARACTER_SOURCE_CONTRACTS_TASK.md`
-
-Task Packet commit：`60a0139c8e7facc019fc63bd6593ef2000261284`。
-
-当前状态：**ISSUED — waiting Codex implementation → READY FOR INDEPENDENT REVIEW**。
+结论：**G4-02 PASS / CLOSED**。
 
 ---
 
-## 10. 当前核心约束
+## 10. Current Task｜G4-03
+
+正式名称：
+
+> **G4-03 — Managed Local Source Library v0.1**
+
+Outcome：让已经成立的 World Pack / Character Card contract 第一次进入 Program 管理的本地 Source Library，形成可验证、不可静默覆盖的 immutable generation inventory，为后续 New Game exact Source selection 提供稳定输入。
+
+必须证明：
+
+```text
+explicit local package
+→ validate through G4-02 production contract
+→ stage/copy contract-owned content
+→ verify exact generation
+→ publish immutable generation into managed local library
+→ inventory current installed generation
+→ restart/reload yields same inventory truth
+```
+
+关键边界：
+
+```text
+Source Library != Game Library
+stable Source identity != exact generation
+external mutable package != managed immutable generation
+current installed generation != historical generation deletion
+```
+
+第一代不需要历史版本 picker；安装新 generation 不得覆盖旧 generation。G4-03 不实现 Game pin registry、multi-Game、New Game selector、Final Create、Expansion Pack 或 Runtime Asset Resolution。
+
+Implementation Owner：**Codex**。
+
+Formal Task Packet：**PENDING ISSUE**。
+
+---
+
+## 11. 当前核心约束
 
 - `Commodity Foundation, Owned Game Semantics.`
 - `Model freedom first. Reversibility over prevention.`
@@ -310,16 +331,15 @@ Task Packet commit：`60a0139c8e7facc019fc63bd6593ef2000261284`。
 
 ---
 
-## 11. 当前 waiting
+## 12. 当前 waiting
 
 ```text
 Blocking: NONE KNOWN
 G4-01: PASS / CLOSED — Engineering + Independent Review + Owner UAT PASS
-Current: G4-02 World Pack + Character Card Source Contracts v0.1
+G4-02: PASS / CLOSED — Engineering + Independent Review PASS; Owner UAT not required
+Current: G4-03 Managed Local Source Library v0.1
 Implementation Owner: Codex
-Formal G4-02 Task Packet: ISSUED — docs/tasks/G4-02_WORLD_CHARACTER_SOURCE_CONTRACTS_TASK.md
-Packet commit: 60a0139c8e7facc019fc63bd6593ef2000261284
-Waiting: Codex implementation → READY FOR INDEPENDENT REVIEW
-G4-03+: HOLD until G4-02 closes
+Formal G4-03 Task Packet: PENDING ISSUE
+G4-04+: HOLD until G4-03 closes
 G4-GATE: NOT YET
 ```
