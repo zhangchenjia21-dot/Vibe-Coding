@@ -1,12 +1,12 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 7.0
+version: 7.1
 created: 2026-08-26
 updated: 2026-08-30
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-05R2 Full-Fidelity New Game Wizard Closure — packet preparation
-current_owner: GPT
+current_task: G4-05R2 Full-Fidelity New Game Wizard Closure
+current_owner: Kimi
 parent_task: G4-05
 semantic_owner: GPT
 context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
@@ -28,16 +28,36 @@ G4-02 original v0.1 engineering       HISTORICAL PASS
 G4-02R1 Source semantic re-audit      PASS / CLOSED
 G4-03 Managed Local Source Library    PASS / CLOSED
 G4-04 Multi-Game / Game Library       PASS / CLOSED
-G4-05 Asset-only New Game Wizard      REWORK → RESUMING FOR CLOSURE
-G4-05R2 full-fidelity Wizard closure  PREPARING PACKET — GPT
+G4-05 Asset-only New Game Wizard      REWORK → ACTIVE CLOSURE
+G4-05R2 full-fidelity Wizard closure  ACTIVE — KIMI
 G4-06 Atomic Final Create             HOLD
 G4-07 First Playable A                HOLD
 G4-GATE                               NOT YET
 ```
 
-Implementation `main` accepted for the G4-02R1 close:
+Current implementation instruction commit:
+
+`8a6fd9ccc27a2005482aa65205a0b2083176c4a2`
+
+Current formal packet:
+
+`my-world/docs/tasks/G4-05R2_FULL_FIDELITY_WIZARD_CLOSURE_TASK.md`
+
+Packet commit:
+
+`c0d8df812511745119d1e9ac8c14283b4c2bd5de`
+
+Formal Code Base:
 
 `1d8278f9a4bc33a748eb6444873af85d27d5a755`
+
+Governance Base used by packet:
+
+`32e7357d2eb86b6788d1a429b0dd97f2ba4a2caa`
+
+Primary execution owner: **Kimi**.  
+Independent Review owner after return: **GPT**.  
+Return ceiling: **READY FOR INDEPENDENT REVIEW**.
 
 ---
 
@@ -71,7 +91,7 @@ Confirmed:
 - G4-03 and preserved G4-05 regressions remain green;
 - IR01 changed tests/evidence only, not production Source code or frozen 2 World + 6 Character fixtures.
 
-G4-02R1 is therefore closed. Do not reopen it without new P0 evidence or an explicit new product decision.
+G4-02R1 is closed. Do not reopen it without new P0 evidence or an explicit new product decision.
 
 ---
 
@@ -108,9 +128,9 @@ Entries can be scenario/opening/location choices without being historical time p
 
 ---
 
-## 4. Why G4-05 still needs closure work
+## 4. Why G4-05 needs G4-05R2
 
-The existing G4-05 Wizard/Composition engineering candidate remains useful and its regressions pass, including:
+The existing G4-05 Wizard/Composition engineering candidate is useful and its preserved mechanics pass:
 
 - explicit click != list focus;
 - exact generation pinning;
@@ -121,40 +141,67 @@ The existing G4-05 Wizard/Composition engineering candidate remains useful and i
 - honest disabled Final Create placeholder;
 - cancel returns Main Menu / no Session.
 
-However the current primary G4-05 product/reality test path still installs the old task-owned **v0.1 historical conversion fixtures** under:
+But the current primary G4-05 product/reality test still installs old task-owned **v0.1 historical conversion fixtures** under:
 
 `tests/fixtures/g4_05/历史真实资产转换/...`
 
-Those old packages are no longer the canonical full-fidelity Source pressure after G4-02R1.
+Those packages are no longer the canonical full-fidelity Source pressure.
 
-G4-05 cannot close until its real Wizard path is re-based onto the frozen v0.2 full-fidelity set:
+G4-05R2 must rebase the real Wizard path directly onto:
 
 `tests/fixtures/g4_02r1/full_fidelity/`
 
-with the corrected temporal / non-temporal semantics.
+without duplicating or rewriting those frozen v0.2 assets.
 
 ---
 
-## 5. Next task｜G4-05R2 Full-Fidelity New Game Wizard Closure
+## 5. Current task｜G4-05R2 Full-Fidelity New Game Wizard Closure
 
 Primary outcome:
 
-> **Make the existing New Game Wizard consume and present the current v0.2 full-fidelity Sources directly, then close G4-05 without entering Final Create.**
+> **Make the existing New Game Wizard consume and present current v0.2 full-fidelity Sources directly, then return the Wizard to GPT for closure review without entering Final Create.**
 
-Expected focus is frontend/product integration, not backend redesign:
+Primary task nature is frontend/product integration.
+
+Required focus:
 
 - replace old v0.1 conversion fixtures as the primary Wizard reality path with frozen v0.2 full-fidelity packages;
 - keep Source Library / Composition backend contracts unchanged unless a concrete integration defect is proven;
 - show chooser-facing `catalog_summary` so rich Sources are understandable before selection;
-- remove universal player-facing `T0` wording from generic Wizard copy: historical Worlds may expose historical Entry names, but non-temporal Worlds must not look like they require a time-mode;
-- use accurate Guaranteed NPC wording that does not imply opening appearance / same scene;
+- remove universal player-facing `T0` wording from generic Wizard copy;
+- use accurate Guaranteed NPC wording that does not imply opening appearance or same scene;
+- translate backend temporal incompatibility into clear player-facing language without weakening it or adding fallback;
 - prove a compatible Han route reaches valid Review;
-- prove a temporally incompatible Han combination fails clearly at Review without creating a Game;
-- prove Afterglow / non-temporal-compatible behavior is not restricted by historical rules;
+- prove a temporally incompatible Han route fails clearly and non-destructively;
+- prove Afterglow / ordinary scenario behavior is not constrained by invented historical rules;
 - preserve responsive/keyboard/layout evidence;
 - keep G4-06 disabled / out of scope.
 
-Formal packet is being prepared from current accepted implementation HEAD.
+Frontend production scope:
+
+```text
+src/ui/新游戏向导.gd
+src/ui/新游戏向导.tscn
+```
+
+Narrow shell UI wiring if required:
+
+```text
+src/应用壳.gd
+src/main.tscn
+```
+
+Protected backend production scope for this packet:
+
+```text
+src/source/**
+src/建局/**
+src/persistence/**
+src/runtime/**
+src/provider/**
+```
+
+If Kimi finds a real backend defect, return **BLOCKED — BACKEND DEFECT** with reproduction instead of silently crossing the boundary.
 
 ---
 
@@ -173,24 +220,18 @@ Kimi       → frontend / UI / interaction implementation
 Grok Build → search / external research / evidence discovery
 ```
 
-Kimi may take backend work as a fallback when explicitly granted; Grok Build may occasionally implement self-contained code work. Task fit comes before quota availability.
+Kimi may take backend work as a fallback only when a packet explicitly grants it. Grok Build may occasionally implement self-contained code work. Task fit comes before quota availability.
 
-For G4-05R2, the natural primary owner is **Kimi** because the remaining work is primarily Wizard frontend/product integration. If Kimi finds a real Source/Composition backend defect, return the boundary finding to GPT rather than silently redesigning backend code.
+G4-05R2 is assigned to **Kimi** because the remaining work is naturally frontend/UI integration. External search is not needed for the current packet, so Grok Build is not the natural owner.
 
 ---
 
 ## 7. Current execution order
 
 ```text
-DONE  G4-02R1 semantic/full-fidelity correction
-↓
-DONE  G4-02R1 Source v0.2-r2 mechanism
-↓
-DONE  GPT Independent Review + IR01 correction
-↓
 PASS/CLOSED G4-02R1
 ↓
-NOW   prepare/execute G4-05R2 full-fidelity Wizard closure
+NOW   G4-05R2 full-fidelity Wizard closure — Kimi
 ↓
 GPT Independent Review
 ↓
@@ -208,9 +249,9 @@ G4-07 remains the first full World+Character product UAT and must still evaluate
 ## 8. Holds / prohibitions
 
 - `docs/tasks/G4-05R1_REAL_ASSET_FIDELITY_CORRECTION_TASK.md` remains **SUPERSEDED / DO NOT EXECUTE**.
-- The old `G4-05_ASSET_ONLY_NEW_GAME_WIZARD_TASK.md` is historical implementation authority only; do not execute its obsolete v0.1 real-asset conversion instructions as a new task.
+- `G4-05_ASSET_ONLY_NEW_GAME_WIZARD_TASK.md` is historical implementation reference only; do not execute its obsolete v0.1 conversion instructions.
 - Do not start G4-06 until G4-05R2 is independently reviewed and closed.
-- Do not use G4-05 to redesign Source semantics, implement Expansion runtime, create Game SQLite, materialize canonical Game state or call the Provider.
+- Do not use G4-05R2 to redesign Source semantics, implement Expansion runtime, create Game SQLite, materialize canonical Game state or call the Provider.
 
 ---
 
@@ -220,4 +261,4 @@ Current navigation handoff:
 
 `handoff/GPT_CONTEXT_HANDOFF_CURRENT.md`
 
-A replacement GPT must refresh both `main` HEADs before acting. G4-02R1 is closed; do not resend its tasks. The next formal execution task is G4-05R2 after the repository-native packet is committed.
+A replacement GPT must refresh both `main` HEADs before acting. G4-02R1 is closed. If Kimi has not returned G4-05R2, do not duplicate the task. If Kimi has returned, GPT's next primary responsibility is Independent Review of the frontend/product integration and evidence quality.
