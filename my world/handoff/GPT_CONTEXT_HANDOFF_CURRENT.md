@@ -6,15 +6,15 @@ updated: 2026-08-30
 project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
-current_parent_task: G4-05
-current_execution_task: G4-05R2
+current_parent_task: G4-06
+current_execution_task: G4-06
 semantic_owner: GPT
-current_execution_owner: Kimi
+current_execution_owner: Codex
 ---
 
 # my world｜GPT CONTEXT HANDOFF CURRENT
 
-> 本文件是接管导航 / 最小充分摘要，不是 Product / Architecture / Status 的替代权威。新 GPT 必须先刷新两个 GitHub `main` HEAD。
+> 接管导航 / 最小充分摘要。不是 Product / Architecture / Status 的替代权威。新 GPT 必须先刷新两个 GitHub `main` HEAD。
 
 ## 1. Read first
 
@@ -27,23 +27,27 @@ Governance:
 5. `my world/MY_WORLD_总体规划路线图_CURRENT.md`
 6. `my world/MY_WORLD_CURRENT_STATUS.md`
 7. `my world/AGENT_EXECUTION_ROUTING_CURRENT.md`
-8. relevant Source decisions under `my world/architecture/source/`
+8. `my world/architecture/creation/G4-06_OPTIONAL_ENTRY_MATERIALIZATION_DECISION.md`
+9. relevant Source + G4-04 persistence decisions
 
 Implementation:
 
-9. `AGENTS.md`
-10. `docs/tasks/G4-05R2_FULL_FIDELITY_WIZARD_CLOSURE_TASK.md`
-11. `src/ui/新游戏向导.gd`
-12. `src/ui/新游戏向导.tscn`
-13. `src/建局/L3_外交层/建局公开接口.gd`
-14. `docs/source/G4-02R1_OPTIONAL_TEMPORAL_SCOPE_CAPABILITY_CLARIFICATION.md`
-15. `docs/source/G4-02R1_R2_MECHANISM_IMPLEMENTATION_EVIDENCE.md`
+10. `AGENTS.md`
+11. `docs/tasks/G4-06_ATOMIC_FINAL_CREATE_TASK.md`
+12. `src/建局/L3_外交层/建局公开接口.gd`
+13. `src/source/L3_外交层/Source合同公开接口.gd`
+14. `src/source/L3_外交层/Source库公开接口.gd`
+15. `src/游戏库/L3_外交层/游戏库公开接口.gd`
+16. `src/persistence/L3_外交层/世界持久化公开接口.gd`
+17. `src/persistence/L3_外交层/数据库安全公开接口.gd`
+18. `src/runtime/当前游戏会话运行时.gd`
+19. G4-05R2 full-fidelity reality tests/evidence
 
 Do not default to rereading the whole historical repository.
 
 ---
 
-## 2. Product core
+## 2. Project core
 
 `my world` is a local-first, single-player-first long-running AI RPG.
 
@@ -61,60 +65,7 @@ Engineering PASS != Product PASS.
 
 ---
 
-## 3. G4-02R1 is closed
-
-Final accepted implementation/evidence:
-
-```text
-mechanism      eb11655f8ff592ae096915fab50553708c0b79df
-evidence       3b2c9d5fa0a9756ee670eb42179b5ae8359e0b2b
-IR01 tests     b6f83851758a79dff2a24f621befdebdcc21c940
-IR01 evidence  1d8278f9a4bc33a748eb6444873af85d27d5a755
-```
-
-GPT final Independent Review: **PASS — no blocking production defect remains**.
-
-Do not resend or reopen G4-02R1 without new P0 evidence / explicit product decision.
-
-Confirmed Source behavior:
-
-- real 2 World + 6 Character v0.2 full-fidelity Sources;
-- exact selected Entry/profile when authored temporal scope exists;
-- no latest/nearest/later/full-life fallback;
-- Han closed temporal coverage including 孙权 280;
-- optional temporal capability: Character may omit `t0_profiles` entirely;
-- World Entries may be scenario/opening choices without historical time partition;
-- no global historical/temporal mode switch;
-- fingerprint coverage wider than Runtime visibility;
-- missing/tampered rich content fails loud;
-- optional portrait absence is honest.
-
----
-
-## 4. Optional temporal scope
-
-> **Temporal Quarantine is an optional Source capability selected by authored need, not a universal asset mode.**
-
-Support both:
-
-```text
-Temporal-scoped Source
-→ authored multiple temporal cuts
-→ exact selected projection
-→ future/canon quarantine
-
-Non-temporal Source
-→ complete rich top-level semantics
-→ no artificial T0 matrix
-```
-
-Do not add `historical`, `temporal_mode`, `requires_quarantine`, family mode or equivalent global classifiers.
-
-When temporal scope is used, future isolation remains strict and there is no fallback.
-
----
-
-## 5. Execution-agent routing
+## 3. Execution-agent routing
 
 Canonical file:
 
@@ -129,144 +80,182 @@ Kimi       → frontend / UI / interaction implementation
 Grok Build → search / external research / evidence discovery
 ```
 
-Task fit comes before quota availability. Kimi backend fallback requires explicit scope. Search does not become architecture authority.
+Task fit comes before quota availability. Kimi backend fallback requires explicit assignment.
+
+Current G4-06 is backend-heavy and assigned to Codex.
 
 ---
 
-## 6. Current task｜G4-05R2
+## 4. G4-02R1 and G4-05 are closed
 
-Task:
+G4-02R1 final accepted Source mechanism/evidence includes:
 
-> **G4-05R2 — Full-Fidelity New Game Wizard Closure**
+```text
+mechanism      eb11655f8ff592ae096915fab50553708c0b79df
+IR01 evidence  1d8278f9a4bc33a748eb6444873af85d27d5a755
+```
 
-Primary owner: **Kimi**  
-Nature: **frontend/product integration**
+G4-05R2 accepted frontend implementation/evidence:
+
+```text
+implementation  ebd5645804334fc2f79cd18543a0571e1587fb14
+evidence / HEAD d9f58963db26055f6ca1a54c26689baf63263ede
+```
+
+GPT Independent Review of G4-05R2: **PASS**.
+
+G4-05 primary reality path now consumes frozen v0.2 full-fidelity 2 World + 6 Character directly. Real Han incompatibility is backend-authoritative, non-temporal scenario behavior remains valid, and no Final Create side effects occur.
+
+Do not reopen G4-02R1 or G4-05 without new P0 evidence / explicit Owner decision.
+
+---
+
+## 5. Source / temporal rules that G4-06 must preserve
+
+Temporal quarantine is optional authored capability.
+
+When an exact Entry is selected:
+
+```text
+World = top-level safe + exact Entry sections
+Character = top-level safe + exact T0 profile when exact binding exists
+```
+
+No latest/nearest/later/full-life fallback.
+
+Zero World profile coverage stays top-level-only/non-hard-blocking.
+
+Fingerprint covers all declared bytes, but only the selected starting projection is materialized into the Game.
+
+Source remains immutable after create; Game-local reality owns future development.
+
+---
+
+## 6. Optional Entry decision for G4-06
+
+Canonical:
+
+`architecture/creation/G4-06_OPTIONAL_ENTRY_MATERIALIZATION_DECISION.md`
+
+Entry remains `0..1`.
+
+If no Entry is selected:
+
+```text
+World materialization     = top-level semantic_sections only
+Character materialization = top-level semantic_sections only
+```
+
+No Entry section or T0 profile is inferred.
+
+Do not add global historical/temporal mode, family restriction or universal required Entry.
+
+Product richness of the no-Entry path is deferred to G4-07 UAT; G4-06 must not invent hidden defaults to make it look richer.
+
+---
+
+## 7. Current task｜G4-06 Atomic Final Create
 
 Packet:
 
-`docs/tasks/G4-05R2_FULL_FIDELITY_WIZARD_CLOSURE_TASK.md`
+`docs/tasks/G4-06_ATOMIC_FINAL_CREATE_TASK.md`
 
 Packet commit:
 
-`c0d8df812511745119d1e9ac8c14283b4c2bd5de`
+`2ad814a6f001c72c57d0616016dc7201dc1258cd`
 
 Formal Code Base:
 
-`1d8278f9a4bc33a748eb6444873af85d27d5a755`
+`d9f58963db26055f6ca1a54c26689baf63263ede`
 
-Governance Base:
+Governance decision base:
 
-`32e7357d2eb86b6788d1a429b0dd97f2ba4a2caa`
+`62d7efcf0cad061543eb3c97779b311bf2563240`
 
 Implementation AGENTS activation commit:
 
-`8a6fd9ccc27a2005482aa65205a0b2083176c4a2`
+`7eec660fa67fd4715b090290ca174efe59f39b58`
 
-Return ceiling:
+Owner: **Codex**  
+Reviewer: **GPT**  
+Return ceiling: **READY FOR INDEPENDENT REVIEW**
 
-> **READY FOR INDEPENDENT REVIEW**
-
-Do not duplicate this task while Kimi is executing it.
-
----
-
-## 7. Why G4-05R2 exists
-
-Existing Wizard/Composition mechanics work, but the primary G4-05 reality path still installs obsolete task-owned v0.1 conversion fixtures under:
-
-`tests/fixtures/g4_05/历史真实资产转换/...`
-
-The current accepted real pressure is the frozen v0.2 set under:
-
-`tests/fixtures/g4_02r1/full_fidelity/`
-
-G4-05R2 must make the Wizard directly consume/present those current Sources.
+Do not duplicate this task while Codex is executing it.
 
 ---
 
-## 8. G4-05R2 key requirements
+## 8. G4-06 required meaning
 
-Kimi should primarily edit:
+Target:
 
 ```text
-src/ui/新游戏向导.gd
-src/ui/新游戏向导.tscn
+Frozen exact Composition
+→ immutable creating intent
+→ fixed creation_id + composition fingerprint + game_id/local identities
+→ exactly one managed Game SQLite
+→ selected Source projection + exact provenance pins
+→ DB identity verification
+→ verified Game Library record
+→ current selection
+→ created
 ```
 
-Narrow shell UI wiring is allowed if needed.
+Important:
 
-Protected backend paths for this task:
+- composition hash is not the creation identity; identical compositions must eventually be able to create two separate Games;
+- same `creation_id` + same payload must replay/converge to the same Game;
+- same `creation_id` + different payload must fail loud;
+- creating intent must be durable before first Game DB side effect;
+- crash windows after intent / DB / Game Library record / current publish must converge after restart/retry;
+- valid Game DB truth is repaired forward, not destructively rolled back;
+- One Game = One SQLite remains frozen;
+- exact Source generation pins never drift to newer current;
+- Source asset IDs are provenance, not Game-local Player/NPC IDs;
+- Guaranteed NPC is canonical cast only, not opening/current location/player-known/relationship;
+- no physical production SQLite schema migration without returning `BLOCKED` first;
+- no Provider call and no AI Opening.
 
-```text
-src/source/**
-src/建局/**
-src/persistence/**
-src/runtime/**
-src/provider/**
-```
-
-If a real backend defect is exposed, Kimi returns **BLOCKED — BACKEND DEFECT** with reproduction instead of silently crossing the boundary.
-
-Required product corrections/evidence:
-
-- primary Wizard reality test installs current frozen v0.2 2 World + 6 Character directly;
-- chooser displays v0.2 `catalog_summary`;
-- generic opening UI no longer universally says `T0`;
-- historical Entry names may still show authored years/history;
-- Guaranteed NPC wording must not imply opening appearance / same scene / current relationship;
-- temporal incompatibility is explained in plain player language without weakening backend semantics or fallback;
-- compatible Han route reaches Review;
-- incompatible Han route fails Review clearly and non-destructively;
-- Afterglow / ordinary scenario path is not forced into historical restrictions;
-- Windows 1280×720 / maximized / 960×540 layout evidence;
-- no Game SQLite, Game Library mutation, Session or Provider call;
-- Final Create remains disabled; G4-06 stays out of scope.
+Persistence already provides explicit initial Game/root/current World creation; Game Library already provides verified existing managed Game registration. G4-06 should compose/narrowly extend these seams.
 
 ---
 
-## 9. Historical task warnings
+## 9. Independent Review after Codex return
 
-- `G4-05R1_REAL_ASSET_FIDELITY_CORRECTION_TASK.md` = **SUPERSEDED / DO NOT EXECUTE**.
-- `G4-05_ASSET_ONLY_NEW_GAME_WIZARD_TASK.md` = historical implementation reference only. Do not re-execute obsolete v0.1 conversion work.
+Do not trust the report alone. Inspect actual code and durable evidence.
 
----
+Specifically hunt:
 
-## 10. What the next GPT does
+1. creating intent really exists before DB side effect;
+2. same creation identity does not mint new game/local IDs on retry;
+3. altered payload under same identity conflicts;
+4. DB-after-crash before Library registration converges without deleting/recreating valid truth;
+5. registration only happens after actual DB identity verification;
+6. exact Source X remains pinned if current changes to Y;
+7. materialized Han early start excludes future/unselected markers;
+8. no-Entry truly uses top-level only, no hidden Entry/profile fallback;
+9. non-temporal scenario route is not falsely time-gated;
+10. local Character IDs differ from Source asset IDs and differ across two Games;
+11. Game Library record/current exactly match DB;
+12. no Provider/AI Conversation Opening exists;
+13. production schema remains v4 unless task returned BLOCKED before any migration;
+14. G3/G4-02R1/G4-03/G4-04/G4-05 regressions remain real and non-vacuous.
 
-If Kimi has **not returned**:
-
-- do not duplicate G4-05R2;
-- maintain governance / answer Owner questions only.
-
-If Kimi **has returned**:
-
-perform Independent Review, specifically inspect:
-
-1. whether primary tests really use frozen v0.2 fixtures;
-2. whether UI text visibly uses `catalog_summary` rather than merely loading it;
-3. whether generic T0 jargon is removed without weakening historical behavior;
-4. whether incompatible Han route is real backend rejection, not a UI-only fake;
-5. whether no profile fallback occurs;
-6. whether backend production paths remained untouched unless explicitly re-routed;
-7. whether Windows/layout evidence is meaningful;
-8. whether G4-06 side effects remain absent.
-
-If PASS, Decision Propagation closes G4-05 and next route is **G4-06 Atomic Final Create**, naturally backend-heavy and normally assigned to Codex.
+If PASS: Decision Propagation closes G4-06 and next task is G4-07 First Playable A, which requires Owner UAT.
 
 ---
 
-## 11. Route
+## 10. Route
 
 ```text
 PASS/CLOSED G4-02R1
 ↓
-NOW G4-05R2 — Kimi
+PASS/CLOSED G4-05
+↓
+NOW G4-06 — Codex
 ↓
 GPT Independent Review
 ↓
-if PASS close G4-05
-↓
-G4-06 Atomic Final Create
+if PASS close G4-06
 ↓
 G4-07 First Playable A — Owner UAT
 ```
