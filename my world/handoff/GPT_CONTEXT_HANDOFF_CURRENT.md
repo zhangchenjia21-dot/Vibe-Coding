@@ -2,36 +2,36 @@
 title: my world｜GPT Context Handoff
 status: current-handoff-navigation
 created: 2026-08-29
-updated: 2026-08-29
+updated: 2026-08-30
 project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
 current_parent_task: G4-02R1
-current_execution_task: G4-02R1M1
+current_execution_task: G4-02R1M1-IR01
 semantic_owner: GPT
 current_execution_owner: Codex
 ---
 
 # my world｜GPT CONTEXT HANDOFF CURRENT
 
-> 本文件是**接管导航 / 最小充分摘要**，不是新的 Product / Architecture / Status 权威。
+> 本文件是接管导航 / 最小充分摘要，不是新的 Product / Architecture / Status 权威。
 >
-> 新 GPT 接管时必须先做 Freshness，并以当前 GitHub `main` 的 Product / Principles / Architecture / Roadmap / Status / implementation facts 为准；若本文件与 current source 冲突，以 current source 为准并更新/替换本 handoff。
+> 新 GPT 必须先刷新两个 GitHub `main` HEAD，并以 current Product / Principles / Architecture / Roadmap / Status / implementation facts 为准。
 
 ---
 
-## 1. 接管第一动作｜不要从聊天记忆直接继续
+## 1. 接管第一动作
 
-先读取两个仓库当前 `main` HEAD：
+刷新：
 
 ```text
 Implementation: zhangchenjia21-dot/my-world
 Governance:     zhangchenjia21-dot/Vibe-Coding
 ```
 
-然后按顺序读取：
+然后优先读取：
 
-### Governance current core
+### Governance
 
 1. `AGENTS.md`
 2. `my world/MY_WORLD_项目启动总纲_CURRENT.md`
@@ -39,37 +39,33 @@ Governance:     zhangchenjia21-dot/Vibe-Coding
 4. `my world/MY_WORLD_架构_CURRENT.md`
 5. `my world/MY_WORLD_总体规划路线图_CURRENT.md`
 6. `my world/MY_WORLD_CURRENT_STATUS.md`
-
-### Current Source architecture decisions
-
 7. `my world/architecture/source/G4_SOURCE_SEMANTIC_OWNERSHIP_AND_REAUDIT_DECISION.md`
 8. `my world/architecture/source/G4_GAME_LOCAL_EVOLVABLE_SEMANTICS_DECISION.md`
 9. `my world/architecture/source/G4_T0_SCOPED_SOURCE_AND_POST_T0_CANON_QUARANTINE_DECISION.md`
+10. `my world/architecture/source/G4_OPTIONAL_TEMPORAL_SOURCE_SCOPE_DECISION.md`
 
-### Implementation current task / contract
+### Implementation
 
-10. `my-world/AGENTS.md`
-11. `my-world/docs/tasks/G4-02R1_SOURCE_SEMANTIC_REAUDIT_TASK.md`
-12. `my-world/docs/tasks/G4-02R1M1_SOURCE_V0_2_R2_MECHANISM_CORRECTION_TASK.md`
-13. `my-world/docs/source/World Pack与Character Card合同v0.2_SEMANTIC_FREEZE.md`
-14. `my-world/docs/source/G4-02R1_T0_SCOPED_SOURCE_CONTRACT_ADDENDUM.md`
-15. `my-world/docs/source/G4-02R1_T0_CHARACTER_INDIVIDUALITY_ADDENDUM.md`
-16. `my-world/docs/source/G4-02R1_FIXED_T0_MULTI_ENTRY_CHARACTER_BINDING_CLARIFICATION.md`
-17. `my-world/docs/source/G4-02R1_CROSS_FAMILY_PACKAGE_SHAPE_STABILITY_DECISION.md`
+11. `AGENTS.md`
+12. `docs/tasks/G4-02R1M1-IR01_OPTIONAL_TEMPORAL_SCOPE_EVIDENCE_CORRECTION_TASK.md`
+13. `docs/tasks/G4-02R1M1_SOURCE_V0_2_R2_MECHANISM_CORRECTION_TASK.md`
+14. `docs/source/G4-02R1_R2_MECHANISM_IMPLEMENTATION_EVIDENCE.md`
+15. `docs/source/World Pack与Character Card合同v0.2_SEMANTIC_FREEZE.md`
+16. `docs/source/G4-02R1_T0_SCOPED_SOURCE_CONTRACT_ADDENDUM.md`
+17. `docs/source/G4-02R1_OPTIONAL_TEMPORAL_SCOPE_CAPABILITY_CLARIFICATION.md`
+18. `docs/source/G4-02R1_T0_CHARACTER_INDIVIDUALITY_ADDENDUM.md`
+19. `docs/source/G4-02R1_FIXED_T0_MULTI_ENTRY_CHARACTER_BINDING_CLARIFICATION.md`
+20. `docs/source/G4-02R1_CROSS_FAMILY_PACKAGE_SHAPE_STABILITY_DECISION.md`
 
-只有现有证据不足时再扩大读取范围；不要默认重新阅读整个历史仓库。
+不要默认重读全部历史仓库。
 
 ---
 
-## 2. 产品目的与不可牺牲核心
+## 2. 产品核心
 
 `my world` 是 local-first、single-player-first 的长期 AI RPG。
 
-Primary Purpose：
-
-> 让单个玩家通过自然语言，与优秀 AI GM 在一个长期持续、可保存、可恢复、会自主演化的 2D RPG 世界中长期游玩。
-
-长期原则：
+核心原则：
 
 > **Model freedom first. Reversibility over prevention.**
 >
@@ -77,116 +73,13 @@ Primary Purpose：
 >
 > **Model authors the world; Runtime makes it durable; Player owns the timeline.**
 >
-> **玩法应该拉出 Schema；不要让玩法迁就先写好的万能 Schema。**
-
-不要为了可靠性把 GM 变成填表机、状态机或固定格式输出器。
+> **玩法拉出 Schema，不让玩法迁就万能 Schema。**
 
 ---
 
-## 3. 当前最重要的历史教训｜历史收敛 / 人格倒灌
+## 3. Source v0.2-r2 当前语义
 
-旧 DSH 长局出现过：玩家改变三国历史后，模型仍因原历史是更低成本模板而把世界重新拉回 canon。
-
-因此当前已冻结：
-
-> **T0-scoped Source / Post-T0 Canon Quarantine.**
->
-> **Do not show the model a post-T0 answer and then ask it to forget that answer.**
-
-必须区分：
-
-```text
-Immutable Source Package Total Content
-!= Selected T0 Source Projection
-!= Game-local Canonical Reality
-!= Runtime Relevant Set
-!= Model-visible Working Set
-```
-
-World 普通 Runtime 只获得：
-
-```text
-top-level always-safe sections
-+ exact selected Entry sections
-```
-
-Character 普通 Runtime 只获得：
-
-```text
-top-level always-safe sections
-+ exact matching T0 profile sections
-```
-
-禁止 latest / nearest-year / later-profile / complete-life biography fallback。
-
-原历史可以自然重现，但没有特殊收敛权重：
-
-> **No convergence force. No divergence force. Causality first.**
-
----
-
-## 4. Character 早期个体性｜特别不要遗漏
-
-防 future leakage 不能把早期人物削成 generic child / generic youth。
-
-正式语义：
-
-> **Age / developmental stage is a capability boundary, not a personality template.**
-
-每个 T0 Character 必须保留截至 T0 已形成的 starting individuality，例如：
-
-- 家庭位置与照料关系；
-- 已经历事件；
-- 教育 / 社会化环境；
-- 已可观察气质、兴趣、恐惧、习惯；
-- 能力与局限；
-- 知识来源与误解；
-- 当前内部张力与开放成长空间。
-
-证据层级允许：
-
-```text
-attested pre-T0 evidence
-reasonable inference
-authored completion
-deliberate blank
-```
-
-但禁止：
-
-```text
-成年 stereotype → 反推童年人格
-后期结局 → 证明早期能力
-未来 canon → 伪装成 starting disposition
-```
-
-人物区分度必须随年龄/证据缩放：2 岁儿童的差异应落在依恋、习惯、感官与即时压力反应，而不是伪造政治人格。
-
----
-
-## 5. Source v0.2-r2｜语义已经冻结
-
-当前语义阶段：
-
-> **PASS / FROZEN FOR MECHANISM**
-
-两类真实资产族已经完成 full-fidelity 语义迁移与 family joint audit：
-
-```text
-World x2
-- 汉末三国：天下未定
-- 埃瑟维亚：诸界余辉
-
-Character x6
-- 刘备
-- 曹操
-- 孙权
-- 莉维娅·塞兰
-- 阿德里安·维尔克
-- 杜恩·石痕
-```
-
-World / Character 使用 rich `semantic_sections` + package-local Markdown/TXT；`section_type` 是开放 hint，不是 universal ontology。
+World / Character 使用 rich `semantic_sections` + package-local UTF-8 Markdown/TXT；`section_type` 是开放 semantic hint，不是 closed ontology。
 
 Disclosure：
 
@@ -201,162 +94,245 @@ gm_private
 Disclosure != Character Knowledge != Player Knowledge
 ```
 
-复杂人物人格、关系、行为、技能/法术表、知识边界继续允许使用 rich prose / tables，不因为 parser 方便而机器化成巨大 schema。
+Exact generation fingerprint 覆盖所有声明 bytes，包括当前未选择或 private 的文件。
+
+> **Fingerprint coverage != Runtime visibility.**
 
 ---
 
-## 6. Game-local evolvable semantics｜不要重新封死世界
+## 4. Temporal scope｜2026-08-30 Owner clarification
 
-Source schema 不是 Living World 的可能性上限。
+T0-scoped / post-T0 canon quarantine **不是所有 Source 的强制模式**。
 
-Final Create 后：
+正式决策：
+
+`architecture/source/G4_OPTIONAL_TEMPORAL_SOURCE_SCOPE_DECISION.md`
+
+正式实现语义澄清：
+
+`my-world/docs/source/G4-02R1_OPTIONAL_TEMPORAL_SCOPE_CAPABILITY_CLARIFICATION.md`
+
+游戏必须同时支持：
 
 ```text
-immutable Source
-→ Game-local canonical object
-→ lived history
-→ model/runtime may evolve local semantics
+Temporal-scoped Source
+→ 多个真实 authored T0 cut
+→ exact selected projection
+→ future/canon quarantine
+
+Non-temporal Source
+→ rich top-level starting semantics
+→ 不强迫建立 T0 profile matrix
 ```
 
-模型可以让本局人物产生 Source 未预见的长期语义，例如新价值观、创伤、政治伦理、学派、制度等。
+典型需要 quarantine：三国等有多个历史开局、后期史实会污染早期开局的资产。
 
-但：
+典型不需要：原创/幻想人物只有一个稳定起始版本，没有多个时间切片需求。
 
-- 不能修改原 Source；
-- 不能修改 global Source contract；
-- 不能让模型 `ALTER TABLE`；
-- stable identity / authority / durability 仍由 Program 管；
-- 若 Location / Relationship / Knowledge / Injury / Inventory / Faction 等已有 Domain owner，则 existing Domain wins；
-- semantic evolution 必须 durable 且 Save/Restore/Timeline 可逆。
+不要增加：
+
+```text
+historical=true/false
+temporal_mode
+requires_quarantine
+family mode
+```
+
+等全局硬分类。
+
+`character_card.v0.2` 的 `t0_profiles` 保持 optional。没有 temporal variation 的 Character 可以只用 top-level `semantic_sections`。
+
+World Entry 可以只是 scenario/opening/location choice；存在 Entry 不等于必须做历史未来隔离。
+
+当前 Afterglow 三个 Entry 共用一个 1287 profile 是合法 authored choice，但不是未来幻想资产必须复制的模板。
 
 ---
 
-## 7. 当前执行状态｜不要重复做 GPT 已冻结的 Meaning
+## 5. Temporal-scoped Source 的严格规则
 
-Parent：`G4-02R1`  
-Semantic owner：**GPT**  
-Semantic/full-fidelity phase：**PASS / FROZEN FOR MECHANISM**  
-Overall：**IMPLEMENTATION PENDING**
+当资产真实使用 temporal scoping 时：
 
-Current execution task：
+> **Do not show the model a post-T0 answer and then ask it to forget that answer.**
 
-> **G4-02R1M1 — Source v0.2-r2 Mechanism Correction**
+```text
+Source Package Total Content
+!= Selected T0 Source Projection
+!= Game-local Reality
+!= Runtime Relevant Set
+!= Model-visible Working Set
+```
 
-Current execution owner：**Codex**
+World：
 
-Codex 任务只实现 Mechanism：
+```text
+top-level always-safe sections
++ exact selected Entry sections
+```
+
+Character：
+
+```text
+top-level always-safe sections
++ exact matching T0 profile sections
+```
+
+禁止 latest / nearest-year / later-profile / complete-life biography fallback。
+
+若 Character 对 World W 声明过任意 profile binding：
+
+```text
+exact Entry binding exists -> compatible
+selected Entry binding missing -> temporal incompatible
+```
+
+若对 W 完全无 binding：走 `no_world_coverage` / always-safe-only，不得凭 family 猜测 hard block。
+
+历史可自然重现，但没有特殊收敛权：
+
+> **No convergence force. No divergence force. Causality first.**
+
+---
+
+## 6. Character individuality
+
+未来隔离不能把早期人物削成 generic child / generic youth。
+
+> **Age / developmental stage is a capability boundary, not a personality template.**
+
+T0 profile 保留截至该时点已形成的个体差异、经历、能力、知识来源、关系历史、压力反应和开放成长空间；禁止用成年 stereotype 或未来结果倒推早期人格。
+
+---
+
+## 7. G4-02R1M1 已完成什么
+
+Codex 已完成 production mechanism implementation：
 
 - v0.2-r2 validator / loader；
 - exact-generation fingerprint；
 - exact selected World Entry projection；
 - exact Character T0 profile projection；
-- explicit temporal compatibility states；
-- G4-03 regression；
-- preserved G4-05 Wizard/Composition regression；
+- temporal compatibility states；
+- G4-03/G4-05 regressions；
 - Godot/Windows evidence。
 
-Codex 不得：
+Implementation commit:
 
-- 改写 2 World + 6 Character semantic content；
-- 重新设计 Source semantics；
-- 压缩 rich prose；
-- 增加 same-family restriction；
-- 增加 latest/nearest/later fallback；
-- 提前实现 G4-06；
-- 恢复被 supersede 的 G4-05R1；
-- 假造 portrait；
-- destructive rollback。
+`eb11655f8ff592ae096915fab50553708c0b79df`
 
-Codex return ceiling：
+Evidence commit:
+
+`3b2c9d5fa0a9756ee670eb42179b5ae8359e0b2b`
+
+GPT first Independent Review found **no blocking production defect**.
+
+---
+
+## 8. 当前唯一活动任务｜IR01
+
+Current execution task:
+
+> **G4-02R1M1-IR01 — Optional Temporal Scope Evidence Correction**
+
+Owner: **Codex**
+
+Packet:
+
+`docs/tasks/G4-02R1M1-IR01_OPTIONAL_TEMPORAL_SCOPE_EVIDENCE_CORRECTION_TASK.md`
+
+Formal Code Base:
+
+`74d1fe8d93e527794db33d0280d76d16674ae1d7`
+
+Governance Base:
+
+`14fb4d686c458c2a09a348e54088377f96655d65`
+
+Packet commit:
+
+`f020848f23464c6022358acf2aa9b82bc940fd83`
+
+Expected shape: **test/evidence correction only**.
+
+Required evidence：
+
+```text
+刘备: 220 exact; 229/263/280 incompatible
+曹操: 214 exact; 220/229/263/280 incompatible
+孙权: 249 exact; 263/280 incompatible
+```
+
+以及：
+
+- synthetic non-temporal Character，无 `t0_profiles`，rich top-level semantics 可正常 load/project；
+- synthetic non-temporal World，有 Entry 但不需要 temporal section matrix；
+- 不增加 historical/temporal global switch；
+- Han future quarantine 继续严格；
+- Afterglow 当前三 Entry shared profile 继续工作；
+- G4-03/G4-05 regressions 继续 green。
+
+若新测试暴露 production defect，Codex 必须明确报告，不能静默扩大 scope。
+
+Return ceiling：
 
 > **READY FOR INDEPENDENT REVIEW**
 
 ---
 
-## 8. 如果 Codex 还没有回包
+## 9. 新 GPT 应如何行动
 
-新 GPT 不要重复实现 `G4-02R1M1`，也不要重新打开 frozen semantics。
+如果 IR01 **尚未回包**：
 
-职责是：
+- 不重复实现；
+- 不再另发同一个任务；
+- 保持 frozen Meaning；
+- 等 Codex 正式 return。
 
-- 保持治理 current；
-- 回答 Owner 的产品/语义问题；
-- 如果 Owner 要派 Codex，使用 repository-native packet；
-- 若新讨论改变 frozen architecture，先走 Decision Propagation，再决定是否 supersede task。
+如果 IR01 **已经回包**：
 
----
+GPT 立即做 final Independent Review，重点检查：
 
-## 9. 如果 Codex 已回包｜下一个 GPT 的首要任务
+1. Sun Quan 280 是否真的走 production exact-binding path；
+2. non-temporal Character 是否真的没有 `t0_profiles`；
+3. non-temporal World 是否真的没有被人为建立历史时间矩阵；
+4. 是否偷偷增加 global historical/temporal flag；
+5. Han future quarantine 是否仍严格；
+6. frozen 2 World + 6 Character 是否未被修改；
+7. G4-03/G4-05 regressions 是否有效。
 
-进入 **Independent Review**，不是信任“tests pass”。
-
-至少主动检查：
-
-1. real 2 World + 6 Character fixtures 是否真正进入 production loader/projection path；
-2. assertion 是否检查实际 projection inventory/content，而不只是数量/存在；
-3. early Han Entry 是否真的排除 later Entry/profile 内容；
-4. unselected/private bytes 是否仍进入 fingerprint；
-5. private/unselected content 是否同时保持 Runtime visibility 隔离；
-6. closed temporal coverage 是否正确：刘备 229+、曹操 220+、孙权 263/280 hard incompatible；
-7. Afterglow 三个 1287 Entry 是否都 exact match 同一个 1287 profile，而未被误解成 location restriction；
-8. cross-world zero-coverage 是否没有被 same-family hard block；
-9. no portrait Character 是否可正常加载；
-10. G4-03 immutable library / tamper invariants 是否真实回归；
-11. G4-05 preserved Wizard/Composition mechanics 是否真实回归；
-12. frozen semantic fixture 是否被 Codex 为了过测试偷偷改写。
-
-若发现根问题，按 lifecycle correction budget 处理；同 seam 重复失败不要无限打补丁。
-
-IR 最大可把工程推进到正确的工程状态；不要把 Engineering PASS 冒充未来 G4-07 的 Product PASS。
+若 PASS：Decision Propagation 后关闭 G4-02R1，并恢复 G4-05 closure/regression。
 
 ---
 
-## 10. 后续顺序｜当前不要跳跃
+## 10. 后续顺序
 
 ```text
-G4-02R1M1 Codex mechanism
-→ GPT Independent Review
-→ if PASS: resume G4-05 closure/regression
-→ G4-06 Atomic Final Create
-→ G4-07 First Playable A — Owner UAT
+NOW
+G4-02R1M1-IR01 Codex evidence correction
+↓
+GPT final Independent Review
+↓
+if PASS
+close G4-02R1
+↓
+resume G4-05 closure/regression
+↓
+G4-06 Atomic Final Create
+↓
+G4-07 First Playable A — Owner UAT
 ```
 
-G4-07 Owner UAT 必须特别验证：
-
-- Narrative richness；
-- Character individuality；
-- T0 后人物是否根据本局经历继续发展；
-- 改变关键历史前提后是否仍偷偷向 canon 收敛；
-- 不强制反历史；
-- Context bounded 但不 starved。
+G4-07 Owner UAT 必须验证：Narrative richness、Character individuality、anti-convergence、人物随本局经历发展、Context bounded but not starved。
 
 G4-05 当前仍 `REWORK / HOLD`；G4-06+ 当前仍 `HOLD`。
 
 ---
 
-## 11. 历史资产 / identity 注意事项
+## 11. 治理纪律
 
-Historical evidence repo：
-
-`zhangchenjia21-dot/sillytavern-assets@4a5364a042e41f4c8a69621fc4467956a78703c0`
-
-它是证据，不是 current implementation authority。
-
-`ashtervia` stable asset IDs 已冻结；不要为了拼写美观静默 rename。
-
-汉末三国 authored Entry 采用固定 Entry/T0，而不是构造任意年份 calendar engine。
-
----
-
-## 12. Git / governance 纪律
-
-- 正式判断前重新读取当前 `main`；
-- current explicit Owner instruction > current Product/Principles/Architecture/Roadmap/Status > implementation facts > governance skill > history/memory；
+- current explicit Owner instruction > current Product/Principles/Architecture/Roadmap/Status > implementation facts > generic skill > history/memory；
 - Freshness != Decision Propagation；
-- chat summary / 本 handoff 不能覆盖 current repo authority；
 - GPT owns Meaning; Codex owns Mechanism；
-- routine build/test/Git/Windows evidence 是 Agent 工作；
+- routine build/test/Git/Windows evidence 属于 Agent；
 - Owner 负责产品方向和真实 UAT；
-- 不做 destructive rollback；repair forward。
-
-接管完成后，用一小段文字向 Owner 报告：读取到的 current task、两个 HEAD、是否存在 drift/blocker、下一动作。不要让 Owner重新复述项目历史。
+- 不 destructive rollback；repair forward；
+- Engineering PASS 不等于 Product PASS。
