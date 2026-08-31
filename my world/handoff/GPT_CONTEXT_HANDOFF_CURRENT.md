@@ -6,10 +6,10 @@ updated: 2026-08-31
 project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
-current_parent_task: G4-07 First Playable A
-current_execution_task: Owner UAT
+current_parent_task: G4-08 Expansion Pack v0.1 + First Real Runtime Vertical
+current_execution_task: G4-08S0 Expansion Pack v0.1 Semantic / Product Freeze
 semantic_owner: GPT
-current_execution_owner: Owner
+current_execution_owner: GPT
 ---
 
 # my world｜GPT CONTEXT HANDOFF CURRENT
@@ -23,79 +23,102 @@ G4-06 Atomic Final Create             PASS / CLOSED
 G4-07A Opening Runtime                PASS / CLOSED
 G4-07B Playable UI Integration        PASS / CLOSED
 G4-07UAT01 Owner Launch Freshness     PASS / CLOSED
-G4-07 First Playable A                OWNER UAT ACTIVE
+G4-07 First Playable A                PASS / CLOSED
+G4-08 Expansion Pack v0.1             ACTIVE
+G4-08S0 Expansion Semantic Freeze     ACTIVE — GPT
 G4-GATE                               NOT YET
 ```
 
-No Codex/Kimi task is active.
+No Codex/Kimi execution task is active yet.
 
 ---
 
-## 2. Current UAT packet
+## 2. G4-07 closure
 
-`my-world/docs/tasks/G4-07_FIRST_PLAYABLE_A_OWNER_UAT.md`
+Owner completed First Playable A product UAT and returned explicit **PASS**.
 
-Owner should launch through normal `run-game.cmd`.
+Implementation record:
 
-Launcher freshness correction accepted at:
+`my-world/docs/g4_07/G4-07_OWNER_UAT_RESULT.md`
+
+This is Product PASS, not merely Engineering PASS. G4-07 is closed and progression to G4-08 is authorized.
+
+Accepted vertical:
 
 ```text
-a250c60fa13043ed129dc68ed69048fea6abad5d
+real installed Source
+→ New Game Wizard / Review
+→ Atomic Final Create
+→ real DeepSeek Opening
+→ free-form play
+→ durable continuation
+→ Save
+→ Main Menu / Continue same Game
 ```
 
-IR record:
+---
 
-`my-world/docs/g4_07uat01/G4-07UAT01_INDEPENDENT_REVIEW.md`
+## 3. Current task — G4-08S0
 
-Canonical launcher now rebuilds missing/stale Windows export from current product inputs and refuses stale fallback on export failure.
+Packet:
+
+`my-world/docs/tasks/G4-08S0_EXPANSION_V0_1_SEMANTIC_PRODUCT_FREEZE_TASK.md`
+
+Owner: **GPT**.
+
+Purpose:
+
+> Freeze the meaning and product boundary of Expansion Pack v0.1 before Codex is allowed to implement mechanism.
+
+Existing authority:
+
+- Expansion Pack is the third reusable Primary Source type.
+- Composition supports `0..N` exact Expansion generations.
+- Source generations are immutable; existing Games pin exact ancestry.
+- G4-08 must prove a real observable Runtime / Context / mechanic effect.
+- manifest/binding/DB existence alone is insufficient.
+- arbitrary code plugins, generic mod sandbox, generic external UI contribution schema, Creator suite and giant universal rules engines remain deferred.
+
+G4-08S0 must freeze:
+
+- minimal Expansion package semantics;
+- selection / compatibility / duplicate rules;
+- Final Create materialization/provenance;
+- one bounded Program-owned runtime capability;
+- durable runtime state + Save/Continue;
+- model-visible Context boundary;
+- exactly one real first Expansion and product acceptance story.
 
 ---
 
-## 3. Local Source precondition
-
-Owner production Source Library is outside Git. Before substantive UAT, New Game must visibly enumerate at least:
-
-- World `天下未定`;
-- World `埃瑟维亚`.
-
-If inventory is empty, solve Owner-local Source installation/bootstrap; do not reopen G4-07A/B/UAT01.
-
----
-
-## 4. UAT pressure routes
-
-1. Han: `208 / 赤壁前夕 + 刘备 + 孙权 guaranteed`, several free-form actions, Save, Main Menu, Continue, then another action.
-2. Afterglow: `1287 / 公共工程余波 + 莉维娅 + 阿德里安/杜恩`, several free-form actions.
-3. no-Entry: one short route with no selected Entry.
-
-Judge:
-
-- Narrative richness;
-- Character individuality;
-- Han vs Afterglow distinctness;
-- Guaranteed NPC anti-convergence;
-- Context sufficiency / immediate continuity;
-- historical/future leakage;
-- no-Entry playability;
-- Save/Continue trust;
-- whether it feels like an AI RPG rather than a transcript demo.
-
-Engineering PASS does not substitute for Product PASS.
-
----
-
-## 5. Next decision
-
-After Owner UAT, GPT decides exactly one:
+## 4. Required progression
 
 ```text
-G4-07 PASS / CLOSED
+G4-08S0 semantic/product freeze — GPT
+→ G4-08M1 mechanism — Codex
+→ real integration / Provider evidence
+→ GPT Independent Review
+→ G4-09 First Playable B with one real Expansion
+→ Owner UAT B
 ```
 
-or
+If the chosen Expansion genuinely requires player-facing interaction, split UI ownership to Kimi after the semantic contract is frozen; do not bury UI semantics in Codex scope.
+
+---
+
+## 5. G4-08 acceptance direction
+
+The first real Expansion must eventually prove:
 
 ```text
-G4-07 Product Correction ACTIVE
+same playable World + Character route
++ exact selected real Expansion
+→ Final Create pins/materializes it
+→ real Runtime consumes it
+→ player can observe a gameplay difference
+→ real DeepSeek Context reflects correct Expansion state
+→ Save / Continue preserves it
+→ no-Expansion route remains unchanged
 ```
 
-Do not start G4-08 before G4-07 Product PASS.
+Do not start G5 before the remaining G4 route and G4-GATE are complete.
