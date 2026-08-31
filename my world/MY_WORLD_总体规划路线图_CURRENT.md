@@ -1,9 +1,9 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 3.1
+version: 3.2
 created: 2026-08-25
-updated: 2026-08-29
+updated: 2026-08-31
 current_phase: G4
 current_status_source: MY_WORLD_CURRENT_STATUS.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
@@ -624,13 +624,14 @@ UI 明显增强游戏理解与沉浸；至少一个真实 Expansion/UI consumer 
 
 ## Outcome
 
-只在 G4/G6 已证明内部能力后，把内容与 Host capability 外部化给作者。
+只在 G4/G6 已证明内部能力后，把内容与 Host capability 外部化给作者，同时让普通玩家可以在应用内安全地安装和管理本地 Source Package，而不需要接触 managed storage 内部结构。
 
 ```text
 proven internal capability
 → external schema / naming
 → validator / adapter
 → Creator / authoring helper / preview
+→ player-facing local Source import / management
 ```
 
 ## Tasks
@@ -640,6 +641,7 @@ proven internal capability
 - Expansion Pack Creator；
 - Draft / Published Source 分离；
 - Import / revision / append-only publish；
+- **Player-facing Source Library Manager / In-game Import**：在【新游戏】提供【导入资源】入口，并提供独立【资源库】管理入口；通过 production Source install/validation seam 导入本地 World / Character / Expansion package，安装成功后立即刷新 chooser / inventory；展示已安装资源与 current generation/version，不直接暴露或要求玩家修改 managed Source Library 内部目录；destructive delete / rollback 只有在 retention semantics 明确后才进入范围；
 - AI-assisted authoring：typed scope / visible ChangeSet / Undo；
 - external UI contribution schema；
 - validation/migration；
