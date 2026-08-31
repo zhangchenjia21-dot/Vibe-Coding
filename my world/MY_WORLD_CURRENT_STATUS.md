@@ -1,12 +1,12 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 7.3
+version: 7.4
 created: 2026-08-26
-updated: 2026-08-30
+updated: 2026-08-31
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-07A First Playable Opening Runtime
-current_owner: Codex
+current_task: G4-07B Playable UI Integration
+current_owner: Kimi
 parent_task: G4-07 First Playable A
 semantic_owner: GPT
 owner_uat_required: true
@@ -31,117 +31,81 @@ G4-04 Multi-Game / Game Library       PASS / CLOSED
 G4-05 Asset-only New Game Wizard      PASS / CLOSED
 G4-06 Atomic Final Create             PASS / CLOSED
 G4-07 First Playable A                ACTIVE — OWNER UAT GATE
-G4-07A Opening Runtime                ACTIVE — CODEX
-G4-07B Playable UI Integration        HOLD — KIMI AFTER G4-07A
+G4-07A Opening Runtime                PASS / CLOSED
+G4-07B Playable UI Integration        ACTIVE — KIMI
 G4-GATE                               NOT YET
 ```
 
 Current formal packet:
 
-`my-world/docs/tasks/G4-07A_FIRST_PLAYABLE_OPENING_RUNTIME_TASK.md`
+`my-world/docs/tasks/G4-07B_PLAYABLE_UI_INTEGRATION_TASK.md`
 
 Packet commit:
 
-`8d3bc6e7557c9687141e02a5e554ee90959c2a68`
+`064ae8b27d2169f8399e81a36a7d7624efe45fdd`
 
 Formal Code Base:
 
-`39d7300790b2b067b12630f4d1efd4fd51b6d126`
+`fdb6a30ad138c332837f17af1d8c74b5643db44b`
 
-Primary execution owner: **Codex**.  
-Task nature: **backend/runtime/context/provider first-Opening vertical**.  
+Primary execution owner: **Kimi**.  
+Task nature: **frontend/application playable vertical integration**.  
 Semantic + Independent Review owner: **GPT**.  
 Parent G4-07 Product gate requires **Owner UAT**.  
 Return ceiling: **READY FOR INDEPENDENT REVIEW**.
 
 ---
 
-## 2. G4-06 final result｜PASS / CLOSED
+## 2. G4-07A final result｜PASS / CLOSED
 
 Accepted implementation/evidence:
 
 ```text
-implementation     1457ca18c4ef19fd5757844820630649ea85fe6b
-implementation doc 383481631cd3de3c4b9fd2cc47eef911961d8373
-IR01 process proof 39d7300790b2b067b12630f4d1efd4fd51b6d126
+opening runtime     dac0e8e4bf655a234ca5b8d0952f6a199373b4af
+durable continuation 221710941950198c4fced9c30991bd295fea39ef
+evidence / accepted HEAD fdb6a30ad138c332837f17af1d8c74b5643db44b
 ```
 
 GPT Independent Review verdict:
 
-> **PASS. G4-06 Atomic Final Create is CLOSED.**
+> **PASS. G4-07A First Playable Opening Runtime is CLOSED.**
 
-Confirmed production semantics:
+Confirmed:
 
-- valid frozen Composition is exact re-reviewed before durable create side effects;
-- immutable creation intent fixes `creation_id`, composition fingerprint, `game_id`, root ID, local World/Player/NPC IDs, exact Source pins and selected starting projections;
-- same creation identity + same payload converges to the same Game/local identities;
-- same creation identity + different payload fails `creation_payload_conflict` without mutating valid truth;
-- identical Composition under different creation identities creates distinct Games and distinct local Character IDs;
-- One Game = One SQLite remains intact;
-- DB internal identity/root snapshot are verified before Game Library registration;
-- wrong-existing DB identity fails loud and the foreign DB is preserved;
-- Source tamper/missing exact generation fails before intent/Game DB/Game Library side effects;
-- selected Source X remains pinned even if current changes to newer Y;
-- early Han materialization excludes future/unselected Entry/profile bytes;
-- no-Entry persists explicit null and materializes top-level-only World/Character semantics;
-- non-temporal scenario Entry works without global historical mode;
-- Guaranteed NPC remains canonical cast only, without invented opening/location/player-known/relationship state;
-- Provider calls = 0 and accepted Conversation count = 0 during Final Create;
-- production SQLite schema remains v4.
+- real Han and Afterglow routes use production G4-06 Final Create;
+- exact created DB is opened through the existing-only runtime seam;
+- G4-07A public interface receives an already-opened runtime and structurally has no Wizard or Source Library dependency;
+- Opening Context is projected from durable Game-local `game_local_setup.v0.1` / current World truth;
+- a newer mutable Source current installed after create does not enter Provider-visible Opening Context;
+- early Han contains selected `208` Entry/profile material and excludes known later/future markers;
+- no-Entry remains explicit no-Entry with no runtime default Entry/profile/year;
+- Guaranteed NPC definitions may be canonical GM knowledge, but runtime instructions explicitly deny automatic opening presence/co-location/familiarity/relationship/mandatory dialogue;
+- rich selected semantic sections are retained in stable order; real Han and Afterglow contexts remain full-fidelity rather than one-line summaries;
+- first request is GM-only: one system message and no fake Player prompt;
+- v4 Conversation stores the accepted GM Opening with an empty Player compatibility slot, while Context Assembly suppresses that empty slot on later Provider requests;
+- Provider failure/cancel before acceptance leaves zero durable accepted Opening and allows clean retry;
+- one successful Opening becomes durable exactly once;
+- accepted Opening blocks any automatic second first Opening;
+- fresh-process reopen restores the exact one real Opening;
+- continuation context after reopen is `[system, assistant, user]`: durable Game-local truth + durable Opening + next real Player action;
+- production SQLite schema remains v4;
+- frozen full-fidelity fixtures remain unchanged;
+- no UI, Expansion, G5 or G7 scope was smuggled into G4-07A.
 
-### G4-06IR01 actual process restart proof
+Real Provider evidence recorded real DeepSeek streaming for both Han and Afterglow. This proves transport and semantic propagation only, not narrative Product PASS.
 
-The first Independent Review found one evidence-quality gap: the original restart test created a fresh FinalCreate object inside one Godot process rather than crossing an OS process boundary.
-
-IR01 corrected only tests/evidence and changed no production code.
-
-For each required crash window:
-
-```text
-Process A → injected durable interruption → exits
-Process B → fresh Godot process → same disk roots / same creation_id / same Composition → resume
-Process C → another fresh Godot process → exact replay
-```
-
-Distinct OS PIDs were required for A/B/C.
-
-Proved windows:
-
-- after intent publish;
-- after DB commit;
-- after Game Library record publish;
-- after current publish.
-
-Every row converged to exactly one SQLite + one Game Library record + matching current selection with the same fixed Game/root/local identities. Existing valid DB bytes were SHA-256 stable across resume/replay, proving no destructive delete/recreate recovery.
-
-No correction-02 was required because real process restart exposed no production defect.
-
-Do not reopen G4-06 absent new P0 evidence or explicit Owner/product decision.
+Do not reopen G4-07A absent new P0 evidence or a concrete G4-07B integration failure demonstrating the reviewed backend seam is insufficient.
 
 ---
 
-## 3. Source / creation truth carried into play
+## 3. Source / Game-local truth carried into UI
 
-Source v0.2-r2 remains frozen:
-
-```text
-thin identity/catalog metadata
-+ ordered rich semantic_sections
-+ disclosure gm_reference | gm_private
-+ package-local UTF-8 Markdown/TXT
-+ optional Entry-scoped World semantics
-+ optional Character T0 profiles
-+ exact immutable generation fingerprint over every declared byte
-```
-
-Temporal quarantine remains optional authored capability.
-
-G4-06-created Game-local setup now owns the selected starting truth:
+Source v0.2-r2 remains frozen.
 
 ```text
 selected Entry
-→ World top-level + exact Entry
-→ Character top-level + exact matching profile when authored
+→ World top-level + exact Entry sections
+→ Character top-level + exact matching T0 profile when authored
 
 no Entry
 → World top-level only
@@ -150,7 +114,13 @@ no Entry
 
 No latest/nearest/later/full-life fallback. No hidden historical mode.
 
-After create, Source provenance remains exact but **Game-local durable materialization is runtime truth**. Future Source current changes must not rewrite or re-materialize an existing Game.
+After G4-06 create:
+
+> **Game-local durable materialization is runtime truth.**
+
+Source provenance remains exact, but mutable Source current cannot rewrite an existing Game.
+
+Guaranteed NPC remains canonical cast only, not automatic opening presence, same location, Player knowledge or relationship.
 
 ---
 
@@ -158,17 +128,17 @@ After create, Source provenance remains exact but **Game-local durable materiali
 
 Purpose:
 
-> Prove that a real World + real Player Character + optional Guaranteed NPCs, with Expansion = none, becomes a genuinely playable AI RPG vertical.
+> Prove that a real World + real Player Character + optional Guaranteed NPCs, Expansion = none, becomes a genuinely playable AI RPG vertical.
 
-Target product route:
+Target route:
 
 ```text
 real Source
-→ New Game Composition
+→ New Game Wizard
 → Compatibility Review
 → Atomic Final Create
 → real AI GM Opening
-→ continuous free play
+→ continuous free-form play
 → Save / exit / reopen / Continue
 → Owner UAT A
 ```
@@ -179,77 +149,79 @@ Owner UAT must judge:
 - Character individuality;
 - anti-convergence;
 - Context not starved;
-- whether the resulting experience actually feels like an AI RPG rather than a technically correct transcript demo.
+- whether the product feels like an AI RPG rather than a technically correct transcript demo.
 
 Engineering PASS cannot substitute for this UAT.
 
 ---
 
-## 5. Current execution task｜G4-07A Opening Runtime
+## 5. Current execution task｜G4-07B Playable UI Integration
 
 Current packet:
 
-`my-world/docs/tasks/G4-07A_FIRST_PLAYABLE_OPENING_RUNTIME_TASK.md`
+`my-world/docs/tasks/G4-07B_PLAYABLE_UI_INTEGRATION_TASK.md`
 
 Primary outcome:
 
 ```text
-G4-06 created Game
-→ existing-only open
-→ read durable Game-local setup/current truth
-→ assemble bounded-but-rich first Opening Context
-→ real DeepSeek GM Opening
-→ accept/persist exactly one first GM Opening
-→ close/reopen same Game
-→ continue from durable Conversation + World truth
+Main Menu
+→ G4-05 Wizard / Review
+→ G4-06 Final Create
+→ exact existing-only Game open
+→ G4-07A Opening streaming in Narrative UI
+→ accepted GM Opening shown once
+→ first real Player action / GM continuation
+→ Save / exit / reopen / Continue
 ```
 
-Key requirements:
+Key integration requirements:
 
-- Opening truth comes from the durable created Game, not Wizard state;
-- do not re-resolve mutable Source current to reconstruct runtime semantics;
-- existing-only open: missing/wrong/corrupt Game must fail loud, never silently create another Game;
-- first accepted Opening must be durable exactly once;
-- failed/cancelled/unaccepted attempts must not become accepted Conversation;
-- reopen after accepted Opening must not auto-generate a second first Opening;
-- first Opening is a GM turn, not a fake persisted Player prompt;
-- early Han Provider-visible context must preserve temporal quarantine;
-- no-Entry must remain no-Entry;
-- Guaranteed NPC existence must not systematically force opening presence/player familiarity;
-- reuse existing G2 Provider and G3 Conversation/persistence ownership;
-- Context must be bounded but cannot collapse rich Source-derived semantics back to one-line summaries;
-- production schema remains v4 unless task returns `BLOCKED` before migration.
+- one frozen Review create attempt owns one stable `creation_id`;
+- repeated click/retry for the same attempt must reuse it and must not create duplicate Games;
+- successful Final Create ends the Wizard create path;
+- after create, the exact returned managed DB is opened existing-only;
+- a Game with accepted Conversation = 0 is a valid `opening-pending` Game;
+- Provider failure/cancel must not delete/unregister/recreate that Game;
+- retry Opening operates on the same created Game;
+- app exit after create but before accepted Opening must recover through Continue;
+- accepted Opening must render as GM-only, without an empty/fake Player bubble;
+- accepted Conversation >= 1 must never auto-generate a second first Opening;
+- the next Player action must use G4-07A durable continuation context, not Wizard or mutable Source current;
+- Save/reopen/Continue must restore the same Game and durable Conversation;
+- no-Entry remains no-Entry;
+- player-facing copy avoids internal IDs/fingerprints/schema/task jargon;
+- Windows 1280×720, 960×540 and maximized interaction/layout must remain usable.
 
-Required real Provider proof: at least Han + Afterglow through production G4-06-created Games.
+Expected Kimi production scope is application/UI only. Protected backend seams remain read-only; a genuine backend gap must return `BLOCKED` for rerouting.
 
 ---
 
-## 6. G4-07 execution decomposition
+## 6. Frozen backend guarantees
 
-To keep ownership and failure domains clear:
+G4-06 remains PASS/CLOSED:
 
-```text
-G4-07A — Codex
-backend/runtime/context/provider Opening vertical
-↓ GPT Independent Review
-G4-07B — Kimi
-Wizard Final Create → playable Narrative UI integration
-↓ GPT Independent Review
-G4-07 — Owner UAT
-real play judgment
-```
+- One Game = One SQLite;
+- immutable creation intent before DB side effects;
+- same creation identity + same payload is replay-safe;
+- same identity + altered payload conflicts;
+- exact Source pins/materialization survive current drift;
+- DB identity verified before Game Library registration;
+- valid DB is repaired forward, not destructively rolled back;
+- production schema v4.
 
-G4-07B remains HOLD until G4-07A exposes a stable reviewed seam.
+G4-07A remains PASS/CLOSED:
 
-This decomposition does not change the roadmap stage order; it only reduces mixed backend/frontend task risk.
+- durable Game-local Opening authority;
+- real DeepSeek streaming/cancel/failure reuse G2 Provider ownership;
+- persist-before-accept reuse G3 Conversation/Persistence ownership;
+- first GM Opening exactly once;
+- fresh-process continuation context from durable state.
+
+G4-07B must integrate these seams, not redesign them.
 
 ---
 
 ## 7. Execution-agent routing
-
-Canonical routing:
-
-`AGENT_EXECUTION_ROUTING_CURRENT.md`
 
 ```text
 GPT        → Meaning / architecture / task shaping / Decision Propagation / Independent Review
@@ -258,35 +230,30 @@ Kimi       → frontend / UI / interaction implementation
 Grok Build → search / external research / evidence discovery
 ```
 
-Task fit comes before quota availability.
+G4-07B is assigned to **Kimi** because the dominant risk is application-state presentation, Wizard→Create→Opening transition, Narrative UI semantics, retry/navigation behavior and Windows interaction quality.
 
-G4-07A is assigned to Codex because the dominant risks are existing-only Game open, Context assembly, Provider orchestration, Conversation durability and retry/idempotence.
-
-G4-07B will route to Kimi because it is frontend/application interaction wiring once the runtime seam is stable.
+If protected backend code must change, Kimi should return `BLOCKED`; GPT will route the correction to Codex if warranted.
 
 ---
 
 ## 8. Holds / warnings
 
-- G4-06 is CLOSED; do not add Provider/UI behavior back into Final Create.
-- G4-07A must not implement G4-07B UI.
-- G4-07 must not introduce Expansion before First Playable A succeeds.
-- Do not build G5 Living World broad architecture or G7 long-session Context platform inside G4-07A.
-- Do not hardcode family-specific narrative scripts to make Han/Afterglow appear distinct.
-- Real Provider evidence must not commit API keys, auth headers or private environment data.
+- G4-06 and G4-07A are CLOSED; do not reopen them casually.
+- G4-07B must not redesign Source, Final Create, Opening backend, Provider stack or Persistence.
+- Do not introduce Expansion before First Playable A succeeds.
+- Do not build G5 Living World broad architecture or G7 Context platform here.
+- Do not hardcode Han/Afterglow scripts to manufacture apparent differentiation.
+- Do not expose secrets in UI, screenshots or evidence.
+- Do not declare G4-07 Product PASS before Owner UAT.
 
 ---
 
 ## 9. Current execution order
 
 ```text
-PASS/CLOSED G4-06
+PASS/CLOSED G4-07A
 ↓
-NOW G4-07A Opening Runtime — Codex
-↓
-GPT Independent Review
-↓
-G4-07B Playable UI Integration — Kimi
+NOW G4-07B Playable UI Integration — Kimi
 ↓
 GPT Independent Review
 ↓
