@@ -7,10 +7,9 @@ project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
 current_parent_task: G4-07 First Playable A
-current_execution_task: G4-07B Playable UI Integration
+current_execution_task: Owner UAT
 semantic_owner: GPT
-current_execution_owner: Kimi
-owner_uat_required: true
+current_execution_owner: Owner
 ---
 
 # my world｜GPT CONTEXT HANDOFF CURRENT
@@ -32,206 +31,157 @@ Governance:
 Implementation:
 
 8. `AGENTS.md`
-9. `docs/tasks/G4-07B_PLAYABLE_UI_INTEGRATION_TASK.md`
-10. `docs/g4_07a/G4-07A_FIRST_PLAYABLE_OPENING_RUNTIME_IMPLEMENTATION_EVIDENCE.md`
-11. `src/应用壳.gd`
-12. `src/main.tscn`
-13. current Narrative UI under `src/ui/**`
-14. `src/最终建局/L3_外交层/原子最终建局公开接口.gd`
-15. `src/首次开场/L3_外交层/首次开场公开接口.gd`
-16. `src/runtime/当前游戏会话运行时.gd`
-17. `src/游戏库/L3_外交层/游戏库公开接口.gd`
+9. `docs/tasks/G4-07_FIRST_PLAYABLE_A_OWNER_UAT.md`
+10. `docs/g4_07b/G4-07B_INDEPENDENT_REVIEW.md`
+11. `docs/g4_07b/G4-07B_PLAYABLE_UI_INTEGRATION_EVIDENCE.md`
+12. `docs/g4_07a/G4-07A_FIRST_PLAYABLE_OPENING_RUNTIME_IMPLEMENTATION_EVIDENCE.md`
 
-Do not default to rereading the whole historical repository.
+Do not default to rereading the full repository history.
 
 ---
 
-## 2. Current route
+## 2. Current formal state
 
 ```text
-G4-05 New Game Wizard          PASS / CLOSED
-G4-06 Atomic Final Create      PASS / CLOSED
-G4-07A Opening Runtime         PASS / CLOSED
-G4-07B Playable UI Integration ACTIVE — KIMI
-G4-07 Owner UAT                WAITING FOR G4-07B IR PASS
+G1 Foundation                         PASS / CLOSED
+G2 AI Conversation Spine              PASS / CLOSED
+G3 Persistence / Save / Timeline      PASS / CLOSED
+G4-01 Application Shell / Lifecycle  PASS / CLOSED
+G4-02R1 Source semantic re-audit      PASS / CLOSED
+G4-03 Managed Local Source Library    PASS / CLOSED
+G4-04 Multi-Game / Game Library       PASS / CLOSED
+G4-05 New Game Wizard                 PASS / CLOSED
+G4-06 Atomic Final Create             PASS / CLOSED
+G4-07 First Playable A                READY FOR OWNER UAT
+G4-07A Opening Runtime                PASS / CLOSED
+G4-07B Playable UI Integration        PASS / CLOSED
+G4-GATE                               NOT YET
 ```
 
-Parent gate G4-07 is product-facing and cannot close without Owner UAT.
+No Codex/Kimi task is active.
 
 ---
 
 ## 3. G4-07A accepted truth
 
-Accepted implementation/evidence:
-
 ```text
-opening runtime       dac0e8e4bf655a234ca5b8d0952f6a199373b4af
-durable continuation 221710941950198c4fced9c30991bd295fea39ef
-evidence / HEAD       fdb6a30ad138c332837f17af1d8c74b5643db44b
+implementation  dac0e8e4bf655a234ca5b8d0952f6a199373b4af
+continuation    221710941950198c4fced9c30991bd295fea39ef
+evidence / HEAD fdb6a30ad138c332837f17af1d8c74b5643db44b
 ```
 
-GPT Independent Review: **PASS / CLOSED**.
+GPT Independent Review: **PASS**.
 
-Key verified semantics:
+Key accepted semantics:
 
-- real Han + Afterglow use production G4-06 creation and `open_existing_game()`;
-- Opening Context comes from durable Game-local setup/current World;
-- Opening module does not accept Source Library or Wizard state;
-- newer Source current does not enter an existing Game's Opening context;
-- Han early-start future markers remain excluded;
-- no-Entry remains no-Entry;
-- Guaranteed NPC is canonical knowledge only, with no forced first-scene convergence;
-- first request is GM-only, one system message, no fake Player prompt;
-- Provider failure/cancel leaves zero durable accepted Opening;
-- successful Opening durable exactly once;
-- fresh process reopen restores the exact Opening and rejects a second first Opening;
-- continuation context after reopen = durable Game-local World + durable Conversation + next real Player action;
-- schema remains v4.
-
-Do not reopen G4-07A without new P0 evidence or a concrete integration defect.
+- existing-only open of G4-06-created Game;
+- first Opening derives only from durable Game-local setup/current truth;
+- no Wizard or mutable Source current reconstruction;
+- real DeepSeek Han + Afterglow;
+- GM-only first Opening with no fake Player prompt;
+- failure/cancel zero accepted + clean retry;
+- accepted Opening durable exactly once;
+- fresh-process reopen cannot create second first Opening;
+- next Player action context = durable Game-local World + durable Conversation + Player action;
+- early Han quarantine and no-Entry rules preserved;
+- schema v4 unchanged.
 
 ---
 
-## 4. Current task｜G4-07B
+## 4. G4-07B accepted truth
+
+```text
+implementation  e13099384c12090197822d1d504089decc1f893b
+evidence / HEAD 2f45614baa0a3c38dac3439934122084817d4602
+IR record       docs/g4_07b/G4-07B_INDEPENDENT_REVIEW.md
+```
+
+GPT Independent Review: **PASS**.
+
+Confirmed:
+
+- production diff limited to application/UI scope;
+- stable one-attempt `creation_id` and duplicate prevention;
+- Final Create → exact existing-only Game open;
+- opening-pending Game survives Provider failure/cancel and app exit;
+- Continue on accepted=0 returns to same Game and retries Opening;
+- accepted Game never auto-generates second first Opening;
+- GM-only Opening has no empty/fake Player bubble;
+- first Player continuation uses reviewed G4-07A durable context;
+- Save / Main Menu / Continue restores same Game and durable history;
+- real application UI DeepSeek verticals pass for Han + Afterglow;
+- no-Entry explicit behavior preserved;
+- 1280×720 / 960×540 / maximized layout evidence passes;
+- protected backend, schema v4, and frozen fixtures unchanged.
+
+Do not reopen G4-07A/B without new P0 evidence or Owner UAT evidence showing a concrete defect.
+
+---
+
+## 5. Current task｜Owner UAT
 
 Formal packet:
 
-`docs/tasks/G4-07B_PLAYABLE_UI_INTEGRATION_TASK.md`
+`my-world/docs/tasks/G4-07_FIRST_PLAYABLE_A_OWNER_UAT.md`
 
-Packet commit:
+The Owner should use the normal product UI, not engineering tests.
 
-`064ae8b27d2169f8399e81a36a7d7624efe45fdd`
+Required UAT pressure routes:
 
-Formal Code Base:
+1. Han early start: `208 / 赤壁前夕 + 刘备 + 孙权 guaranteed`, several actions, Save, Main Menu, Continue.
+2. Afterglow: `1287 / 公共工程余波 + 莉维娅 + 阿德里安/杜恩`, several actions.
+3. one short no-Entry check.
 
-`fdb6a30ad138c332837f17af1d8c74b5643db44b`
+Owner judges:
 
-Owner: **Kimi**  
-Reviewer: **GPT**  
-Return ceiling: **READY FOR INDEPENDENT REVIEW**
+- Narrative richness;
+- Character individuality;
+- Han vs Afterglow distinctness;
+- anti-convergence;
+- immediate Context sufficiency;
+- future/canon leakage in early Han;
+- no-Entry richness;
+- UI/product feel.
 
-Primary target:
+Minimal Owner return:
 
 ```text
-Main Menu
-→ New Game Wizard / Review
-→ Atomic Final Create
-→ exact existing-only Game open
-→ GM Opening streams in Narrative UI
-→ Player sends real action
-→ GM continuation
-→ Save / exit / reopen / Continue
+1. Han：PASS / 有问题
+2. Afterglow：PASS / 有问题
+3. no-Entry：可玩 / 太空 / 其他
+4. 最明显的优点：一句话
+5. 最影响继续玩的缺点：一句话（没有就写“无”）
+6. 总体：我愿意继续玩 / 还不像成品 / 需要先修某问题
 ```
 
 ---
 
-## 5. Critical G4-07B semantics
+## 6. Frozen semantics while UAT is pending
 
-### Stable create-attempt identity
-
-`creation_id` belongs to one frozen Review create attempt, not one click.
-
-- double-click/retry must reuse it;
-- successful create ends that Wizard create path;
-- editing/re-reviewing before successful create produces a new attempt identity;
-- UI must not produce duplicate Games through callback/retry behavior.
-
-### Created-but-not-opened is valid
-
-A durable Game with accepted Conversation = 0 is an `opening-pending` Game.
-
-Provider failure/cancel or app exit after create must not delete/recreate it.
-
-Continue must reopen that exact Game and allow/start the G4-07A first Opening.
-
-### Existing-only
-
-After create and on Continue, never use a first-run seam that silently creates a replacement Game.
-
-### GM-only Opening UI
-
-The first accepted durable entry has empty compatibility `player_text`. Do not render an empty/fake Player bubble.
-
-### Durable continuation
-
-First real Player action after Opening must use G4-07A durable continuation context, not Wizard or mutable Source current.
-
-### Parent UAT remains required
-
-Engineering evidence can make the vertical UAT-ready but cannot prove narrative richness, individuality, anti-convergence or product value.
+- Source v0.2-r2 remains frozen.
+- Game-local materialization is runtime truth after create.
+- no latest/nearest/later/full-life fallback.
+- no hidden historical mode.
+- Guaranteed NPC is canonical cast only, not automatic opening presence/location/player knowledge/relationship.
+- created Game exists before AI Opening acceptance; failure/cancel never rolls back creation.
+- Engineering PASS != Product PASS.
 
 ---
 
-## 6. Protected backend boundaries for Kimi
+## 7. Next decision
 
-Expected Kimi production scope:
+After Owner UAT, GPT must decide:
 
-- `src/应用壳.gd`
-- `src/main.tscn`
-- `src/ui/**`
-- narrow application/presentation glue
+```text
+G4-07 PASS / CLOSED
+```
 
-Treat these as read-only unless a concrete blocker is proven:
+or
 
-- `src/最终建局/**`
-- `src/首次开场/**`
-- `src/persistence/**`
-- `src/runtime/**`
-- `src/provider/**`
-- `src/source/**`
-- `src/domain/**`
-- `src/context/**`
-- `src/游戏库/**`
-- `src/建局/**`
+```text
+G4-07 Product Correction ACTIVE
+```
 
-If Kimi reports a protected backend seam is insufficient, inspect evidence and route the smallest correction to Codex rather than letting frontend work absorb backend ownership.
+If correction is required, issue the smallest evidence-driven task to the correct owner. Do not generically reopen G4-07A/B.
 
----
-
-## 7. Independent Review after Kimi returns
-
-Refresh both repo `main` HEADs first. Inspect actual diff/evidence, not report text.
-
-At minimum verify:
-
-1. Kimi stayed within frontend/application scope or clearly reported any necessary exception;
-2. Final Create button uses a stable create-attempt `creation_id` across retries/double-click prevention;
-3. same UI attempt cannot create two Games;
-4. successful create opens the exact returned DB existing-only;
-5. create success + Opening failure does not roll back/delete/recreate the Game;
-6. Continue on a created Game with accepted Conversation = 0 reaches Opening retry/start rather than blank/dead state;
-7. accepted Opening renders as GM-only with no empty fake Player bubble;
-8. accepted Conversation >= 1 does not trigger another first Opening;
-9. first real Player action uses reviewed durable continuation context and real Provider path;
-10. Save / Main Menu or app reopen / Continue restores same Game and history;
-11. no-Entry UI path does not introduce hidden defaults;
-12. Han early path retains temporal isolation;
-13. Afterglow uses the same family-agnostic UI path;
-14. Provider failure/cancel/retry has understandable UI and no duplicate durable truth;
-15. Windows 1280×720, 960×540 and maximized interaction/layout evidence is real;
-16. no debug IDs/fingerprints/schema/task jargon dominate player-facing surfaces;
-17. G2/G3/G4-01/G4-04/G4-05/G4-06/G4-07A regressions are meaningful;
-18. production schema remains v4 and frozen fixtures unchanged.
-
-If PASS:
-
-- close G4-07B;
-- mark G4-07 **READY FOR OWNER UAT**;
-- prepare a short Owner UAT route using real Han + Afterglow;
-- do **not** close G4-07 until Owner explicitly judges the product experience.
-
----
-
-## 8. Product UAT questions after G4-07B PASS
-
-Owner should judge, not agents:
-
-- Does Han actually feel grounded in its selected historical moment without future leakage?
-- Does Afterglow feel like a genuinely different authored world rather than the same generic GM voice?
-- Does the Player Character feel individually grounded?
-- Do Guaranteed NPCs avoid collapsing unnaturally into scene one?
-- Is Context rich enough for meaningful play without obvious starvation?
-- Does free-form play feel like an AI RPG rather than a transcript demo?
-- Does Save / exit / Continue preserve trust in the same ongoing Game?
-
-Engineering PASS cannot answer these.
+Do not start G4-08 Expansion before G4-07 Product PASS.
