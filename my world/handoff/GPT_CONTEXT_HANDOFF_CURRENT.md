@@ -7,7 +7,7 @@ project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
 current_parent_task: G4-09R1 Runtime Model Settings v0.1
-current_execution_task: G4-09R1M1 Runtime Model Settings / Multi-Provider Mechanism
+current_execution_task: G4-09R1M1C01 Settings Projection + Kimi Proof
 semantic_owner: GPT
 current_execution_owner: Codex
 ---
@@ -28,12 +28,13 @@ G4-09P1 Owner UAT B Production Prep   PASS / CLOSED
 G4-09UATB Owner Product UAT           HOLD
 G4-09R1 Runtime Model Settings v0.1   ACTIVE
 G4-09R1S0 Semantic Freeze             PASS / CLOSED — GPT
-G4-09R1M1 Backend Mechanism           ACTIVE — CODEX
+G4-09R1M1 Backend Mechanism           CORRECTION REQUIRED
+G4-09R1M1C01 Projection/Kimi Proof    ACTIVE — CODEX
 G4-09R1B1 Settings UI                 HOLD — KIMI
 G4-GATE                               NOT YET
 ```
 
-Owner explicitly requested model/runtime settings before UAT B. Do not ask Owner to run the stale DeepSeek-only UAT yet.
+Owner UAT remains paused. Kimi UI must not start until M1C01 passes GPT Independent Review.
 
 ---
 
@@ -43,116 +44,123 @@ Governance:
 
 1. `my world/MY_WORLD_CURRENT_STATUS.md`
 2. `my world/architecture/foundation/G4_RUNTIME_MODEL_SETTINGS_V0_1_DECISION.md`
-3. `my world/architecture/source/G4_EXPANSION_V0_1_PUBLIC_D20_DECISION.md`
 
 Implementation:
 
-4. `AGENTS.md`
-5. `docs/tasks/G4-09R1M1_RUNTIME_MODEL_SETTINGS_MECHANISM_TASK.md`
-6. `docs/tasks/G4-09R1B1_MODEL_SETTINGS_UI_TASK.md` — HOLD
-7. `src/provider/deepseek流式适配器.gd`
-8. `src/context/上下文组装器.gd`
-9. Opening / Narrative / ActionAdjudication Provider construction seams
-10. `.env.example` / `run-game.ps1`
+3. `AGENTS.md`
+4. `docs/g4_09r1/G4-09R1M1_INDEPENDENT_REVIEW.md`
+5. `docs/tasks/G4-09R1M1C01_SETTINGS_PROJECTION_KIMI_PROOF_CORRECTION_TASK.md`
+6. `docs/g4_09r1/G4-09R1M1_机制实现证据.md`
+7. Runtime Settings L0-L3
+8. Provider L1-L3
+9. `tests/g4_09r1/运行时模型设置机制测试.gd`
+10. real multi-provider runner
 
 ---
 
-## 3. Frozen model catalog
+## 3. M1 accepted implementation
 
-```text
-deepseek_v4_pro   → DeepSeek V4 Pro   → deepseek-v4-pro
-deepseek_v4_flash → DeepSeek V4 Flash → deepseek-v4-flash
-kimi_k3 / 256K    → Kimi K3            → k3-256k
-kimi_k3 / 1M      → Kimi K3            → k3
-kimi_k27 / 256K   → Kimi K2.7          → kimi-for-coding
-```
+Reviewed HEAD:
 
-Kimi K2.7 + 1M is invalid.
+`7b183d4b5aecd1b4d0e0f80fbfe235ded4c67344`
 
-Requested reasoning:
+Accepted and protected absent concrete regression:
 
-```text
-DeepSeek/K3:
-Low    → low
-Medium → high
-High   → high
-Max    → max
-
-Kimi K2.7:
-Thinking ON fixed; no graded effort control
-```
-
-Context setting means application runtime context ceiling/capability selection. Do not claim every Provider accepts a request-body context-window field. Do not pull G7 forward.
-
----
-
-## 4. Credentials / scope
-
-Secrets:
-
-```text
-DEEPSEEK_API_KEY
-KIMI_API_KEY
-```
-
-Settings persist outside Games under an app-local settings seam. Default:
-
-```text
-DeepSeek V4 Pro / 256K / High
-```
-
-Settings are not Source, Composition, Game canonical reality or SQLite schema. Existing Games must not be rewritten.
-
-No automatic cross-provider fallback.
+- `user://my-world/settings/provider-runtime.json` with schema `my-world.provider-runtime.v1`;
+- default `deepseek_v4_pro / 256k / high`;
+- exact closed catalog:
+  - DeepSeek V4 Pro → `deepseek-v4-pro`;
+  - DeepSeek V4 Flash → `deepseek-v4-flash`;
+  - Kimi K3 256K → `k3-256k`;
+  - Kimi K3 1M → `k3`;
+  - Kimi K2.7 256K → `kimi-for-coding`;
+- K2.7 + 1M fail-closed;
+- DeepSeek/K3 `low→low`, `medium→high`, `high→high`, `max→max`;
+- K2.7 fixed-thinking capability metadata / no graded effective value;
+- atomic/fail-safe settings persistence;
+- selected Provider credential only: `DEEPSEEK_API_KEY` or `KIMI_API_KEY`;
+- missing selected key → zero network; no cross-provider fallback;
+- shared runtime Provider seam used by First Opening, ordinary Narrative, d20 adjudication and d20 resolution narrative;
+- active request freezes runtime profile;
+- reasoning-only stream material is not emitted as player narrative;
+- canonical launcher allows either/both/no key at Main Menu startup;
+- real DeepSeek V4 Pro/Flash evidence completed;
+- Source/Final Create/Public d20/SQLite v4 unchanged.
 
 ---
 
-## 5. Current Codex task
+## 4. Why M1 is not PASS
+
+### A. Missing UI-safe unsaved candidate projection
+
+Current Settings L3 only exposes current persisted `request_snapshot()` plus `catalog()/validate()`. G4-09R1B1 needs to preview an unsaved choice while backend retains ownership of compatibility/effective policy.
+
+Correction must add a non-mutating projection sufficient for:
+
+```text
+K2.7 + 1M invalid
+Medium → actual High
+K2.7 fixed thinking
+allowed context choices
+selected-provider configured bool
+```
+
+No secret values, no save side effect, and no requirement for UI to derive endpoint/model/request fields.
+
+### B. Kimi wire / real-provider proof incomplete
+
+Current evidence has:
+
+```text
+DeepSeek V4 Pro    completed
+DeepSeek V4 Flash  completed
+Kimi K3            credential_unavailable
+Kimi K2.7          credential_unavailable
+```
+
+Original M1 task explicitly says stubs are insufficient for final Kimi PASS.
+
+Current official Kimi behavior must be used to verify/correct actual Thinking ON wire semantics for K3 and K2.7, then small real Kimi calls must run when local `KIMI_API_KEY` and entitlement are available.
+
+Never substitute another model or expose the key.
+
+---
+
+## 5. Current correction
 
 Packet:
 
-`my-world/docs/tasks/G4-09R1M1_RUNTIME_MODEL_SETTINGS_MECHANISM_TASK.md`
+`my-world/docs/tasks/G4-09R1M1C01_SETTINGS_PROJECTION_KIMI_PROOF_CORRECTION_TASK.md`
 
-Codex owns:
+Correction budget: **correction-01**.
 
-- durable application settings/defaults/validation;
-- exact closed profile catalog;
-- DeepSeek + Kimi fixed OpenAI-compatible endpoints;
-- provider model-id derivation and reasoning mapping;
-- selected-provider credential fail-loud;
-- one runtime profile seam consumed by Opening, Narrative and both Public d20 Provider phases;
-- `.env.example` / canonical launcher credential allowlist as required;
-- deterministic regression evidence;
-- small real DeepSeek and Kimi calls when local credentials/entitlement permit.
+Codex should only touch the settings/provider contract/tests/evidence required for the two focused gaps. Do not implement final Settings UI and do not redesign Source/Game/Public d20/G7/G8.
 
-Real Kimi support cannot be declared from stubs alone. If Kimi credential or entitlement is unavailable, return that explicit blocker.
-
-Protected: Source/Final Create/Game persistence/Public d20 semantics/SQLite v4/G7 architecture.
-
-Return ceiling: **READY FOR INDEPENDENT REVIEW**. Codex must not start the UI task.
+Return ceiling: **READY FOR INDEPENDENT REVIEW**.
 
 ---
 
 ## 6. After Codex returns
 
-GPT refreshes both main heads and reviews actual code/evidence.
+GPT must refresh both `main` branches and inspect actual correction diff/evidence.
 
-If M1 PASS:
+Verify:
+
+1. candidate projection is backend-owned and non-mutating;
+2. projection directly proves K2.7 context incompatibility, Medium→High, fixed-thinking and non-secret credential status;
+3. Kimi K3/K2.7 wire keeps Thinking ON according to current official API behavior;
+4. K2.7 sends no fake graded effort;
+5. real Kimi K3 and K2.7 calls succeeded, or a precise current credential/entitlement blocker remains;
+6. regressions stay green and SQLite remains v4.
+
+If all required reality evidence is present and PASS:
 
 ```text
+G4-09R1M1C01 PASS / CLOSED
 G4-09R1M1 PASS / CLOSED
 → activate G4-09R1B1 — KIMI
 ```
 
-Kimi then implements Main Menu `模型设置`, compatibility states, effective reasoning disclosure, credential status, save/cancel/reopen and responsive layout. UI never owns model ids/endpoints/secrets.
+If `KIMI_API_KEY` is still absent, M1 remains open and UI remains HOLD; do not call stub evidence a real Kimi PASS.
 
-After Kimi IR PASS:
-
-```text
-real DeepSeek + Kimi integration
-→ Windows export freshness
-→ refreshed UAT instructions
-→ G4-09UATB ACTIVE — OWNER
-```
-
-G4-09 and G4-08 remain open; do not start G4-10/G5.
+G4-GATE remains NOT YET; do not start G4-10/G5.
