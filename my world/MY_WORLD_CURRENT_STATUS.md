@@ -1,13 +1,13 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 7.9
+version: 8.0
 created: 2026-08-26
-updated: 2026-08-31
+updated: 2026-09-01
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-08M1 Public d20 Expansion Mechanism
+current_task: G4-08M1C01 NO_CHECK Action Idempotency Correction
 current_owner: Codex
-parent_task: G4-08 Expansion Pack v0.1 + First Real Runtime Vertical
+parent_task: G4-08M1 Public d20 Expansion Mechanism
 semantic_owner: GPT
 owner_uat_required: false
 context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
@@ -36,52 +36,120 @@ G4-07B Playable UI Integration        PASS / CLOSED
 G4-07UAT01 Owner Launch Freshness     PASS / CLOSED
 G4-08 Expansion Pack v0.1             ACTIVE
 G4-08S0 Expansion Semantic Freeze     PASS / CLOSED
-G4-08M1 Public d20 Mechanism          ACTIVE — CODEX
+G4-08M1 Public d20 Mechanism          CORRECTION REQUIRED
+G4-08M1C01 NO_CHECK Idempotency       ACTIVE — CODEX
+G4-08B UI Integration                 NOT YET
 G4-GATE                               NOT YET
 ```
 
-Current formal execution packet:
+Current correction packet:
 
-`my-world/docs/tasks/G4-08M1_PUBLIC_D20_EXPANSION_MECHANISM_TASK.md`
+`my-world/docs/tasks/G4-08M1C01_NO_CHECK_ACTION_IDEMPOTENCY_CORRECTION_TASK.md`
 
 Formal Code Base:
 
-`3b5cd80a26091a17d61c5a055637a422a9edb3aa`
+`31eca597d144c7c1214ddcc114d718a45fabf9dd`
 
+Independent Review record:
+
+`my-world/docs/g4_08m1/G4-08M1_INDEPENDENT_REVIEW.md`
+
+Correction budget: **correction-01**.  
 Primary execution owner: **Codex**.  
-Reviewer / semantic owner: **GPT**.  
-Return ceiling: **READY FOR INDEPENDENT REVIEW**.
+Reviewer / semantic owner: **GPT**.
 
 ---
 
-## 2. G4-07 final result｜PRODUCT PASS / CLOSED
+## 2. G4-08M1 reviewed implementation
 
-Owner completed First Playable A product UAT and returned explicit **PASS**.
+Reviewed implementation HEAD:
 
-Formal record:
+`31eca597d144c7c1214ddcc114d718a45fabf9dd`
 
-`my-world/docs/g4_07/G4-07_OWNER_UAT_RESULT.md`
+M1 substantially established the intended mechanism:
 
-The accepted no-Expansion vertical remains the regression baseline:
+- `expansion_pack.v0.1` is a third first-class Source type through the existing strict contract and Managed Library;
+- Public d20 exact generation installs/current/exact revalidation and immutable retention are implemented;
+- Composition supports explicit `0..N` exact Expansion selections;
+- duplicate exact Expansion / same exclusive `capability_slot` collision fail closed;
+- Final Create pins/materializes exact Expansion provenance, authored rules and capability binding;
+- no Provider call occurs during Final Create and SQLite remains schema v4;
+- `CHECK_REQUIRED` uses strict JSON Proposal → validation/freeze → Program RNG → Program total/outcome → durable check → second Provider narrative;
+- same risky action retry/restart reuses exact durable roll/outcome and does not reroll;
+- real DeepSeek evidence exists for Han and Afterglow;
+- no-Expansion G4-07 regression remains intact;
+- no executable Source mechanism and no UI ownership were added.
+
+These seams are not generically reopened by the correction.
+
+---
+
+## 3. Independent Review blocker
+
+M1 is not PASS because the Expansion-enabled `NO_CHECK` branch does not preserve stable `action_id` as durable replay identity.
+
+Current behavior is effectively:
 
 ```text
-real installed World/Character Source
-→ New Game Wizard / Review
-→ Atomic Final Create
-→ real DeepSeek GM Opening
-→ free-form Player actions
-→ durable continuation
-→ Save
-→ Main Menu / Continue same Game
+stable action_id submitted
+→ Provider returns NO_CHECK + narrative
+→ Conversation durably accepts Player/GM turn
+→ no durable action-id completion marker exists
 ```
 
-G4-08 must preserve this route when no Expansion is selected.
+If the success acknowledgement is lost, or the Game is reopened and the caller retries the same `action_id`, the runtime cannot distinguish the already accepted NO_CHECK action from a new submission. It may call Provider again and append a duplicate Player/GM turn.
+
+This conflicts with the frozen contract because the caller supplies the stable action identity **before** the Provider decides whether the branch is `NO_CHECK` or `CHECK_REQUIRED`.
+
+Therefore both branches must satisfy:
+
+```text
+same action_id + same Player payload
+→ at most one accepted Player/GM turn
+```
 
 ---
 
-## 3. G4-08S0 result｜PASS / CLOSED
+## 4. G4-08M1C01 target
 
-Canonical semantic decision:
+The correction is intentionally narrow.
+
+Required final semantics for an already accepted Expansion-enabled NO_CHECK action:
+
+```text
+same action_id + same Player text
+→ already accepted / replay-safe result
+→ Provider calls = 0
+→ RNG calls = 0
+→ Conversation additions = 0
+```
+
+And:
+
+```text
+same action_id + changed Player text
+→ fail loud identity/payload conflict
+```
+
+The implementation must also cover restart/lost-ACK windows around durable NO_CHECK result and Conversation acceptance without turning NO_CHECK into a fake dice check.
+
+Required focused evidence:
+
+- first NO_CHECK remains one Provider call / zero RNG;
+- same-process replay is exactly-once;
+- fresh-process/reopen replay is exactly-once;
+- changed payload conflicts;
+- pre-result Provider failure remains retryable;
+- durable result-before-Conversation and Conversation-before-final-marker windows recover without Provider replay;
+- CHECK_REQUIRED no-reroll cases remain green;
+- no-Expansion G4-07 route remains unchanged;
+- schema stays v4 unless narrowly justified otherwise.
+
+---
+
+## 5. Frozen semantic authority
+
+Canonical decision remains:
 
 `my world/architecture/source/G4_EXPANSION_V0_1_PUBLIC_D20_DECISION.md`
 
@@ -96,91 +164,20 @@ capability    action_check.public_d20.v1
 slot          action_resolution
 ```
 
-The historical `the-world` Public d20 material was used only as semantic reference. Current implementation remains Godot-native and governed by the present Source/Game/Runtime boundaries.
-
-Frozen core:
-
-- Expansion is optional `0..N` exact immutable generations;
-- duplicate exact Expansion and same capability-slot collision fail closed;
-- Public d20 has no hidden World-family restriction;
-- roll only when outcome is uncertain and failure has meaningful stakes;
-- certainly succeeds / certainly impossible / no-cost repeat → no roll;
-- Program owns RNG / total / outcome;
-- Risk Structure / Check Proposal freezes before RNG;
-- no-check normal turn stays one Provider call;
-- real check uses conditional second Provider continuation after durable result;
-- same action retry/restart never rerolls;
-- Expansion owns resolution, not downstream canonical World consequences;
-- no natural-1/natural-20 auto override in v0.1.
+No semantic redesign is requested by correction-01.
 
 ---
 
-## 4. Current task｜G4-08M1
-
-M1 implements backend/mechanism only:
+## 6. Next progression
 
 ```text
-Expansion Source contract / Managed Library
-→ exact Composition backend
-→ capability-slot compatibility
-→ Atomic Final Create materialization/provenance
-→ Program-owned capability registry
-→ structured adjudication envelope
-→ freeze-before-RNG
-→ Program d20 RNG
-→ durable check resolution
-→ idempotent retry/restart
-→ real DeepSeek resolution continuation
-→ UI-neutral mechanic projection
+G4-08M1C01 — Codex focused correction
+→ GPT Independent Review
+→ if PASS: G4-08M1 PASS / CLOSED
+→ G4-08B Wizard / Review / mechanic-card UI — Kimi
+→ GPT Independent Review
+→ G4-09 First Playable B
+→ Owner UAT B
 ```
 
-M1 does **not** own Wizard/Narrative visual UI.
-
-Required proof includes:
-
-- real Expansion load/install/current/exact immutable generation;
-- Public d20 exact selection and Final Create materialization;
-- no-Expansion regression;
-- normal/advantage/disadvantage Program computation;
-- Provider failure after roll does not reroll;
-- fresh-process reopen/Continue preserves exact result;
-- real Han + real Afterglow Provider evidence;
-- no executable Source plugin support.
-
-If production persistence schema changes from v4, the implementation must use the smallest migration required and prove prior Game compatibility.
-
----
-
-## 5. UI / product progression
-
-After M1 reaches READY FOR INDEPENDENT REVIEW:
-
-1. GPT refreshes current `main` and reviews actual implementation/evidence;
-2. if M1 PASS, GPT issues a separate Kimi task (`G4-08B`) for:
-   - Expansion selection in New Game Wizard;
-   - Review projection;
-   - lightweight public check mechanic card;
-3. GPT reviews actual UI integration;
-4. then G4-09 First Playable B / Owner UAT validates the real Expansion product experience.
-
-First-generation UI does not require a player click-to-roll button or dice animation.
-
----
-
-## 6. G4-08 acceptance direction
-
-G4-08 eventually must prove:
-
-```text
-same playable World + Character route
-+ exact selected Public d20 Expansion
-→ Final Create pins/materializes it
-→ real Runtime consumes it
-→ risky Player action produces a real Program-owned check
-→ public result constrains real DeepSeek continuation
-→ Save / Continue preserves it
-→ ordinary no-check action does not become a dice pipeline
-→ no-Expansion route remains unchanged
-```
-
-Do not claim G4-08 PASS from M1 alone. Do not start G5 before the remaining G4 route and G4-GATE are complete.
+Do not activate Kimi before M1C01 passes. Do not claim G4-08 PASS from backend mechanism alone. Do not start G5 before remaining G4 route and G4-GATE are complete.
