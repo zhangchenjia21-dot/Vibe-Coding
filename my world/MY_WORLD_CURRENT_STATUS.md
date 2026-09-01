@@ -1,13 +1,13 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 8.1
+version: 8.2
 created: 2026-08-26
 updated: 2026-09-01
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-08B Public d20 UI / Interaction Integration
+current_task: G4-08BC01 Public d20 UI Projection / Fail-Loud Correction
 current_owner: Kimi
-parent_task: G4-08 Expansion Pack v0.1 + First Real Runtime Vertical
+parent_task: G4-08B Public d20 UI / Interaction Integration
 semantic_owner: GPT
 owner_uat_required: false
 context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
@@ -38,33 +38,32 @@ G4-08 Expansion Pack v0.1             ACTIVE
 G4-08S0 Expansion Semantic Freeze     PASS / CLOSED
 G4-08M1 Public d20 Mechanism          PASS / CLOSED
 G4-08M1C01 NO_CHECK Idempotency       PASS / CLOSED
-G4-08B Public d20 UI Integration      ACTIVE — KIMI
+G4-08B Public d20 UI Integration      CORRECTION REQUIRED
+G4-08BC01 UI Projection / Fail-Loud   ACTIVE — KIMI
 G4-GATE                               NOT YET
 ```
 
-Current formal execution packet:
+Current correction packet:
 
-`my-world/docs/tasks/G4-08B_PUBLIC_D20_UI_INTEGRATION_TASK.md`
+`my-world/docs/tasks/G4-08BC01_UI_PROJECTION_FAIL_LOUD_CORRECTION_TASK.md`
 
 Formal Code Base:
 
-`d646427dfe3c4c6328809384e482cd1fdd2204a0`
+`3a20234d06c10904c220cd1a49bf29f6ad6769e7`
 
+Independent Review record:
+
+`my-world/docs/g4_08b/G4-08B_INDEPENDENT_REVIEW.md`
+
+Correction budget: **correction-01**.  
 Primary execution owner: **Kimi**.  
 Reviewer / semantic owner: **GPT**.
 
 ---
 
-## 2. G4-08M1 final result｜PASS / CLOSED
+## 2. G4-08 backend status｜PASS / CLOSED through M1
 
-Initial M1 review found one correction-01 blocker on Expansion-enabled `NO_CHECK` stable-action replay. Codex corrected it without widening architecture.
-
-Final review records:
-
-- `my-world/docs/g4_08m1/G4-08M1_INDEPENDENT_REVIEW.md`
-- `my-world/docs/g4_08m1/G4-08M1C01_INDEPENDENT_REVIEW.md`
-
-Accepted backend mechanism now proves:
+Accepted mechanism remains frozen:
 
 ```text
 exact Expansion Source
@@ -80,98 +79,104 @@ exact Expansion Source
 → real DeepSeek continuation
 ```
 
-Both Provider branches are stable-action replay safe:
+SQLite remains schema v4. No executable Source support was added.
 
-```text
-CHECK_REQUIRED → never rerolls same action
-NO_CHECK       → never replays accepted action through Provider
-```
-
-SQLite remains schema v4. No executable Source support was added. Real Han + Afterglow mechanism evidence remains valid.
+Do not reopen M1/M1C01 absent concrete backend regression evidence.
 
 ---
 
-## 3. Current task｜G4-08B UI / interaction integration
+## 3. G4-08B reviewed implementation
 
-Purpose:
+Reviewed implementation/evidence HEAD:
 
-> Project the accepted Expansion mechanism into the real player path without moving mechanism truth into UI.
+`3a20234d06c10904c220cd1a49bf29f6ad6769e7`
 
-Required product integration:
+Broadly correct:
 
-### New Game
+- Wizard projects installed Expansion inventory;
+- exact 0..N selection uses existing Composition authority;
+- Review shows selected Public d20;
+- no-Expansion Game retains G4-07 path;
+- Public d20 Player action routes through accepted L3 adjudication Host;
+- UI supplies stable action identity and retries unresolved actions;
+- durable check truth is read-only in UI;
+- Continue / Load can reconstruct/remove accepted mechanic records;
+- real Han DeepSeek Public d20 evidence exists;
+- protected backend paths are unchanged.
 
-- Wizard reads installed Expansion generations from existing Source inventory;
-- selection is explicit `0..N`, never auto-select first item;
-- explicit none remains valid;
-- backend `set_expansion` / compatibility remains authority;
-- Review displays actual selected Expansion name/version.
+G4-08B is nevertheless **not PASS** because GPT Independent Review found player-facing projection/routing defects.
 
-### Runtime
+---
 
-No Expansion:
+## 4. Current correction｜G4-08BC01
 
-```text
-preserve accepted G4-07 Narrative path unchanged
-```
+### A. Mechanic-card lifecycle/order
 
-Public d20 selected:
+Current live path appends the transient card before the Player/GM turn exists and does not replace/reposition it after acceptance. Current redraw path appends the historical card after GM.
+
+Required stable history is:
 
 ```text
 Player action
-→ stable UI-owned action_id
-→ accepted ActionAdjudication L3 seam
-→ NO_CHECK normal narrative
-   or
-→ CHECK_REQUIRED Program result
-→ public mechanic projection
-→ GM continuation
+→ mechanic card
+→ GM narrative
 ```
 
-UI does not call `conversation.begin_turn()` before the d20 Host and never computes dice truth.
+This same association must hold live, on retry, reopen retry, Continue and Load/Restore.
 
-### Retry / reopen
+Each durable `check_id` may have at most one visible mechanic projection at a time. Existing-check retry must not duplicate cards through both stage signal and synchronous streaming return.
 
-- failed/cancelled action with durable resolution reuses exact action_id/text;
-- no reroll because of Provider failure;
-- unresolved durable action after reopen must be surfaced as `重试行动`, not silently forgotten;
-- Public d20 accepted turns do not use legacy generic Regenerate in v0.1.
+### B. Unsupported action-resolution capability
 
-### Mechanic card
-
-Show Program-owned accepted check values, including intent, DC, modifier/reasons, stance, raw rolls, selected roll, total, outcome and failure stakes.
-
-The public result should become visible when resolution narrative begins, before GM continuation finishes. Historical accepted cards must rebuild on Continue / Load from durable Game-local state. NO_CHECK has no dice card.
-
----
-
-## 4. Protected boundaries
-
-G4-08B must not redesign:
-
-- Source / Managed Library;
-- Composition backend semantics;
-- Final Create;
-- Public d20 rules / RNG / durable identity;
-- persistence schema;
-- Provider protocol;
-- G5 world consequences.
-
-If a required UI-neutral L3 projection is missing, Kimi reports the blocker rather than editing lower-layer mechanism ownership.
-
-Player-facing resource import remains deferred to G8.
-
----
-
-## 5. Next progression
+A Game-local Expansion with:
 
 ```text
-G4-08B UI/integration — Kimi
+capability_slot = action_resolution
+capability_id != action_check.public_d20.v1
+```
+
+must fail visibly and gate Player input. It must not silently fall back to the legacy no-Expansion Narrative path.
+
+### C. Evidence correction
+
+The dedicated explicit-none Wizard/Review test is currently empty despite the evidence document claiming coverage. Add direct proof:
+
+```text
+explicit none
+→ Review shows 拓展 / 无
+→ frozen Expansion selection is empty with explicit-none semantics
+```
+
+Remove production debug probe output from the UI code.
+
+---
+
+## 5. Protected boundaries
+
+G4-08BC01 must not redesign or modify semantic ownership under:
+
+- `src/source/**`
+- `src/最终建局/**`
+- `src/persistence/**`
+- `src/行动判定/L0_公理层/**`
+- `src/行动判定/L1_器件层/**`
+- `src/行动判定/L2_流程层/**`
+- Provider protocol
+
+No click-to-roll, dice animation, attributes, combat, or new Expansion semantics.
+
+---
+
+## 6. Next progression
+
+```text
+G4-08BC01 — Kimi focused correction
 → GPT Independent Review
+→ if PASS: G4-08B PASS / CLOSED
 → G4-09 First Playable B
 → prepare Owner production Source Library with Public d20 exact package
 → Owner UAT B
 → remaining G4 gate work
 ```
 
-G4-08 is not yet Product PASS. Do not start G5 before the remaining G4 route / G4-GATE are complete.
+G4-08 is not yet Product PASS. Do not start G5 before remaining G4 route / G4-GATE are complete.
