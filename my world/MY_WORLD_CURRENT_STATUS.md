@@ -1,15 +1,15 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 8.4
+version: 8.5
 created: 2026-08-26
 updated: 2026-09-01
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-09UATB Owner Product UAT
-current_owner: OWNER
-parent_task: G4-09 First Playable B: Add Real Expansion
+current_task: G4-09R1M1 Runtime Model Settings / Multi-Provider Mechanism
+current_owner: Codex
+parent_task: G4-09R1 Runtime Model Settings v0.1
 semantic_owner: GPT
-owner_uat_required: true
+owner_uat_required: false
 context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
@@ -42,150 +42,159 @@ G4-08B Public d20 UI Integration      PASS / CLOSED
 G4-08BC01 UI Projection / Fail-Loud   PASS / CLOSED
 G4-09 First Playable B                ACTIVE
 G4-09P1 Owner UAT B Production Prep   PASS / CLOSED
-G4-09UATB Owner Product UAT           ACTIVE — OWNER
+G4-09UATB Owner Product UAT           HOLD
+G4-09R1 Runtime Model Settings v0.1   ACTIVE
+G4-09R1S0 Semantic Freeze             PASS / CLOSED — GPT
+G4-09R1M1 Backend Mechanism           ACTIVE — CODEX
+G4-09R1B1 Settings UI                 HOLD — KIMI
 G4-GATE                               NOT YET
 ```
 
-Current formal packet:
+Owner explicitly requested G4-09R1 before beginning UAT B. The previous UAT handoff is paused, not failed.
 
-`my-world/docs/tasks/G4-09UATB_OWNER_PRODUCT_UAT_TASK.md`
+Canonical decision:
 
-Product instructions:
+`my world/architecture/foundation/G4_RUNTIME_MODEL_SETTINGS_V0_1_DECISION.md`
 
-`my-world/docs/g4_09/G4-09UATB_Owner产品验收说明.md`
+Current implementation packet:
 
-Accepted production-prep review:
+`my-world/docs/tasks/G4-09R1M1_RUNTIME_MODEL_SETTINGS_MECHANISM_TASK.md`
 
-`my-world/docs/g4_09/G4-09P1_INDEPENDENT_REVIEW.md`
+Planned UI packet:
 
-Current execution owner: **OWNER**.  
-Semantic/review owner: **GPT**.
+`my-world/docs/tasks/G4-09R1B1_MODEL_SETTINGS_UI_TASK.md`
 
-No Codex/Kimi execution task is active.
-
----
-
-## 2. G4-09P1 result｜PASS / CLOSED
-
-Reviewed prep HEAD:
-
-`cf8b9cb998263ae44f6f8c2f145f78dd815ef176`
-
-Accepted preparation:
-
-- explicit opt-in preparation utility uses only the production SourceLibrary public API;
-- no manual managed-library filesystem copying;
-- exact Public d20 current/exact identity verified;
-- exact fingerprint: `e40bf3cb1059a4952d4230ae624fc3a0ba9bc705e279b13fef8cd1e795ca5ec1`;
-- observed production inventory: World 2 / Character 6 / Expansion 1;
-- prep utility has no Game/SQLite mutation path and records Owner games modified = no;
-- canonical `run-game.ps1 -ValidateExportOnly` freshness validation passed;
-- G4-08B smoke remained green;
-- no Provider-facing semantic change, so prior accepted real DeepSeek evidence remains applicable.
-
-The preparation is sufficient to hand off to Owner Product UAT.
+Current owner: **Codex**. Reviewer/semantic owner: **GPT**.
 
 ---
 
-## 3. G4-09 product gate
+## 2. Owner-requested model settings freeze
 
-Canonical target:
+The Main Menu will expose application-level runtime selection for:
 
 ```text
-accepted World + Character combination
-+ 1 real Expansion
-→ New Game
-→ exact binding
-→ real DeepSeek play
-→ observable Expansion effect
-→ Save / reopen / Continue
-→ Owner UAT B
+Models:
+- DeepSeek V4 Pro
+- DeepSeek V4 Flash
+- Kimi K3
+- Kimi K2.7
+
+Context ceiling:
+- 256K
+- 1M
+
+Requested reasoning:
+- Low
+- Medium
+- High
+- Max
 ```
 
-Gate question:
+Exact provider mapping:
 
-> **Does `判定与检定：公开 d20` genuinely add worthwhile gameplay rather than merely adding database records?**
+```text
+DeepSeek V4 Pro     → deepseek-v4-pro
+DeepSeek V4 Flash   → deepseek-v4-flash
+Kimi K3 / 256K      → k3-256k
+Kimi K3 / 1M        → k3
+Kimi K2.7 / 256K    → kimi-for-coding
+```
 
-Engineering PASS cannot answer this. Only the Owner verdict closes the product gate.
+Kimi K2.7 does not support 1M in this catalog and exposes fixed Thinking ON rather than the same graded effort selector.
+
+For DeepSeek V4 and Kimi K3:
+
+```text
+Low → low
+Medium → high
+High → high
+Max → max
+```
+
+Settings are application-local runtime preferences, not Source/Game canonical truth and not SQLite schema.
+
+Credentials remain local environment-only:
+
+```text
+DEEPSEEK_API_KEY
+KIMI_API_KEY
+```
+
+No automatic cross-provider fallback.
 
 ---
 
-## 4. Current task｜G4-09UATB Owner Product UAT
+## 3. Current backend task｜G4-09R1M1
 
-Launch only through the canonical launcher:
-
-`run-game.cmd`
-
-Preferred baseline:
+Codex must replace the hidden DeepSeek-only runtime routing with one validated closed profile seam used by all real Provider calls:
 
 ```text
-World      汉末三国：天下未定
-Entry      208 / 赤壁前夕
-Player     刘备
-NPC        孙权 (optional guaranteed)
-Expansion  判定与检定：公开 d20
+First Opening
+ordinary Narrative
+Public d20 adjudication
+Public d20 resolution narrative
+retry/reopen calls
 ```
 
-Owner validates:
+Backend owns:
 
-1. Review visibly lists Public d20.
-2. Real DeepSeek Opening completes.
-3. A genuinely risky action with meaningful failure stakes produces a public d20 mechanic card.
-4. GM continuation respects the Program-owned success/failure result.
-5. An ordinary/no-risk action does not unnecessarily roll.
-6. Save → Main Menu → Continue preserves the same Game/history/mechanic result.
-7. The mechanic adds worthwhile tension, clarity or gameplay value.
+- durable app-local settings/defaults;
+- profile catalog and compatibility validation;
+- fixed DeepSeek/Kimi endpoints and model-id derivation;
+- reasoning requested→effective mapping;
+- context ceiling metadata without pulling G7 forward;
+- selected-provider credential routing / fail-loud;
+- generic-enough OpenAI-compatible streaming seam for exactly these two Providers;
+- `.env.example` and canonical launcher credential allowlist as required;
+- real DeepSeek + Kimi evidence when local credentials/entitlement permit.
 
-Owner verdict:
+Real Kimi support may not be declared from stubs only. If local Kimi credential/entitlement is missing, Codex must report that exact blocker.
 
-```text
-PASS
-```
-
-or:
-
-```text
-FAIL
-<what felt wrong / what broke>
-```
+SQLite remains v4. Do not reopen Source, Final Create or Public d20 semantics.
 
 ---
 
-## 5. Frozen accepted boundaries
+## 4. Planned frontend task｜G4-09R1B1
 
-Do not reopen without concrete evidence:
+Kimi remains HOLD until GPT Independent Review passes M1.
 
-- Expansion Source / Managed Library exact generation mechanism;
-- Composition exact 0..N selection and slot compatibility;
-- Final Create exact materialization/provenance;
-- Public d20 Proposal freeze / Program RNG / result semantics;
-- CHECK_REQUIRED and NO_CHECK durable retry/restart identity;
-- G4-08B UI interaction and durable card reconstruction;
-- SQLite schema v4;
-- Provider protocol.
+Then Kimi owns only:
 
-No current engineering task may start while Owner UAT B is active.
+- Main Menu `模型设置` entry;
+- model/context/reasoning controls;
+- backend-derived compatibility/disabled states;
+- K2.7 256K-only + fixed-thinking explanation;
+- Medium→effective High disclosure;
+- non-secret DeepSeek/Kimi credential status;
+- Save/Cancel/reopen/restart UX;
+- responsive desktop layout.
+
+UI never owns model ids, endpoints, request-body reasoning fields or secrets.
 
 ---
 
-## 6. Next progression
+## 5. Context boundary
+
+The 256K/1M selection is a runtime context ceiling/capability choice. Existing G2-05 conservative assembly may use less than the selected ceiling.
+
+Do not introduce G7 summarization/retrieval/memory compression/tokenizer architecture here.
+
+---
+
+## 6. G4-09UATB hold
+
+The previous DeepSeek-only Owner UAT instructions are stale while G4-09R1 is active.
+
+Resume condition:
 
 ```text
-G4-09UATB Owner Product UAT
-→ explicit Owner PASS / FAIL
-→ GPT Decision Propagation
+G4-09R1M1 Codex
+→ GPT Independent Review
+→ G4-09R1B1 Kimi
+→ GPT Independent Review
+→ real Provider + Windows export freshness
+→ refresh UAT B instructions
+→ G4-09UATB ACTIVE — OWNER
 ```
 
-If Owner PASS:
-
-```text
-G4-09 First Playable B      PASS / CLOSED
-G4-08 Expansion Pack v0.1   Product PASS / CLOSED
-→ G4-10 Runtime Asset Resolution
-→ G4-11 Two Primary Asset Families Reality Test
-→ G4-GATE
-```
-
-If Owner FAIL, GPT classifies the concrete product seam and routes the smallest correction.
-
-G4-GATE is NOT YET. Do not start G5 before G4-GATE.
+G4-09 and G4-08 remain open. G4-GATE is NOT YET. Do not start G4-10 or G5.
