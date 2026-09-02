@@ -6,10 +6,10 @@ updated: 2026-09-02
 project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
-current_parent_task: G4-09 First Playable B
-current_execution_task: G4-09UATB Owner Product UAT — focused reliability/responsiveness retest
+current_parent_task: G4-10 Runtime Asset Resolution
+current_execution_task: G4-10M1 Runtime Asset Resolution Mechanism
 semantic_owner: GPT
-current_execution_owner: OWNER
+current_execution_owner: CODEX
 ---
 
 # my world｜GPT CONTEXT HANDOFF CURRENT
@@ -20,27 +20,43 @@ current_execution_owner: OWNER
 
 ```text
 G4-07 First Playable A                PASS / CLOSED
-G4-08 Expansion Pack v0.1             ACTIVE — gameplay value accepted, final gate pending
+G4-08 Expansion Pack v0.1             PASS / CLOSED
 G4-08M1 Public d20 Mechanism          PASS / CLOSED
 G4-08B Public d20 UI Integration      PASS / CLOSED
-G4-09 First Playable B                ACTIVE pending Owner final verdict
+G4-09 First Playable B                PASS / CLOSED
 G4-09R1 Runtime Model Settings v0.1   PASS / CLOSED
-G4-09UATBC01 Narrative Responsiveness PASS / CLOSED — streaming goal retained
+G4-09UATBC01 Narrative Responsiveness PASS / CLOSED
 G4-09UATBC02A d20 Protocol Decoupling PASS / CLOSED
 G4-09UATBC02B Failure Visibility      PASS / CLOSED AFTER C01
 G4-09UATBC02BC01 Persistence Visibility PASS / CLOSED
 G4-09UATBC02P1 Final Windows Freshness PASS / CLOSED
-G4-09UATB Owner Product UAT           ACTIVE — OWNER focused reliability/responsiveness retest
+G4-09UATB Owner Product UAT           PASS / CLOSED
+G4-10 Runtime Asset Resolution        ACTIVE
+G4-10S0 Semantic Freeze               PASS / CLOSED — GPT
+G4-10M1 Mechanism                     ACTIVE — CODEX
+G4-11 Two Primary Asset Families      NOT YET
 G4-GATE                               NOT YET
 ```
 
-Do not start G4-10/G5 before Owner final verdict and G4 gate closure.
+Do not start G4-11 before G4-10M1 passes GPT Independent Review. Do not start G5 before G4-GATE.
 
-## 2. Protected Owner / architecture findings
+## 2. Owner PASS closeout
 
-Owner already accepted Public d20 gameplay/mechanics. Do not reopen that question absent a concrete regression.
+On 2026-09-02 Owner returned:
 
-Canonical principle:
+```text
+PASS
+```
+
+for the final focused G4-09UATB reliability/responsiveness retest.
+
+Formal implementation record:
+
+`docs/g4_09/G4-09UATB_OWNER_PRODUCT_UAT_RESULT.md`
+
+This closes G4-09UATB, G4-09 First Playable B and G4-08 Expansion Pack v0.1. Do not reopen the already accepted Public d20 gameplay-value question absent a concrete regression.
+
+Protected runtime principle remains:
 
 ```text
 Model Freedom First
@@ -50,68 +66,74 @@ Visible Narrative First
 Canonical Commit Behind a Turn Finalize Barrier
 ```
 
-Accepted correction-02 truth:
+## 3. Roadmap after G4-09
 
-- mixed control+narrative Provider response is removed;
-- player-visible GM narrative is a separate free-form stream with no JSON/sentinel/exact-line/LF contract;
-- isolated control formatting gets at most one bounded recovery;
-- unresolved control fails soft to ordinary free-form narrative, creates no d20 check and no fake NO_CHECK marker;
-- valid CHECK_REQUIRED freezes Program result durably before result narrative;
-- no per-token canonical persistence;
-- stable action/check identity and no-reroll preserved;
-- selected Provider only / no fallback;
-- genuine terminal transport and credential failures show safe reasons + retry;
-- fail-soft degradation is not shown as `行动未完成`;
-- persistence/finalize hard failures map to safe-save wording + retry;
-- no raw secrets, Provider bodies, hidden reasoning, SQL/SQLite/path details are exposed.
+Canonical roadmap requires:
 
-## 3. G4-09UATBC02P1 Independent Review
+```text
+G4-10 Runtime Asset Resolution
+→ G4-11 Two Primary Asset Families Reality Test
+→ G4-GATE
+→ G5
+```
 
-Reviewed delivery:
+G4-10 roadmap outcome: bind portrait / scene / authored map to exact Source generation and prove safe path, missing fallback, Windows export, and real Godot load. It explicitly does not become a full map topology/travel/GIS/procedural-map system.
 
-- START_HEAD: `e8dfcdce26487da0ffd6967eea703b104ca907a2`
-- EVIDENCE_HEAD: `f8fea02b0c77ec4ea597b31b4c721825266cfc64`
+## 4. G4-10S0 canonical decision
 
-Formal review:
+Decision:
 
-`my-world/docs/g4_09/G4-09UATBC02P1_INDEPENDENT_REVIEW.md`
+`Vibe-Coding/my world/architecture/source/G4_RUNTIME_ASSET_RESOLUTION_V0_1_DECISION.md`
 
-Verdict: **PASS / CLOSED**.
+Key truth:
 
-Accepted proof:
+- immutable Source generation owns authored visual bytes;
+- Game resolution uses pinned exact generation, never Source current;
+- v0.1 consumers: Character optional portrait + World authored `portrait | scene | map`;
+- exact resolution states: `RESOLVED / ABSENT / UNAVAILABLE`;
+- optional canonical absence is not corruption;
+- missing/tampered/unsafe/un-decodable visual is unavailable and may use an application-owned neutral presentation fallback;
+- presentation fallback must never rewrite identity or use current/neighbor/other-package/network replacement;
+- safe package-local path rules remain mandatory;
+- real Godot image decode/load is required;
+- authored map image is not topology/travel/current-location/GIS truth;
+- no visual bytes copied into SQLite/Game canonical storage merely for display;
+- no G5 semantics or G6 full UI redesign in G4-10M1.
 
-- canonical Windows export was stale, rebuilt and verified from the final correction-02 source line;
-- immediate second validation confirmed current export and skipped rebuild;
-- current-head focused G4-08B/C02B/C02BC01 integration: 127 PASS / 0 FAIL;
-- SQLite schema remains v4;
-- production Source, Game Library, Owner Games, runtime model settings and `.env.local` remained unchanged;
-- P1 changed no product behavior.
+## 5. Current Codex task
 
-## 4. Current Owner retest
+Packet:
 
-Instructions:
+`my-world/docs/tasks/G4-10M1_RUNTIME_ASSET_RESOLUTION_MECHANISM_TASK.md`
 
-`my-world/docs/g4_09/G4-09UATB_Owner产品验收说明.md`
+Owner: **Codex**.
 
-Ask the Owner only for the narrow final product verdict:
+M1 must prove:
 
-- ordinary action reaches free-form narrative and visibly streams;
-- risky action still shows the durable d20 result before free-form result narrative;
-- model control formatting cannot dead-end play;
-- genuine terminal failures show safe reasons and remain retryable;
-- no duplicate turn/card/reroll;
-- Save/Continue intact.
+- exact Character portrait resolution + real Godot load;
+- exact World scene/map resolution + real Godot load;
+- ABSENT / UNAVAILABLE semantics;
+- unsafe path rejection;
+- broken/missing/tampered visual never silently substitutes another identity;
+- two generations of the same Source remain isolated after current changes;
+- no Source/Game/SQLite writeback solely for visual display;
+- canonical Windows export validation;
+- directly affected regressions and `git diff --check`.
 
-Do not ask the Owner to re-evaluate whether Public d20 is worthwhile.
+No real DeepSeek/Kimi call is required.
 
-## 5. After Owner verdict
+Return ceiling: **READY FOR INDEPENDENT REVIEW**.
 
-If Owner PASS:
+## 6. Review focus after Codex returns
 
-1. close G4-09UATB;
-2. close G4-09 First Playable B;
-3. close G4-08 Expansion Pack v0.1;
-4. refresh current roadmap/gate authority before shaping G4-10;
-5. do not start G5 before G4-GATE.
+Independent Review must inspect actual code/evidence, especially:
 
-If Owner FAIL, preserve accepted gameplay value and investigate only the concrete failed seam.
+1. whether resolver truly starts from exact generation rather than stable/current identity;
+2. whether old-generation visual bytes remain resolvable after new current generation is published;
+3. whether UNAVAILABLE can ever silently load current/neighbor/other-package bytes;
+4. whether safe path is reused consistently and no generic local-file authority leaks through L3;
+5. whether real Godot load proves decode, not only `FileAccess.file_exists`;
+6. whether presentation failures remain non-blocking without hiding non-visual Source integrity corruption;
+7. whether Codex avoided map topology/G5/G6 scope creep.
+
+If M1 PASS, close G4-10 and shape G4-11 from current roadmap/evidence. Do not start G5 before G4-GATE.
