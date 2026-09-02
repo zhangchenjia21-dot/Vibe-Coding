@@ -1,189 +1,192 @@
 # G4 Narrative Responsiveness v0.1 Decision
 
-Status: **FROZEN / OWNER-REQUESTED — C02 FRAMING AMENDMENT**
+Status: **FROZEN / OWNER-REQUESTED — MODEL-FREEDOM AMENDMENT**
 Date: 2026-09-02
 Semantic owner: **GPT**
 Applies now to: **G4-09UATB correction**
 Carries forward as a runtime ordering invariant for later G5/G6 work.
 
-## 1. Trigger / Product finding
+## 1. Primary product finding
 
-During real Owner UAT, the Owner accepted the gameplay value/semantics of `判定与检定：公开 d20`, but reported that visible GM narrative feels substantially too slow.
+The Owner accepted the gameplay value/semantics of `判定与检定：公开 d20`, then identified two experience problems during real play:
 
-Implementation inspection established two original facts:
+1. visible GM narrative must appear as soon as practical instead of waiting behind bookkeeping or whole-response buffering;
+2. the game must not become fragile because a model emitted harmless formatting variance or failed to satisfy an unnecessarily strict machine-readable text protocol.
 
-1. Ordinary Opening / ordinary Narrative already stream Provider `text_delta` into an in-memory provisional Conversation draft and UI; accepted Conversation persistence happens only after Provider completion. Per-token SQLite persistence is **not** the cause of slow visible text.
-2. The Public d20 Host buffered Provider output and only published narrative after the whole structured response / whole resolution-narrative call completed. C01 removed that whole-response buffering.
+Ordinary Opening/Narrative already stream into provisional in-memory Conversation and persist only after completion. Per-token SQLite/file writes are not the source of slow text. C01 removed Public d20 whole-response buffering, but its mixed control+narrative framing made model formatting a new blocking gate. That coupling is now rejected.
 
-A later focused Owner retest exposed an adjacent robustness defect: C01's physical-first-line JSON framing is too strict for harmless real-model formatting variance, and the Public d20 UI currently hides the concrete safe failure reason behind a generic unfinished-action state.
-
-This remains a core-loop responsiveness/reliability defect, not merely visual polish.
-
-## 2. Primary runtime principle
+## 2. Core principles
 
 ```text
+Model Freedom First
++
 Visible Narrative First
 +
 Canonical Commit Behind a Turn Finalize Barrier
 ```
 
-### INV-NR-01 — Visible narrative is the foreground critical path
+### INV-NR-01 — Narrative channel stays free-form
 
-Once a Provider has produced player-visible narrative text that is semantically safe to expose, the runtime should project it to the Narrative UI as soon as practical. Persistence, indexing, future character/event/world derivation, or other bookkeeping must not intentionally hold the whole narrative until terminal Provider completion.
+Player-visible GM narrative must be ordinary natural-language text. Do not require the narrative stream itself to contain JSON headers, sentinels, Markdown contracts, exact physical-line framing, or other machine protocol that can make harmless model formatting errors block play.
 
-### INV-NR-02 — Visible draft may be provisional
+### INV-NR-02 — Minimize blocking gates
 
-Streaming text is allowed to be visible before it becomes authoritative durable truth. Until finalize succeeds, it remains a provisional draft. Cancel/failure/persistence failure must preserve the existing rule that partial draft is not accepted into future Context.
+A model-format/parser gate is not allowed merely for implementation convenience or call-count optimization. Hard blocking gates are reserved for facts that must be authoritative before play can safely continue, such as an exact Program-owned d20 result, persistence integrity, or an unsupported capability that would corrupt semantics.
 
-### INV-NR-03 — No per-token canonical writes
+Recoverable model-format/control failures must be absorbed by the orchestration layer whenever possible rather than surfaced as a dead-end turn.
 
-Provider deltas must not trigger SQLite/world-state/file writes per token or per small text chunk. Streaming accumulates in memory; canonical persistence is coalesced at semantic boundaries.
+### INV-NR-03 — Visible narrative is the foreground critical path
 
-### INV-NR-04 — Turn Finalize Barrier
+Once narrative is semantically safe to expose, stream it to the existing provisional Conversation/UI path immediately. Persistence, indexing, future character/event/world derivation, or other bookkeeping must not intentionally hold the full narrative until terminal completion.
 
-The next player action must not enter Provider Context until the previous turn's authoritative effects required by that turn have completed their durable commit.
+### INV-NR-04 — Visible draft may be provisional
 
-Conceptually:
+Streaming text may be visible before authoritative durable acceptance. Cancel/failure/persistence failure keeps partial draft out of future Context.
+
+### INV-NR-05 — No per-token canonical writes
+
+Provider deltas stay in memory. Do not write SQLite/world/files per token or small chunk. Canonical persistence occurs at semantic boundaries.
+
+### INV-NR-06 — Turn Finalize Barrier
+
+The next player action may not enter Provider Context until the previous turn's authoritative effects required by that turn have durably finalized.
+
+### INV-NR-07 — Future semantic background lane
+
+Future G5/G6 character/event/relationship/location/world derivation should be eligible to run while the player reads already-visible narrative when safe, but must converge before the next turn depends on it. This decision does not implement those systems or a generic job queue in G4.
+
+## 3. Public d20 control and narrative must be decoupled
+
+The mixed C01 protocol (`control JSON + raw narrative in one Provider response`) is superseded.
+
+### Control lane
+
+The d20 Host may use a short, isolated adjudication request to determine only:
 
 ```text
-visible narrative stream
-→ Provider terminal completion
-→ validate/coalesce authoritative turn effects
-→ durable commit(s) / acceptance markers
-→ Turn Finalize Barrier PASS
-→ next player action becomes eligible
+NO_CHECK
+or
+CHECK_REQUIRED + proposal
 ```
 
-This prevents responsiveness optimization from creating eventual-consistency gameplay where the next turn sees stale world/character/event truth.
+This lane is not player-visible narrative. Its output may be structured because it represents mechanics, not prose. However, control-format handling must be resilient and bounded:
 
-### INV-NR-05 — Future semantic background lane
+- prefer provider-native structured response support when already available through the current Provider seam, but do not redesign the Provider architecture solely for this task;
+- otherwise parse the smallest isolated structured response rather than coupling structure to GM prose;
+- harmless whitespace/pretty-print formatting must not create product failure;
+- one bounded automatic repair/retry is allowed for malformed control output;
+- do not loop indefinitely or create a generic retry framework;
+- do not expose raw control payloads, prompts, hidden reasoning, keys or Authorization to the player.
 
-When G5/G6 later introduce character changes, event changes, relationship/location/world updates, derived indexes, or similar semantic work, those computations should be eligible to run while the player is reading already-visible narrative **when safe**, but they must converge before the Turn Finalize Barrier if the next turn depends on them.
+### Narrative lane
 
-This decision does **not** implement those future systems in G4 and does not authorize a generic job framework now.
+GM narrative is a separate free-form request/stream:
 
-## 3. Public d20 ordering remains authoritative
+- no JSON framing requirement;
+- no sentinel requirement;
+- no exact first-line contract;
+- stream Provider content deltas directly into provisional Conversation as ordinary narrative;
+- narrative persistence remains behind Provider completion/finalize, never per token.
 
-The accepted no-reroll / stable-action semantics remain unchanged.
+### NO_CHECK
 
-For `CHECK_REQUIRED`:
+The prior optimization requiring exactly one Provider call is **superseded**. Reliability and model freedom are more important than minimizing call count.
+
+Normal path:
 
 ```text
-short adjudication control response
-→ validate proposal
-→ Program RNG
-→ durable exact check result
-→ start result-narrative Provider call
-→ stream result narrative visibly as deltas arrive
+short adjudication control
+→ NO_CHECK
+→ free-form narrative request
+→ visible narrative streaming
+→ durable Conversation/finalize
+```
+
+If the control lane still cannot produce a valid decision after its bounded recovery attempt, the runtime must **fail-soft rather than dead-end the turn**:
+
+```text
+control unavailable/unparseable
+→ transparently degrade this action to the ordinary no-Expansion natural-language narrative path
+→ no d20 roll is created
+→ show at most a concise non-blocking notice that the optional check mechanic was skipped for this action
+→ continue play
+```
+
+This degradation must never be silent in durable mechanic semantics: no fake check, no fake NO_CHECK durable marker pretending adjudication succeeded, and no provider fallback to another model.
+
+### CHECK_REQUIRED
+
+When the control lane produces a valid CHECK_REQUIRED proposal, preserve the accepted authoritative ordering:
+
+```text
+validated proposal
+→ Program RNG/outcome
+→ durable exact check
+→ free-form result-narrative request
+→ visible result narrative streaming
 → durable Conversation acceptance
-→ durable narrative_accepted marker
+→ narrative_accepted marker
 → Turn Finalize Barrier PASS
 ```
 
-The exact d20 result must remain durable **before** result narrative begins. That short write is intentionally foreground because it prevents reroll/reinterpretation after crash/retry.
+The exact d20 result remains durable before result narrative begins. Retry/reopen must reuse the exact same durable check and never reroll.
 
-For `NO_CHECK`, preserve **one Provider call** and no-dice semantics. The control protocol is a semantically framed JSON object followed by raw narrative body:
+## 4. Failure behavior
 
-```text
-optional leading JSON framing whitespace
-→ first complete JSON object:
-  {"decision":"NO_CHECK","reason":"..."}
-→ optional framing whitespace after the object
-→ raw player-visible narrative body, streamed incrementally
-```
+The player must not be trapped merely because model control formatting was imperfect.
 
-`CHECK_REQUIRED` uses the same first-complete-object framing but has no narrative body:
+- recoverable control-format failures use bounded internal recovery, then fail-soft ordinary narrative degradation;
+- Provider/network/credential failures may still stop the current Provider request because no narrative can be produced, but the UI must show a concise safe reason and keep the stable retry path available;
+- persistence failures remain hard failures because accepting a turn without durable truth would corrupt history;
+- unsupported authored capability remains fail-loud rather than silently changing rules.
 
-```text
-{"decision":"CHECK_REQUIRED","proposal":{...}}
-```
+A generic `行动未完成` message may accompany recovery controls, but it must not be the only player-visible diagnostic for a terminal failure.
 
-### Framing requirements after C02 amendment
+## 5. Latency observability
 
-- physical line boundaries are **not** semantic authority;
-- the parser must find the first complete JSON object incrementally across arbitrary Provider/SSE chunk boundaries and across pretty-printed physical lines;
-- leading whitespace before the JSON object is allowed;
-- JSON object completeness must be determined structurally, including nested objects, quoted strings and escapes; braces inside strings must not terminate the object;
-- the first non-whitespace framing character must still begin the JSON object; Markdown fences, natural-language preamble, or arbitrary prose before the object remain fail-loud and are not guessed through;
-- the complete control object must validate exact branch fields/semantics before any NO_CHECK narrative is exposed;
-- after a validated NO_CHECK control object, framing whitespace may be consumed before the first narrative content; narrative then streams progressively and is accumulated in memory for exact final persistence;
-- after a validated CHECK_REQUIRED object, only trailing whitespace is allowed; any non-whitespace body remains a protocol error;
-- on Provider completion, NO_CHECK narrative must be non-empty;
-- exact NO_CHECK resolution (including the finalized narrative) is persisted once after Provider completion and before Conversation durable acceptance;
-- if Provider fails before completion, no completed NO_CHECK resolution exists and the provisional Conversation attempt fails/cancels;
-- if exact NO_CHECK resolution was durably written but later Conversation/marker acknowledgement fails, retry/reopen reuses that exact durable narrative and does not ask Provider to invent a replacement.
-
-The parser may be tolerant of harmless formatting, but it must never silently reinterpret ambiguous or malformed control content. If the same real-model framing seam still fails after correction-02, stop adding format special cases and redesign the control protocol.
-
-## 4. Provisional Conversation ownership for d20 streaming
-
-Public d20 Host may begin/retry the current provisional Conversation turn before the narrative Provider call finishes so that deltas can flow through the existing Conversation/UI projection.
-
-Requirements:
-
-- one player action still maps to one stable action identity;
-- failed/cancelled provisional attempts never become durable accepted Conversation;
-- retry in the same process must reuse the existing unaccepted Conversation turn rather than append duplicate player turns;
-- reopen after process loss reconstructs only durable truth and resumes from durable check / durable NO_CHECK state as already specified;
-- accepted ordering remains `Player → visible mechanic card when applicable → GM narrative`.
-
-## 5. Latency and failure observability
-
-The runtime must retain non-secret, non-persistent monotonic timing evidence sufficient to distinguish Provider latency from application-added buffering.
-
-At minimum measure or expose for tests/evidence:
+Keep non-secret, non-persistent monotonic timing sufficient to distinguish:
 
 ```text
-request_started
+control_request_started
+control_completed / control_recovery
+narrative_request_started
 first_provider_content_delta
 first_visible_narrative_delta
 provider_completed
 finalize_completed / turn_ready
 ```
 
-For CHECK_REQUIRED also distinguish adjudication control completion, durable check completion, and resolution-narrative request start.
+Do not log prompts, narrative content, hidden reasoning, credentials or Authorization.
 
-Do not log API keys, Authorization headers, prompts, raw hidden reasoning, or full player/GM content as performance telemetry.
-
-No fixed production SLA is frozen in v0.1 because Provider/model/network latency varies. The required structural proof is that, when a narrative response arrives in delayed chunks, `first_visible_narrative_delta` occurs before `provider_completed` rather than only after it.
-
-Public d20 terminal failures must also produce a safe player-visible reason category. The UI may map stable public failure codes to concise messages, but must not display raw Provider payloads, prompts, secrets, Authorization, hidden reasoning, or unbounded transport bodies. A generic unfinished-action recovery state may remain, but it must not be the only diagnostic visible to the player.
+No fixed Provider SLA is frozen. Application acceptance is structural: once free-form narrative content begins arriving, it must become visible before Provider completion.
 
 ## 6. Protected accepted semantics
 
-This correction must not change:
+Do not change:
 
 - model profile/catalog/settings semantics;
 - selected-provider-only credential routing / no fallback;
 - Source / Final Create ownership;
-- SQLite production schema v4;
-- Public d20 Program-owned RNG/outcome;
-- no nat-1/nat-20 special rule;
-- stable action/check identity and no-reroll behavior;
-- no-Expansion G4-07 natural-language path;
-- current Context Assembly / G7 deferrals;
-- Game Library / Save / Restore semantics.
+- SQLite schema v4;
+- Program-owned RNG/outcome and no nat-1/nat-20 special rule;
+- stable action/check identity and no-reroll;
+- Game Library / Save / Restore semantics;
+- no-Expansion G4-07 natural-language behavior except reuse as the explicit fail-soft degradation path;
+- current G7 deferrals.
 
-## 7. Explicit non-scope
+## 7. Correction-budget rule
 
-Do not use this correction to implement:
+C01's progressive-streaming goal remains accepted, but its mixed control+narrative protocol is superseded because real Owner UAT exposed it as a fragile gate.
 
-- G5 character/world/event semantic mutation systems;
-- generic background worker/job queue architecture;
-- long-session summarization/retrieval/tokenizer work;
-- speculative event sourcing redesign;
-- UI redesign unrelated to safe failure visibility;
-- Provider timeout/watchdog policy unless a separate reproduced blocker requires it.
+Correction-02 is therefore a **protocol decoupling redesign**, not another accumulation of parser special cases. If the decoupled control lane itself still repeatedly fails in real Provider testing, stop adding format rules and revisit whether Public d20 adjudication should use a different program/provider capability.
 
 ## 8. Gate effect
 
-The Owner's positive finding that Public d20 gameplay itself is worthwhile remains preserved. The focused Owner retest is paused for correction-02 after the real product hit an unfinished action under the C01 framing protocol.
-
 ```text
-G4-09UATBC01 Narrative Responsiveness      PASS / CLOSED
+G4-09UATBC01 Narrative Responsiveness      PASS / CLOSED — streaming goal retained
 G4-09UATB Owner Product UAT               HOLD — CORRECTION-02
-G4-09UATBC02A Framing Robustness           ACTIVE — CODEX
+G4-09UATBC02A d20 Protocol Decoupling      ACTIVE — CODEX
 G4-09UATBC02B Failure Visibility           HOLD — KIMI
 ```
 
-After both engineering corrections pass Independent Review and Windows/product freshness is current, Owner UAT resumes with a focused check of progressive narrative, reliable action completion/retry, and safe visible failure feedback.
+After both corrections pass Independent Review and Windows/product freshness is current, Owner UAT resumes only as a focused reliability/responsiveness retest. The previously accepted d20 gameplay value is not reopened.
