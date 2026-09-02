@@ -1,15 +1,15 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 9.7
+version: 9.8
 created: 2026-08-26
 updated: 2026-09-02
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-09UATBC02P1 Final Windows Freshness / Owner Retest Readiness
-current_owner: CODEX
-parent_task: G4-09UATB Owner Product UAT
+current_task: G4-09UATB Owner Product UAT — focused reliability/responsiveness retest
+current_owner: OWNER
+parent_task: G4-09 First Playable B
 semantic_owner: GPT
-owner_uat_required: false
+owner_uat_required: true
 context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
@@ -40,8 +40,8 @@ G4-09UATBC01 Narrative Responsiveness PASS / CLOSED — streaming goal retained
 G4-09UATBC02A d20 Protocol Decoupling PASS / CLOSED
 G4-09UATBC02B Failure Visibility      PASS / CLOSED AFTER C01
 G4-09UATBC02BC01 Persistence Visibility PASS / CLOSED
-G4-09UATBC02P1 Final Windows Freshness ACTIVE — CODEX
-G4-09UATB Owner Product UAT           HOLD — awaiting final current-head Windows freshness
+G4-09UATBC02P1 Final Windows Freshness PASS / CLOSED
+G4-09UATB Owner Product UAT           ACTIVE — OWNER focused reliability/responsiveness retest
 G4-GATE                               NOT YET
 ```
 
@@ -51,7 +51,7 @@ Do not start G4-10 or G5 before final Owner verdict and G4 gate closure.
 
 The Owner already accepted Public d20 gameplay/mechanics. Preserve that finding.
 
-Correction-02 now has both implementation/UI pieces accepted by GPT Independent Review:
+Correction-02 is engineering-complete:
 
 - C02A removed the fragile mixed machine-control + GM-prose protocol;
 - player-visible narrative is free-form and progressively streamed;
@@ -60,31 +60,31 @@ Correction-02 now has both implementation/UI pieces accepted by GPT Independent 
 - valid CHECK_REQUIRED keeps Program RNG/outcome durable before result narrative;
 - C02B surfaces safe terminal connection/credential reasons and non-blocking degradation notice;
 - C02BC01 completes safe persistence/finalize hard-failure visibility;
+- C02P1 rebuilt/verified the canonical Windows Owner export from the final correction-02 source head and current-head focused integration is 127 PASS / 0 FAIL;
 - no new model-format gate, provider fallback, retry framework, or persistence schema change was introduced.
 
-Formal completion review:
+Formal freshness review:
 
-`my-world/docs/g4_09/G4-09UATBC02BC01_INDEPENDENT_REVIEW.md`
+`my-world/docs/g4_09/G4-09UATBC02P1_INDEPENDENT_REVIEW.md`
 
-## 3. Current task｜G4-09UATBC02P1
+## 3. Current task｜G4-09UATB
 
-Owner: **Codex**
+Owner: **OWNER**
 
-Packet:
+Instructions:
 
-`my-world/docs/tasks/G4-09UATBC02P1_FINAL_WINDOWS_FRESHNESS_TASK.md`
+`my-world/docs/g4_09/G4-09UATB_Owner产品验收说明.md`
 
-Reason: C02B/C02BC01 modified `src/ui/叙事对话视图.gd` after the last Windows export freshness proof. Before Owner retest, the canonical Owner build must be rebuilt/validated from the current final source head.
+This is a narrow reliability/responsiveness retest only:
 
-Required work is validation-only:
+- ordinary action reaches free-form narrative and visibly streams;
+- risky action still shows durable d20 result before free-form result narrative;
+- model control formatting cannot dead-end play;
+- genuine terminal failures show safe reasons and remain retryable;
+- no duplicate turn/card/reroll;
+- Save/Continue intact.
 
-- `.\run-game.ps1 -ValidateExportOnly` on current main;
-- focused G4-08B/C02B/C02BC01 UI integration;
-- SQLite v4 confirmation;
-- Owner Games / Source / Runtime Model Settings / credentials untouched;
-- `git diff --check` clean.
-
-No real Provider rerun is required solely for this task because C02B/C02BC01 changed only UI projection; accepted C02A real DeepSeek/Kimi evidence remains current for Provider semantics.
+The Owner is not asked to re-prove whether Public d20 gameplay is worthwhile.
 
 ## 4. Frozen runtime principle
 
@@ -98,16 +98,10 @@ Canonical Commit Behind a Turn Finalize Barrier
 
 Future G5/G6 work must preserve this invariant. Do not add model-format gates for implementation convenience.
 
-## 5. After freshness
+## 5. After Owner verdict
 
-If G4-09UATBC02P1 passes GPT Independent Review:
+If Owner returns PASS, GPT may close G4-09UATB, G4-09 First Playable B and G4-08 Expansion Pack v0.1, then inspect current roadmap authority and the G4 gate before shaping G4-10.
 
-```text
-G4-09UATB ACTIVE — OWNER focused reliability/responsiveness retest
-```
-
-The Owner will not be asked to re-prove whether Public d20 gameplay is worthwhile.
-
-Only after Owner final PASS may GPT close G4-09UATB, G4-09 First Playable B and G4-08 Expansion Pack v0.1, then inspect roadmap authority before shaping G4-10.
+If Owner returns FAIL, preserve the already accepted gameplay-value finding and address only the concrete regression/failure seam.
 
 Do not start G5 before G4-GATE.
