@@ -1,13 +1,13 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 9.9
+version: 10.0
 created: 2026-08-26
 updated: 2026-09-02
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-10M1 Runtime Asset Resolution Mechanism
+current_task: G4-11P1 Two-Family Reality Prep / Engineering Proof
 current_owner: CODEX
-parent_task: G4-10 Runtime Asset Resolution
+parent_task: G4-11 Two Primary Asset Families Reality Test
 semantic_owner: GPT
 owner_uat_required: false
 context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
@@ -36,42 +36,122 @@ G4-08M1 Public d20 Mechanism          PASS / CLOSED
 G4-08B Public d20 UI Integration      PASS / CLOSED
 G4-09 First Playable B                PASS / CLOSED
 G4-09R1 Runtime Model Settings v0.1   PASS / CLOSED
-G4-09UATBC01 Narrative Responsiveness PASS / CLOSED
-G4-09UATBC02A d20 Protocol Decoupling PASS / CLOSED
-G4-09UATBC02B Failure Visibility      PASS / CLOSED AFTER C01
-G4-09UATBC02BC01 Persistence Visibility PASS / CLOSED
-G4-09UATBC02P1 Final Windows Freshness PASS / CLOSED
 G4-09UATB Owner Product UAT           PASS / CLOSED
-G4-10 Runtime Asset Resolution        ACTIVE
-G4-10S0 Semantic Freeze               PASS / CLOSED — GPT
-G4-10M1 Mechanism                     ACTIVE — CODEX
-G4-11 Two Primary Asset Families      NOT YET
+G4-10 Runtime Asset Resolution        DEFERRED / MOVED TO G6
+G4-10S0 Semantic Freeze               HISTORICAL DESIGN NOTE / DEFERRED
+G4-10M1 Mechanism                     SUPERSEDED / DO NOT EXECUTE
+G4-11 Two Primary Asset Families      ACTIVE
+G4-11P1 Engineering Reality Prep      ACTIVE — CODEX
+G4-11UAT Owner Reality Test           NOT YET
 G4-GATE                               NOT YET
 ```
 
-Do not start G4-11 before G4-10M1 passes GPT Independent Review. Do not start G5 before G4-GATE.
+Do not start G5 before G4-11 engineering review + Owner Reality UAT + G4-GATE.
 
-## 2. Owner UAT closure
+## 2. Owner route decision｜Visual work deferred
 
-On 2026-09-02 the Owner returned the final G4-09UATB verdict:
+On 2026-09-02 the Owner explicitly decided that current portrait / scene / authored-map assets are not mature and visual integration is not part of the present core experience.
 
-```text
-PASS
-```
+Canonical decision:
 
-Implementation record:
+`architecture/source/G4_VISUAL_ASSET_DEFERRAL_TO_G6_DECISION.md`
 
-`my-world/docs/g4_09/G4-09UATB_OWNER_PRODUCT_UAT_RESULT.md`
-
-This closes:
+Result:
 
 ```text
-G4-09UATB Owner Product UAT
-G4-09 First Playable B
-G4-08 Expansion Pack v0.1
+G4-10 Runtime Asset Resolution
+DEFERRED / MOVED TO G6
+
+G4-10M1
+SUPERSEDED / DO NOT EXECUTE
 ```
 
-The previously accepted Public d20 gameplay-value finding remains authoritative. The final correction chain also preserves:
+This is not an engineering failure. It is a critical-path simplification following `Vertical before platform / Consumer before infrastructure`.
+
+Runtime visual asset resolution is removed from G4-GATE. G5 semantics must remain independent of portrait/scene/map presentation.
+
+## 3. Current route
+
+Canonical roadmap v3.3:
+
+```text
+G4-09 PASS / CLOSED
+↓
+G4-11 Two Primary Asset Families Reality Test
+↓
+G4-GATE
+↓
+G5 World Semantics & GM Runtime
+```
+
+Visual runtime work re-enters in G6 only after a real presentation consumer exists and the exact consumer semantics are re-audited.
+
+## 4. G4-11 product decision
+
+Canonical decision:
+
+`architecture/source/G4_TWO_FAMILY_REALITY_TEST_V0_1_DECISION.md`
+
+Fixed comparison:
+
+```text
+Family A
+World:      汉末三国：天下未定
+Entry:      208｜赤壁前夕
+Player:     刘备
+Expansion:  none
+
+Family B
+World:      埃瑟维亚：诸界余辉
+Entry:      t0-1287-ovista
+Player:     莉维娅·塞兰
+Expansion:  none
+```
+
+Use the same current selected runtime model profile for both engineering real-provider verticals. Do not alter Owner persisted model preference solely for the comparison.
+
+Product question:
+
+> Can the same Host sustain two genuinely different, Source-grounded RPG worlds without cross-family leakage or generic-chat convergence?
+
+No visual asset acceptance exists in G4-11.
+
+## 5. Current task｜G4-11P1
+
+Owner: **Codex**
+
+Packet:
+
+`my-world/docs/tasks/G4-11P1_TWO_FAMILY_REALITY_PREP_TASK.md`
+
+This is a validation / UAT-support task. No production behavior change is expected.
+
+Required proof:
+
+- task-owned exact full-fidelity Source installs for both families;
+- independent Game IDs / independent SQLite;
+- real Provider Opening + accepted continuations for each family using the same effective selected model profile;
+- Save / close / reopen / Continue for each;
+- A→B→A switch isolation;
+- no cross-family Source/Context leakage;
+- exact semantic Source ancestry and bounded Source-update isolation;
+- no visual dependency;
+- Owner production Source/Games/settings/credentials untouched;
+- directly affected regressions + `git diff --check`.
+
+Return ceiling: **READY FOR INDEPENDENT REVIEW**.
+
+If a real production blocker requires runtime behavior changes, Codex must stop and return the blocker; it must not silently fix product behavior inside this validation task.
+
+## 6. Owner UAT after P1
+
+After GPT Independent Review PASS, activate `G4-11UAT` for a short Owner comparison of the two real production Games.
+
+Owner judges only whether the two play experiences are materially different as RPG worlds and whether Save/switch/Continue remains coherent.
+
+Owner is **not** asked to judge portrait/scene/map or visual polish.
+
+## 7. Protected runtime principle
 
 ```text
 Model Freedom First
@@ -81,63 +161,17 @@ Visible Narrative First
 Canonical Commit Behind a Turn Finalize Barrier
 ```
 
-## 3. Roadmap authority after Owner PASS
+G4-11 must not add prose-format gates, genre keyword validators, output classifiers, or scripted beats to force differentiation.
 
-Canonical roadmap v3.2 still requires:
+## 8. After G4-11
 
-```text
-G4-10 Runtime Asset Resolution
-→ G4-11 Two Primary Asset Families Reality Test
-→ G4-GATE
-→ only then G5
-```
-
-G4-10 is explicitly bounded to exact-generation portrait / scene / authored-map runtime resolution. It is not a map topology/travel/GIS/procedural-map task.
-
-## 4. G4-10 Semantic Freeze
-
-Canonical decision:
-
-`my world/architecture/source/G4_RUNTIME_ASSET_RESOLUTION_V0_1_DECISION.md`
-
-Accepted S0 truth:
-
-- authored visual bytes remain owned by immutable Managed Source generations;
-- a Game resolves visuals from its pinned exact Source generation, never Source current;
-- Character optional portrait and World authored `portrait | scene | map` are the v0.1 consumer set;
-- exact resolution distinguishes `RESOLVED / ABSENT / UNAVAILABLE`;
-- presentation may fail-soft with an application-owned neutral placeholder/omission, but identity must never fall back to current/neighbor/another Source/network replacement;
-- existing safe package-path boundary remains mandatory;
-- real Godot image load is required; file existence alone is not proof;
-- authored map is presentation/reference only, not topology/travel/current-location/GIS truth;
-- no second Game-owned canonical visual byte store and no SQLite schema change solely for display;
-- G4-10 does not build G6 visual redesign or G5 semantics.
-
-## 5. Current task｜G4-10M1
-
-Owner: **Codex**
-
-Implementation packet:
-
-`my-world/docs/tasks/G4-10M1_RUNTIME_ASSET_RESOLUTION_MECHANISM_TASK.md`
-
-Primary engineering outcome:
+If G4-11P1 passes Independent Review and G4-11UAT passes Owner Product Value Acceptance:
 
 ```text
-exact immutable Source generation
-+ declared portrait / scene / map visual
-→ safe runtime resolution
-→ real Godot image load
+G4-11 PASS / CLOSED
+→ G4-GATE PASS
+→ close G4
+→ shape G5 route
 ```
 
-Required evidence includes exact-generation isolation across Source updates, path safety, ABSENT/UNAVAILABLE handling, real Godot 4.7.2 loading, canonical Windows export validation, no Owner production data mutation, and directly affected regressions.
-
-No real Provider call is required for G4-10M1.
-
-Return ceiling: **READY FOR INDEPENDENT REVIEW**.
-
-## 6. Next after M1
-
-If G4-10M1 passes GPT Independent Review, close G4-10 and shape/activate G4-11 Two Primary Asset Families Reality Test from the current roadmap and real visual-resolution evidence.
-
-G4-11 is the next product reality pressure. G4-GATE remains after G4-11. Do not start G5 early.
+Do not start G5 early.
