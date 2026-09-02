@@ -1,12 +1,12 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 9.4
+version: 9.5
 created: 2026-08-26
 updated: 2026-09-02
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-09UATBC02A Public d20 Protocol Decoupling / Model-Freedom Correction
-current_owner: CODEX
+current_task: G4-09UATBC02B Public d20 Failure Visibility / Recoverable UX
+current_owner: KIMI
 parent_task: G4-09UATB Owner Product UAT
 semantic_owner: GPT
 owner_uat_required: false
@@ -43,8 +43,8 @@ G4-09R1B1 Settings UI                 PASS / CLOSED AFTER CORRECTION-01
 G4-09R1P1 Final Integration/Freshness PASS / CLOSED
 G4-09UATBC01 Narrative Responsiveness PASS / CLOSED — streaming goal retained
 G4-09UATB Owner Product UAT           HOLD — CORRECTION-02
-G4-09UATBC02A d20 Protocol Decoupling ACTIVE — CODEX
-G4-09UATBC02B Failure Visibility      HOLD — KIMI
+G4-09UATBC02A d20 Protocol Decoupling PASS / CLOSED
+G4-09UATBC02B Failure Visibility      ACTIVE — KIMI
 G4-GATE                               NOT YET
 ```
 
@@ -54,16 +54,15 @@ Do not start G4-10 or G5 while correction-02 is active.
 
 The Owner has already accepted the Public d20 gameplay/mechanic itself. That product finding remains authoritative.
 
-C01 fixed application-added whole-response narrative buffering. A later real focused retest then hit a new failure: an action ended in generic `行动未完成` with no narrative.
+C01 fixed application-added whole-response narrative buffering. The subsequent real focused retest exposed that C01's mixed machine-control + GM-prose response was too fragile and that the UI hid the specific safe failure reason.
 
-Independent diagnosis found two adjacent seams:
+C02A has now passed GPT Independent Review. The mixed protocol is removed rather than patched.
 
-1. C01 coupled machine control and GM prose into one Provider response (`control JSON + narrative body`) and therefore made model formatting a blocking gameplay gate;
-2. Public d20 UI did not surface the safe terminal failure reason even though a mapper already existed.
+Formal review:
 
-The mixed protocol is now superseded rather than patched with more parser exceptions.
+`my-world/docs/g4_09/G4-09UATBC02A_INDEPENDENT_REVIEW.md`
 
-## 3. Frozen runtime principles
+## 3. Accepted runtime principles
 
 Canonical decision:
 
@@ -79,67 +78,54 @@ Visible Narrative First
 Canonical Commit Behind a Turn Finalize Barrier
 ```
 
-Implications:
+Accepted C02A truth:
 
-- player-visible GM narrative must remain free-form natural language;
-- do not require JSON/sentinel/exact-line framing in the narrative stream;
-- do not add model-format gates merely to save Provider calls;
-- hard gates are reserved for authoritative mechanics/persistence/capability integrity;
-- Public d20 mechanics control is separated from narrative;
-- the old hard requirement `NO_CHECK = exactly one Provider call` is superseded;
-- isolated control output gets at most one bounded internal recovery attempt;
-- if control still cannot be resolved, this action fails soft to the ordinary no-Expansion natural-language narrative path rather than dead-ending play;
-- fail-soft degradation creates no fake d20 check and no fake successful-adjudication durable marker;
-- CHECK_REQUIRED exact Program result remains durable before free-form result narrative;
-- narrative still streams provisionally with no per-token canonical persistence;
-- next action stays behind the Turn Finalize Barrier until required authoritative effects finalize.
+- player-visible GM narrative is free-form natural language;
+- narrative has no JSON/sentinel/exact-line/physical-LF machine contract;
+- Public d20 mechanics control and narrative are separate selected-provider requests;
+- the old `NO_CHECK = exactly one Provider call` optimization is superseded;
+- isolated control accepts harmless whitespace and pretty-print formatting;
+- malformed control gets at most one bounded recovery attempt;
+- if control remains unresolved, the action continues through ordinary free-form degraded narrative instead of terminal unfinished state;
+- degraded narrative creates no d20 check and no fake successful NO_CHECK durable marker;
+- valid CHECK_REQUIRED still performs Program RNG/outcome and durable exact check before result narrative starts;
+- narrative streams provisionally with no per-token canonical persistence;
+- partial visible draft on fail/cancel is excluded from future Context;
+- stable action/check identity, no-reroll and lost-ACK/reopen guarantees remain intact;
+- selected Provider only; no cross-provider fallback;
+- real task-owned DeepSeek V4 Pro NO_CHECK and Kimi K3 CHECK_REQUIRED paths both completed without recovery/degradation;
+- Windows export was rebuilt/verified against the C02A checkout;
+- SQLite schema remains v4.
 
-Future G5/G6 character/event/world semantic calculations may run behind visible narrative when safe, but must converge before the next turn depends on them. This G4 work does not implement those systems or a generic background worker.
+Future G5/G6 semantic work must continue to respect Model Freedom First and the Turn Finalize Barrier; this G4 correction does not implement a background-job framework.
 
-## 4. Current task｜G4-09UATBC02A
+## 4. Current task｜G4-09UATBC02B
 
-Owner: **Codex**
+Owner: **Kimi**
 
 Packet:
 
-`my-world/docs/tasks/G4-09UATBC02A_D20_PROTOCOL_DECOUPLING_TASK.md`
-
-Required architecture:
-
-```text
-short isolated mechanics-control request
-→ valid NO_CHECK or CHECK_REQUIRED
-
-NO_CHECK
-→ separate free-form narrative request
-→ progressive visible narrative
-
-CHECK_REQUIRED
-→ Program RNG/outcome
-→ durable exact check
-→ separate free-form result narrative request
-→ progressive visible narrative
-```
-
-Control formatting failure may not trap the player. One bounded internal recovery attempt is allowed; after that, degrade the action transparently to ordinary natural-language narrative without a d20 check.
-
-No Provider fallback, no fake mechanic state, no narrative-format contract.
-
-## 5. C02B after C02A
-
 `my-world/docs/tasks/G4-09UATBC02B_PUBLIC_D20_FAILURE_VISIBILITY_TASK.md`
 
-C02B remains HOLD until GPT closes C02A. Kimi will only surface safe terminal failure reasons and a non-blocking degradation notice; it must not redefine backend mechanics.
+Goal:
 
-## 6. Correction-budget rule
+- surface concise safe reasons for genuine terminal Provider/network/credential/persistence failures;
+- preserve stable `重试行动` recovery;
+- do not present C02A fail-soft degradation as `行动未完成`;
+- at most show a compact non-blocking notice that optional d20 control was skipped for the degraded action;
+- never expose keys, Authorization, prompts, raw Provider bodies or hidden reasoning.
 
-This is correction-02. C01's streaming goal is retained, but its mixed protocol is superseded.
+C02B is UI-only. It must not change Action Adjudication backend, Provider behavior, model policy, retry policy, persistence semantics, fallback behavior or add any new model-format/blocking gate.
 
-If the **decoupled control lane itself** still repeatedly fails at the same real-model seam after C02A, stop adding formatting patches and redesign the mechanic-control capability instead of spending correction-03 on special cases.
+## 5. Correction-budget rule
 
-## 7. After correction
+This is correction-02. C01's progressive-streaming goal remains accepted; its mixed protocol is superseded.
 
-If C02A and C02B both pass GPT Independent Review:
+If the same **decoupled control lane** repeatedly fails in real Provider use after C02A, do not spend another correction adding parser formatting cases. Return for a control-capability redesign.
+
+## 6. After correction
+
+If C02B passes GPT Independent Review and product/Windows freshness is current:
 
 ```text
 G4-09UATB ACTIVE — OWNER focused reliability/responsiveness retest
