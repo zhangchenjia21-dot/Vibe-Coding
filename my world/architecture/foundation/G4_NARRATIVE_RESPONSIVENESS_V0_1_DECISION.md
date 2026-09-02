@@ -1,9 +1,9 @@
 # G4 Narrative Responsiveness v0.1 Decision
 
-Status: **FROZEN / OWNER-REQUESTED — MODEL-FREEDOM AMENDMENT**
+Status: **FROZEN / IMPLEMENTED / OWNER-ACCEPTED**
 Date: 2026-09-02
 Semantic owner: **GPT**
-Applies now to: **G4-09UATB correction**
+Applies now to: **accepted G4 runtime behavior**
 Carries forward as a runtime ordering invariant for later G5/G6 work.
 
 ## 1. Primary product finding
@@ -13,7 +13,7 @@ The Owner accepted the gameplay value/semantics of `判定与检定：公开 d20
 1. visible GM narrative must appear as soon as practical instead of waiting behind bookkeeping or whole-response buffering;
 2. the game must not become fragile because a model emitted harmless formatting variance or failed to satisfy an unnecessarily strict machine-readable text protocol.
 
-Ordinary Opening/Narrative already stream into provisional in-memory Conversation and persist only after completion. Per-token SQLite/file writes are not the source of slow text. C01 removed Public d20 whole-response buffering, but its mixed control+narrative framing made model formatting a new blocking gate. That coupling is now rejected.
+Ordinary Opening/Narrative already stream into provisional in-memory Conversation and persist only after completion. Per-token SQLite/file writes are not the source of slow text. C01 removed Public d20 whole-response buffering, but its mixed control+narrative framing made model formatting a new blocking gate. That coupling is rejected.
 
 ## 2. Core principles
 
@@ -178,17 +178,23 @@ Do not change:
 
 C01's progressive-streaming goal remains accepted, but its mixed control+narrative protocol is superseded because real Owner UAT exposed it as a fragile gate.
 
-Correction-02 is therefore a **protocol decoupling redesign**, not another accumulation of parser special cases. If the decoupled control lane itself still repeatedly fails in real Provider testing, stop adding format rules and revisit whether Public d20 adjudication should use a different program/provider capability.
+Correction-02 is therefore a **protocol decoupling redesign**, not another accumulation of parser special cases. If the decoupled control lane itself later repeatedly fails in real Provider use, stop adding format rules and revisit whether Public d20 adjudication should use a different program/provider capability.
 
-## 8. Current gate effect
+## 8. Accepted gate result
 
-C02A has passed Independent Review and the accepted implementation now conforms to this decision: control and narrative are decoupled, malformed control fails soft after one bounded recovery, and narrative remains free-form.
+The complete correction chain passed Independent Review and final Owner retest:
 
 ```text
-G4-09UATBC01 Narrative Responsiveness      PASS / CLOSED — streaming goal retained
-G4-09UATB Owner Product UAT               HOLD — CORRECTION-02
-G4-09UATBC02A d20 Protocol Decoupling      PASS / CLOSED
-G4-09UATBC02B Failure Visibility           ACTIVE — KIMI
+G4-09UATBC01 Narrative Responsiveness       PASS / CLOSED
+G4-09UATBC02A d20 Protocol Decoupling       PASS / CLOSED
+G4-09UATBC02B Failure Visibility            PASS / CLOSED AFTER C01
+G4-09UATBC02BC01 Persistence Visibility     PASS / CLOSED
+G4-09UATBC02P1 Final Windows Freshness      PASS / CLOSED
+G4-09UATB Owner Product UAT                 PASS / CLOSED
+G4-09 First Playable B                      PASS / CLOSED
+G4-08 Expansion Pack v0.1                   PASS / CLOSED
 ```
 
-C02B is UI-only and must not modify the accepted backend protocol or add any new model-format/blocking gate. After C02B passes Independent Review and Windows/product freshness is current, Owner UAT resumes only as a focused reliability/responsiveness retest. The previously accepted d20 gameplay value is not reopened.
+Owner returned final verdict `PASS` on 2026-09-02.
+
+These runtime ordering/model-freedom invariants carry forward into later G5/G6 work. Current execution proceeds to G4-10 Runtime Asset Resolution; this decision does not authorize reopening the accepted Public d20 protocol absent a concrete regression.
