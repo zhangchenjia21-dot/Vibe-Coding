@@ -1,12 +1,12 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 8.8
+version: 8.9
 created: 2026-08-26
 updated: 2026-09-02
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-09R1B1C01A Runtime Settings L3 UI Support
-current_owner: Codex
+current_task: G4-09R1B1C01B Settings UI State Consistency
+current_owner: Kimi
 parent_task: G4-09R1 Runtime Model Settings v0.1
 semantic_owner: GPT
 owner_uat_required: false
@@ -48,28 +48,28 @@ G4-09R1S0 Semantic Freeze             PASS / CLOSED — GPT
 G4-09R1M1 Backend Mechanism           PASS / CLOSED
 G4-09R1M1C01 Projection/Kimi Proof    PASS / CLOSED
 G4-09R1B1 Settings UI                 CORRECTION REQUIRED
-G4-09R1B1C01A L3 UI Support           ACTIVE — CODEX
-G4-09R1B1C01B UI State Consistency    HOLD — KIMI
+G4-09R1B1C01A L3 UI Support           PASS / CLOSED
+G4-09R1B1C01B UI State Consistency    ACTIVE — KIMI
 G4-GATE                               NOT YET
 ```
 
-Owner UAT remains HOLD. The B1 implementation has real DeepSeek/Kimi UI generation evidence, but GPT Independent Review found two state/ownership blockers plus the missing Escape cancel path.
-
-Implementation review:
-
-`my-world/docs/g4_09r1/G4-09R1B1_INDEPENDENT_REVIEW.md`
+Owner UAT remains HOLD until C01B plus final integration/freshness pass.
 
 Current packet:
 
-`my-world/docs/tasks/G4-09R1B1C01A_RUNTIME_SETTINGS_L3_UI_SUPPORT_TASK.md`
+`my-world/docs/tasks/G4-09R1B1C01B_UI_STATE_CONSISTENCY_CORRECTION_TASK.md`
 
-Current owner: **Codex**. Reviewer/semantic owner: **GPT**.
+C01A Independent Review:
+
+`my-world/docs/g4_09r1/G4-09R1B1C01A_INDEPENDENT_REVIEW.md`
+
+Current owner: **Kimi**. Reviewer/semantic owner: **GPT**.
 
 ---
 
-## 2. Accepted B1 implementation
+## 2. Accepted B1 implementation and reality
 
-Reviewed B1/evidence HEAD:
+Original B1 reviewed HEAD:
 
 `fcdcec66edad41afbb93f4a5e9cc70174402be5c`
 
@@ -90,56 +90,41 @@ Accepted and not to be reopened absent regression:
 
 ---
 
-## 3. Why B1 is not PASS
+## 3. C01A result｜PASS / CLOSED
 
-### A. Invalid K2.7 intermediate state
+Accepted implementation/evidence HEAD:
 
-Sequence:
+`bb3c16b392887a4649f32e23348067c70a3e7a1c`
+
+Runtime Settings L3 now provides:
 
 ```text
-Kimi K3 / 1M
-→ switch model to Kimi K2.7
-→ backend correctly rejects K2.7 + 1M
+validated_default_settings()
+→ exact defensive-copy default deepseek_v4_pro / 256k / high
+
+inspect_candidate(kimi_k27 / 1m / high)
+→ success=false
+→ status=incompatible_context_limit
+→ safe partial candidate including allowed_context_limits=[256k]
+→ fixed_thinking=true
+→ graded_reasoning=false
+→ reasoning_effective=null
 ```
 
-Current UI disables Save and 1M, but returns before applying fixed-thinking presentation. Reasoning can remain enabled and the fixed Thinking explanation disappears. K2.7 capability truth must remain consistent even while the context choice is invalid.
-
-### B. UI crosses Runtime Settings L0
-
-Application Shell directly imports the Runtime Settings L0 rules only to obtain the validated default for corrupt persisted settings. UI must depend on L3 only. A small L3 default-settings seam is required.
-
-### C. Escape cancel path
-
-The custom settings overlay has a visible Cancel button but no explicit `ui_cancel` / Escape behavior, despite the B1 interaction requirement.
+The projection carries no endpoint/model/request/secret fields; unknown/malformed candidate returns no partial identity. Default/candidate inspection causes no settings/Game/Source/SQLite mutation. Provider and UI were not modified; schema remains v4.
 
 ---
 
-## 4. Current correction routing
+## 4. Current C01B correction
 
-First:
+Kimi now owns only UI state consistency:
 
-```text
-G4-09R1B1C01A — Codex
-```
+1. remove Application Shell direct Runtime Settings L0 import; corrupt persisted recovery must use L3 `validated_default_settings()`;
+2. exact `K3 / 1M → K2.7` transition must simultaneously show invalid context and fixed-thinking truth;
+3. 256K restores valid Save state while K2.7 remains fixed-thinking; switching to graded models re-enables reasoning from L3 truth;
+4. Escape / `ui_cancel` behaves as Cancel with zero persistence side effect.
 
-Backend-only result:
-
-- expose exact validated default through Runtime Settings L3;
-- for known incompatible candidates, return safe partial capability truth through L3 while preserving failure status;
-- no UI, Provider, Source, persistence-schema or d20 changes.
-
-Then, only after GPT Independent Review PASS:
-
-```text
-G4-09R1B1C01B — Kimi
-```
-
-UI result:
-
-- remove UI→L0 dependency;
-- preserve K2.7 fixed-thinking presentation during invalid 1M state;
-- valid 256K recovery and graded-model switching remain correct;
-- Escape/ui_cancel behaves like Cancel without Save.
+Runtime Settings/backend/Provider/Source/Final Create/Persistence/Public d20 are protected from C01B changes.
 
 ---
 
@@ -148,9 +133,7 @@ UI result:
 Resume condition:
 
 ```text
-C01A Codex
-→ GPT Independent Review
-→ C01B Kimi
+C01B Kimi
 → GPT Independent Review
 → G4-09R1B1 PASS / CLOSED
 → final Provider + Windows freshness integration
