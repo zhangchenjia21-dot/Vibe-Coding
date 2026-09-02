@@ -6,10 +6,10 @@ updated: 2026-09-02
 project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
-current_parent_task: G4-09UATB Owner Product UAT
-current_execution_task: G4-09UATBC02P1 Final Windows Freshness / Owner Retest Readiness
+current_parent_task: G4-09 First Playable B
+current_execution_task: G4-09UATB Owner Product UAT — focused reliability/responsiveness retest
 semantic_owner: GPT
-current_execution_owner: CODEX
+current_execution_owner: OWNER
 ---
 
 # my world｜GPT CONTEXT HANDOFF CURRENT
@@ -29,8 +29,8 @@ G4-09UATBC01 Narrative Responsiveness PASS / CLOSED — streaming goal retained
 G4-09UATBC02A d20 Protocol Decoupling PASS / CLOSED
 G4-09UATBC02B Failure Visibility      PASS / CLOSED AFTER C01
 G4-09UATBC02BC01 Persistence Visibility PASS / CLOSED
-G4-09UATBC02P1 Final Windows Freshness ACTIVE — CODEX
-G4-09UATB Owner Product UAT           HOLD — awaiting final current-head Windows freshness
+G4-09UATBC02P1 Final Windows Freshness PASS / CLOSED
+G4-09UATB Owner Product UAT           ACTIVE — OWNER focused reliability/responsiveness retest
 G4-GATE                               NOT YET
 ```
 
@@ -65,34 +65,35 @@ Accepted correction-02 truth:
 - persistence/finalize hard failures map to safe-save wording + retry;
 - no raw secrets, Provider bodies, hidden reasoning, SQL/SQLite/path details are exposed.
 
-Formal completion review:
+## 3. G4-09UATBC02P1 Independent Review
 
-`my-world/docs/g4_09/G4-09UATBC02BC01_INDEPENDENT_REVIEW.md`
+Reviewed delivery:
 
-## 3. Current task — G4-09UATBC02P1
+- START_HEAD: `e8dfcdce26487da0ffd6967eea703b104ca907a2`
+- EVIDENCE_HEAD: `f8fea02b0c77ec4ea597b31b4c721825266cfc64`
 
-Packet:
+Formal review:
 
-`my-world/docs/tasks/G4-09UATBC02P1_FINAL_WINDOWS_FRESHNESS_TASK.md`
+`my-world/docs/g4_09/G4-09UATBC02P1_INDEPENDENT_REVIEW.md`
 
-Owner: **Codex**.
+Verdict: **PASS / CLOSED**.
 
-This is validation-only. C02B/C02BC01 changed the Narrative UI after the last Windows freshness proof, so before Owner focused retest Codex must validate/rebuild the canonical Windows export from current `main`.
+Accepted proof:
 
-Required proof:
-
-- `.\run-game.ps1 -ValidateExportOnly` current-head success, rebuilding stale export if needed;
-- focused G4-08B/C02B/C02BC01 UI integration green;
+- canonical Windows export was stale, rebuilt and verified from the final correction-02 source line;
+- immediate second validation confirmed current export and skipped rebuild;
+- current-head focused G4-08B/C02B/C02BC01 integration: 127 PASS / 0 FAIL;
 - SQLite schema remains v4;
-- Owner Games, production Source, Runtime Model Settings preference, credentials and `.env.local` untouched;
-- `git diff --check` clean;
-- no production behavior changes.
+- production Source, Game Library, Owner Games, runtime model settings and `.env.local` remained unchanged;
+- P1 changed no product behavior.
 
-Do not rerun real DeepSeek/Kimi benchmark solely for this task. C02A already proved real selected-provider DeepSeek NO_CHECK and Kimi CHECK_REQUIRED paths, and later corrections are UI-only.
+## 4. Current Owner retest
 
-## 4. Owner retest after P1
+Instructions:
 
-If GPT Independent Review passes P1, resume `G4-09UATB ACTIVE — OWNER` for a narrow reliability/responsiveness retest:
+`my-world/docs/g4_09/G4-09UATB_Owner产品验收说明.md`
+
+Ask the Owner only for the narrow final product verdict:
 
 - ordinary action reaches free-form narrative and visibly streams;
 - risky action still shows the durable d20 result before free-form result narrative;
@@ -101,8 +102,16 @@ If GPT Independent Review passes P1, resume `G4-09UATB ACTIVE — OWNER` for a n
 - no duplicate turn/card/reroll;
 - Save/Continue intact.
 
-Do not ask Owner to re-evaluate whether Public d20 is worthwhile.
+Do not ask the Owner to re-evaluate whether Public d20 is worthwhile.
 
-Only after Owner final PASS may GPT close G4-09UATB, G4-09, and G4-08, then inspect current roadmap authority before shaping G4-10.
+## 5. After Owner verdict
 
-Do not start G5 before G4-GATE.
+If Owner PASS:
+
+1. close G4-09UATB;
+2. close G4-09 First Playable B;
+3. close G4-08 Expansion Pack v0.1;
+4. refresh current roadmap/gate authority before shaping G4-10;
+5. do not start G5 before G4-GATE.
+
+If Owner FAIL, preserve accepted gameplay value and investigate only the concrete failed seam.
