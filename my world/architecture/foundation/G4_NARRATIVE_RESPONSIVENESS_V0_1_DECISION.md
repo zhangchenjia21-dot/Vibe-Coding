@@ -180,13 +180,15 @@ C01's progressive-streaming goal remains accepted, but its mixed control+narrati
 
 Correction-02 is therefore a **protocol decoupling redesign**, not another accumulation of parser special cases. If the decoupled control lane itself still repeatedly fails in real Provider testing, stop adding format rules and revisit whether Public d20 adjudication should use a different program/provider capability.
 
-## 8. Gate effect
+## 8. Current gate effect
+
+C02A has passed Independent Review and the accepted implementation now conforms to this decision: control and narrative are decoupled, malformed control fails soft after one bounded recovery, and narrative remains free-form.
 
 ```text
 G4-09UATBC01 Narrative Responsiveness      PASS / CLOSED — streaming goal retained
 G4-09UATB Owner Product UAT               HOLD — CORRECTION-02
-G4-09UATBC02A d20 Protocol Decoupling      ACTIVE — CODEX
-G4-09UATBC02B Failure Visibility           HOLD — KIMI
+G4-09UATBC02A d20 Protocol Decoupling      PASS / CLOSED
+G4-09UATBC02B Failure Visibility           ACTIVE — KIMI
 ```
 
-After both corrections pass Independent Review and Windows/product freshness is current, Owner UAT resumes only as a focused reliability/responsiveness retest. The previously accepted d20 gameplay value is not reopened.
+C02B is UI-only and must not modify the accepted backend protocol or add any new model-format/blocking gate. After C02B passes Independent Review and Windows/product freshness is current, Owner UAT resumes only as a focused reliability/responsiveness retest. The previously accepted d20 gameplay value is not reopened.
