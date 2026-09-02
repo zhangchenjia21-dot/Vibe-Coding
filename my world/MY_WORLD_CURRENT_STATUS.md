@@ -1,15 +1,15 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 9.0
+version: 9.1
 created: 2026-08-26
 updated: 2026-09-02
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-09R1P1 Runtime Model Settings Final Integration / Owner UAT Readiness
-current_owner: Codex
-parent_task: G4-09R1 Runtime Model Settings v0.1
+current_task: G4-09UATB Owner Product UAT
+current_owner: OWNER
+parent_task: G4-09 First Playable B
 semantic_owner: GPT
-owner_uat_required: false
+owner_uat_required: true
 context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
@@ -31,80 +31,97 @@ G4-04 Multi-Game / Game Library       PASS / CLOSED
 G4-05 Asset-only New Game Wizard      PASS / CLOSED
 G4-06 Atomic Final Create             PASS / CLOSED
 G4-07 First Playable A                PASS / CLOSED
-G4-08 Expansion Pack v0.1             ACTIVE
+G4-08 Expansion Pack v0.1             ACTIVE pending Owner verdict
 G4-08M1 Public d20 Mechanism          PASS / CLOSED
 G4-08B Public d20 UI Integration      PASS / CLOSED
-G4-09 First Playable B                ACTIVE
+G4-09 First Playable B                ACTIVE pending Owner verdict
 G4-09P1 Owner UAT B Production Prep   PASS / CLOSED
-G4-09UATB Owner Product UAT           HOLD
-G4-09R1 Runtime Model Settings v0.1   ACTIVE
+G4-09R1 Runtime Model Settings v0.1   PASS / CLOSED
 G4-09R1S0 Semantic Freeze             PASS / CLOSED
 G4-09R1M1 Backend Mechanism           PASS / CLOSED
 G4-09R1B1 Settings UI                 PASS / CLOSED AFTER CORRECTION-01
-G4-09R1B1C01A L3 UI Support           PASS / CLOSED
-G4-09R1B1C01B UI State Consistency    PASS / CLOSED
-G4-09R1P1 Final Integration/Freshness ACTIVE — CODEX
+G4-09R1P1 Final Integration/Freshness PASS / CLOSED
+G4-09UATB Owner Product UAT           ACTIVE — OWNER
 G4-GATE                               NOT YET
 ```
 
-Owner UAT remains HOLD until the final integration/freshness gate passes Independent Review.
+No engineering task is active while Owner UAT B is active. Do not start G4-10 or G5.
 
-Current packet:
+## 2. Runtime Model Settings v0.1｜PASS / CLOSED
 
-`my-world/docs/tasks/G4-09R1P1_FINAL_INTEGRATION_FRESHNESS_TASK.md`
+Final implementation/readiness evidence HEAD:
 
-Current owner: **Codex**. Reviewer/semantic owner: **GPT**.
+`f615cc49748320f346362430383e6ff074668278`
 
-## 2. G4-09R1B1 final result｜PASS / CLOSED
+Formal final review:
 
-Final reviewed UI evidence HEAD:
+`my-world/docs/g4_09r1/G4-09R1P1_INDEPENDENT_REVIEW.md`
 
-`b6bd6bc8e077bbeccbb8639f6bc0670795e3e36c`
+Accepted product/runtime truth:
 
-Accepted B1 vertical:
+- Main Menu application-level Model Settings exists;
+- exact four player-facing profiles: DeepSeek V4 Pro / V4 Flash / Kimi K3 / Kimi K2.7;
+- 256K/1M compatibility and reasoning mappings are backend-owned;
+- Medium visibly maps to effective High where applicable;
+- K2.7 is 256K-only with fixed Thinking ON;
+- settings persist outside Games/Source and never store API keys;
+- selected-provider-only credentials, no automatic fallback;
+- Opening/Narrative/Public d20 Provider phases all use the same current validated runtime profile seam;
+- actual UI selection + Save -> real DeepSeek V4 Pro Opening completed;
+- actual UI selection + Save -> real Kimi K3 Opening completed;
+- canonical Windows export was rebuilt/validated on the accepted launch line;
+- production Source remains World 2 / Character 6 / Expansion 1 with exact Public d20 current;
+- Owner Games were not modified;
+- SQLite remains v4.
 
-- Main Menu `模型设置` entry;
-- exact display models DeepSeek V4 Pro / V4 Flash / Kimi K3 / Kimi K2.7;
-- backend-owned context/reasoning/fixed-thinking/effective projection;
-- Medium → actual High disclosure;
-- K2.7 256K-only and fixed Thinking ON, including invalid 1M intermediate state;
-- non-secret credential status;
-- Save/Cancel/Escape/reopen/restart persistence;
-- invalid persisted recovery through Runtime Settings L3 only;
-- no Game/Source/SQLite mutation;
-- required desktop layouts and regressions green;
-- real DeepSeek and Kimi UI-selected generation evidence accepted.
+The owner-requested prerequisite before First Playable B UAT is therefore closed.
 
-Formal reviews:
+## 3. Current task｜G4-09UATB Owner Product UAT
 
-- `my-world/docs/g4_09r1/G4-09R1B1_INDEPENDENT_REVIEW.md`
-- `my-world/docs/g4_09r1/G4-09R1B1C01A_INDEPENDENT_REVIEW.md`
-- `my-world/docs/g4_09r1/G4-09R1B1C01B_INDEPENDENT_REVIEW.md`
+Owner instructions:
 
-No correction-02 is required.
+`my-world/docs/g4_09/G4-09UATB_Owner产品验收说明.md`
 
-## 3. Current task｜G4-09R1P1
-
-This is the final reality/freshness gate before Owner UAT B resumes. It must prove on current `main`:
-
-```text
-actual Main Menu settings -> DeepSeek V4 Pro -> real accepted Opening
-actual Main Menu settings -> Kimi K3 -> real accepted Opening
-canonical run-game Windows export freshness
-production World/Character/Public d20 UAT prerequisites intact
-Owner Games unchanged
-Owner UAT instructions refreshed to start with Model Settings
-```
-
-Tests must use task-owned Game/Source/settings roots; do not overwrite Owner production model preference merely to validate. No feature redesign is allowed.
-
-## 4. Resume condition for Owner UAT
+Preferred product route:
 
 ```text
-G4-09R1P1 Codex
-→ GPT Independent Review
-→ if PASS: G4-09R1 PASS / CLOSED
-→ G4-09UATB ACTIVE — OWNER
+run-game.cmd
+-> 模型设置
+-> choose desired accepted model/context/reasoning and Save
+-> reopen once; confirm effective summary
+-> New Game
+-> 汉末三国：天下未定
+-> 208｜赤壁前夕
+-> 刘备
+-> 判定与检定：公开 d20
+-> real Opening
+-> genuinely risky action -> visible d20 card
+-> ordinary/no-risk action -> no unnecessary card
+-> Save -> Main Menu -> Continue
+-> same Game/history/mechanic result
+-> Owner product verdict
 ```
 
-Owner UAT will still decide G4-09/G4-08 product PASS. G4-GATE remains NOT YET; do not start G4-10 or G5.
+The Owner is not asked to benchmark DeepSeek vs Kimi. They may use the accepted configuration they want for the session.
+
+The product question remains:
+
+> Does `判定与检定：公开 d20` add worthwhile gameplay rather than merely technical state?
+
+Owner returns `PASS` or `FAIL <reason>`.
+
+## 4. After Owner verdict
+
+If PASS:
+
+```text
+G4-09UATB Owner Product UAT   PASS / CLOSED
+G4-09 First Playable B        PASS / CLOSED
+G4-08 Expansion Pack v0.1     PASS / CLOSED
+```
+
+Then GPT performs Decision Propagation and inspects the current roadmap authority before shaping G4-10 Runtime Asset Resolution. G4-11 and G4-GATE still remain before G5.
+
+If FAIL, GPT records the exact product seam and routes a bounded correction to the appropriate owner under the correction-budget rules.
+
+Engineering evidence cannot substitute for this Owner verdict.
