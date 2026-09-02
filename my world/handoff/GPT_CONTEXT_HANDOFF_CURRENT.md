@@ -2,14 +2,14 @@
 title: my world｜GPT Context Handoff
 status: current-handoff-navigation
 created: 2026-08-29
-updated: 2026-09-01
+updated: 2026-09-02
 project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
 current_parent_task: G4-09R1 Runtime Model Settings v0.1
-current_execution_task: G4-09R1B1 Model Settings UI / Interaction
+current_execution_task: G4-09R1B1C01A Runtime Settings L3 UI Support
 semantic_owner: GPT
-current_execution_owner: Kimi
+current_execution_owner: Codex
 ---
 
 # my world｜GPT CONTEXT HANDOFF CURRENT
@@ -27,14 +27,14 @@ G4-09 First Playable B                ACTIVE
 G4-09P1 Owner UAT B Production Prep   PASS / CLOSED
 G4-09UATB Owner Product UAT           HOLD
 G4-09R1 Runtime Model Settings v0.1   ACTIVE
-G4-09R1S0 Semantic Freeze             PASS / CLOSED — GPT
 G4-09R1M1 Backend Mechanism           PASS / CLOSED
-G4-09R1M1C01 Projection/Kimi Proof    PASS / CLOSED
-G4-09R1B1 Settings UI                 ACTIVE — KIMI
+G4-09R1B1 Settings UI                 CORRECTION REQUIRED
+G4-09R1B1C01A L3 UI Support           ACTIVE — CODEX
+G4-09R1B1C01B UI State Consistency    HOLD — KIMI
 G4-GATE                               NOT YET
 ```
 
-Owner UAT remains paused until Settings UI and final integration/freshness pass.
+Owner UAT remains paused.
 
 ---
 
@@ -48,125 +48,92 @@ Governance:
 Implementation:
 
 3. `AGENTS.md`
-4. `docs/g4_09r1/G4-09R1M1C01_INDEPENDENT_REVIEW.md`
-5. `docs/tasks/G4-09R1B1_MODEL_SETTINGS_UI_TASK.md`
-6. Runtime Settings L3 public interface, especially `inspect_candidate(settings)`
-7. current Application Shell / Main Menu scene and script
+4. `docs/g4_09r1/G4-09R1B1_INDEPENDENT_REVIEW.md`
+5. `docs/tasks/G4-09R1B1C01A_RUNTIME_SETTINGS_L3_UI_SUPPORT_TASK.md`
+6. `docs/tasks/G4-09R1B1C01B_UI_STATE_CONSISTENCY_CORRECTION_TASK.md` — HOLD
+7. Runtime Settings L2/L3 current implementation and focused tests
 
 ---
 
-## 3. Accepted backend
+## 3. Accepted backend and B1 reality
 
-Reviewed backend/evidence HEAD:
+Backend remains PASS / CLOSED for provider/model semantics:
 
-`6ea825ba0ea0d5a57728c55789f437ff9626b6cb`
+- exact four-profile catalog;
+- DeepSeek/K3 reasoning mapping;
+- K2.7 fixed Thinking ON / 256K-only;
+- selected-provider credentials, no fallback;
+- shared Provider routing through Opening/Narrative/Public d20;
+- real DeepSeek and real Kimi model calls completed;
+- SQLite v4 / Source / Final Create / d20 semantics unchanged.
 
-Backend is **PASS / CLOSED**.
+B1 reviewed HEAD:
 
-Accepted:
+`fcdcec66edad41afbb93f4a5e9cc70174402be5c`
 
-- app-local settings `user://my-world/settings/provider-runtime.json`;
-- schema `my-world.provider-runtime.v1`;
-- default `deepseek_v4_pro / 256k / high`;
-- exact closed catalog:
-  - DeepSeek V4 Pro → `deepseek-v4-pro`;
-  - DeepSeek V4 Flash → `deepseek-v4-flash`;
-  - Kimi K3 256K → `k3-256k`;
-  - Kimi K3 1M → `k3`;
-  - Kimi K2.7 256K → `kimi-for-coding`;
-- K2.7 + 1M fail-closed;
-- DeepSeek/K3 `low→low`, `medium→high`, `high→high`, `max→max`;
-- K2.7 fixed Thinking ON / no graded effective effort;
-- selected-provider credential only: `DEEPSEEK_API_KEY` or `KIMI_API_KEY`;
-- missing selected key → zero network, no cross-provider fallback;
-- shared runtime Provider seam across Opening/Narrative/Public d20 phases;
-- active request profile snapshot immutable;
-- reasoning-only stream material hidden from player narrative;
-- real DeepSeek V4 Pro/Flash calls completed;
-- real Kimi `k3-256k`, `k3`, `kimi-for-coding` calls completed;
-- SQLite remains v4; Source/Final Create/Public d20 semantics unchanged.
+Accepted B1 work:
 
-## 4. Mandatory UI projection seam
-
-Backend now exposes:
-
-```text
-ModelRuntimeSettingsPublicInterface.inspect_candidate(settings)
-```
-
-It is non-mutating and UI-safe. It returns backend-owned truth for:
-
-```text
-profile display/provider
-selected + allowed context
-requested/effective reasoning
-graded/fixed thinking
-selected-provider credential configured bool
-validation error
-```
-
-It does not return endpoint/model id/request path/payload fields/key values and does not save the candidate.
-
-Kimi UI must use this seam rather than duplicating provider rules.
+- Main Menu settings surface and exact display model list;
+- valid `inspect_candidate()` preview;
+- Medium→actual High disclosure;
+- valid K2.7/256K fixed-thinking UX;
+- non-secret credential display;
+- Save/Cancel/reopen/restart behavior;
+- no Game/Source mutation;
+- layout/regression evidence;
+- real DeepSeek V4 Pro and Kimi K3 selected from the actual UI each reached real Opening generation.
 
 ---
 
-## 5. Current Kimi task
+## 4. Why B1 needs correction
+
+### Finding A
+
+With current context 1M, switching model to Kimi K2.7 yields backend `incompatible_context_limit`. UI correctly disables Save, but its failure path returns before applying fixed-thinking presentation. Reasoning can remain enabled and the fixed-Thinking explanation is hidden.
+
+### Finding B
+
+Application Shell directly imports Runtime Settings L0 rules to get `validated_default()` for corrupt persisted settings. UI must depend on Runtime Settings L3 only.
+
+### Finding C
+
+The custom overlay has no explicit `ui_cancel` / Escape path; packet required sensible Escape/Cancel behavior.
+
+---
+
+## 5. Current Codex task
 
 Packet:
 
-`my-world/docs/tasks/G4-09R1B1_MODEL_SETTINGS_UI_TASK.md`
+`my-world/docs/tasks/G4-09R1B1C01A_RUNTIME_SETTINGS_L3_UI_SUPPORT_TASK.md`
 
-Kimi owns:
+Codex owns only:
 
-- Main Menu `模型设置` entry;
-- model/context/reasoning controls;
-- backend-derived compatibility/disabled states;
-- K2.7 256K-only + fixed-thinking explanation;
-- Medium → actual High disclosure;
-- non-secret DeepSeek/Kimi credential status;
-- Save/Cancel/reopen/restart UX;
-- responsive desktop layout.
+1. expose exact validated default through Runtime Settings L3, non-mutating and defensive-copy;
+2. make `inspect_candidate()` return safe partial capability truth for a known profile even when context is incompatible, while preserving `success=false / status=incompatible_context_limit`;
+3. direct tests for no-write/no-secret behavior.
 
-Kimi must not own model ids, endpoints, request payload fields, credential values or provider fallback.
+Do not change UI or Provider wire/model semantics. Real Provider rerun is unnecessary unless Provider code is touched.
 
-Required real UI integration before return:
-
-```text
-one DeepSeek selection → real generation
-one Kimi selection     → real generation
-```
-
-Layouts: 1280×720, 960×540, maximized desktop. Continue/New Game/Public d20 must remain green.
-
-Return ceiling: **READY FOR INDEPENDENT REVIEW**.
+Return ceiling: READY FOR INDEPENDENT REVIEW.
 
 ---
 
-## 6. After Kimi returns
+## 6. After C01A
 
-GPT refreshes both main branches and reviews actual UI code/evidence.
+If GPT passes C01A, activate:
 
-Verify:
+`my-world/docs/tasks/G4-09R1B1C01B_UI_STATE_CONSISTENCY_CORRECTION_TASK.md`
 
-1. UI consumes `inspect_candidate()` rather than duplicating compatibility/effective rules;
-2. K2.7 disables 1M and graded reasoning visibly;
-3. Medium visibly discloses actual High for DeepSeek/K3;
-4. credential display is bool-only with no secret exposure;
-5. Save/Cancel/reopen/restart behavior is correct;
-6. invalid persisted state is visibly recoverable;
-7. layout is usable at all required desktop sizes;
-8. real DeepSeek and Kimi selected via UI each reach real generation;
-9. Continue/New Game/Public d20 regressions remain green;
-10. no Source/Game/SQLite mutation from settings.
+Kimi then removes the L0 dependency, consumes new L3 support, fixes K2.7 invalid-context fixed-thinking presentation, and adds Escape/ui_cancel = Cancel.
 
-If PASS:
+After C01B GPT Independent Review PASS:
 
 ```text
 G4-09R1B1 PASS / CLOSED
-→ final integration/freshness check
-→ refresh Owner UAT instructions
+→ final real Provider / Windows freshness integration
+→ refreshed Owner UAT instructions
 → G4-09UATB ACTIVE — OWNER
 ```
 
-Do not close G4-09/G4-08 before Owner Product UAT verdict. G4-GATE remains NOT YET.
+Do not close G4-09/G4-08 before Owner Product UAT verdict.
