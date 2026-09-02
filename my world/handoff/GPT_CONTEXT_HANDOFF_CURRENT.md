@@ -7,9 +7,9 @@ project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
 current_parent_task: G4-09UATB Owner Product UAT
-current_execution_task: G4-09UATBC02A Public d20 Protocol Decoupling / Model-Freedom Correction
+current_execution_task: G4-09UATBC02B Public d20 Failure Visibility / Recoverable UX
 semantic_owner: GPT
-current_execution_owner: CODEX
+current_execution_owner: KIMI
 ---
 
 # my world｜GPT CONTEXT HANDOFF CURRENT
@@ -27,34 +27,20 @@ G4-09 First Playable B                ACTIVE pending Owner final verdict
 G4-09R1 Runtime Model Settings v0.1   PASS / CLOSED
 G4-09UATBC01 Narrative Responsiveness PASS / CLOSED — streaming goal retained
 G4-09UATB Owner Product UAT           HOLD — CORRECTION-02
-G4-09UATBC02A d20 Protocol Decoupling ACTIVE — CODEX
-G4-09UATBC02B Failure Visibility      HOLD — KIMI
+G4-09UATBC02A d20 Protocol Decoupling PASS / CLOSED
+G4-09UATBC02B Failure Visibility      ACTIVE — KIMI
 G4-GATE                               NOT YET
 ```
 
 Do not start G4-10/G5 while correction-02 is active.
 
-## 2. Owner findings
+## 2. Owner findings preserved
 
 Owner already accepted Public d20 gameplay/mechanics. Preserve that finding.
 
-C01 correctly removed whole-response narrative buffering. During the subsequent focused Owner retest, a submitted action ended in generic `行动未完成` with no narrative.
+C01 correctly removed whole-response narrative buffering, but its mixed `control JSON + narrative body` contract turned harmless model formatting variance into a blocking gameplay gate. The Owner then reminded the project of the higher-level requirement to minimize model restrictions and blocking gates.
 
-Code inspection found:
-
-- the C01 parser required a tightly framed mixed Provider response containing machine control plus player-visible narrative;
-- this made harmless model-format variance a blocking gameplay gate;
-- the UI also swallowed the safe failure code and showed only generic recovery state.
-
-The initial instinct to add more JSON framing tolerance was rejected after Owner reminded the project of the higher-level principle: minimize model restrictions and avoid gates that can block play.
-
-## 3. Canonical model-freedom principle
-
-Read:
-
-`my world/architecture/foundation/G4_NARRATIVE_RESPONSIVENESS_V0_1_DECISION.md`
-
-Current frozen principle:
+Canonical response:
 
 ```text
 Model Freedom First
@@ -64,78 +50,83 @@ Visible Narrative First
 Canonical Commit Behind a Turn Finalize Barrier
 ```
 
-Key invariants:
+The UI also had an adjacent defect: it obtained safe terminal failure codes but did not actually show the mapped reason, leaving only generic `行动未完成` state.
 
-- player-visible GM narrative is free-form natural language;
-- never require JSON/sentinel/exact-line framing in the narrative stream;
-- do not make model formatting a hard gate merely for implementation convenience or call-count optimization;
-- Public d20 mechanics control and narrative are separate lanes;
-- old `NO_CHECK = exactly one Provider call` optimization is superseded;
-- isolated control formatting gets at most one bounded internal recovery attempt;
-- if control remains unresolved, fail-soft this action to ordinary no-Expansion natural-language narrative instead of trapping the player;
-- degradation creates no fake d20 check and no fake successful-adjudication durable marker;
-- selected Provider only; no provider fallback;
-- valid CHECK_REQUIRED still freezes Program RNG/outcome durably before free-form result narrative;
-- no reroll/stable action identity preserved;
-- narrative streams provisionally with no per-token persistence;
-- Turn Finalize Barrier remains authoritative.
+## 3. G4-09UATBC02A Independent Review
 
-## 4. Current Codex task — C02A
+Reviewed implementation:
 
-Packet:
+- START_HEAD: `6a50a2c04a244888c58e4eb395226b72539b5364`
+- IMPLEMENTATION_HEAD: `beecdefc8f3698bb2c5d06b5bf0dd53f6b1ed415`
+- EVIDENCE_HEAD: `9b3d4343250cabfe4f58e61db31c7180d0ca13da`
 
-`my-world/docs/tasks/G4-09UATBC02A_D20_PROTOCOL_DECOUPLING_TASK.md`
+Formal review:
 
-Expected architecture:
+`my-world/docs/g4_09/G4-09UATBC02A_INDEPENDENT_REVIEW.md`
 
-```text
-short mechanics-control request
-→ NO_CHECK or CHECK_REQUIRED
+Verdict: **PASS / CLOSED**.
 
-NO_CHECK
-→ separate free-form narrative request
-→ visible streaming
+Accepted C02A truth:
 
-CHECK_REQUIRED
-→ Program RNG/outcome
-→ durable exact check
-→ separate free-form result narrative request
-→ visible streaming
-```
+- mixed control+narrative response protocol is removed from production;
+- player-visible narrative is a separate free-form request/stream with no JSON/sentinel/exact-line/LF contract;
+- isolated control parser accepts harmless outer whitespace / pretty-print JSON;
+- malformed control gets at most initial + one recovery request;
+- second unresolved control fails soft to `degraded_narrative`, which remains progressively visible and accepted;
+- degraded action creates no check and no fake successful NO_CHECK durable marker;
+- normal NO_CHECK is isolated control + free-form narrative and retains exact durable replay/lost-ACK safety;
+- valid CHECK_REQUIRED preserves Program RNG/outcome → durable exact check → free-form result narrative ordering;
+- CHECK narrative failure/cancel/retry/reopen never rerolls;
+- no per-token canonical persistence;
+- no production changes to Conversation/UI/Persistence/Runtime/Provider/Source/Final Create/Game Library/Runtime Settings;
+- selected Provider only; no fallback;
+- SQLite schema remains v4;
+- real task-owned DeepSeek V4 Pro NO_CHECK and Kimi K3 CHECK_REQUIRED both completed without control recovery/degradation;
+- Windows export was rebuilt/verified against the corrected checkout.
 
-If isolated control output is malformed:
+The repeated Godot `HTTPClient status != STATUS_BODY` warning occurred on successful real calls and did not create duplicate terminal events, recovery, fallback or failed actions. Provider transport was outside C02A scope.
 
-```text
-one bounded automatic recovery attempt
-→ if still unresolved
-→ ordinary natural-language narrative degradation
-→ continue play, no d20 state
-```
-
-Do not repair the old mixed protocol with more parser special cases.
-
-Independent Review must inspect actual code/evidence and verify the degradation path is non-blocking and non-fake.
-
-## 5. C02B HOLD
+## 4. Current task — C02B
 
 Packet:
 
 `my-world/docs/tasks/G4-09UATBC02B_PUBLIC_D20_FAILURE_VISIBILITY_TASK.md`
 
-After C02A PASS, Kimi should surface safe terminal Provider/network/credential/persistence reasons and a non-blocking degradation notice. UI must not display raw Provider bodies/prompts/reasoning/keys.
+Owner: **Kimi**.
 
-## 6. Correction budget
+C02B is UI-only. Required outcome:
 
-This is correction-02. If the same **decoupled control-lane** failure persists after C02A, do not spend correction-03 adding formatting cases. Return for a control-capability redesign.
+- genuine terminal transport/network/credential/persistence failures show concise safe player-readable reasons;
+- stable `重试行动` recovery remains available;
+- C02A fail-soft degradation is not rendered as terminal `行动未完成`;
+- at most show a compact non-blocking notice that optional d20 was skipped for the degraded action;
+- no keys, Authorization, prompts, raw Provider payloads or hidden reasoning are exposed.
 
-## 7. Owner retest after C02A+B
+Strict prohibition:
 
-Owner UAT resumes only after both engineering tasks pass GPT IR. The retest is narrow:
+- no backend mechanic change;
+- no Provider change;
+- no new parser/format contract;
+- no provider/model fallback;
+- no new retry policy;
+- no new blocking gate.
 
-- ordinary action completes reliably and narrative streams;
-- risky action still shows durable d20 result before result narrative;
-- control-format variance no longer dead-ends play;
-- real terminal failures show a safe reason and remain retryable;
+Allowed production path is only `src/ui/叙事对话视图.gd` plus focused UI tests/evidence.
+
+## 5. Correction budget
+
+This is correction-02. If the same decoupled control lane repeatedly fails in real Provider use after C02A, do not add more formatting special cases. Return for a control-capability redesign.
+
+## 6. Owner retest after C02B
+
+Owner UAT remains HOLD until C02B passes GPT IR and product/Windows freshness is current.
+
+Focused retest after that:
+
+- ordinary action reliably reaches free-form narrative and streams;
+- risky action still shows durable d20 result before free-form result narrative;
+- control-format variance cannot dead-end play;
+- genuine terminal failure shows a safe reason and remains retryable;
 - no duplicate turn/card/reroll;
 - Save/Continue intact.
 
