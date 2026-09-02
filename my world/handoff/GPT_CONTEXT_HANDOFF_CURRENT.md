@@ -6,10 +6,10 @@ updated: 2026-09-02
 project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
-current_parent_task: G4-09UATBC02B Public d20 Failure Visibility
-current_execution_task: G4-09UATBC02BC01 Persistence Failure Visibility Completion
+current_parent_task: G4-09UATB Owner Product UAT
+current_execution_task: G4-09UATBC02P1 Final Windows Freshness / Owner Retest Readiness
 semantic_owner: GPT
-current_execution_owner: KIMI
+current_execution_owner: CODEX
 ---
 
 # my world｜GPT CONTEXT HANDOFF CURRENT
@@ -26,20 +26,21 @@ G4-08B Public d20 UI Integration      PASS / CLOSED
 G4-09 First Playable B                ACTIVE pending Owner final verdict
 G4-09R1 Runtime Model Settings v0.1   PASS / CLOSED
 G4-09UATBC01 Narrative Responsiveness PASS / CLOSED — streaming goal retained
-G4-09UATB Owner Product UAT           HOLD — CORRECTION-02
 G4-09UATBC02A d20 Protocol Decoupling PASS / CLOSED
-G4-09UATBC02B Failure Visibility      CORRECTION REQUIRED
-G4-09UATBC02BC01 Persistence Visibility ACTIVE — KIMI
+G4-09UATBC02B Failure Visibility      PASS / CLOSED AFTER C01
+G4-09UATBC02BC01 Persistence Visibility PASS / CLOSED
+G4-09UATBC02P1 Final Windows Freshness ACTIVE — CODEX
+G4-09UATB Owner Product UAT           HOLD — awaiting final current-head Windows freshness
 G4-GATE                               NOT YET
 ```
 
-Do not start G4-10/G5 while correction-02 remains open.
+Do not start G4-10/G5 before Owner final verdict and G4 gate closure.
 
 ## 2. Protected Owner / architecture findings
 
-Owner already accepted Public d20 gameplay/mechanics. Preserve that finding.
+Owner already accepted Public d20 gameplay/mechanics. Do not reopen that question absent a concrete regression.
 
-Canonical runtime principle remains:
+Canonical principle:
 
 ```text
 Model Freedom First
@@ -49,73 +50,59 @@ Visible Narrative First
 Canonical Commit Behind a Turn Finalize Barrier
 ```
 
-C02A is PASS / CLOSED. Player-visible narrative is free-form, control/narrative are decoupled, malformed control gets bounded recovery then fail-soft ordinary narrative, and no fake d20/NO_CHECK truth is created on degradation.
+Accepted correction-02 truth:
 
-## 3. C02B first delivery review
+- mixed control+narrative Provider response is removed;
+- player-visible GM narrative is a separate free-form stream with no JSON/sentinel/exact-line/LF contract;
+- isolated control formatting gets at most one bounded recovery;
+- unresolved control fails soft to ordinary free-form narrative, creates no d20 check and no fake NO_CHECK marker;
+- valid CHECK_REQUIRED freezes Program result durably before result narrative;
+- no per-token canonical persistence;
+- stable action/check identity and no-reroll preserved;
+- selected Provider only / no fallback;
+- genuine terminal transport and credential failures show safe reasons + retry;
+- fail-soft degradation is not shown as `行动未完成`;
+- persistence/finalize hard failures map to safe-save wording + retry;
+- no raw secrets, Provider bodies, hidden reasoning, SQL/SQLite/path details are exposed.
 
-Reviewed implementation:
+Formal completion review:
 
-- START_HEAD: `f3348871f0b34ef2ddd1f045b067df7bfb580468`
-- IMPLEMENTATION_HEAD: `6c47387e6b6e2cafeb40ef4e371c433d64ae7045`
-- EVIDENCE_HEAD: `c8d8de6c0c773169bbaa4dabb92df063b8a51f10`
+`my-world/docs/g4_09/G4-09UATBC02BC01_INDEPENDENT_REVIEW.md`
 
-Formal review:
-
-`my-world/docs/g4_09/G4-09UATBC02B_INDEPENDENT_REVIEW.md`
-
-Verdict: **CORRECTION REQUIRED**.
-
-Accepted from the first C02B delivery:
-
-- transport terminal failure shows a safe connection reason + retry;
-- missing-key terminal failure shows a safe credential reason + retry;
-- C02A degraded accepted action is shown as a compact non-blocking notice, never as `行动未完成`;
-- successful NO_CHECK/CHECK paths and layout regressions remained green;
-- no backend/protocol/parser/fallback/retry/blocking-state change.
-
-Blocking gap:
-
-Persistence/finalize hard-failure codes still fall through `_plain_adjudication_failure()` to generic `行动未完成`. Because persistence is a legitimate hard gate, the UI must explicitly say that the result could not be safely saved.
-
-Relevant failure-code family:
-
-```text
-persistence_failure
-check_persistence_failed
-no_check_persistence_failed
-check_acceptance_marker_failed
-no_check_acceptance_marker_failed
-```
-
-## 4. Current Kimi task
+## 3. Current task — G4-09UATBC02P1
 
 Packet:
 
-`my-world/docs/tasks/G4-09UATBC02BC01_PERSISTENCE_FAILURE_VISIBILITY_CORRECTION_TASK.md`
+`my-world/docs/tasks/G4-09UATBC02P1_FINAL_WINDOWS_FRESHNESS_TASK.md`
 
-Scope is still UI-only:
+Owner: **Codex**.
 
-- `src/ui/叙事对话视图.gd`
-- directly relevant UI tests/evidence
+This is validation-only. C02B/C02BC01 changed the Narrative UI after the last Windows freshness proof, so before Owner focused retest Codex must validate/rebuild the canonical Windows export from current `main`.
 
 Required proof:
 
-- one pre-Conversation durable mechanics-write failure shows safe persistence wording + recovery;
-- one Conversation/finalize or acceptance-marker failure shows the same safe persistence category + recovery;
-- no raw SQLite/SQL/path/internal storage details;
-- transport, missing-key, degraded and successful paths remain unchanged;
-- no backend / Provider / Persistence / protocol / retry-policy changes;
-- no new model-format gate, fallback or blocking state.
+- `.\run-game.ps1 -ValidateExportOnly` current-head success, rebuilding stale export if needed;
+- focused G4-08B/C02B/C02BC01 UI integration green;
+- SQLite schema remains v4;
+- Owner Games, production Source, Runtime Model Settings preference, credentials and `.env.local` untouched;
+- `git diff --check` clean;
+- no production behavior changes.
 
-No real Provider rerun is required for this UI projection correction.
+Do not rerun real DeepSeek/Kimi benchmark solely for this task. C02A already proved real selected-provider DeepSeek NO_CHECK and Kimi CHECK_REQUIRED paths, and later corrections are UI-only.
 
-## 5. After C02BC01
+## 4. Owner retest after P1
 
-If GPT Independent Review passes C02BC01:
+If GPT Independent Review passes P1, resume `G4-09UATB ACTIVE — OWNER` for a narrow reliability/responsiveness retest:
 
-1. close C02BC01 and C02B;
-2. refresh final product/Windows freshness if needed;
-3. resume `G4-09UATB ACTIVE — OWNER` for focused reliability/responsiveness retest only;
-4. do not ask Owner to re-evaluate whether Public d20 is worthwhile.
+- ordinary action reaches free-form narrative and visibly streams;
+- risky action still shows the durable d20 result before free-form result narrative;
+- model control formatting cannot dead-end play;
+- genuine terminal failures show safe reasons and remain retryable;
+- no duplicate turn/card/reroll;
+- Save/Continue intact.
+
+Do not ask Owner to re-evaluate whether Public d20 is worthwhile.
+
+Only after Owner final PASS may GPT close G4-09UATB, G4-09, and G4-08, then inspect current roadmap authority before shaping G4-10.
 
 Do not start G5 before G4-GATE.
