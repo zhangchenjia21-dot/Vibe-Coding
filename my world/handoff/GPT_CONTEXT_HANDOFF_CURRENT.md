@@ -7,9 +7,9 @@ project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
 current_parent_task: G4-09R1 Runtime Model Settings v0.1
-current_execution_task: G4-09R1B1C01A Runtime Settings L3 UI Support
+current_execution_task: G4-09R1B1C01B Settings UI State Consistency
 semantic_owner: GPT
-current_execution_owner: Codex
+current_execution_owner: Kimi
 ---
 
 # my world｜GPT CONTEXT HANDOFF CURRENT
@@ -29,8 +29,8 @@ G4-09UATB Owner Product UAT           HOLD
 G4-09R1 Runtime Model Settings v0.1   ACTIVE
 G4-09R1M1 Backend Mechanism           PASS / CLOSED
 G4-09R1B1 Settings UI                 CORRECTION REQUIRED
-G4-09R1B1C01A L3 UI Support           ACTIVE — CODEX
-G4-09R1B1C01B UI State Consistency    HOLD — KIMI
+G4-09R1B1C01A L3 UI Support           PASS / CLOSED
+G4-09R1B1C01B UI State Consistency    ACTIVE — KIMI
 G4-GATE                               NOT YET
 ```
 
@@ -49,15 +49,15 @@ Implementation:
 
 3. `AGENTS.md`
 4. `docs/g4_09r1/G4-09R1B1_INDEPENDENT_REVIEW.md`
-5. `docs/tasks/G4-09R1B1C01A_RUNTIME_SETTINGS_L3_UI_SUPPORT_TASK.md`
-6. `docs/tasks/G4-09R1B1C01B_UI_STATE_CONSISTENCY_CORRECTION_TASK.md` — HOLD
-7. Runtime Settings L2/L3 current implementation and focused tests
+5. `docs/g4_09r1/G4-09R1B1C01A_INDEPENDENT_REVIEW.md`
+6. `docs/tasks/G4-09R1B1C01B_UI_STATE_CONSISTENCY_CORRECTION_TASK.md`
+7. current Application Shell settings UI + B1 focused tests
 
 ---
 
 ## 3. Accepted backend and B1 reality
 
-Backend remains PASS / CLOSED for provider/model semantics:
+Backend/provider model semantics remain PASS / CLOSED:
 
 - exact four-profile catalog;
 - DeepSeek/K3 reasoning mapping;
@@ -67,7 +67,7 @@ Backend remains PASS / CLOSED for provider/model semantics:
 - real DeepSeek and real Kimi model calls completed;
 - SQLite v4 / Source / Final Create / d20 semantics unchanged.
 
-B1 reviewed HEAD:
+Original B1 reviewed HEAD:
 
 `fcdcec66edad41afbb93f4a5e9cc70174402be5c`
 
@@ -81,58 +81,79 @@ Accepted B1 work:
 - Save/Cancel/reopen/restart behavior;
 - no Game/Source mutation;
 - layout/regression evidence;
-- real DeepSeek V4 Pro and Kimi K3 selected from the actual UI each reached real Opening generation.
+- real DeepSeek V4 Pro and Kimi K3 selected from actual UI each reached real Opening generation.
 
 ---
 
-## 4. Why B1 needs correction
+## 4. C01A accepted support
 
-### Finding A
+Reviewed implementation/evidence HEAD:
 
-With current context 1M, switching model to Kimi K2.7 yields backend `incompatible_context_limit`. UI correctly disables Save, but its failure path returns before applying fixed-thinking presentation. Reasoning can remain enabled and the fixed-Thinking explanation is hidden.
+`bb3c16b392887a4649f32e23348067c70a3e7a1c`
 
-### Finding B
+Formal review:
 
-Application Shell directly imports Runtime Settings L0 rules to get `validated_default()` for corrupt persisted settings. UI must depend on Runtime Settings L3 only.
+`my-world/docs/g4_09r1/G4-09R1B1C01A_INDEPENDENT_REVIEW.md`
 
-### Finding C
+Accepted L3 seams:
 
-The custom overlay has no explicit `ui_cancel` / Escape path; packet required sensible Escape/Cancel behavior.
+```text
+validated_default_settings()
+→ defensive exact deepseek_v4_pro / 256k / high
+
+inspect_candidate(kimi_k27 / 1m / high)
+→ success=false / incompatible_context_limit
+→ candidate.allowed_context_limits=[256k]
+→ candidate.fixed_thinking=true
+→ candidate.graded_reasoning=false
+→ candidate.reasoning_effective=null
+→ selected-provider credential bool only
+```
+
+No transport/secret fields; unknown/malformed candidates expose no partial identity; no settings/Game/Source/SQLite write side effect.
 
 ---
 
-## 5. Current Codex task
+## 5. Current Kimi task
 
 Packet:
 
-`my-world/docs/tasks/G4-09R1B1C01A_RUNTIME_SETTINGS_L3_UI_SUPPORT_TASK.md`
+`my-world/docs/tasks/G4-09R1B1C01B_UI_STATE_CONSISTENCY_CORRECTION_TASK.md`
 
-Codex owns only:
+Kimi must:
 
-1. expose exact validated default through Runtime Settings L3, non-mutating and defensive-copy;
-2. make `inspect_candidate()` return safe partial capability truth for a known profile even when context is incompatible, while preserving `success=false / status=incompatible_context_limit`;
-3. direct tests for no-write/no-secret behavior.
+1. remove `src/应用壳.gd` direct Runtime Settings L0 dependency and use L3 `validated_default_settings()` for corrupt persisted recovery;
+2. consume partial L3 candidate truth even on `incompatible_context_limit` so `K3 / 1M → K2.7` shows Save disabled + 1M disabled + reasoning disabled + fixed Thinking ON explanation simultaneously;
+3. preserve valid 256K recovery and re-enable reasoning when switching to a graded model according to L3 projection;
+4. implement `ui_cancel` / Escape exactly as Cancel without Save/mutation;
+5. keep accepted B1 layout, persistence, Continue/New Game/Public d20 behavior green.
 
-Do not change UI or Provider wire/model semantics. Real Provider rerun is unnecessary unless Provider code is touched.
+Do not modify Runtime Settings/backend/Provider/Source/Final Create/Persistence/Public d20.
+
+Existing real DeepSeek/Kimi UI generation evidence remains applicable if normal Save/provider routing is unchanged.
 
 Return ceiling: READY FOR INDEPENDENT REVIEW.
 
 ---
 
-## 6. After C01A
+## 6. After Kimi returns
 
-If GPT passes C01A, activate:
+GPT refreshes both mains and verifies actual code/evidence, especially:
 
-`my-world/docs/tasks/G4-09R1B1C01B_UI_STATE_CONSISTENCY_CORRECTION_TASK.md`
+- no Application Shell L0 import;
+- invalid persisted recovery through L3 only and no silent save;
+- exact K3/1M→K2.7 intermediate state consistency;
+- 256K recovery and graded-model switch;
+- Escape/ui_cancel no-save behavior;
+- no backend/protected-path changes;
+- focused B1, G4-07B, G4-08B and layouts green.
 
-Kimi then removes the L0 dependency, consumes new L3 support, fixes K2.7 invalid-context fixed-thinking presentation, and adds Escape/ui_cancel = Cancel.
-
-After C01B GPT Independent Review PASS:
+If PASS:
 
 ```text
 G4-09R1B1 PASS / CLOSED
 → final real Provider / Windows freshness integration
-→ refreshed Owner UAT instructions
+→ refresh Owner UAT instructions
 → G4-09UATB ACTIVE — OWNER
 ```
 
