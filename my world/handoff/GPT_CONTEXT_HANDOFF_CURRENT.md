@@ -6,8 +6,8 @@ updated: 2026-09-02
 project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
-current_parent_task: G4-10 Runtime Asset Resolution
-current_execution_task: G4-10M1 Runtime Asset Resolution Mechanism
+current_parent_task: G4-11 Two Primary Asset Families Reality Test
+current_execution_task: G4-11P1 Two-Family Reality Prep / Engineering Proof
 semantic_owner: GPT
 current_execution_owner: CODEX
 ---
@@ -21,42 +21,151 @@ current_execution_owner: CODEX
 ```text
 G4-07 First Playable A                PASS / CLOSED
 G4-08 Expansion Pack v0.1             PASS / CLOSED
-G4-08M1 Public d20 Mechanism          PASS / CLOSED
-G4-08B Public d20 UI Integration      PASS / CLOSED
 G4-09 First Playable B                PASS / CLOSED
-G4-09R1 Runtime Model Settings v0.1   PASS / CLOSED
-G4-09UATBC01 Narrative Responsiveness PASS / CLOSED
-G4-09UATBC02A d20 Protocol Decoupling PASS / CLOSED
-G4-09UATBC02B Failure Visibility      PASS / CLOSED AFTER C01
-G4-09UATBC02BC01 Persistence Visibility PASS / CLOSED
-G4-09UATBC02P1 Final Windows Freshness PASS / CLOSED
 G4-09UATB Owner Product UAT           PASS / CLOSED
-G4-10 Runtime Asset Resolution        ACTIVE
-G4-10S0 Semantic Freeze               PASS / CLOSED — GPT
-G4-10M1 Mechanism                     ACTIVE — CODEX
-G4-11 Two Primary Asset Families      NOT YET
+G4-10 Runtime Asset Resolution        DEFERRED / MOVED TO G6
+G4-10M1 Mechanism                     SUPERSEDED / DO NOT EXECUTE
+G4-11 Two Primary Asset Families      ACTIVE
+G4-11P1 Engineering Reality Prep      ACTIVE — CODEX
+G4-11UAT Owner Reality Test           NOT YET
 G4-GATE                               NOT YET
 ```
 
-Do not start G4-11 before G4-10M1 passes GPT Independent Review. Do not start G5 before G4-GATE.
+Do not start G5 before G4-11P1 Independent Review + G4-11UAT Owner PASS + G4-GATE.
 
-## 2. Owner PASS closeout
+## 2. Owner visual deferral decision
 
-On 2026-09-02 Owner returned:
+Owner explicitly decided on 2026-09-02 that portrait / scene / authored-map resources are not currently mature and are not part of the core experience.
+
+Canonical decision:
+
+`my world/architecture/source/G4_VISUAL_ASSET_DEFERRAL_TO_G6_DECISION.md`
+
+Effect:
 
 ```text
-PASS
+G4-10 Runtime Asset Resolution   DEFERRED / MOVED TO G6
+G4-10M1                          SUPERSEDED / DO NOT EXECUTE
 ```
 
-for the final focused G4-09UATB reliability/responsiveness retest.
+Runtime visual asset resolution and exact visual generation are removed from G4-GATE.
 
-Formal implementation record:
+This does not block G5 because visual presentation is not World/Character/Event/Knowledge/Location authority.
 
-`docs/g4_09/G4-09UATB_OWNER_PRODUCT_UAT_RESULT.md`
+Protected distinction:
 
-This closes G4-09UATB, G4-09 First Playable B and G4-08 Expansion Pack v0.1. Do not reopen the already accepted Public d20 gameplay-value question absent a concrete regression.
+```text
+portrait / scene / map image
+!= gameplay semantic truth
 
-Protected runtime principle remains:
+map image
+!= topology / travel / current location / GIS
+```
+
+Future G6 must re-audit the actual visual consumer before implementing a resolver or deciding old-Game presentation overrides.
+
+## 3. G4-11 canonical product test
+
+Decision:
+
+`my world/architecture/source/G4_TWO_FAMILY_REALITY_TEST_V0_1_DECISION.md`
+
+Fixed families:
+
+```text
+A — historical / low-magic
+World:      汉末三国：天下未定
+Entry:      208｜赤壁前夕
+Player:     刘备
+Expansion:  none
+
+B — high-magic / fantasy
+World:      埃瑟维亚：诸界余辉
+Entry:      t0-1287-ovista
+Player:     莉维娅·塞兰
+Expansion:  none
+```
+
+Engineering real-provider comparison uses the same current selected runtime model profile through the shared adapter. Do not change Owner persisted model preference solely for the test.
+
+No portrait / scene / authored-map requirement exists.
+
+## 4. G4-11P1 current task
+
+Packet:
+
+`my-world/docs/tasks/G4-11P1_TWO_FAMILY_REALITY_PREP_TASK.md`
+
+Owner: **Codex**.
+
+Type: validation / UAT-support. No production behavior change is expected.
+
+Required real vertical for each family:
+
+```text
+exact full-fidelity Source
+→ Composition
+→ Atomic Final Create
+→ independent Game / SQLite
+→ real Provider Opening
+→ >=2 accepted continuation turns
+→ Save
+→ close/switch
+→ reopen / Continue
+→ another accepted continuation
+```
+
+Also prove:
+
+- A/B Game and Conversation isolation;
+- no cross-family Source/Context leakage;
+- T0 quarantine remains intact;
+- exact semantic Source ancestry / bounded Source-update isolation;
+- no visual dependency;
+- no G5/G6 scope creep;
+- Owner production Source/Games/settings/credentials untouched.
+
+If a blocker requires product runtime changes, Codex must stop and return the blocker instead of fixing it inside P1.
+
+Return ceiling: **READY FOR INDEPENDENT REVIEW**.
+
+## 5. Independent Review focus
+
+After Codex returns, GPT must inspect actual evidence/code and especially verify:
+
+1. both verticals use production seams, not a fake parallel harness;
+2. same effective selected model profile is used for both real Provider paths;
+3. A/B have distinct Game IDs + SQLite and switch A→B→A correctly;
+4. no opposite-family Source identity/content appears in model-visible Context;
+5. Save/reopen/Continue restores each Game's own accepted history;
+6. Source current update cannot mutate existing Game semantic ancestry;
+7. no visual resolver, output-format gate, keyword classifier or premature G5 semantics were added;
+8. Owner production surfaces remain unchanged.
+
+Engineering PASS does not prove the two worlds feel different.
+
+## 6. Owner UAT after P1
+
+If P1 passes GPT Independent Review, activate a short `G4-11UAT`.
+
+Owner product question:
+
+> Do the actual Han / 刘备 and Afterglow / 莉维娅 play experiences clearly feel like two different RPG worlds rather than one generic AI chat with swapped names?
+
+Owner is not asked to judge visuals.
+
+If Owner PASS:
+
+```text
+G4-11 PASS / CLOSED
+→ G4-GATE PASS
+→ G4 CLOSED
+→ inspect/shape G5 route
+```
+
+If Owner FAIL, correct only the concrete Source/Context/Game seam exposed. Do not reintroduce visual work as a substitute for world differentiation.
+
+## 7. Protected runtime principle
 
 ```text
 Model Freedom First
@@ -66,74 +175,4 @@ Visible Narrative First
 Canonical Commit Behind a Turn Finalize Barrier
 ```
 
-## 3. Roadmap after G4-09
-
-Canonical roadmap requires:
-
-```text
-G4-10 Runtime Asset Resolution
-→ G4-11 Two Primary Asset Families Reality Test
-→ G4-GATE
-→ G5
-```
-
-G4-10 roadmap outcome: bind portrait / scene / authored map to exact Source generation and prove safe path, missing fallback, Windows export, and real Godot load. It explicitly does not become a full map topology/travel/GIS/procedural-map system.
-
-## 4. G4-10S0 canonical decision
-
-Decision:
-
-`Vibe-Coding/my world/architecture/source/G4_RUNTIME_ASSET_RESOLUTION_V0_1_DECISION.md`
-
-Key truth:
-
-- immutable Source generation owns authored visual bytes;
-- Game resolution uses pinned exact generation, never Source current;
-- v0.1 consumers: Character optional portrait + World authored `portrait | scene | map`;
-- exact resolution states: `RESOLVED / ABSENT / UNAVAILABLE`;
-- optional canonical absence is not corruption;
-- missing/tampered/unsafe/un-decodable visual is unavailable and may use an application-owned neutral presentation fallback;
-- presentation fallback must never rewrite identity or use current/neighbor/other-package/network replacement;
-- safe package-local path rules remain mandatory;
-- real Godot image decode/load is required;
-- authored map image is not topology/travel/current-location/GIS truth;
-- no visual bytes copied into SQLite/Game canonical storage merely for display;
-- no G5 semantics or G6 full UI redesign in G4-10M1.
-
-## 5. Current Codex task
-
-Packet:
-
-`my-world/docs/tasks/G4-10M1_RUNTIME_ASSET_RESOLUTION_MECHANISM_TASK.md`
-
-Owner: **Codex**.
-
-M1 must prove:
-
-- exact Character portrait resolution + real Godot load;
-- exact World scene/map resolution + real Godot load;
-- ABSENT / UNAVAILABLE semantics;
-- unsafe path rejection;
-- broken/missing/tampered visual never silently substitutes another identity;
-- two generations of the same Source remain isolated after current changes;
-- no Source/Game/SQLite writeback solely for visual display;
-- canonical Windows export validation;
-- directly affected regressions and `git diff --check`.
-
-No real DeepSeek/Kimi call is required.
-
-Return ceiling: **READY FOR INDEPENDENT REVIEW**.
-
-## 6. Review focus after Codex returns
-
-Independent Review must inspect actual code/evidence, especially:
-
-1. whether resolver truly starts from exact generation rather than stable/current identity;
-2. whether old-generation visual bytes remain resolvable after new current generation is published;
-3. whether UNAVAILABLE can ever silently load current/neighbor/other-package bytes;
-4. whether safe path is reused consistently and no generic local-file authority leaks through L3;
-5. whether real Godot load proves decode, not only `FileAccess.file_exists`;
-6. whether presentation failures remain non-blocking without hiding non-visual Source integrity corruption;
-7. whether Codex avoided map topology/G5/G6 scope creep.
-
-If M1 PASS, close G4-10 and shape G4-11 from current roadmap/evidence. Do not start G5 before G4-GATE.
+Do not add model-format gates, genre keyword gates, mandatory prose structures or scripted beats merely to force family differentiation.
