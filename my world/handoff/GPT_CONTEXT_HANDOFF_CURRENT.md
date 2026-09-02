@@ -6,10 +6,10 @@ updated: 2026-09-02
 project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
-current_parent_task: G4-09UATB Owner Product UAT
-current_execution_task: G4-09UATBC01 Narrative Responsiveness / Public d20 Streaming Critical Path
+current_parent_task: G4-09 First Playable B
+current_execution_task: G4-09UATB Owner Product UAT — Focused Responsiveness Retest
 semantic_owner: GPT
-current_execution_owner: CODEX
+current_execution_owner: OWNER
 ---
 
 # my world｜GPT CONTEXT HANDOFF CURRENT
@@ -29,12 +29,12 @@ G4-09R1 Runtime Model Settings v0.1   PASS / CLOSED
 G4-09R1M1 Backend Mechanism           PASS / CLOSED
 G4-09R1B1 Settings UI                 PASS / CLOSED AFTER CORRECTION-01
 G4-09R1P1 Final Integration/Freshness PASS / CLOSED
-G4-09UATB Owner Product UAT           HOLD — NARRATIVE RESPONSIVENESS CORRECTION
-G4-09UATBC01 Narrative Responsiveness ACTIVE — CODEX
+G4-09UATBC01 Narrative Responsiveness PASS / CLOSED
+G4-09UATB Owner Product UAT           ACTIVE — OWNER focused responsiveness retest
 G4-GATE                               NOT YET
 ```
 
-Do not start G4-10/G5 while C01 is active.
+No Codex/Kimi task is active. Do not start G4-10/G5 while Owner UAT remains open.
 
 ## 2. Read first
 
@@ -47,28 +47,68 @@ Governance:
 Implementation:
 
 4. `AGENTS.md`
-5. `docs/tasks/G4-09UATBC01_NARRATIVE_RESPONSIVENESS_STREAMING_TASK.md`
-6. `docs/g4_09/G4-09UATB_OWNER_FINDING_NARRATIVE_RESPONSIVENESS.md`
-7. `src/行动判定/L2_流程层/公开D20行动判定流程.gd`
-8. directly relevant M1/M1C01/B tests
+5. `docs/g4_09/G4-09UATBC01_INDEPENDENT_REVIEW.md`
+6. `docs/g4_09/G4-09UATB_Owner产品验收说明.md`
+7. `docs/g4_09/G4-09UATB_OWNER_FINDING_NARRATIVE_RESPONSIVENESS.md`
 
-## 3. Owner UAT finding
+## 3. Owner product finding already accepted
 
 The Owner actually played the Public d20 Expansion and judged the mechanic/gameplay itself as having no material problem. Preserve that product finding.
 
-The remaining blocker is responsiveness: visible GM narrative feels too slow.
+Do not ask the Owner to re-prove whether Public d20 is worthwhile unless a concrete gameplay regression appears.
 
-Code inspection established:
+## 4. G4-09UATBC01 Independent Review result
 
-- ordinary Opening/Narrative: delta -> in-memory draft/UI; accepted Conversation SQLite write only after Provider completion;
-- Public d20 Host: Provider deltas accumulate in `_buffer`; narrative is exposed only after whole-response completion;
-- current issue is therefore d20 Host buffering, not per-token DB/file mutation.
+Reviewed implementation:
 
-The Owner's later `测试` push mainly added generated `.uid/.import` files; it is not a latency trace. Preserve those commits but do not treat them as performance evidence.
+- START_HEAD: `d944f3bbac45cfaa1a02bf61baaa8ecd0421064c`
+- IMPLEMENTATION_HEAD: `c03bcab9392ec70066f0a900a8718ab6befc0c33`
+- reviewed evidence/final Codex HEAD: `151bbefe805d3afc7f6f8da377d8c32e0e57cc01`
 
-## 4. Frozen responsiveness architecture
+Formal review:
 
-Canonical principle:
+`my-world/docs/g4_09/G4-09UATBC01_INDEPENDENT_REVIEW.md`
+
+Verdict: **PASS / CLOSED**.
+
+Accepted correction truth:
+
+- NO_CHECK remains one Provider call;
+- wire is compact one-line JSON control header + physical LF + raw narrative body;
+- parser supports arbitrary Provider content-delta chunking and validates the complete header before exposing body;
+- NO_CHECK body streams into provisional Conversation before Provider completion;
+- no durable Conversation/world write occurs per token/chunk;
+- CHECK_REQUIRED exact Program d20 result is durable before result-narrative request and first visible result delta;
+- result narrative streams progressively during the second Provider call;
+- fail/cancel leaves partial visible draft unaccepted and outside future Context;
+- same-process retry reuses matching unaccepted Player turn;
+- NO_CHECK Window A/B and CHECK_REQUIRED no-reroll/restart guarantees remain intact;
+- `turn_ready` is only reached after durable Conversation + required acceptance-marker finalization;
+- timing is monotonic/action-relative and contains no prompt/narrative/key/Authorization;
+- no changes to Conversation/UI/Persistence/Runtime/Provider ownership or SQLite schema v4;
+- real task-owned DeepSeek V4 Pro vertical exercised both NO_CHECK and CHECK_REQUIRED progressive visibility;
+- Windows export freshness rebuilt/verified against corrected checkout.
+
+## 5. Performance interpretation
+
+The application buffering defect is fixed, but Provider latency is not.
+
+Real evidence showed:
+
+- NO_CHECK: the first visible narrative follows the first Provider content quickly and occurs before Provider completion; the larger initial wait is Provider/model TTFT;
+- CHECK_REQUIRED: the result narrative now streams once available, but the path still has two Provider stages by design, so selected-model reasoning/TTFT can dominate time-to-first-result-narrative.
+
+If the Owner still reports slowness, distinguish:
+
+```text
+Provider/model TTFT / reasoning latency
+vs
+application buffering/finalize latency
+```
+
+using the timing seam. Do not assume file/SQLite writes are slowing every token; current code does not persist per token.
+
+The broader frozen principle remains:
 
 ```text
 Visible Narrative First
@@ -76,51 +116,62 @@ Visible Narrative First
 Canonical Commit Behind a Turn Finalize Barrier
 ```
 
-Important invariants:
+Future G5/G6 character/event/world semantic calculations may run behind visible narrative when safe, but must converge before the next turn depends on them. Do not pull those systems into G4.
 
-- visible narrative may be provisional before durable acceptance;
-- never write canonical state per token/chunk;
-- next player action cannot enter Context until current turn required durable effects finalize;
-- CHECK_REQUIRED exact Program roll/outcome remains durable before result narrative begins;
-- NO_CHECK remains one Provider call;
-- NO_CHECK wire becomes compact one-line control JSON followed by raw streamable narrative body;
-- if Provider fails mid-body, provisional draft is not accepted;
-- if exact completed NO_CHECK resolution is durable but downstream ack/marker failed, retry/reopen reuses exact narrative with no replacement Provider call;
-- future G5/G6 character/event/world semantic calculations should be able to run behind visible narrative when safe, but must converge before the Turn Finalize Barrier if next-turn context depends on them;
-- do not implement those future systems or a generic background worker in this G4 correction.
+## 6. Current Owner focused retest
 
-## 5. Current Codex task
+Instructions:
 
-Packet:
+`my-world/docs/g4_09/G4-09UATB_Owner产品验收说明.md`
 
-`my-world/docs/tasks/G4-09UATBC01_NARRATIVE_RESPONSIVENESS_STREAMING_TASK.md`
+The Owner may Continue the existing Public d20 Game.
 
-Expected implementation scope is Action Adjudication L0/L1/L2 + focused tests/evidence. Conversation/UI/Persistence/Provider are protected unless Codex proves a blocker and stops.
-
-Required structural proof:
+Focused checks:
 
 ```text
-NO_CHECK: first visible narrative delta < Provider completed
-CHECK_REQUIRED result narrative: durable check < first visible narrative delta < Provider completed
+NO_CHECK ordinary action
+→ no dice card
+→ GM narrative visibly grows progressively
+
+CHECK_REQUIRED risky action
+→ durable d20 card first
+→ result narrative visibly grows progressively
+→ no duplicate card/Player turn/reroll/result rewrite
+
+then
+Save → Main Menu → Continue
+→ same history/check result
 ```
 
-Also preserve one-call NO_CHECK, no-reroll, no duplicate Player turn, replay/lost-ACK windows, SQLite v4 and no-Expansion streaming.
+Owner returns only the final responsiveness verdict:
 
-Latency evidence must distinguish Provider first content, first visible narrative, Provider completion and finalize, without secrets/prompts/full content.
+```text
+PASS
+```
 
-Return ceiling: **READY FOR INDEPENDENT REVIEW**.
+or:
 
-## 6. After Codex return
+```text
+FAIL
+<remaining latency/regression seam>
+```
 
-GPT must:
+## 7. After Owner verdict
+
+If PASS:
 
 1. refresh both mains;
-2. inspect actual changed code, not report only;
-3. verify incremental header/body parsing across arbitrary chunk boundaries;
-4. verify NO_CHECK progressive streaming + one call + replay safety;
-5. verify CHECK_REQUIRED exact check durable before visible result narrative + no reroll;
-6. verify provisional Conversation fail/cancel/retry creates no duplicate Player turn;
-7. verify no protected seam was crossed silently;
-8. inspect latency evidence and Windows export freshness;
-9. if PASS, close C01 and resume a **focused** Owner responsiveness retest;
-10. do not close G4-09/G4-08 until Owner final verdict.
+2. record Owner focused UAT PASS;
+3. close `G4-09UATB`, `G4-09 First Playable B`, and `G4-08 Expansion Pack v0.1`;
+4. Decision Propagation to implementation `AGENTS.md`, Current Status and this handoff;
+5. inspect current roadmap authority before shaping G4-10 Runtime Asset Resolution;
+6. do not start G5 before G4-GATE.
+
+If FAIL:
+
+1. refresh both mains;
+2. classify whether remaining issue is Provider latency, Public d20 orchestration, UI projection, or another concrete seam;
+3. apply correction-budget rules;
+4. preserve accepted Public d20 gameplay, no-reroll, persistence and model-settings boundaries unless directly implicated.
+
+Engineering evidence does not substitute for the Owner final responsiveness verdict.
