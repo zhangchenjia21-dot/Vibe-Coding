@@ -1,13 +1,13 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 12.1
+version: 12.2
 created: 2026-08-26
 updated: 2026-09-03
 phase: G5 World Semantics & GM Runtime
-current_task: G5-03M1C02 Semantic-vs-Agency Currentness Separation
+current_task: G5-03M1R01 Agency Scheduler v0.3 Simplification Redesign
 current_owner: KIMI
-parent_task: G5-03M1 Multi-Actor Agency Cycle
+parent_task: G5-03M1 Multi-Actor Agency
 semantic_owner: GPT
 owner_uat_required: false
 context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
@@ -29,112 +29,145 @@ G5 World Semantics & GM Runtime             ACTIVE
 G5-01 World Turn / Semantic Materialization PASS / CLOSED
 G5-02 Knowledge Provenance                  PASS / CLOSED
 G5-03 NPC / Faction Agency                  ACTIVE
-G5-03M1 Multi-Actor Agency Cycle            CORRECTION REQUIRED
-G5-03M1C01 Currentness + Timeline Isolation PARTIAL PASS / CLOSED INTO C02
-G5-03M1C02 Semantic-vs-Agency Currentness   ACTIVE — KIMI
+G5-03M1 Multi-Actor Agency                  REDESIGN ACTIVE
+G5-03M1C01 Currentness correction           HISTORICAL PARTIAL PASS
+G5-03M1C02 Semantic-vs-Agency correction    SUPERSEDED / DO NOT EXECUTE
+G5-03M1R01 Agency Scheduler v0.3            ACTIVE — KIMI
 G5-03M2 Stable Actor Materialization        NOT YET
 G5-04 Event / Priority Evolution            NOT YET
 G5-GATE                                     NOT YET
 ```
 
-Do not start G5-03M2/G5-04 before C02 Independent Review PASS.
+## 2. Why R01 redesign
 
-## 2. C01 review result
+The same semantic/Agency currentness seam required a second correction. Under the project correction budget:
 
-C01 implementation HEAD:
+> **same seam still fails → redesign**
 
-`a28ccc7688ca44bce91589badb129f90736cc603`
+Owner approved relaxing the optimization constraints rather than continuing to patch them.
 
-Review:
+Do **not** roll back G5-03 implementation commits. Preserve the passing downstream Multi-Actor execution/runtime and replace only the upstream scheduler/selection coupling.
 
-`my-world/docs/g5_03/G5-03M1C01_INDEPENDENT_REVIEW.md`
+Canonical decision:
 
-C01 correctly fixed:
+`architecture/world/G5_AGENCY_SCHEDULER_V0_3_DECISION.md`
 
-- stale Agency commit/head guards;
-- production Restore invalidation;
-- current-hash actor Knowledge/Agency History filtering;
-- same-turn stale cycle replacement;
-- replay skip of already committed actors;
-- sibling cycle-owned head progression.
+Historical v0.2 decision is superseded.
 
-Multi-actor selection/concurrency architecture remains accepted.
-
-## 3. C02 blocking seam
-
-C01 accidentally coupled two different meanings of currentness.
-
-Required protected distinction:
+## 3. Current canonical flow
 
 ```text
-semantic source version still accepted
-!=
-Agency handoff still current
+free-form Narrative
+→ durable Conversation acceptance
+→ G5-01/G5-02 semantic lane: changes + knowledge only
+→ mark Agency dirty
+→ foreground idle + semantic queue settled
+→ standalone lightweight Agency Selector over latest current world snapshot
+→ 0..4 validated stable actors
+→ separate concurrent actor-scoped executions
+→ 0..N durable sibling actor actions
 ```
 
-If Turn A is still present with the same accepted GM hash, valid G5-01 changes and G5-02 knowledge may still materialize even when the player has already started or accepted Turn B.
+Agency is a best-effort evaluation of the latest current world, not a mandatory child cycle for every player turn.
 
-But Turn A Agency Selection must be suppressed once Turn A is no longer the latest foreground-idle turn.
+Fast A→B→C player progress may coalesce into one later Agency evaluation of C; no historical Agency catch-up queue is required.
 
-Do not erase accepted semantic truth merely because the player moves quickly.
+## 4. What is preserved
 
-Second blocker: a valid selection-only result (`changes=[]`, `knowledge_events=[]`, non-empty `agency_candidates`) must carry complete source identity and be able to start current Agency without creating a fake semantic mutation. The same applies when all parsed knowledge events are dropped by actor allowlist.
+R01 must reuse/preserve where possible:
 
-## 4. Current packet
+- multi-actor concurrent per-actor execution;
+- actor-private Source/current Knowledge/own agency history;
+- serialized `commit_world_mutation_durably(...)` sibling commits;
+- same-cycle sibling expected-head progression;
+- foreground/Restore cancellation;
+- stale Knowledge/Agency History filtering;
+- same-version replay no duplicate actor execution/mutation;
+- bounded later GM Context `Independent Actor Actions`;
+- no automatic Player/other-actor knowledge grant.
 
-`my-world/docs/tasks/G5-03M1C02_SEMANTIC_AGENCY_CURRENTNESS_SEPARATION_CORRECTION_TASK.md`
+## 5. What is removed
 
-C02 must:
+The semantic-analysis result no longer owns Agency Selection.
 
-1. split semantic source-version validity from Agency handoff eligibility;
-2. preserve valid older accepted changes/knowledge while suppressing stale Agency;
-3. keep actual regenerate/correction hash replacement fail-closed;
-4. publish `source_turn_index + source_gm_sha256 + agency_candidates` on valid selection-only/no-record terminal paths;
-5. keep Application's defensive latest/hash/foreground-idle validation;
-6. preserve all M1/C01 multi-actor, concurrency, Restore, replay and knowledge-boundary behavior.
-
-## 5. Provider status
-
-Parent G5-03 real feature proof remains:
+Remove the current production dependency:
 
 ```text
-PENDING / EXTERNAL PROVIDER UNAVAILABLE
+semantic response agency_candidates
+→ Application starts Agency
 ```
 
-**C02 makes zero real Provider calls.**
+Semantic materialization returns to its own validity semantics. An older accepted source turn may still materialize valid changes/knowledge if its accepted GM hash remains current at that index; foreground advancement only makes the old Agency opportunity obsolete.
 
-## 6. Next slice remains G5-03M2 after M1 PASS
+## 6. Standalone selector
 
-Owner's Red-Cliffs example still justifies:
+Selector may run only when:
+
+- Session ready;
+- Agency dirty;
+- foreground idle;
+- semantic worker has zero active/queued work;
+- no selector/cycle already active.
+
+It may use bounded GM-level current-world context because it only decides who receives an action evaluation. Actor execution remains private/actor-scoped, so selector omniscience does not become actor omniscience.
+
+Output:
+
+```json
+{"actors":["stable-id-a","stable-id-b"]}
+```
+
+Validate Guaranteed-NPC stable IDs, dedupe, reject Player/unknown, cap 4. No round-robin fallback/retry loop.
+
+## 7. Foreground / Restore behavior
+
+New foreground attempt cancels active selector + remaining uncommitted actor work and abandons that obsolete Agency opportunity. Already committed actions remain durable. A later successfully accepted turn marks dirty again.
+
+Restore/Recovery/session close cancels active background Agency and clears obsolete dirty state. Loading a Save does not automatically fire Agency.
+
+Before using selector output, frozen latest accepted turn/hash + world head must still match current state and foreground must remain idle.
+
+## 8. Current packet
+
+`my-world/docs/tasks/G5-03M1R01_AGENCY_SCHEDULER_V0_3_SIMPLIFICATION_REDESIGN_TASK.md`
+
+Do not execute the superseded C02 packet.
+
+## 9. Provider status / authorization
+
+Parent v0.2 real proof remains historically pending due Provider unavailability.
+
+R01 is a new approved redesign task. After deterministic gates are green it may use at most:
+
+```text
+1 real standalone selector request
++
+up to 2 real actor execution requests
+```
+
+Stub Narrative/semantic prerequisites. No real Narrative call solely to reach Agency, no retry/fallback/hidden Provider switch. External outage leaves reality proof pending without blocking code review.
+
+## 10. Next slice
+
+After R01 Independent Review PASS and G5-03M1 Engineering closeout:
 
 ```text
 G5-03M2 Minimal Stable Actor Materialization / Registry Expansion
 ```
 
-Purpose: important non-Guaranteed named actors such as Cao Cao / Zhuge Liang may enter the same Agency Cycle once stable Game-local identity/materialization semantics are frozen.
+This remains justified by the Owner requirement that important non-Guaranteed named actors such as Cao Cao / Zhuge Liang can enter Agency once stable Game-local identity/material exists.
 
-Do not implement M2 inside C02.
+## 11. Temporary routing
 
-## 7. Temporary routing
+Through 2026-09-06 23:59 (+08:00): GPT owns architecture/review; Kimi owns code-changing implementation. Correct in-flight Kimi work may finish after expiry.
 
-Through 2026-09-06 23:59 (+08:00):
-
-```text
-GPT        → semantics / architecture / final Independent Review
-Kimi       → code-changing implementation owner
-Grok Build → research/evidence support when useful
-Owner      → Product UAT / explicit verdict
-```
-
-Auto-expiry 2026-09-07 00:00 (+08:00); correct in-flight Kimi work may finish.
-
-## 8. Route
+## 12. Route
 
 ```text
-Kimi G5-03M1C02
+Kimi G5-03M1R01 Agency Scheduler v0.3
 → GPT Independent Review
-→ if PASS, close G5-03M1 Engineering
-→ shape G5-03M2 Stable Actor Materialization
+→ close G5-03M1 Engineering if PASS
+→ G5-03M2 Stable Actor Materialization
 ```
 
 Visual runtime remains deferred to G6.
