@@ -7,7 +7,7 @@ project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
 current_parent_task: G5-03M1R01 Agency Scheduler v0.3
-current_execution_task: G5-03M1R01C01 Scheduler Production Lifecycle + Current Snapshot
+current_execution_task: G5-03M1R01C02 Dirty Opportunity Consumption + Lifecycle Proof
 semantic_owner: GPT
 current_execution_owner: KIMI
 ---
@@ -26,82 +26,74 @@ G5-03M1 Multi-Actor Agency                      REDESIGN ACTIVE
 G5-03M1C01                                      HISTORICAL PARTIAL PASS
 G5-03M1C02                                      SUPERSEDED / DO NOT EXECUTE
 G5-03M1R01 Agency Scheduler v0.3                CORRECTION REQUIRED
-G5-03M1R01C01 Scheduler Lifecycle/Snapshot      ACTIVE — KIMI
+G5-03M1R01C01 Scheduler Lifecycle/Snapshot      CORRECTION REQUIRED / CLOSED INTO C02
+G5-03M1R01C02 Dirty Opportunity Consumption     ACTIVE — KIMI
 G5-03M2 Stable Actor Materialization            NOT YET
 G5-04 Event / Priority Evolution                NOT YET
 ```
 
-Canonical v0.3 decision:
+Canonical:
 
 `my world/architecture/world/G5_AGENCY_SCHEDULER_V0_3_DECISION.md`
 
-R01 Independent Review:
+C01 review:
 
-`my-world/docs/g5_03/G5-03M1R01_INDEPENDENT_REVIEW.md`
+`my-world/docs/g5_03/G5-03M1R01C01_INDEPENDENT_REVIEW.md`
 
-Current correction:
+Current packet:
 
-`my-world/docs/tasks/G5-03M1R01C01_SCHEDULER_PRODUCTION_LIFECYCLE_CURRENT_SNAPSHOT_CORRECTION_TASK.md`
+`my-world/docs/tasks/G5-03M1R01C02_DIRTY_OPPORTUNITY_CONSUMPTION_CORRECTION_TASK.md`
 
-## Owner review-tool decision
+Owner temporarily declined Gemini review; current flow is Kimi implementation → GPT Independent Review.
 
-Owner temporarily declined Gemini adversarial review. The optional Gemini packet is `CANCELLED / DO NOT EXECUTE`. Review flow is again:
+## Accepted architecture
 
-```text
-Kimi implementation → GPT Independent Review
-```
-
-No Gemini result is required.
-
-## Accepted v0.3 architecture
-
-Do not redesign:
+Do not redesign or re-couple Agency selection into semantic analysis:
 
 ```text
-Narrative durable accepted
+ordinary durable accepted turn
 → semantic changes + knowledge only
-→ standalone Scheduler dirty/coalescing
-→ foreground idle + semantic worker settled
-→ standalone selector over current world
-→ validated 0..4 stable actors
+→ one dirty Agency opportunity
+→ standalone selector over latest current world
+→ 0..4 stable actors
 → existing concurrent actor-scoped Agency Cycle
 ```
 
-Preserve semantic/Agency decoupling, multi-actor concurrency, actor-private Knowledge/History, sibling expected-head progression, foreground/Restore cancellation and replay no duplicate.
+## C01 review result
 
-## R01 review findings
+Reviewed implementation HEAD: `9da292966e5a56bbbea7ca5aedb20919d5ebb092`.
 
-Reviewed implementation HEAD: `46f8bd34875a55de7c26a1b9ebc5f11312a9f582`.
+C01 correctly added:
 
-Three material defects were verified from production code:
+- production `generation_completed` dirty wiring for ordinary player turns;
+- cycle terminal child cleanup;
+- current accepted-hash selector consequence filtering;
+- selector adapter cleanup.
 
-1. **production dirty wiring missing** — Scheduler initializes `dirty=false`; tests call `mark_dirty()` manually, but Application never calls it after an ordinary durable accepted turn. `_on_world_turn_finished_for_scheduler()` only calls `consider_agency()`, so normal product flow returns `not_ready` and selector never starts;
-2. **cycle terminal cleanup missing** — Scheduler stores `agency_cycle_runtime`, but never connects to `cycle_finished`/clears the terminal child. `consider_agency()` rejects whenever this reference is non-null, so after the first cycle future Agency is permanently blocked;
-3. **selector current-world filtering incomplete** — `Recent World Changes` includes structurally valid semantic records without checking current accepted GM hash. A stale record physically retained after regenerate/correction can influence selection even though normal GM Context would reject it.
+Blocking defect remains: `dirty` is never consumed when a selector starts. Therefore Cycle A terminal still sees `dirty=true` and immediately calls `consider_agency()`, creating another selector for the same accepted-turn opportunity.
 
-These findings are one seam: standalone Scheduler **production lifecycle + current snapshot**. They do not justify reverting v0.3.
+Current focused no-retry test is inverted: it asserts dirty remains true and manual re-consider starts a new selector. The C01 production-wiring test also directly calls `mark_dirty()` instead of exercising Application production callback wiring.
 
-## R01C01 required review focus
+## C02 review focus
 
 When Kimi returns verify actual code/tests for:
 
-- real production ordinary-turn acceptance marks dirty without manual test shortcut;
-- Opening is not treated as ordinary Agency turn;
-- semantic terminal is only a wake-up;
-- Cycle A terminal cleanup sets Scheduler ready for later Cycle B;
-- late terminal callback from an old cycle cannot clear a newer cycle;
-- failed/no-actors selector opportunity does not auto-retry, but a later accepted turn can schedule again;
-- selector world changes contain current hash-matching consequences and exclude stale hash-mismatching consequences;
-- existing coalescing, foreground/Restore, multi-actor concurrency, knowledge isolation, sibling-head and replay tests remain green;
-- zero real Provider calls in correction; `git diff --check` PASS.
+1. selector start consumes current dirty opportunity (`dirty=false`);
+2. completed/no-actors/malformed/provider-failed/hold opportunity cannot auto-retry or manual re-consider without a new accepted turn;
+3. Cycle A terminal produces zero selector A2 before Turn B acceptance;
+4. later Turn B production acceptance creates fresh dirty and can start selector/cycle B;
+5. production dirty proof does not directly call `mark_dirty()`;
+6. exact completed-cycle cleanup cannot let an old callback clear a newer cycle;
+7. C01 current-hash filtering and all R01 concurrency/knowledge/foreground/Restore/replay behavior remain green;
+8. zero real Provider calls and `git diff --check` PASS.
 
 ## Provider
 
-R01C01 makes zero real Provider calls. Parent real G5-03 feature proof remains pending honestly.
+C02 makes zero real Provider calls. Parent real G5-03 feature proof remains pending honestly.
 
 ## Next
 
-Only after R01C01 Independent Review PASS and G5-03M1 Engineering closeout:
+Only after C02 Independent Review PASS and G5-03M1 Engineering closeout:
 
 `G5-03M2 Minimal Stable Actor Materialization / Registry Expansion`
 
