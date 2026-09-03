@@ -1,13 +1,13 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 12.2
+version: 12.3
 created: 2026-08-26
 updated: 2026-09-03
 phase: G5 World Semantics & GM Runtime
-current_task: G5-03M1R01 Agency Scheduler v0.3 Simplification Redesign
+current_task: G5-03M1R01C01 Scheduler Production Lifecycle + Current Snapshot
 current_owner: KIMI
-parent_task: G5-03M1 Multi-Actor Agency
+parent_task: G5-03M1R01 Agency Scheduler v0.3
 semantic_owner: GPT
 owner_uat_required: false
 context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
@@ -30,144 +30,97 @@ G5-01 World Turn / Semantic Materialization PASS / CLOSED
 G5-02 Knowledge Provenance                  PASS / CLOSED
 G5-03 NPC / Faction Agency                  ACTIVE
 G5-03M1 Multi-Actor Agency                  REDESIGN ACTIVE
-G5-03M1C01 Currentness correction           HISTORICAL PARTIAL PASS
-G5-03M1C02 Semantic-vs-Agency correction    SUPERSEDED / DO NOT EXECUTE
-G5-03M1R01 Agency Scheduler v0.3            ACTIVE — KIMI
+G5-03M1C01 old currentness correction       HISTORICAL PARTIAL PASS
+G5-03M1C02 semantic-vs-agency correction    SUPERSEDED / DO NOT EXECUTE
+G5-03M1R01 Agency Scheduler v0.3            CORRECTION REQUIRED
+G5-03M1R01C01 Scheduler Lifecycle/Snapshot  ACTIVE — KIMI
 G5-03M2 Stable Actor Materialization        NOT YET
 G5-04 Event / Priority Evolution            NOT YET
 G5-GATE                                     NOT YET
 ```
 
-## 2. Why R01 redesign
+## 2. Owner review-tool decision
 
-The same semantic/Agency currentness seam required a second correction. Under the project correction budget:
+Owner temporarily declined Gemini adversarial review and returned to the prior flow:
 
-> **same seam still fails → redesign**
+```text
+Kimi implementation
+→ GPT actual-code Independent Review
+→ focused correction if concrete blocker exists
+→ next stage
+```
 
-Owner approved relaxing the optimization constraints rather than continuing to patch them.
+No Gemini result is required. The implementation-repo Gemini review packet is CANCELLED / DO NOT EXECUTE.
 
-Do **not** roll back G5-03 implementation commits. Preserve the passing downstream Multi-Actor execution/runtime and replace only the upstream scheduler/selection coupling.
+## 3. Accepted v0.3 design remains
 
-Canonical decision:
+Canonical:
 
 `architecture/world/G5_AGENCY_SCHEDULER_V0_3_DECISION.md`
 
-Historical v0.2 decision is superseded.
-
-## 3. Current canonical flow
-
 ```text
-free-form Narrative
-→ durable Conversation acceptance
-→ G5-01/G5-02 semantic lane: changes + knowledge only
-→ mark Agency dirty
+Narrative durable accepted
+→ semantic lane: changes + knowledge only
+→ standalone Agency Scheduler dirty/coalescing
 → foreground idle + semantic queue settled
-→ standalone lightweight Agency Selector over latest current world snapshot
-→ 0..4 validated stable actors
-→ separate concurrent actor-scoped executions
-→ 0..N durable sibling actor actions
+→ standalone selector over latest current world snapshot
+→ 0..4 stable actors
+→ existing concurrent actor-scoped Agency Cycle
 ```
 
-Agency is a best-effort evaluation of the latest current world, not a mandatory child cycle for every player turn.
+Do not re-couple Agency selection into semantic analysis.
 
-Fast A→B→C player progress may coalesce into one later Agency evaluation of C; no historical Agency catch-up queue is required.
+## 4. R01 Independent Review
 
-## 4. What is preserved
+Reviewed implementation HEAD:
 
-R01 must reuse/preserve where possible:
+`46f8bd34875a55de7c26a1b9ebc5f11312a9f582`
 
-- multi-actor concurrent per-actor execution;
-- actor-private Source/current Knowledge/own agency history;
-- serialized `commit_world_mutation_durably(...)` sibling commits;
-- same-cycle sibling expected-head progression;
-- foreground/Restore cancellation;
-- stale Knowledge/Agency History filtering;
-- same-version replay no duplicate actor execution/mutation;
-- bounded later GM Context `Independent Actor Actions`;
-- no automatic Player/other-actor knowledge grant.
+Formal review:
 
-## 5. What is removed
+`my-world/docs/g5_03/G5-03M1R01_INDEPENDENT_REVIEW.md`
 
-The semantic-analysis result no longer owns Agency Selection.
-
-Remove the current production dependency:
+Result:
 
 ```text
-semantic response agency_candidates
-→ Application starts Agency
+CORRECTION REQUIRED / NOT ENGINEERING PASS YET
 ```
 
-Semantic materialization returns to its own validity semantics. An older accepted source turn may still materialize valid changes/knowledge if its accepted GM hash remains current at that index; foreground advancement only makes the old Agency opportunity obsolete.
+Three blocking/material production defects were found in the new Scheduler seam:
 
-## 6. Standalone selector
+1. production Application never marks the Scheduler dirty after an ordinary player turn becomes durably accepted; focused tests manually call `mark_dirty()`, so normal product flow never starts the selector;
+2. after the first `AgencyCycleRuntimeProcess` reaches terminal completion, Scheduler never clears/frees `agency_cycle_runtime`, so future Agency evaluations remain permanently `not_ready`;
+3. selector `Recent World Changes` reads structurally valid semantic records without current accepted-GM-hash filtering, so stale consequences from regenerated/corrected Narrative may influence actor selection.
 
-Selector may run only when:
+These findings do not invalidate the v0.3 redesign. They are one focused seam: **production Scheduler lifecycle + current snapshot**.
 
-- Session ready;
-- Agency dirty;
-- foreground idle;
-- semantic worker has zero active/queued work;
-- no selector/cycle already active.
+## 5. Current correction
 
-It may use bounded GM-level current-world context because it only decides who receives an action evaluation. Actor execution remains private/actor-scoped, so selector omniscience does not become actor omniscience.
+Packet:
 
-Output:
+`my-world/docs/tasks/G5-03M1R01C01_SCHEDULER_PRODUCTION_LIFECYCLE_CURRENT_SNAPSHOT_CORRECTION_TASK.md`
 
-```json
-{"actors":["stable-id-a","stable-id-b"]}
-```
+Required outcomes:
 
-Validate Guaranteed-NPC stable IDs, dedupe, reject Player/unknown, cap 4. No round-robin fallback/retry loop.
+- real production durable ordinary-turn lifecycle marks Agency dirty;
+- semantic terminal remains only a scheduling wake-up;
+- completed/invalidated cycle child is safely cleaned and later turns can start later cycles;
+- selector world-change material uses current accepted-hash truth filtering;
+- selector/cycle terminal cleanup does not create automatic retry loops or strand Scheduler;
+- all existing semantic decoupling, coalescing, foreground/Restore, concurrency, knowledge isolation, sibling-head and replay behavior remains green.
 
-## 7. Foreground / Restore behavior
+## 6. Provider rule
 
-New foreground attempt cancels active selector + remaining uncommitted actor work and abandons that obsolete Agency opportunity. Already committed actions remain durable. A later successfully accepted turn marks dirty again.
+**R01C01 makes zero real Provider calls.** Parent real G5-03 proof remains honestly pending/unavailable. This correction is deterministic production wiring/lifecycle only.
 
-Restore/Recovery/session close cancels active background Agency and clears obsolete dirty state. Loading a Save does not automatically fire Agency.
+## 7. Next slice
 
-Before using selector output, frozen latest accepted turn/hash + world head must still match current state and foreground must remain idle.
+Only after R01C01 passes GPT Independent Review and G5-03M1 Engineering closes:
 
-## 8. Current packet
+`G5-03M2 Minimal Stable Actor Materialization / Registry Expansion`
 
-`my-world/docs/tasks/G5-03M1R01_AGENCY_SCHEDULER_V0_3_SIMPLIFICATION_REDESIGN_TASK.md`
+Do not start M2/G5-04 early.
 
-Do not execute the superseded C02 packet.
-
-## 9. Provider status / authorization
-
-Parent v0.2 real proof remains historically pending due Provider unavailability.
-
-R01 is a new approved redesign task. After deterministic gates are green it may use at most:
-
-```text
-1 real standalone selector request
-+
-up to 2 real actor execution requests
-```
-
-Stub Narrative/semantic prerequisites. No real Narrative call solely to reach Agency, no retry/fallback/hidden Provider switch. External outage leaves reality proof pending without blocking code review.
-
-## 10. Next slice
-
-After R01 Independent Review PASS and G5-03M1 Engineering closeout:
-
-```text
-G5-03M2 Minimal Stable Actor Materialization / Registry Expansion
-```
-
-This remains justified by the Owner requirement that important non-Guaranteed named actors such as Cao Cao / Zhuge Liang can enter Agency once stable Game-local identity/material exists.
-
-## 11. Temporary routing
+## 8. Temporary routing
 
 Through 2026-09-06 23:59 (+08:00): GPT owns architecture/review; Kimi owns code-changing implementation. Correct in-flight Kimi work may finish after expiry.
-
-## 12. Route
-
-```text
-Kimi G5-03M1R01 Agency Scheduler v0.3
-→ GPT Independent Review
-→ close G5-03M1 Engineering if PASS
-→ G5-03M2 Stable Actor Materialization
-```
-
-Visual runtime remains deferred to G6.
