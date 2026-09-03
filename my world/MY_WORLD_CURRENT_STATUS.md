@@ -1,15 +1,15 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 10.1
+version: 10.2
 created: 2026-08-26
 updated: 2026-09-03
 phase: G4 Primary Source Assets & Local Game Creation
-current_task: G4-11UAT Owner Two-Family Reality Test
-current_owner: OWNER
+current_task: G4-11C01 Narrative Voice Soft Prompt Tuning
+current_owner: CODEX
 parent_task: G4-11 Two Primary Asset Families Reality Test
 semantic_owner: GPT
-owner_uat_required: true
+owner_uat_required: false
 context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
@@ -40,13 +40,14 @@ G4-09UATB Owner Product UAT           PASS / CLOSED
 G4-10 Runtime Asset Resolution        DEFERRED / MOVED TO G6
 G4-10S0 Semantic Freeze               HISTORICAL DESIGN NOTE / DEFERRED
 G4-10M1 Mechanism                     SUPERSEDED / DO NOT EXECUTE
-G4-11 Two Primary Asset Families      ACTIVE
+G4-11 Two Primary Asset Families      ACTIVE — CLOSEOUT
 G4-11P1 Engineering Reality Prep      PASS / CLOSED
-G4-11UAT Owner Reality Test           ACTIVE — OWNER
-G4-GATE                               NOT YET
+G4-11UAT Owner Reality Test           PASS / CLOSED
+G4-11C01 Narrative Voice Soft Prompt  ACTIVE — CODEX
+G4-GATE                               HOLD — awaiting C01 engineering review only
 ```
 
-Do not start G5 before G4-11UAT Owner PASS + G4-GATE.
+Do not start G5 before G4-11C01 Independent Review + formal G4-GATE closeout.
 
 ## 2. Owner route decision｜Visual work deferred
 
@@ -68,123 +69,68 @@ SUPERSEDED / DO NOT EXECUTE
 
 This is not an engineering failure. Runtime visual asset resolution is removed from G4-GATE. G5 semantics remain independent of portrait/scene/map presentation.
 
-## 3. Current route
+## 3. G4-11 product result
 
-Canonical roadmap v3.3:
+Formal Owner result:
 
-```text
-G4-09 PASS / CLOSED
-↓
-G4-11 Two Primary Asset Families Reality Test
-↓
-G4-GATE
-↓
-G5 World Semantics & GM Runtime
-```
+`my-world/docs/g4_11/G4-11UAT_OWNER_RESULT.md`
 
-Visual runtime work re-enters in G6 only after a real presentation consumer exists and the exact consumer semantics are re-audited.
-
-## 4. G4-11 fixed product comparison
-
-Canonical decision:
-
-`architecture/source/G4_TWO_FAMILY_REALITY_TEST_V0_1_DECISION.md`
-
-```text
-Family A
-World:      汉末三国：天下未定
-Entry:      208｜赤壁前夕
-Player:     刘备
-Expansion:  none
-
-Family B
-World:      埃瑟维亚：诸界余辉
-Entry:      t0-1287-ovista
-Player:     莉维娅·塞兰
-Expansion:  none
-```
-
-Product question:
-
-> Can the same Host sustain two genuinely different, Source-grounded RPG worlds without cross-family leakage or generic-chat convergence?
-
-No visual asset acceptance exists in G4-11.
-
-## 5. G4-11P1 Independent Review result
-
-Implementation evidence head:
-
-`my-world@8a8426b17906f06582ea6503aa7854eaa0ed04de`
-
-Formal review:
-
-`my-world/docs/g4_11/G4-11P1_INDEPENDENT_REVIEW.md`
+Owner explicitly confirmed that the two worlds are materially different.
 
 Verdict:
 
 ```text
-G4-11P1
+G4-11UAT Two-Family Reality Test
 PASS / CLOSED
 ```
 
-Accepted engineering reality:
-
-- START→FINAL changed only task-owned tests/docs; no production code changed;
-- both real family verticals used the same effective `kimi_k3 / k3-256k / 256k / high` selected profile through the production stack;
-- each family completed real Provider Opening + 3 durable continuations;
-- each completed named Save → close → exact Game Library reopen / Continue;
-- A/B Game IDs and SQLite files are independent;
-- same Host completed `A → B → A → B → A` without Session/Conversation identity crossover;
-- assembled requests contain exact selected family/T0 identity and exclude opposite-family/new-current markers;
-- task-owned Source current updates do not mutate existing Game exact ancestry/materialized starting truth;
-- Owner production Source/Games/settings/current DB fingerprints remained unchanged;
-- no output keyword gate, output classifier, mandatory prose format, visual runtime work or G5 semantics were added.
-
-Evidence-note: final evidence omitted an explicit `git diff --check` line even though the blocked draft planned one. GPT Independent Review treated this as a non-blocking documentation omission because the reviewed diff is tests/docs only and no semantic/functional whitespace issue was found. Future packets should record the requested result explicitly.
-
-P1 Engineering PASS does not decide product differentiation.
-
-## 6. Current task｜G4-11UAT
-
-Owner: **Owner**
-
-Formal packet:
-
-`my-world/docs/tasks/G4-11UAT_OWNER_TWO_FAMILY_REALITY_TASK.md`
-
-Owner performs a short real-product comparison:
+Non-blocking quality finding:
 
 ```text
-Han / 刘备 / 208 赤壁前夕 / Expansion none
-vs
-Afterglow / 莉维娅 / 1287 奥维斯塔 / Expansion none
+Cross-world narrative prose style converges too strongly.
 ```
 
-Use the current selected model profile. Owner may play naturally; no benchmark wording is required.
+This does not invalidate world differentiation. The Owner authorized exactly one minimal prompt-only correction and explicitly allowed its product effect to be checked later rather than creating another standalone G4 UAT cycle.
 
-Judge only:
+## 4. Current micro-correction｜G4-11C01
 
-- whether the two ordinary play experiences materially feel like different RPG worlds;
-- whether Character position/voice/concerns are materially different;
-- whether no obvious cross-family leakage occurs;
-- whether Save / Main Menu / switch / Continue remains coherent.
+Canonical decision:
 
-Do not judge portrait/scene/map or visual polish.
+`architecture/foundation/G4_NARRATIVE_VOICE_SOFT_PROMPT_TUNING_DECISION.md`
 
-Minimum verdict:
+Implementation packet:
+
+`my-world/docs/tasks/G4-11C01_NARRATIVE_VOICE_SOFT_PROMPT_TUNING_TASK.md`
+
+Owner: **Codex**.
+
+Scope:
 
 ```text
-PASS
+shared GM creative prompt
++ focused prompt-projection tests/evidence
 ```
 
-or:
+Intent:
 
-```text
-FAIL
-<concrete symptom>
-```
+- let narrative language texture naturally follow current World / Character / scene;
+- avoid one generic RPG/web-fiction narrator voice across all worlds;
+- keep clear long-form modern Chinese readability;
+- avoid forced pseudo-classical language, decorative fantasy adjectives, fixed labels or templates.
 
-## 7. Protected runtime principle
+Hard boundaries:
+
+- no Source schema/package/generation change;
+- no Provider or Runtime Model Settings change;
+- no d20 change;
+- no persistence/SQLite change;
+- no output keyword validator or style classifier;
+- no reject/retry/block based on prose style;
+- no G5 implementation.
+
+No real Provider run and no standalone Owner UAT are required for C01.
+
+## 5. Protected runtime principle
 
 ```text
 Model Freedom First
@@ -194,18 +140,26 @@ Visible Narrative First
 Canonical Commit Behind a Turn Finalize Barrier
 ```
 
-G4-11 must not add prose-format gates, genre keyword validators, output classifiers or scripted beats to force differentiation.
+Additional C01 invariant:
 
-## 8. After Owner verdict
+> **Narrative style is guidance, not an acceptance gate.**
 
-If Owner PASS:
+## 6. Route after C01
+
+If GPT Independent Review passes C01:
 
 ```text
-G4-11UAT PASS / CLOSED
+G4-11C01 PASS / CLOSED
 → G4-11 PASS / CLOSED
 → G4-GATE PASS
-→ close G4
-→ refresh roadmap and shape G5
+→ G4 CLOSED
+→ shape G5-01 under current roadmap authority
 ```
 
-If Owner FAIL, correct only the concrete Source/Context/Game seam exposed. Do not reintroduce visual work as a substitute for world differentiation.
+Current canonical next G5 task from roadmap v3.3:
+
+```text
+G5-01 Minimum Playable T0 + World Turn / Semantic Materialization
+```
+
+G5-01 must be semantically shaped by GPT before implementation; do not start it from the roadmap title alone.
