@@ -37,7 +37,31 @@ G5-04 Event / Priority Evolution      NOT YET
 
 Do not start G5-02 before G5-01 Independent Review + Owner product checkpoint.
 
-## 2. G4 final truth
+## 2. Standing Owner authorization — real Provider validation
+
+Owner explicitly granted standing authorization on 2026-09-03 for **bounded real Provider validation required by approved my world Task Packets**.
+
+Canonical decision:
+
+`my world/architecture/foundation/REAL_PROVIDER_VALIDATION_STANDING_AUTHORIZATION.md`
+
+Rule for future task shaping and execution:
+
+```text
+Task Packet explicitly requires real Provider proof
++ bounded scenario / call-turn-attempt ceiling
++ current approved runtime Provider/profile
+→ already authorized
+→ execution Agent MUST NOT pause to ask Owner again
+```
+
+Every future my world Task Packet that requires real Provider evidence should cite this decision and state the smallest reasonable call/turn/attempt ceiling.
+
+This is not unlimited external authorization: no open-ended benchmark loops, model/provider switching, billing/account changes, secrets/credentials or unrelated private data in prompts, new external services or unrelated irreversible side effects.
+
+Current G5-01M1 §12.E is explicitly pre-authorized: one initial natural ordinary action plus at most one additional action only if the first legitimately yields no durable consequence. Codex should continue from already-green offline work and execute this proof without another Owner confirmation.
+
+## 3. G4 final truth
 
 Owner confirmed the two G4-11 worlds materially feel different. Narrative prose voice convergence was a non-blocking quality finding.
 
@@ -53,7 +77,7 @@ Narrative style is guidance, not an acceptance gate.
 
 No Source migration, Provider change, style classifier, keyword gate or style-triggered reject/retry was introduced. Product effect will be observed opportunistically in the next suitable Owner UAT.
 
-## 3. Visual deferral remains protected
+## 4. Visual deferral remains protected
 
 ```text
 G4-10 Runtime Asset Resolution = DEFERRED / MOVED TO G6
@@ -61,7 +85,7 @@ G4-10 Runtime Asset Resolution = DEFERRED / MOVED TO G6
 
 Do not implement portrait / scene / authored-map runtime during G5. Visual presentation is not World/Character/Knowledge/Event authority.
 
-## 4. G5-01 canonical decision
+## 5. G5-01 canonical decision
 
 Read:
 
@@ -84,7 +108,7 @@ Narrative must never contain G5 machine framing.
 
 Semantic extraction is auxiliary/best-effort in v0.1. Analysis failure does not invalidate the accepted turn and does not block further play.
 
-## 5. G5-01M1 task
+## 6. G5-01M1 task
 
 Packet:
 
@@ -122,7 +146,7 @@ living_world
 
 This is a turn-level consequence ledger, not a universal entity/fact ontology.
 
-## 6. Existing seams to reuse
+## 7. Existing seams to reuse
 
 Current implementation already owns:
 
@@ -135,7 +159,7 @@ Current implementation already owns:
 
 Do not create a second persistence owner/table unless a concrete blocker is returned to GPT.
 
-## 7. G5-01 protected non-scope
+## 8. G5-01 protected non-scope
 
 Do not implement early:
 
@@ -148,7 +172,7 @@ Do not implement early:
 
 Do not modify `src/ui/**` or SQLite schema silently. Stop and return a boundary finding if such change proves necessary.
 
-## 8. Independent Review focus after Codex returns
+## 9. Independent Review focus after Codex returns
 
 GPT must inspect actual code/evidence and especially verify:
 
@@ -162,10 +186,10 @@ GPT must inspect actual code/evidence and especially verify:
 8. Save/Restore/reopen preserve coherent Conversation + semantic snapshot;
 9. Context projection is bounded and only uses committed matching records;
 10. no Source/Provider-fallback/UI/G5-02+ scope creep;
-11. real selected-provider proof is genuine if authorized;
+11. real selected-provider proof is genuine under standing authorization;
 12. Owner production state remains untouched.
 
-## 9. After M1
+## 10. After M1
 
 If Independent Review passes:
 
