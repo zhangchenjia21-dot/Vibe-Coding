@@ -1,13 +1,13 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 11.7
+version: 11.8
 created: 2026-08-26
 updated: 2026-09-03
 phase: G5 World Semantics & GM Runtime
-current_task: G5-02M1C01 Actor Roster + Recent Knowledge Projection Correction
+current_task: G5-03M1 Stable Guaranteed-NPC Independent Agency Vertical
 current_owner: KIMI
-parent_task: G5-02M1 Known-Actor Knowledge Provenance Spine
+parent_task: G5-03 NPC / Faction Agency
 semantic_owner: GPT
 owner_uat_required: false
 context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
@@ -32,114 +32,163 @@ G4-GATE                               PASS
 G5 World Semantics & GM Runtime       ACTIVE
 G5-01 World Turn / Semantic Materialization
                                       PASS / CLOSED
-G5-01M1 Semantic Materialization Spine ENGINEERING PASS / CLOSED
-G5-01M1C02 Restore Timeline Isolation CANCELLED / DO NOT EXECUTE
-G5-02 Knowledge Provenance            ACTIVE
-G5-02M1 Known-Actor Knowledge Spine   CORRECTION REQUIRED
+G5-02 Knowledge Provenance            PASS / CLOSED
+G5-02M1 Known-Actor Knowledge Spine   ENGINEERING PASS / CLOSED
 G5-02M1C01 Actor Roster + Recent Knowledge Projection
-                                      ACTIVE — KIMI
-G5-02 real Provider vertical          PENDING / EXTERNAL PROVIDER UNAVAILABLE
-G5-03 NPC / Faction Agency            NOT YET
+                                      PASS / CLOSED
+G5-02 real Provider vertical          HISTORICAL GAP / EXTERNAL PROVIDER UNAVAILABLE
+
+G5-03 NPC / Faction Agency            ACTIVE
+G5-03M1 Stable Guaranteed-NPC Agency  ACTIVE — KIMI
 G5-04 Event / Priority Evolution      NOT YET
 G5-GATE                               NOT YET
 ```
 
-Do not start G5-03 before G5-02M1C01 Independent Review and G5-02 closeout.
+Do not start G5-04 before G5-03M1 Independent Review and GPT decides whether a second Faction slice is required for G5-03 closeout.
 
-## 2. G5-02M1 reviewed implementation
+## 2. G5-02 closeout
 
-Kimi pushed:
+Formal closeout:
 
-```text
-IMPLEMENTATION/EVIDENCE_HEAD 492815aefd127c20bd17fbda892aad8d41279dcb
-```
+`my-world/docs/g5_02/G5-02_CLOSEOUT.md`
 
-Evidence:
+Final review:
 
-`my-world/docs/g5_02/G5-02M1_KNOWN_ACTOR_KNOWLEDGE_PROVENANCE_EVIDENCE.md`
+`my-world/docs/g5_02/G5-02M1C01_INDEPENDENT_REVIEW.md`
 
-Formal Independent Review:
+Accepted:
 
-`my-world/docs/g5_02/G5-02M1_INDEPENDENT_REVIEW.md`
+- same existing semantic-analysis request now receives exact stable actor name/local-ID roster;
+- unknown/non-roster actors cannot become durable knowers;
+- Knowledge parsing remains isolated from valid G5-01 `changes`;
+- knowledge + changes share at most one atomic world mutation;
+- bounded Actor Knowledge Context now retains newest matching knowledge rather than oldest forever;
+- real-provider harness can no longer false-pass with empty knowledge;
+- no SQLite schema/Source/UI/G5-03 scope was introduced by G5-02.
 
-Result:
+The single bounded G5-02 real selected-Provider attempt timed out in ordinary Narrative before feature execution. This remains an honest historical gap; no second attempt/fallback occurred. A separate G5-02 Owner UAT is not required because the first materially player-visible consumer is G5-03 actor agency.
 
-```text
-CORRECTION REQUIRED / NOT ENGINEERING PASS YET
-```
+## 3. Current G5-03 authority
 
-The architecture is accepted: one existing auxiliary semantic-analysis request, isolated knowledge parsing, stable roster validation before persistence, at most one atomic world mutation, bounded soft Actor Knowledge Context, no Narrative gate/schema/platform creep.
+Canonical decision:
 
-## 3. Blocking findings
+`architecture/world/G5_STABLE_NPC_AGENCY_V0_1_DECISION.md`
 
-### A. Model is not given the exact actor IDs it must return
+Implementation packet:
 
-The production semantic-analysis request requires `knowledge_events[*].knower_id` to equal a stable Game-local `local_character_id`, but the request currently only includes accepted Player Action + GM Narrative. It does not include the Player/Guaranteed-NPC local-ID roster.
+`my-world/docs/tasks/G5-03M1_STABLE_NPC_INDEPENDENT_AGENCY_TASK.md`
 
-Deterministic stub tests can hand-write IDs, but a real model cannot reliably emit an exact ID it has never been shown.
+Core product question:
 
-### B. Knowledge Context is bounded in the wrong direction
+> Can a stable Guaranteed NPC independently choose and undertake an action from its own Character Source + durable Knowledge Provenance, without explicit player prompting and without blocking the foreground Narrative loop?
 
-Current projection sorts oldest → newest and consumes the event cap from the front. After eight events, later new knowledge can be omitted while early knowledge remains forever. The frozen decision requires a bounded recent working set.
+Protected principle:
 
-### C. Real-provider harness can false-pass without knowledge
+> **Source provides inertia; actors create history.**
 
-The current harness accepts `no_changes` and permits an empty knowledge record set to satisfy the boundary check. A future healthy Provider run must require at least one committed valid roster knowledge event and its later Context projection before feature-specific PASS.
+## 4. G5-03M1 actor scope
 
-## 4. Current correction
-
-Packet:
-
-`my-world/docs/tasks/G5-02M1C01_ACTOR_ROSTER_RECENCY_CORRECTION_TASK.md`
-
-Required outcome:
-
-- add a compact Player + Guaranteed-NPC display-name/local-ID roster to the **same existing** semantic-analysis request;
-- keep one auxiliary Provider call per accepted ordinary turn;
-- select newest matching knowledge within the existing bounded Context cap;
-- update the real-provider harness so empty/no-knowledge output cannot count as G5-02 proof;
-- preserve knowledge parse isolation and single atomic mutation semantics.
-
-No extra real Provider call is allowed in this correction. The parent packet's one-attempt ceiling has already been consumed by an ordinary-Narrative timeout.
-
-## 5. Provider status
+First slice covers stable current Game-local Guaranteed NPCs only.
 
 ```text
-G5-02M1 real selected-Provider vertical
-PENDING / EXTERNAL PROVIDER UNAVAILABLE
+guaranteed_npcs[*].local_character_id
 ```
 
-The single bounded attempt timed out during ordinary Narrative before feature-specific knowledge materialization. No fallback/hidden Provider switch/second attempt is allowed.
+Player Character is not autonomously controlled by this lane.
 
-## 6. Temporary execution routing｜through 2026-09-06
+No incidental/emergent NPC identity, Faction identity/agency, settlement/group actor or universal entity graph in M1.
+
+If multiple Guaranteed NPCs exist, M1 may use deterministic round-robin one-actor-per-source-turn **evaluation**. This is not the G5-04 pressure/priority scheduler.
+
+## 5. Background agency contract
+
+Protected ordering:
+
+```text
+Player action
+→ free-form visible GM Narrative
+→ durable Conversation acceptance
+→ existing G5-01/G5-02 semantic lane terminal
+→ optional background Stable-NPC agency evaluation
+→ optional atomic agency world mutation
+```
+
+Agency is not a Turn Finalize Barrier.
+
+The player may immediately begin the next action. If foreground Conversation starts while agency is queued/active, agency is cancelled/invalidated instead of delaying Narrative. Late callbacks after invalidation must not commit.
+
+Provider/parse/hold/cancel failure is fail-soft: no fake mutation, no Narrative failure, no automatic retry, no fallback.
+
+## 6. Actor-scoped cognition
+
+Agency request for selected NPC may receive only bounded actor-local material:
+
+- exact selected NPC ID/name;
+- that NPC's exact Game-local Character Source projection / selected T0 profile;
+- that NPC's own committed/current G5-02 Knowledge Provenance;
+- that NPC's own recent durable agency history.
+
+Do not pass full omniscient GM/world Context, Player private post-T0 knowledge or another NPC's private knowledge merely because the GM can see it.
+
+This is the first direct consumer proving:
+
+```text
+GM knowledge != NPC knowledge
+```
+
+## 7. Durable agency shape
+
+A valid `decision=act` may persist a bounded record under existing `world_state.living_world`, tied to:
+
+`game_id + source turn + accepted GM hash + source world head + actor ID`.
+
+Use existing `commit_world_mutation_durably(...)`; no SQLite table/schema.
+
+A `hold` creates no mutation.
+
+Later omniscient GM Context may receive bounded `Independent Actor Actions` as world truth. This does not automatically grant other actors knowledge and does not automatically disclose the hidden action to the human player.
+
+## 8. Stale/race safety
+
+Before agency commit, invalidate if:
+
+- new foreground Conversation attempt starts;
+- accepted Conversation advances;
+- active world head changes;
+- source GM hash changes;
+- Save Restore / Recovery switches progress;
+- session closes.
+
+Use existing Conversation `attempt_started` and Runtime `restore_completed` or equivalent narrow seams. Best-effort transport cancellation alone is not sufficient; late callback must also fail closed.
+
+## 9. Real Provider validation
+
+Standing authorization applies.
+
+After all deterministic/integration gates are green, G5-03M1 may spend at most **one** task-owned real selected-Provider agency request. Prefer stubbing unrelated Opening/Narrative/semantic prerequisites so the bounded call is spent on agency itself.
+
+Feature-specific PASS requires valid `act` from the selected stable NPC, one durable agency record/effect, and later GM Context projection.
+
+`hold`, malformed output, timeout or outage is inconclusive/pending. No loop-until-act, no fallback, no hidden model switch.
+
+## 10. Temporary execution routing｜through 2026-09-06
 
 ```text
 GPT        → semantics / architecture / task shaping / final Independent Review
 Kimi       → primary code-changing implementation owner, temporarily substituting for Codex
 Grok Build → external research / evidence support when useful
-Owner      → Product UAT / explicit product verdict
+Owner      → Product UAT / explicit verdict
 ```
 
 The override auto-expires at 2026-09-07 00:00 (+08:00). Correct in-flight Kimi work may finish under its issued packet.
 
-## 7. Protected semantics
+## 11. Route
 
 ```text
-Game / World Truth
-!= actor knowledge
-!= human-player disclosure
-!= omniscient GM model context
-```
-
-> **GM omniscience must not become actor omniscience.**
-
-G5-02M1 remains limited to post-T0 acquisition for the Player Character + Guaranteed NPC stable local IDs. No generic Knowledge Graph, Faction knowledge, emergent NPC identity, false-belief engine, UI, G5-03 Agency or G6/G7 work.
-
-## 8. Route
-
-```text
-Kimi G5-02M1C01
+Kimi G5-03M1 implementation
 → GPT Independent Review
-→ if PASS, close G5-02
-→ shape G5-03 NPC / Faction Agency
+→ decide from actual consumer whether a Faction slice is still required inside G5-03
+→ only then move toward G5-04 Event / Priority Evolution
 ```
+
+Visual runtime remains deferred to G6.
