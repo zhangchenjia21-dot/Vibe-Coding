@@ -27,21 +27,39 @@ G3 Persistent Game / Save / Timeline PASS / CLOSED
 G4-01 ... G4-09                       PASS / CLOSED
 G4-10 Runtime Asset Resolution        DEFERRED / MOVED TO G6
 G4-10M1                               SUPERSEDED / DO NOT EXECUTE
-G4-11 Two Primary Asset Families      ACTIVE
 G4-11P1 Engineering Reality Prep      PASS / CLOSED
-G4-11UAT Owner Reality Test           ACTIVE — OWNER
-G4-GATE                               NOT YET
+G4-11UAT Owner Reality Test           PASS / CLOSED
+G4-11C01 Narrative Voice Soft Prompt  ACTIVE — CODEX
+G4-GATE                               HOLD — C01 engineering review only
 ```
 
 当前路线：
 
 ```text
-G4-11UAT Owner Two-Family Reality Test
+G4-11C01 soft prompt closeout
 → G4-GATE
-→ G5 World Semantics & GM Runtime
+→ G5-01 Minimum Playable T0 + World Turn / Semantic Materialization
 ```
 
 Owner 已明确把 portrait / scene / authored-map runtime 接入延期到 G6；视觉资源不再是 G4-GATE 或 G5 的前置。
+
+---
+
+## G4-11 product result
+
+Owner 已确认：
+
+> **两套 Source 实际玩起来是两个不同的 RPG 世界。**
+
+因此 Two-Family Reality Test 的核心产品价值已经 PASS。
+
+剩余 finding：两个世界的叙述正文仍偏向同一种通用现代中文 RPG 旁白。
+
+该 finding 被分类为 **non-blocking narrative-quality issue**。Owner 授权一次极小的 Host-level soft-prompt tuning，不改 Source，不增加 style gate，不单独再做一轮 Owner UAT；实际效果留到下一次合适的产品 UAT 顺带观察。
+
+Canonical decision：
+
+`architecture/foundation/G4_NARRATIVE_VOICE_SOFT_PROMPT_TUNING_DECISION.md`
 
 ---
 
@@ -60,32 +78,6 @@ Managed Source Library
 第一代不支持无 World / 无 Character 的空白 AI 世界直接建局。
 
 Character Card 是 reusable Character Source，不是“主角专用卡”。Guaranteed NPC 从 Final Create 起属于 canonical cast，但不自动等于 opening appearance / player-known / relationship / current Context membership。
-
----
-
-## 当前 G4-11 Reality Test
-
-最终 G4 reality pressure 使用两套真实 full-fidelity Source：
-
-```text
-历史 / 低魔
-汉末三国：天下未定
-208｜赤壁前夕
-刘备
-
-高魔 / 幻想
-埃瑟维亚：诸界余辉
-t0-1287-ovista
-莉维娅·塞兰
-```
-
-两边 `Expansion = none`。G4-11P1 已用同一个实际 selected runtime model profile 跑通两套 real-provider 工程纵向、Save/reopen 和 A→B→A 隔离。
-
-当前只剩 Owner Product UAT。最终 Gate 不是“数据库里两个 asset_id 不同”，而是 Owner 实际游玩后明显感觉：
-
-> **这是两个不同的 RPG 世界。**
-
-视觉 polish 不属于这次验收。
 
 ---
 
@@ -130,7 +122,11 @@ Visible Narrative First
 Canonical Commit Behind a Turn Finalize Barrier
 ```
 
-G4/G5 新增长期边界：
+G4-11C01 新增长期边界：
+
+> **Narrative style is guidance, not an acceptance gate.**
+
+G4/G5 长期区分：
 
 ```text
 Application Lifetime != Game Session Lifetime
@@ -160,15 +156,23 @@ G6 在真实 RPG presentation consumer 存在后重新审计并实现所需的 v
 
 ---
 
+## 下一阶段
+
+C01 Independent Review PASS 后，正式关闭 G4 并进入 G5。
+
+当前 roadmap 的第一个 G5 task 是：
+
+```text
+G5-01 Minimum Playable T0 + World Turn / Semantic Materialization
+```
+
+它不是直接建完整世界模拟器。第一步要解决的是：一次 Narrative Turn 中真正发生、且未来回合必须记住的变化，怎样成为 durable Game Reality。GPT 必须先冻结 semantic / ownership / acceptance 边界，再交给实现 Agent。
+
+---
+
 ## 架构专题
 
 统一从 [`MY_WORLD_架构_CURRENT.md`](./MY_WORLD_架构_CURRENT.md) 导航。专题文档保存 contract / trade-off / migration 深度，不与顶层 current 文件争夺 authority。
-
-Source 相关 current decisions 位于：
-
-`architecture/source/`
-
-Persistence / UI / foundation 等专题分别位于对应 `architecture/` 子目录。
 
 ---
 
