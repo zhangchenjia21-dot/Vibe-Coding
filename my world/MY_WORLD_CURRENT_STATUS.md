@@ -1,7 +1,7 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 11.0
+version: 11.1
 created: 2026-08-26
 updated: 2026-09-03
 phase: G5 World Semantics & GM Runtime
@@ -48,7 +48,31 @@ G5-GATE                               NOT YET
 
 Do not start G5-02 before G5-01 implementation review + Owner product checkpoint.
 
-## 2. G4 final closeout
+## 2. Standing authorization｜Required real Provider validation
+
+Owner explicitly authorized future **bounded real Provider validation that is required by an approved my world Task Packet**.
+
+Canonical decision:
+
+`architecture/foundation/REAL_PROVIDER_VALIDATION_STANDING_AUTHORIZATION.md`
+
+Effect:
+
+```text
+approved Task Packet requires real Provider evidence
++ task defines bounded scenario/call/turn/attempt ceiling
++ current approved Provider/profile
+→ PRE-AUTHORIZED
+→ execution Agent proceeds without asking Owner again
+```
+
+Future Task Packets requiring real Provider evidence must cite this standing authorization and specify the smallest reasonable call/turn/attempt ceiling.
+
+This authorization removes repeated permission interruptions. It does not authorize open-ended benchmarks, Provider/model switching, billing/account changes, secrets/credentials in prompts, unrelated private data, new external services or other scope expansion.
+
+G5-01M1 §12.E is already covered. Codex should execute the bounded real-selected-Provider proof after offline gates are green without another Owner confirmation.
+
+## 3. G4 final closeout
 
 G4-11 Owner result:
 
@@ -76,7 +100,7 @@ G4-11C01 PASS / CLOSED
 → G4 PASS / CLOSED
 ```
 
-## 3. Visual work remains deferred
+## 4. Visual work remains deferred
 
 Owner decision remains protected:
 
@@ -91,7 +115,7 @@ Canonical decision:
 
 G5 must remain independent of portrait / scene / authored-map presentation. Map image still does not equal topology / travel / current location / GIS.
 
-## 4. G5-01 semantic freeze
+## 5. G5-01 semantic freeze
 
 Canonical decision:
 
@@ -119,7 +143,7 @@ Player action
 
 Narrative acceptance does **not** depend on semantic-analysis success.
 
-## 5. Current task｜G5-01M1
+## 6. Current task｜G5-01M1
 
 Implementation packet:
 
@@ -149,7 +173,7 @@ no retry loop
 play continues
 ```
 
-## 6. World Turn v0.1 boundary
+## 7. World Turn v0.1 boundary
 
 Conceptual durable namespace:
 
@@ -173,7 +197,7 @@ Regenerate/correction safety requirement:
 
 > a semantic record whose source GM hash no longer matches the currently accepted Conversation entry must never be projected into model Context.
 
-## 7. Existing runtime seams to reuse
+## 8. Existing runtime seams to reuse
 
 Current implementation already has:
 
@@ -186,7 +210,7 @@ Current implementation already has:
 
 G5-01 must extend these seams rather than introduce a second persistence owner.
 
-## 8. Protected cross-stage principles
+## 9. Protected cross-stage principles
 
 ```text
 Model Freedom First
@@ -202,7 +226,7 @@ and:
 
 G5-01 must not add narrative JSON framing, mandatory prose format, output keyword validation or a semantic-extraction gate before visible play can continue.
 
-## 9. Route after G5-01M1
+## 10. Route after G5-01M1
 
 If GPT Independent Review passes M1:
 
