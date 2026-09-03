@@ -2,14 +2,14 @@
 title: my world｜GPT Context Handoff
 status: current-handoff-navigation
 created: 2026-08-29
-updated: 2026-09-02
+updated: 2026-09-03
 project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
 current_parent_task: G4-11 Two Primary Asset Families Reality Test
-current_execution_task: G4-11P1 Two-Family Reality Prep / Engineering Proof
+current_execution_task: G4-11UAT Owner Two-Family Reality Test
 semantic_owner: GPT
-current_execution_owner: CODEX
+current_execution_owner: OWNER
 ---
 
 # my world｜GPT CONTEXT HANDOFF CURRENT
@@ -26,14 +26,14 @@ G4-09UATB Owner Product UAT           PASS / CLOSED
 G4-10 Runtime Asset Resolution        DEFERRED / MOVED TO G6
 G4-10M1 Mechanism                     SUPERSEDED / DO NOT EXECUTE
 G4-11 Two Primary Asset Families      ACTIVE
-G4-11P1 Engineering Reality Prep      ACTIVE — CODEX
-G4-11UAT Owner Reality Test           NOT YET
+G4-11P1 Engineering Reality Prep      PASS / CLOSED
+G4-11UAT Owner Reality Test           ACTIVE — OWNER
 G4-GATE                               NOT YET
 ```
 
-Do not start G5 before G4-11P1 Independent Review + G4-11UAT Owner PASS + G4-GATE.
+Do not start G5 before Owner G4-11UAT PASS and formal G4-GATE closeout.
 
-## 2. Owner visual deferral decision
+## 2. Visual deferral remains protected
 
 Owner explicitly decided on 2026-09-02 that portrait / scene / authored-map resources are not currently mature and are not part of the core experience.
 
@@ -50,8 +50,6 @@ G4-10M1                          SUPERSEDED / DO NOT EXECUTE
 
 Runtime visual asset resolution and exact visual generation are removed from G4-GATE.
 
-This does not block G5 because visual presentation is not World/Character/Event/Knowledge/Location authority.
-
 Protected distinction:
 
 ```text
@@ -62,15 +60,11 @@ map image
 != topology / travel / current location / GIS
 ```
 
-Future G6 must re-audit the actual visual consumer before implementing a resolver or deciding old-Game presentation overrides.
-
-## 3. G4-11 canonical product test
+## 3. G4-11 fixed product comparison
 
 Decision:
 
 `my world/architecture/source/G4_TWO_FAMILY_REALITY_TEST_V0_1_DECISION.md`
-
-Fixed families:
 
 ```text
 A — historical / low-magic
@@ -86,86 +80,101 @@ Player:     莉维娅·塞兰
 Expansion:  none
 ```
 
-Engineering real-provider comparison uses the same current selected runtime model profile through the shared adapter. Do not change Owner persisted model preference solely for the test.
-
 No portrait / scene / authored-map requirement exists.
 
-## 4. G4-11P1 current task
+## 4. G4-11P1 PASS — engineering truth
 
-Packet:
+Implementation evidence head:
 
-`my-world/docs/tasks/G4-11P1_TWO_FAMILY_REALITY_PREP_TASK.md`
+`my-world@8a8426b17906f06582ea6503aa7854eaa0ed04de`
 
-Owner: **Codex**.
+Formal GPT Independent Review:
 
-Type: validation / UAT-support. No production behavior change is expected.
+`my-world/docs/g4_11/G4-11P1_INDEPENDENT_REVIEW.md`
 
-Required real vertical for each family:
+Verdict:
 
 ```text
-exact full-fidelity Source
-→ Composition
-→ Atomic Final Create
-→ independent Game / SQLite
-→ real Provider Opening
-→ >=2 accepted continuation turns
-→ Save
-→ close/switch
-→ reopen / Continue
-→ another accepted continuation
+G4-11P1 PASS / CLOSED
 ```
 
-Also prove:
+Accepted facts:
 
-- A/B Game and Conversation isolation;
-- no cross-family Source/Context leakage;
-- T0 quarantine remains intact;
-- exact semantic Source ancestry / bounded Source-update isolation;
-- no visual dependency;
-- no G5/G6 scope creep;
-- Owner production Source/Games/settings/credentials untouched.
+- only task-owned tests/docs changed; no production behavior changed;
+- harness instantiates real `src/main.tscn` and uses current Wizard / Final Create / Game Session / Opening / Conversation / Save / Game Library seams;
+- both real verticals used the same effective selected profile `kimi_k3 / kimi / k3-256k / 256k / high`;
+- each family completed real Opening + 3 durable continuations;
+- each completed named Save → close → exact Game Library reopen / Continue;
+- A/B Game IDs and SQLite paths are distinct;
+- switch sequence `A → B → A → B → A` passed;
+- every assembled request contains selected family/T0 identity and excludes opposite-family/new-current markers;
+- bounded task-owned Source current changes do not mutate existing Game provenance/materialized starting truth;
+- Owner production Source/Games/settings/current DB fingerprints remained equal before/after;
+- no visual work, G5 semantics, output keyword validator, output classifier, mandatory prose format or scripted beat was introduced.
 
-If a blocker requires product runtime changes, Codex must stop and return the blocker instead of fixing it inside P1.
+Evidence note: final evidence omitted an explicit `git diff --check` result. GPT treated that as a non-blocking documentation omission after reviewing the tests/docs-only diff; do not reinterpret it as an engineering failure or rerun expensive Provider calls solely for that line.
 
-Return ceiling: **READY FOR INDEPENDENT REVIEW**.
+Engineering PASS does not prove product differentiation.
 
-## 5. Independent Review focus
+## 5. Current task — Owner G4-11UAT
 
-After Codex returns, GPT must inspect actual evidence/code and especially verify:
+Formal packet:
 
-1. both verticals use production seams, not a fake parallel harness;
-2. same effective selected model profile is used for both real Provider paths;
-3. A/B have distinct Game IDs + SQLite and switch A→B→A correctly;
-4. no opposite-family Source identity/content appears in model-visible Context;
-5. Save/reopen/Continue restores each Game's own accepted history;
-6. Source current update cannot mutate existing Game semantic ancestry;
-7. no visual resolver, output-format gate, keyword classifier or premature G5 semantics were added;
-8. Owner production surfaces remain unchanged.
+`my-world/docs/tasks/G4-11UAT_OWNER_TWO_FAMILY_REALITY_TASK.md`
 
-Engineering PASS does not prove the two worlds feel different.
+Owner should use the real product and create/play the two fixed Games with `Expansion = none`, preferably no Guaranteed NPCs for the clean comparison.
 
-## 6. Owner UAT after P1
+Owner may play naturally for roughly 2–4 actions in each. Do not require benchmark wording.
 
-If P1 passes GPT Independent Review, activate a short `G4-11UAT`.
+Then switch back to the first Game and Continue once.
 
 Owner product question:
 
 > Do the actual Han / 刘备 and Afterglow / 莉维娅 play experiences clearly feel like two different RPG worlds rather than one generic AI chat with swapped names?
 
-Owner is not asked to judge visuals.
+Judge also whether switching/Continue remains coherent and whether obvious cross-family leakage occurs.
 
-If Owner PASS:
+Do not judge visuals or future G5 capabilities.
+
+Minimum return:
 
 ```text
-G4-11 PASS / CLOSED
-→ G4-GATE PASS
-→ G4 CLOSED
-→ inspect/shape G5 route
+PASS
 ```
 
-If Owner FAIL, correct only the concrete Source/Context/Game seam exposed. Do not reintroduce visual work as a substitute for world differentiation.
+or:
 
-## 7. Protected runtime principle
+```text
+FAIL
+<one or two concrete observations>
+```
+
+## 6. If Owner PASS
+
+Immediately refresh both `main`s and record Owner verdict. Then perform Decision Propagation:
+
+```text
+G4-11UAT PASS / CLOSED
+G4-11 PASS / CLOSED
+G4-GATE PASS
+G4 CLOSED
+```
+
+After closure, read the canonical roadmap before shaping G5. Do not blindly start G5-01 from memory; verify current G5 order/architecture and shape the first task under current authority.
+
+## 7. If Owner FAIL
+
+Capture the concrete product symptom. Correct only the actual Source / Context / Game seam exposed.
+
+Do not:
+
+- reopen visual runtime as a substitute for semantic differentiation;
+- add genre keyword gates;
+- add mandatory prose structure;
+- add output classifiers/scripted beats;
+- prematurely implement broad G5 world simulation.
+
+## 8. Protected runtime principle
 
 ```text
 Model Freedom First
@@ -174,5 +183,3 @@ Visible Narrative First
 +
 Canonical Commit Behind a Turn Finalize Barrier
 ```
-
-Do not add model-format gates, genre keyword gates, mandatory prose structures or scripted beats merely to force family differentiation.
