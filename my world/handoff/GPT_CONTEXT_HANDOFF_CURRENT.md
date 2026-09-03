@@ -6,10 +6,10 @@ updated: 2026-09-03
 project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
-current_parent_task: G5-01 Minimum Playable T0 + World Turn / Semantic Materialization
-current_execution_task: G5-01M1 Independent Review
+current_parent_task: G5-01M1 World Turn / Semantic Materialization Spine
+current_execution_task: G5-01M1C02 Restore Timeline Isolation Correction
 semantic_owner: GPT
-current_execution_owner: GPT
+current_execution_owner: KIMI
 ---
 
 # my world｜GPT CONTEXT HANDOFF CURRENT
@@ -29,18 +29,17 @@ G4-GATE                               PASS
 G5 World Semantics & GM Runtime       ACTIVE
 G5-01 Minimum Playable T0 + World Turn / Semantic Materialization
                                       ACTIVE
-G5-01M1 Semantic Materialization Spine IMPLEMENTED / INDEPENDENT REVIEW ACTIVE — GPT
+G5-01M1 Semantic Materialization Spine CORRECTION REQUIRED
+G5-01M1C02 Restore Timeline Isolation ACTIVE — KIMI
 G5-01 real Provider vertical          PENDING / EXTERNAL PROVIDER UNAVAILABLE
 G5-02 Knowledge Provenance            NOT YET
 G5-03 NPC / Faction Agency            NOT YET
 G5-04 Event / Priority Evolution      NOT YET
 ```
 
-Do not start G5-02 before G5-01 engineering review + Owner/product checkpoint.
+Do not start G5-02 before G5-01M1 correction review + Owner/product checkpoint.
 
 ## 2. Temporary execution routing until 2026-09-07
-
-Owner reports Codex weekly quota exhausted until 2026-09-07 and explicitly directs temporary use of Kimi and Grok.
 
 Canonical decision:
 
@@ -55,69 +54,97 @@ Grok Build → external research / evidence discovery / Provider-reality support
 Owner      → Product UAT / explicit product verdict
 ```
 
-Prefer `Kimi implementation + Grok evidence/research when useful → GPT Independent Review` without inventing unnecessary multi-agent work.
+The override auto-expires at 2026-09-07 00:00 (+08:00). Correct in-flight Kimi work may finish under its issued packet.
 
-The override automatically expires at 2026-09-07 00:00 (+08:00). Long-term Codex/Kimi/Grok routing resumes absent newer Owner instruction. Do not interrupt correct in-flight Kimi work solely because expiry occurs.
+## 3. Parent G5-01M1 review result
 
-## 3. G5-01M1 has already been pushed
-
-Codex completed and pushed before quota exhaustion:
+Reviewed:
 
 ```text
 IMPLEMENTATION_HEAD  eb171a19dd0b4eeb134392128fb8df7fd5b104cb
 EVIDENCE_HEAD        f9b1be01bd102f3bb1ae6b0b762a6b97d3a5b6f1
 ```
 
-Evidence:
+Formal review:
 
-`my-world/docs/g5_01/G5-01M1_WORLD_TURN_SEMANTIC_MATERIALIZATION_EVIDENCE.md`
+`my-world/docs/g5_01/G5-01M1_INDEPENDENT_REVIEW.md`
 
-Do not ask Kimi to redo this implementation. Current action is GPT Independent Review of actual committed code/evidence.
+Result:
 
-If GPT finds a focused correction before 2026-09-07, assign it to Kimi. Grok may assist with external/provider/evidence investigation when useful.
+```text
+CORRECTION REQUIRED / NOT ENGINEERING PASS YET
+```
 
-## 4. Standing Provider authorization and outage policy
+The main architecture is acceptable: Narrative durable acceptance precedes the independent semantic lane; semantic failure is fail-soft; valid changes use existing atomic world mutation/Timeline; Context is bounded and matching; no narrative protocol gate, persistence schema migration, universal ontology, G5-02+ or G6 work was introduced.
 
-Canonical decision:
+## 4. Blocking Restore finding
+
+`SemanticMaterializationProcess` keeps timeline-local ephemeral state:
+
+```text
+_attempted_versions
+_queue
+_active
+```
+
+Current Runtime emits `restore_completed` after committed Save/Recovery progress switch, but the semantic worker does not observe it.
+
+Failure sequence:
+
+```text
+future Turn N version V attempted
+→ Restore before Turn N
+→ durable Conversation/world_state rewind correctly
+→ _attempted_versions still remembers V
+→ player later reaches exact same Turn N / GM hash
+→ already_attempted
+→ no new semantic request / no World Turn
+```
+
+This is abandoned-future execution state affecting the restored timeline and violates:
+
+> **Player owns the timeline.**
+
+A pre-Restore active/queued semantic request is also not explicitly invalidated at the progress-switch boundary. Cancellation alone is insufficient; a late completion must be incapable of committing into the restored timeline.
+
+## 5. Current correction packet
+
+`my-world/docs/tasks/G5-01M1C02_RESTORE_TIMELINE_ISOLATION_CORRECTION_TASK.md`
+
+Owner: **Kimi**.
+
+Required proof:
+
+1. Save at timeline T;
+2. future exact player/GM version is attempted/materialized;
+3. Restore to T removes that future;
+4. recreate the exact same future player/GM version;
+5. a fresh semantic request is allowed and can commit again;
+6. active pre-Restore analysis cannot commit after Restore even with a late callback;
+7. queued pre-Restore work is discarded/quarantined;
+8. Restore itself launches no semantic request.
+
+Expected production scope is preferably only `src/世界回合/L2_流程层/语义物化流程.gd` plus focused tests/evidence. Use existing `restore_completed`; do not add a new persistence mechanism unless a blocker is returned first.
+
+No real Provider call is required for this correction.
+
+## 6. Provider status
+
+Standing authorization/outage decision:
 
 `my world/architecture/foundation/REAL_PROVIDER_VALIDATION_STANDING_AUTHORIZATION.md`
 
-Permanent rules:
+Parent M1 real vertical remains:
 
 ```text
-Task Packet requires bounded real Provider proof
-→ already authorized
-→ do not pause for Owner confirmation
-```
-
-If bounded attempts are exhausted by external Provider timeout/unavailability before the feature-specific vertical can execute:
-
-```text
-do not fabricate / fallback / switch Provider / exceed attempt ceiling
-→ commit + push reviewable implementation/tests/evidence
-→ mark real vertical PENDING / EXTERNAL PROVIDER UNAVAILABLE
-→ GPT Independent Review proceeds on actual code
-```
-
-External Provider availability may block reality proof; it does not block code review.
-
-## 5. Current G5-01M1 Provider outcome
-
-Two authorized Kimi K3 real requests timed out during ordinary Narrative after 420 seconds. No accepted ordinary Narrative was produced, so the semantic-analysis lane and World mutation were not reached by the real vertical.
-
-Classification:
-
-```text
-real selected-Provider vertical
 PENDING / EXTERNAL PROVIDER UNAVAILABLE
-
-engineering implementation
-INDEPENDENT REVIEW ACTIVE — GPT
 ```
 
-No fallback, hidden model switch or third attempt occurred. Committed evidence reports Owner production settings / Source / Games / Game Library / current SQLite fingerprints unchanged.
+Two bounded Kimi K3 real requests timed out in ordinary Narrative after 420 seconds before the semantic lane executed. No fallback/hidden switch/third attempt occurred.
 
-## 6. G5-01 semantic contract remains frozen
+Do not spend another Provider attempt for G5-01M1C02. The Restore invariant is deterministic and should be proven offline/SQLite.
+
+## 7. Protected G5-01 semantics
 
 Canonical decision:
 
@@ -132,63 +159,44 @@ free-form visible Narrative
 → optional atomic World Turn mutation
 ```
 
-Narrative acceptance is independent from semantic-analysis success.
+Narrative acceptance remains independent of semantic-analysis success.
 
-Conceptual namespace:
+`living_world.v0.1` remains a bounded turn-level consequence ledger, not a universal ontology.
 
-```text
-living_world
-  schema_version = living_world.v0.1
-  semantic_turns_by_index
-    <turn_index>
-      world_turn_id
-      source_turn_index
-      source_gm_sha256
-      materialized_at
-      changes[]
-```
+Do not add:
 
-This is a bounded turn-level consequence ledger, not a universal graph/ontology.
+- narrative JSON/header/sentinel requirements;
+- semantic-analysis acceptance gate;
+- cross-provider fallback;
+- Source mutation;
+- SQLite schema migration;
+- UI work;
+- G5-02 Knowledge;
+- G5-03 NPC/Faction Agency;
+- G5-04 Event/Priority evolution;
+- G6 visual runtime.
 
-## 7. Independent Review focus
+## 8. Review after Kimi returns
 
-GPT must inspect actual code/evidence and especially verify:
+Refresh both mains and inspect actual correction diff/evidence.
 
-1. accepted Narrative remains independent of semantic-analysis success;
-2. production does not parse/control visible prose;
-3. exactly one auxiliary semantic request per new accepted ordinary turn version;
-4. valid result commits one atomic world mutation;
-5. invalid/transport analysis creates no fake mutation and no player-action failure;
-6. correction/regenerate cannot project stale old semantic record;
-7. replay does not duplicate World Turns;
-8. Save/Restore/reopen preserve coherent Conversation + semantic snapshot;
-9. Context projection is bounded and only uses committed matching records;
-10. no Source/Provider-fallback/UI/G5-02+ scope creep;
-11. real Provider proof is honestly marked pending, not falsely passed;
-12. Owner production state remains untouched.
+Key questions:
 
-## 8. After engineering review
+1. Is `restore_completed` or an equivalent committed progress-switch seam actually observed?
+2. Are attempted-version suppression and queued work reset/quarantined at Restore?
+3. Is active pre-Restore work guarded by an epoch/version boundary so late completion cannot commit?
+4. Does exact same future accepted version after Restore get a new semantic attempt?
+5. Does Restore itself avoid automatic Provider analysis?
+6. Are existing idempotency/correction/Save-Restore/Context tests still green?
+7. Was no real Provider call made?
+8. Is scope focused with no Runtime schema/UI/Source/G5-02+ creep?
 
-If engineering implementation passes while real Provider proof remains pending, do not close G5-01 product/reality acceptance yet.
-
-A later successful real Provider run or short Owner UAT must still prove:
+If correction PASS:
 
 ```text
-accepted Narrative
-→ semantic analysis
-→ durable World Turn
-→ reopen / later play
-→ matching consequence re-enters Context
+G5-01M1 Engineering PASS
++ real Provider vertical still PENDING
+→ short G5-01 Owner/product reality checkpoint
 ```
 
-The deferred G4-11 narrative-voice soft-prompt effect may be observed in that same UAT but is not a separate gate.
-
-Only after G5-01 product/reality PASS may GPT close G5-01 and shape G5-02 Knowledge Provenance.
-
-## 9. Other protected truth
-
-- visual runtime remains deferred to G6;
-- no portrait/scene/authored-map runtime in G5;
-- no G5-02 Knowledge, G5-03 NPC/Faction Agency, or G5-04 Event/Priority evolution may be implemented early;
-- no Provider fallback or hidden model switch to make validation pass;
-- Model Freedom First / Visible Narrative First remain protected.
+Only after product/reality PASS may GPT close G5-01 and shape G5-02 Knowledge Provenance.
