@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 11.8
+version: 11.9
 created: 2026-08-26
 updated: 2026-09-03
 phase: G5 World Semantics & GM Runtime
-current_task: G5-03M1 Stable Guaranteed-NPC Independent Agency Vertical
+current_task: G5-03M1 Multi-Actor Agency Cycle
 current_owner: KIMI
 parent_task: G5-03 NPC / Faction Agency
 semantic_owner: GPT
@@ -19,176 +19,215 @@ implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ## 1. Stage state
 
 ```text
-G1 Foundation                         PASS / CLOSED
-G2 AI Conversation Spine              PASS / CLOSED
-G3 Persistence / Save / Timeline      PASS / CLOSED
-G4 Primary Source Assets & Local Game Creation
-                                      PASS / CLOSED
-G4-10 Runtime Asset Resolution        DEFERRED / MOVED TO G6
-G4-11 Two Primary Asset Families      PASS / CLOSED
-G4-11C01 Narrative Voice Soft Prompt  PASS / CLOSED
-G4-GATE                               PASS
+G1 Foundation                              PASS / CLOSED
+G2 AI Conversation Spine                   PASS / CLOSED
+G3 Persistence / Save / Timeline           PASS / CLOSED
+G4 Primary Source Assets & Local Game      PASS / CLOSED
+G4-10 Runtime Asset Resolution             DEFERRED / MOVED TO G6
 
-G5 World Semantics & GM Runtime       ACTIVE
-G5-01 World Turn / Semantic Materialization
-                                      PASS / CLOSED
-G5-02 Knowledge Provenance            PASS / CLOSED
-G5-02M1 Known-Actor Knowledge Spine   ENGINEERING PASS / CLOSED
-G5-02M1C01 Actor Roster + Recent Knowledge Projection
-                                      PASS / CLOSED
-G5-02 real Provider vertical          HISTORICAL GAP / EXTERNAL PROVIDER UNAVAILABLE
+G5 World Semantics & GM Runtime            ACTIVE
+G5-01 World Turn / Semantic Materialization PASS / CLOSED
+G5-02 Knowledge Provenance                 PASS / CLOSED
+G5-02M1 Known-Actor Knowledge Spine        ENGINEERING PASS / CLOSED
+G5-02 real Provider vertical               HISTORICAL GAP / Provider unavailable
 
-G5-03 NPC / Faction Agency            ACTIVE
-G5-03M1 Stable Guaranteed-NPC Agency  ACTIVE — KIMI
-G5-04 Event / Priority Evolution      NOT YET
-G5-GATE                               NOT YET
+G5-03 NPC / Faction Agency                 ACTIVE
+G5-03M1 old Stable Guaranteed-NPC packet   SUPERSEDED / DO NOT EXECUTE
+G5-03M1 Multi-Actor Agency Cycle           ACTIVE — KIMI
+G5-03M2 Stable Actor Materialization       NEXT AFTER M1 REVIEW
+G5-04 Event / Priority Evolution           NOT YET
+G5-GATE                                    NOT YET
 ```
-
-Do not start G5-04 before G5-03M1 Independent Review and GPT decides whether a second Faction slice is required for G5-03 closeout.
 
 ## 2. G5-02 closeout
 
-Formal closeout:
+G5-02 is PASS/CLOSED. Formal closeout:
 
 `my-world/docs/g5_02/G5-02_CLOSEOUT.md`
 
-Final review:
+Protected distinction remains:
 
-`my-world/docs/g5_02/G5-02M1C01_INDEPENDENT_REVIEW.md`
+```text
+World / Game Truth
+!= actor knowledge
+!= human-player disclosure
+!= omniscient GM Context
+```
 
-Accepted:
+G5-02 real selected-Provider feature proof remains an honest historical gap because its single bounded attempt timed out before feature execution. Do not reopen G5-02 solely to manufacture retrospective proof.
 
-- same existing semantic-analysis request now receives exact stable actor name/local-ID roster;
-- unknown/non-roster actors cannot become durable knowers;
-- Knowledge parsing remains isolated from valid G5-01 `changes`;
-- knowledge + changes share at most one atomic world mutation;
-- bounded Actor Knowledge Context now retains newest matching knowledge rather than oldest forever;
-- real-provider harness can no longer false-pass with empty knowledge;
-- no SQLite schema/Source/UI/G5-03 scope was introduced by G5-02.
+## 3. Owner correction to G5-03
 
-The single bounded G5-02 real selected-Provider attempt timed out in ordinary Narrative before feature execution. This remains an honest historical gap; no second attempt/fallback occurred. A separate G5-02 Owner UAT is not required because the first materially player-visible consumer is G5-03 actor agency.
+Owner explicitly rejected the previously frozen rule:
 
-## 3. Current G5-03 authority
+```text
+one eligible player turn
+→ evaluate at most one NPC
+→ round-robin
+```
 
-Canonical decision:
+Reason: a pressured world window may plausibly contain several independent actor actions. Red-Cliffs-eve example: Cao Cao, Sun Quan and Zhuge Liang may all have simultaneous reasons to act.
 
-`architecture/world/G5_STABLE_NPC_AGENCY_V0_1_DECISION.md`
+Canonical product rule:
+
+> **One player/world turn may lead to zero, one, or several independent actor actions.**
+
+Current canonical decision:
+
+`architecture/world/G5_MULTI_ACTOR_AGENCY_CYCLE_V0_2_DECISION.md`
+
+Historical single-NPC decision:
+
+`architecture/world/G5_STABLE_NPC_AGENCY_V0_1_DECISION.md` → SUPERSEDED.
+
+## 4. Current task
 
 Implementation packet:
 
-`my-world/docs/tasks/G5-03M1_STABLE_NPC_INDEPENDENT_AGENCY_TASK.md`
+`my-world/docs/tasks/G5-03M1_MULTI_ACTOR_AGENCY_CYCLE_TASK.md`
 
-Core product question:
+Old packet:
 
-> Can a stable Guaranteed NPC independently choose and undertake an action from its own Character Source + durable Knowledge Provenance, without explicit player prompting and without blocking the foreground Narrative loop?
+`my-world/docs/tasks/G5-03M1_STABLE_NPC_INDEPENDENT_AGENCY_TASK.md` → SUPERSEDED / DO NOT EXECUTE.
+
+Current Agency Cycle:
+
+```text
+accepted ordinary turn
+→ existing post-Narrative semantic-analysis request
+   also performs Agency Selection
+→ validated agency_candidates = 0..4 stable NPC IDs
+→ separate actor-scoped execution request for every selected actor
+→ selected requests may run concurrently
+→ several valid acts may durably commit during the same Agency Cycle
+```
+
+No mandatory standalone selector Provider request is added. Selection is a semantic phase, but should piggyback on the existing auxiliary analysis request.
+
+## 5. Selection semantics
+
+For M1, eligible stable actors are current Guaranteed NPCs with durable `local_character_id`.
+
+Selection is relevance-based, not round-robin fairness.
+
+For every candidate, selector input may contain bounded:
+
+- exact actor ID/display name;
+- actor's own Character Source/T0 agency-relevant material;
+- actor's own committed Knowledge Provenance;
+- actor's own recent agency history.
+
+Instruction must require each candidate to be judged from **that actor's own** material rather than another actor's private knowledge.
+
+Optional `agency_candidates` parsing is fail-soft and independent:
+
+```text
+bad selection
+!= bad G5-01 changes
+!= bad G5-02 knowledge
+!= Narrative failure
+```
+
+Cap: 4 actors/cycle in v0.2. No retry-until-nonempty and no round-robin fallback.
+
+## 6. Per-actor execution
+
+Each selected actor gets an independent machine request containing only:
+
+- exact actor identity;
+- that actor's Game-local Character Source/T0 material;
+- that actor's own durable knowledge;
+- that actor's own recent agency history;
+- minimal cycle/source identity.
+
+Do not author several actors' actions from one combined private-knowledge execution prompt.
 
 Protected principle:
 
-> **Source provides inertia; actors create history.**
+> **GM omniscience must not become actor omniscience.**
 
-## 4. G5-03M1 actor scope
+## 7. Concurrent background behavior
 
-First slice covers stable current Game-local Guaranteed NPCs only.
+Selected actor requests must be able to progress concurrently, bounded by selected count (max 4), so Provider latency does not recreate a first-actor-only bias.
 
-```text
-guaranteed_npcs[*].local_character_id
-```
+Agency is background/best-effort and never a Turn Finalize Barrier.
 
-Player Character is not autonomously controlled by this lane.
+Foreground player input wins. On new Conversation attempt / Restore / Recovery / source replacement / unrelated world-head change / session close:
 
-No incidental/emergent NPC identity, Faction identity/agency, settlement/group actor or universal entity graph in M1.
+- invalidate remaining uncommitted actor work;
+- best-effort cancel transports;
+- late callbacks cannot commit;
+- actor actions already committed before the foreground boundary remain durable.
 
-If multiple Guaranteed NPCs exist, M1 may use deterministic round-robin one-actor-per-source-turn **evaluation**. This is not the G5-04 pressure/priority scheduler.
+## 8. Durable multi-actor cycle
 
-## 5. Background agency contract
+Several actors may create durable actions from the same source turn/cycle.
 
-Protected ordering:
+Use existing `commit_world_mutation_durably(...)` only; no SQLite schema/table.
 
-```text
-Player action
-→ free-form visible GM Narrative
-→ durable Conversation acceptance
-→ existing G5-01/G5-02 semantic lane terminal
-→ optional background Stable-NPC agency evaluation
-→ optional atomic agency world mutation
-```
+Provider requests may finish concurrently, but durable commits must serialize. A successful sibling agency commit is allowed cycle-owned head progression; unrelated head changes invalidate remaining results.
 
-Agency is not a Turn Finalize Barrier.
+Committed independent actor actions may enter later bounded omniscient GM Context. They are not automatic Player disclosure or automatic knowledge for other actors.
 
-The player may immediately begin the next action. If foreground Conversation starts while agency is queued/active, agency is cancelled/invalidated instead of delaying Narrative. Late callbacks after invalidation must not commit.
+## 9. Actor pool after M1
 
-Provider/parse/hold/cancel failure is fail-soft: no fake mutation, no Narrative failure, no automatic retry, no fallback.
+Guaranteed NPC is an **M1 bootstrap pool**, not the permanent product boundary.
 
-## 6. Actor-scoped cognition
-
-Agency request for selected NPC may receive only bounded actor-local material:
-
-- exact selected NPC ID/name;
-- that NPC's exact Game-local Character Source projection / selected T0 profile;
-- that NPC's own committed/current G5-02 Knowledge Provenance;
-- that NPC's own recent durable agency history.
-
-Do not pass full omniscient GM/world Context, Player private post-T0 knowledge or another NPC's private knowledge merely because the GM can see it.
-
-This is the first direct consumer proving:
+Owner's Cao Cao / Sun Quan / Zhuge Liang example provides a real consumer for:
 
 ```text
-GM knowledge != NPC knowledge
+G5-03M2 Minimal Stable Actor Materialization / Registry Expansion
 ```
 
-## 7. Durable agency shape
+M2 will define how important non-Guaranteed named NPCs become Game-local stable actors without unsafe free-form name matching or silently importing mutable external Source into an existing Game.
 
-A valid `decision=act` may persist a bounded record under existing `world_state.living_world`, tied to:
+Do not smuggle M2 into M1.
 
-`game_id + source turn + accepted GM hash + source world head + actor ID`.
+## 10. Relationship to G5-04
 
-Use existing `commit_world_mutation_durably(...)`; no SQLite table/schema.
+G5-03 selection answers only:
 
-A `hold` creates no mutation.
+> Which currently stable actors plausibly have reason to act now?
 
-Later omniscient GM Context may receive bounded `Independent Actor Actions` as world truth. This does not automatically grant other actors knowledge and does not automatically disclose the hidden action to the human player.
+G5-04 still owns broad Event/Priority world evolution, player-absence progression, faction/world pressures and selective world-time advancement.
 
-## 8. Stale/race safety
-
-Before agency commit, invalidate if:
-
-- new foreground Conversation attempt starts;
-- accepted Conversation advances;
-- active world head changes;
-- source GM hash changes;
-- Save Restore / Recovery switches progress;
-- session closes.
-
-Use existing Conversation `attempt_started` and Runtime `restore_completed` or equivalent narrow seams. Best-effort transport cancellation alone is not sufficient; late callback must also fail closed.
-
-## 9. Real Provider validation
+## 11. Real Provider authorization
 
 Standing authorization applies.
 
-After all deterministic/integration gates are green, G5-03M1 may spend at most **one** task-owned real selected-Provider agency request. Prefer stubbing unrelated Opening/Narrative/semantic prerequisites so the bounded call is spent on agency itself.
+After deterministic gates are green, G5-03M1 may use at most:
 
-Feature-specific PASS requires valid `act` from the selected stable NPC, one durable agency record/effect, and later GM Context projection.
+```text
+1 real combined semantic-selection request
++
+up to 2 real selected actor execution requests
+```
 
-`hold`, malformed output, timeout or outage is inconclusive/pending. No loop-until-act, no fallback, no hidden model switch.
+Maximum 3 feature-owned calls. No retry loops, fallback or hidden Provider switch.
 
-## 10. Temporary execution routing｜through 2026-09-06
+If inconclusive/unavailable, commit/push reviewable work and mark real proof pending.
+
+## 12. Temporary execution routing
+
+Through 2026-09-06 23:59 (+08:00):
 
 ```text
 GPT        → semantics / architecture / task shaping / final Independent Review
-Kimi       → primary code-changing implementation owner, temporarily substituting for Codex
-Grok Build → external research / evidence support when useful
+Kimi       → primary code-changing implementation owner
+Grok Build → research/evidence support when useful
 Owner      → Product UAT / explicit verdict
 ```
 
-The override auto-expires at 2026-09-07 00:00 (+08:00). Correct in-flight Kimi work may finish under its issued packet.
+Auto-expiry 2026-09-07 00:00 (+08:00); correct in-flight Kimi work may finish.
 
-## 11. Route
+## 13. Route
 
 ```text
-Kimi G5-03M1 implementation
+Kimi G5-03M1 Multi-Actor Agency Cycle
 → GPT Independent Review
-→ decide from actual consumer whether a Faction slice is still required inside G5-03
-→ only then move toward G5-04 Event / Priority Evolution
+→ shape/execute G5-03M2 Stable Actor Materialization
+→ decide remaining Faction slice from actual consumer
+→ G5-04
 ```
 
 Visual runtime remains deferred to G6.
