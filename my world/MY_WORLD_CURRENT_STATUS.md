@@ -1,13 +1,13 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 11.6
+version: 11.7
 created: 2026-08-26
 updated: 2026-09-03
 phase: G5 World Semantics & GM Runtime
-current_task: G5-02M1 Known-Actor Knowledge Provenance Spine
+current_task: G5-02M1C01 Actor Roster + Recent Knowledge Projection Correction
 current_owner: KIMI
-parent_task: G5-02 Knowledge Provenance
+parent_task: G5-02M1 Known-Actor Knowledge Provenance Spine
 semantic_owner: GPT
 owner_uat_required: false
 context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
@@ -34,150 +34,84 @@ G5-01 World Turn / Semantic Materialization
                                       PASS / CLOSED
 G5-01M1 Semantic Materialization Spine ENGINEERING PASS / CLOSED
 G5-01M1C02 Restore Timeline Isolation CANCELLED / DO NOT EXECUTE
-G5-01 dedicated real Provider vertical HISTORICAL GAP — Provider unavailable; not rewritten as PASS
-
 G5-02 Knowledge Provenance            ACTIVE
-G5-02M1 Known-Actor Knowledge Spine   ACTIVE — KIMI
+G5-02M1 Known-Actor Knowledge Spine   CORRECTION REQUIRED
+G5-02M1C01 Actor Roster + Recent Knowledge Projection
+                                      ACTIVE — KIMI
+G5-02 real Provider vertical          PENDING / EXTERNAL PROVIDER UNAVAILABLE
 G5-03 NPC / Faction Agency            NOT YET
 G5-04 Event / Priority Evolution      NOT YET
 G5-GATE                               NOT YET
 ```
 
-Do not start G5-03 before G5-02M1 Independent Review and G5-02 closeout.
+Do not start G5-03 before G5-02M1C01 Independent Review and G5-02 closeout.
 
-## 2. G5-01 closeout
+## 2. G5-02M1 reviewed implementation
 
-Formal closeout:
-
-`my-world/docs/g5_01/G5-01_CLOSEOUT.md`
-
-The Owner explicitly waived a new dedicated G5-01 UAT because prior actual play already provided sufficient product confidence that the world remembers consequences of player choices, and directed the project to proceed directly to the next task.
-
-Therefore:
+Kimi pushed:
 
 ```text
-G5-01 dedicated additional UAT
-WAIVED BY OWNER
-
-G5-01 product progression
-ACCEPTED / CLOSED
+IMPLEMENTATION/EVIDENCE_HEAD 492815aefd127c20bd17fbda892aad8d41279dcb
 ```
 
-This does not fabricate the earlier dedicated real-Provider vertical as PASS. Two bounded Kimi K3 attempts timed out during ordinary Narrative before the feature-specific semantic lane executed. That remains a historical evidence gap only and does not reopen G5-01.
+Evidence:
 
-The previously proposed C02 exact-replay Restore correction is cancelled. It addresses a rare exact turn-index + byte-identical GM-hash replay edge and would require a later consumer-driven branch/reuse decision to solve correctly. Do not implement it now.
+`my-world/docs/g5_02/G5-02M1_KNOWN_ACTOR_KNOWLEDGE_PROVENANCE_EVIDENCE.md`
 
-## 3. Current G5-02 semantic decision
+Formal Independent Review:
 
-Canonical decision:
+`my-world/docs/g5_02/G5-02M1_INDEPENDENT_REVIEW.md`
 
-`architecture/world/G5_KNOWLEDGE_PROVENANCE_V0_1_DECISION.md`
-
-Core distinction:
+Result:
 
 ```text
-Game / World Truth
-!= actor knowledge
-!= human-player disclosure
-!= omniscient GM model context
+CORRECTION REQUIRED / NOT ENGINEERING PASS YET
 ```
 
-Protected principle:
+The architecture is accepted: one existing auxiliary semantic-analysis request, isolated knowledge parsing, stable roster validation before persistence, at most one atomic world mutation, bounded soft Actor Knowledge Context, no Narrative gate/schema/platform creep.
 
-> **GM omniscience must not become actor omniscience.**
+## 3. Blocking findings
 
-Current Source `disclosure: gm_reference` is GM/reference visibility, not automatic actor knowledge.
+### A. Model is not given the exact actor IDs it must return
 
-## 4. G5-02M1 scope
+The production semantic-analysis request requires `knowledge_events[*].knower_id` to equal a stable Game-local `local_character_id`, but the request currently only includes accepted Player Action + GM Narrative. It does not include the Player/Guaranteed-NPC local-ID roster.
 
-Implementation packet:
+Deterministic stub tests can hand-write IDs, but a real model cannot reliably emit an exact ID it has never been shown.
 
-`my-world/docs/tasks/G5-02M1_KNOWN_ACTOR_KNOWLEDGE_PROVENANCE_TASK.md`
+### B. Knowledge Context is bounded in the wrong direction
 
-Owner: **KIMI** under the temporary execution routing through 2026-09-06.
+Current projection sorts oldest → newest and consumes the event cap from the front. After eight events, later new knowledge can be omitted while early knowledge remains forever. The frozen decision requires a bounded recent working set.
 
-v0.1 tracks only **post-T0 knowledge acquisition** for actors that already have stable Game-local IDs:
+### C. Real-provider harness can false-pass without knowledge
+
+The current harness accepts `no_changes` and permits an empty knowledge record set to satisfy the boundary check. A future healthy Provider run must require at least one committed valid roster knowledge event and its later Context projection before feature-specific PASS.
+
+## 4. Current correction
+
+Packet:
+
+`my-world/docs/tasks/G5-02M1C01_ACTOR_ROSTER_RECENCY_CORRECTION_TASK.md`
+
+Required outcome:
+
+- add a compact Player + Guaranteed-NPC display-name/local-ID roster to the **same existing** semantic-analysis request;
+- keep one auxiliary Provider call per accepted ordinary turn;
+- select newest matching knowledge within the existing bounded Context cap;
+- update the real-provider harness so empty/no-knowledge output cannot count as G5-02 proof;
+- preserve knowledge parse isolation and single atomic mutation semantics.
+
+No extra real Provider call is allowed in this correction. The parent packet's one-attempt ceiling has already been consumed by an ordinary-Narrative timeout.
+
+## 5. Provider status
 
 ```text
-Player Character
-+
-Guaranteed NPCs
+G5-02M1 real selected-Provider vertical
+PENDING / EXTERNAL PROVIDER UNAVAILABLE
 ```
 
-Do not build identity for incidental/emergent NPCs or Factions in G5-02M1.
+The single bounded attempt timed out during ordinary Narrative before feature-specific knowledge materialization. No fallback/hidden Provider switch/second attempt is allowed.
 
-G5-02M1 extends the existing one-per-turn semantic-analysis request; it must **not add a second Provider call per accepted turn**.
-
-Conceptually:
-
-```json
-{
-  "changes": ["durable world consequence"],
-  "knowledge_events": [
-    {
-      "knower_id": "local-character-id",
-      "fact": "post-T0 fact this actor now has grounds to know",
-      "basis": "witnessed|told|discovered|participated"
-    }
-  ]
-}
-```
-
-Knowledge validation failure must not invalidate an otherwise valid G5-01 `changes` result.
-
-## 5. Durable / Context semantics
-
-Knowledge provenance belongs inside the existing game-local world snapshot under `living_world`, adjacent to G5-01 turn records. No SQLite schema/table migration.
-
-First consumer is later ordinary GM Context:
-
-- GM may still receive broad World/Source truth;
-- Context additionally projects a bounded actor-knowledge provenance section;
-- GM is instructed not to make actors speak/plan/react from post-T0 facts merely because GM knows them;
-- this is soft semantic guidance, not a Narrative output classifier/gate.
-
-Do not create a universal Knowledge Graph, inference engine, rumor network, false-belief system, confidence scores or Faction knowledge in v0.1.
-
-## 6. Required first vertical
-
-At minimum prove:
-
-```text
-Player Character + Guaranteed NPC A
-→ Player alone discovers private fact F
-→ durable knowledge provenance says Player knows F
-→ NPC A does not
-→ later Context preserves the asymmetry
-→ later accepted turn explicitly tells NPC A
-→ NPC A then gains provenance for F
-→ Save/reopen preserves knowledge state
-```
-
-Unknown returned actor IDs must never become durable authority.
-
-## 7. Provider authorization / outage rule
-
-Canonical standing decision:
-
-`architecture/foundation/REAL_PROVIDER_VALIDATION_STANDING_AUTHORIZATION.md`
-
-After offline/integration gates are green, G5-02M1 may make **at most one** task-owned real selected-Provider attempt. It is already authorized; do not pause to ask Owner again.
-
-No fallback or hidden model switch.
-
-If the selected Provider is unavailable:
-
-```text
-real G5-02 vertical = PENDING / EXTERNAL PROVIDER UNAVAILABLE
-→ commit/push reviewable implementation/tests/evidence
-→ GPT Independent Review proceeds
-```
-
-## 8. Temporary execution routing｜through 2026-09-06
-
-Canonical decision:
-
-`architecture/foundation/TEMPORARY_EXECUTION_ROUTING_2026-09-03_TO_2026-09-06.md`
+## 6. Temporary execution routing｜through 2026-09-06
 
 ```text
 GPT        → semantics / architecture / task shaping / final Independent Review
@@ -188,15 +122,24 @@ Owner      → Product UAT / explicit product verdict
 
 The override auto-expires at 2026-09-07 00:00 (+08:00). Correct in-flight Kimi work may finish under its issued packet.
 
-## 9. Route
+## 7. Protected semantics
 
 ```text
-G5-02M1 Kimi implementation
-→ GPT Independent Review
-→ G5-02 closeout
-→ shape G5-03 NPC / Faction Agency
+Game / World Truth
+!= actor knowledge
+!= human-player disclosure
+!= omniscient GM model context
 ```
 
-Do not implement G5-03 autonomous action early.
+> **GM omniscience must not become actor omniscience.**
 
-Visual runtime remains deferred to G6.
+G5-02M1 remains limited to post-T0 acquisition for the Player Character + Guaranteed NPC stable local IDs. No generic Knowledge Graph, Faction knowledge, emergent NPC identity, false-belief engine, UI, G5-03 Agency or G6/G7 work.
+
+## 8. Route
+
+```text
+Kimi G5-02M1C01
+→ GPT Independent Review
+→ if PASS, close G5-02
+→ shape G5-03 NPC / Faction Agency
+```
