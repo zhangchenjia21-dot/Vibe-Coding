@@ -6,10 +6,10 @@ updated: 2026-09-03
 project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
-current_parent_task: G5-01 Minimum Playable T0 + World Turn / Semantic Materialization
-current_execution_task: G5-01 Owner / Product Reality Checkpoint
+current_parent_task: G5-02 Knowledge Provenance
+current_execution_task: G5-02M1 Known-Actor Knowledge Provenance Spine
 semantic_owner: GPT
-current_execution_owner: OWNER
+current_execution_owner: KIMI
 ---
 
 # my world｜GPT CONTEXT HANDOFF CURRENT
@@ -27,126 +27,168 @@ G4-11C01 Narrative Voice Soft Prompt  PASS / CLOSED
 G4-GATE                               PASS
 
 G5 World Semantics & GM Runtime       ACTIVE
-G5-01 Minimum Playable T0 + World Turn / Semantic Materialization
-                                      PRODUCT REALITY CHECKPOINT — OWNER
+G5-01 World Turn / Semantic Materialization
+                                      PASS / CLOSED
 G5-01M1 Semantic Materialization Spine ENGINEERING PASS / CLOSED
 G5-01M1C02 Restore Timeline Isolation CANCELLED / DO NOT EXECUTE
-G5-01 real Provider vertical          PENDING / EXTERNAL PROVIDER UNAVAILABLE
-G5-02 Knowledge Provenance            NOT YET
+G5-02 Knowledge Provenance            ACTIVE
+G5-02M1 Known-Actor Knowledge Spine   ACTIVE — KIMI
 G5-03 NPC / Faction Agency            NOT YET
 G5-04 Event / Priority Evolution      NOT YET
 ```
 
-Do not start G5-02 before G5-01 Owner/Product PASS.
+Do not start G5-03 before G5-02 Independent Review/closeout.
 
-## 2. G5-01M1 engineering result
+## 2. G5-01 closeout / Owner decision
 
-Reviewed implementation/evidence:
+Formal closeout:
 
-```text
-IMPLEMENTATION_HEAD  eb171a19dd0b4eeb134392128fb8df7fd5b104cb
-EVIDENCE_HEAD        f9b1be01bd102f3bb1ae6b0b762a6b97d3a5b6f1
-```
+`my-world/docs/g5_01/G5-01_CLOSEOUT.md`
 
-Formal review:
+Owner explicitly declined another dedicated G5-01 UAT, stating prior actual play already gave sufficient confidence that the world remembers player-choice consequences, and instructed the project to move directly to the next task.
 
-`my-world/docs/g5_01/G5-01M1_INDEPENDENT_REVIEW.md`
+Therefore G5-01 is PASS/CLOSED by explicit Owner progression decision after Engineering PASS.
 
-Result:
+The dedicated M1 real-provider attempt remains historically unproven because two bounded Kimi K3 ordinary-Narrative requests timed out before the semantic lane executed. Do not rewrite that evidence as PASS, but do not reopen G5-01 merely to manufacture retrospective proof.
 
-```text
-ENGINEERING PASS / CLOSED
-```
+The previously proposed `G5-01M1C02` Restore exact-replay correction is cancelled/do-not-execute. The edge requires same restored future turn index + byte-identical GM Narrative hash and needs later branch/result-reuse semantics if a real consumer ever exposes it.
 
-Core semantics remain protected:
+## 3. Current G5-02 authority
 
-```text
-free-form visible Narrative
-→ durable Conversation acceptance
-→ separate best-effort semantic analysis
-→ optional atomic World Turn mutation
-→ bounded committed/hash-matching Context projection
-```
+Canonical decision:
 
-No narrative protocol gate, Provider fallback, SQLite schema migration, Source mutation, universal ontology, G5-02+ or G6 work was introduced.
+`my world/architecture/world/G5_KNOWLEDGE_PROVENANCE_V0_1_DECISION.md`
 
-## 3. C02 is cancelled
+Implementation packet:
 
-`my-world/docs/tasks/G5-01M1C02_RESTORE_TIMELINE_ISOLATION_CORRECTION_TASK.md`
+`my-world/docs/tasks/G5-02M1_KNOWN_ACTOR_KNOWLEDGE_PROVENANCE_TASK.md`
 
-is now:
+Core distinction:
 
 ```text
-CANCELLED / DO NOT EXECUTE
+Game / World Truth
+!= actor knowledge
+!= human-player disclosure
+!= omniscient GM model context
 ```
 
-The exact-replay edge requires Restore followed by the same conversation turn index and exact full GM Narrative hash. Current restored-away durable records already do not contaminate current Context. A complete fix would require a later consumer-driven design for durable extraction-result reuse or branch-aware identity, so no speculative Restore infrastructure should be built now.
+Protected principle:
 
-## 4. Current product checkpoint
+> **GM omniscience must not become actor omniscience.**
 
-Owner should validate one simple lived consequence, without inspecting implementation internals.
+Current Source `disclosure: gm_reference` remains GM/reference metadata. It must not be interpreted as “all actors know this section.”
 
-Product question:
+## 4. G5-02M1 bounded actor scope
 
-> Does a consequence established naturally in free-form play remain part of the world after another turn / Save / reopen, and does later GM behavior naturally respect it?
-
-A minimal scenario is enough, for example:
+Only post-T0 knowledge acquisition for stable current Game-local actors:
 
 ```text
-player establishes a clear persistent consequence
-→ GM explicitly confirms it in Narrative
-→ continue at least one more turn
-→ Save / return / reopen Continue
-→ take an action that depends on the earlier consequence
-→ verify the GM treats it as existing reality rather than forgetting/resetting it
+player_character.local_character_id
++
+guaranteed_npcs[*].local_character_id
 ```
 
-Do not ask Owner to inspect JSON, SQLite, hashes or analysis output. The semantic materialization lane should remain invisible as a mechanism.
+No emergent/incidental NPC identity, Faction knowledge, group knowledge or generic entity graph.
 
-The G4-11C01 narrative-voice soft prompt may be observed opportunistically in this same session, but it is not a separate gate.
+Starting Source is not converted into a giant knowledge database; v0.1 makes post-T0 acquisition durable first.
 
-If the selected Provider is unavailable/times out, classify the checkpoint as externally blocked rather than Product FAIL.
+## 5. Reuse one semantic request
 
-## 5. Provider state
+Do not add a second Provider tax per accepted turn.
 
-Canonical standing authorization/outage decision:
+Extend the existing G5-01 auxiliary request conceptually to:
+
+```json
+{
+  "changes": ["..."],
+  "knowledge_events": [
+    {
+      "knower_id": "stable-local-id",
+      "fact": "...",
+      "basis": "witnessed|told|discovered|participated"
+    }
+  ]
+}
+```
+
+Knowledge validation must be isolated so bad/absent knowledge data cannot invalidate an otherwise valid G5-01 `changes` result.
+
+Unknown actor IDs never become durable knowledge authority.
+
+## 6. Durable + Context semantics
+
+Knowledge provenance lives inside the existing game-local world document under `living_world`, adjacent to G5-01 turn records. No SQLite schema migration/table.
+
+A single accepted semantic response may produce changes only, knowledge only, both, or neither. If something durable exists, at most one atomic world mutation for that turn version.
+
+First consumer is later GM Context:
+
+- GM may still see broad world truth;
+- add bounded Actor Knowledge Provenance;
+- tell GM that post-T0 world truth is not automatically actor knowledge;
+- no prose keyword checker/classifier/retry gate.
+
+## 7. First proof target
+
+Use a task-owned Game with Player Character + one Guaranteed NPC:
+
+```text
+Player alone discovers private fact F
+→ Player gets durable knowledge provenance
+→ NPC does not
+→ later GM Context preserves asymmetry
+→ later Narrative explicitly tells NPC F
+→ NPC then gains durable provenance
+→ Save/reopen preserves the boundary
+```
+
+Also prove:
+
+- unknown actor IDs rejected;
+- knowledge-only result can commit one world mutation;
+- knowledge parse failure does not break valid G5-01 changes;
+- stale GM-hash knowledge does not project;
+- replay/reopen does not duplicate.
+
+## 8. Provider validation
+
+Standing authorization:
 
 `my world/architecture/foundation/REAL_PROVIDER_VALIDATION_STANDING_AUTHORIZATION.md`
 
-Two bounded Kimi K3 requests previously timed out in ordinary Narrative before the semantic lane executed, so:
+After offline gates are green, at most **one** task-owned real selected-Provider G5-02 attempt is authorized. Do not ask Owner again.
 
-```text
-real selected-Provider G5-01 vertical
-PENDING / EXTERNAL PROVIDER UNAVAILABLE
-```
+No fallback/hidden switch/second attempt.
 
-No fallback, hidden provider switch or additional loop-until-pass attempt is allowed by engineering agents.
+If externally unavailable, commit/push reviewable implementation with:
 
-## 6. Temporary execution routing
+`READY FOR INDEPENDENT REVIEW — REAL PROVIDER PROOF PENDING`.
+
+## 9. Temporary routing
 
 Through 2026-09-06 23:59 (+08:00):
 
 ```text
-GPT        → meaning / architecture / governance / task shaping / final Independent Review
-Kimi       → primary code-changing implementation owner; temporary Codex substitute
-Grok Build → external research / evidence discovery / Provider-reality support / secondary cross-check
-Owner      → Product UAT
+GPT        → semantics / architecture / governance / final Independent Review
+Kimi       → primary code-changing owner; temporary Codex substitute
+Grok Build → external research/evidence support only if useful
+Owner      → Product UAT / verdict
 ```
 
-The override auto-expires at 2026-09-07 00:00 (+08:00).
+Auto-expiry 2026-09-07 00:00 (+08:00); do not interrupt correct in-flight Kimi work solely due expiry.
 
-## 7. After Owner checkpoint
+## 10. Review focus when Kimi returns
 
-If Owner PASS:
+Refresh both mains and inspect actual code/evidence. Verify especially:
 
-```text
-G5-01 PASS / CLOSED
-→ GPT performs Decision Propagation
-→ shape G5-02 Knowledge Provenance
-```
+1. only one semantic Provider request per accepted turn;
+2. G5-01 changes remain backward-compatible when knowledge field is absent/invalid;
+3. only stable Player/Guaranteed NPC local IDs can be persisted as knowers;
+4. knowledge-only + changes+knowledge both use at most one atomic world mutation;
+5. Context projects only committed/current-hash-matching knowledge and remains bounded;
+6. no actor omniscience keyword/output gate is added;
+7. Save/reopen preserves the asymmetry;
+8. no Source migration, SQLite schema, G5-03 Agency, Faction knowledge, generic graph, UI or G6/G7 scope creep;
+9. real Provider result is honest about success versus outage.
 
-G5-02 product question:
-
-> Which actor knows which durable world facts, how did they learn them, and which facts must not be available to them yet?
-
-Do not jump directly to NPC/Faction autonomous Agency; that remains G5-03.
+If G5-02M1 passes, close G5-02 and then shape G5-03 NPC / Faction Agency.
