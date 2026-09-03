@@ -1,7 +1,7 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 3.4
+version: 3.5
 created: 2026-08-25
 updated: 2026-09-03
 current_phase: G5
@@ -214,9 +214,9 @@ G5 semantics 不等待美术资源。
 ## G5 task order
 
 ```text
-G5-01 Minimum Playable T0 + World Turn / Semantic Materialization
+G5-01 Minimum Playable T0 + World Turn / Semantic Materialization  PASS / CLOSED
 ↓
-G5-02 Knowledge Provenance
+G5-02 Knowledge Provenance                                    ACTIVE
 ↓
 G5-03 NPC / Faction Agency
 ↓
@@ -235,15 +235,19 @@ G5-GATE
 
 ## G5-01｜Minimum Playable T0 + World Turn / Semantic Materialization
 
-**ACTIVE**。
+**PASS / CLOSED**。
 
 Canonical decision：
 
 `architecture/world/G5_WORLD_TURN_SEMANTIC_MATERIALIZATION_V0_1_DECISION.md`
 
-First implementation：
+Implementation：
 
 `my-world/docs/tasks/G5-01M1_WORLD_TURN_SEMANTIC_MATERIALIZATION_TASK.md`
+
+Closeout：
+
+`my-world/docs/g5_01/G5-01_CLOSEOUT.md`
 
 ### Outcome
 
@@ -264,34 +268,99 @@ Protected distinction：
 
 > **Narrative acceptance != semantic-analysis success.**
 
-G5-01 不允许为了结构化世界语义重新把 Narrative 变成 JSON / sentinel / parser protocol。
+G5-01 没有为了结构化世界语义重新把 Narrative 变成 JSON / sentinel / parser protocol。
 
-Semantic analysis 是独立 machine lane；malformed / transport / empty analysis 默认 fail-soft，不把已经接受的玩家行动判失败，也不创建 fake world mutation。
+Semantic analysis 是独立 machine lane；malformed / transport / empty analysis fail-soft，不把已经接受的玩家行动判失败，也不创建 fake world mutation。
 
-World Turn v0.1 是 turn-level durable consequence ledger，不是永久 universal ontology。
+World Turn v0.1 是 turn-level durable consequence ledger，不是 permanent universal ontology。
 
-### G5-01 product checkpoint
+Owner 在 Engineering PASS 后明确选择跳过额外的专门 G5-01 UAT：此前实际游玩已经给了“世界会记住玩家选择后果”的足够产品信心，因此直接推进。此前 dedicated real-provider vertical 因 Kimi K3 timeout 未能完成，历史证据状态不被伪造为 PASS，但不再作为额外 progression gate。
 
-M1 Independent Review PASS 后进行短 Owner UAT：建立一个简单、明确的持久后果，继续行动/重开后确认世界仍然记得，而且 Narrative 仍自由自然。
-
-G4-11C01 的文风软提示效果可在同一次 UAT 顺带观察，不构成独立 Gate。
+`G5-01M1C02 Restore Timeline Isolation` 已取消；它针对 Restore 后相同 turn index + byte-identical GM Narrative hash 的极窄 exact-replay edge，等待未来真实 branch/result-reuse consumer 再裁定。
 
 ---
 
 ## G5-02｜Knowledge Provenance
 
-Outcome：正式建立：
+**ACTIVE**。
+
+Canonical decision：
+
+`architecture/world/G5_KNOWLEDGE_PROVENANCE_V0_1_DECISION.md`
+
+First implementation：
+
+`my-world/docs/tasks/G5-02M1_KNOWN_ACTOR_KNOWLEDGE_PROVENANCE_TASK.md`
+
+### Outcome
+
+正式建立：
 
 ```text
-World Truth
-!= Character/NPC Knowledge
-!= Player Knowledge
-!= Model-visible Context
+World / Game Truth
+!= Actor Knowledge
+!= Human-player disclosure
+!= Omniscient GM model Context
 ```
 
-Knowledge 必须有来源/证据边界，不能因为 GM/Source 知道就让所有 NPC 自动知道。
+核心原则：
 
-G5-02 在 G5-01 durable world-turn consumer 证明后再塑形；不要提前把 `changes[]` 伪装成 Knowledge Graph。
+> **GM omniscience must not become actor omniscience.**
+
+当前 Source 的 `disclosure: gm_reference` 只表示 GM/reference visibility，不能被解释成“所有 NPC 都知道这些信息”。
+
+### G5-02M1 first slice
+
+只让**游戏开始后新产生的知识获取**变成 durable provenance，而且仅覆盖已经有稳定 Game-local identity 的：
+
+```text
+Player Character
++
+Guaranteed NPCs
+```
+
+不把所有 T0 Source 转成 Knowledge Graph，不提前建立 incidental/emergent NPC identity，也不建立 Faction/shared knowledge。
+
+G5-02M1 复用 G5-01 每回合已有的一次后台 semantic-analysis request；不增加第二次 Provider tax。概念响应：
+
+```json
+{
+  "changes": ["durable world consequence"],
+  "knowledge_events": [
+    {
+      "knower_id": "stable-local-character-id",
+      "fact": "actor now has grounds to know this post-T0 fact",
+      "basis": "witnessed|told|discovered|participated"
+    }
+  ]
+}
+```
+
+Knowledge failure 不能拖累 G5-01：
+
+```text
+valid changes
++ absent/invalid knowledge data
+→ valid changes still eligible to commit
+→ knowledge fails soft
+```
+
+Knowledge provenance 使用既有 world snapshot / atomic mutation，不新增 SQLite schema/table。
+
+第一 consumer 是 later GM Context：GM 仍可看 broad World truth，但额外拿到 bounded Actor Knowledge Provenance，提醒它不能让角色仅因为 GM 知道就自动知道 post-T0 事实。
+
+这是 soft semantic guidance，不是 Narrative output classifier/gate。
+
+Explicitly deferred：
+
+- universal Entity/Knowledge Graph；
+- false belief / deception resolution；
+- confidence/reliability scoring；
+- rumor propagation；
+- Faction/shared knowledge；
+- emergent NPC identity platform；
+- separate Player Knowledge UI；
+- long-session retrieval platform。
 
 ---
 
