@@ -1,13 +1,13 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 11.1
+version: 11.2
 created: 2026-08-26
 updated: 2026-09-03
 phase: G5 World Semantics & GM Runtime
-current_task: G5-01M1 World Turn / Semantic Materialization Spine
+current_task: G5-01M1C01 Provider Outage / Reviewability Correction
 current_owner: CODEX
-parent_task: G5-01 Minimum Playable T0 + World Turn / Semantic Materialization
+parent_task: G5-01M1 World Turn / Semantic Materialization Spine
 semantic_owner: GPT
 owner_uat_required: false
 context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
@@ -29,107 +29,103 @@ G4 Primary Source Assets & Local Game Creation
                                       PASS / CLOSED
 G4-01 ... G4-09                       PASS / CLOSED
 G4-10 Runtime Asset Resolution        DEFERRED / MOVED TO G6
-G4-10M1 Mechanism                     SUPERSEDED / DO NOT EXECUTE
 G4-11 Two Primary Asset Families      PASS / CLOSED
-G4-11P1 Engineering Reality Prep      PASS / CLOSED
-G4-11UAT Owner Reality Test           PASS / CLOSED
 G4-11C01 Narrative Voice Soft Prompt  PASS / CLOSED
 G4-GATE                               PASS
 
 G5 World Semantics & GM Runtime       ACTIVE
 G5-01 Minimum Playable T0 + World Turn / Semantic Materialization
                                       ACTIVE
-G5-01M1 Semantic Materialization Spine ACTIVE — CODEX
+G5-01M1 Semantic Materialization Spine IMPLEMENTED LOCALLY / REVIEW PENDING
+G5-01M1C01 Provider Outage Reviewability ACTIVE — CODEX
 G5-02 Knowledge Provenance            NOT YET
 G5-03 NPC / Faction Agency            NOT YET
 G5-04 Event / Priority Evolution      NOT YET
 G5-GATE                               NOT YET
 ```
 
-Do not start G5-02 before G5-01 implementation review + Owner product checkpoint.
+Do not start G5-02 before G5-01 engineering review + Owner/product checkpoint.
 
-## 2. Standing authorization｜Required real Provider validation
-
-Owner explicitly authorized future **bounded real Provider validation that is required by an approved my world Task Packet**.
+## 2. Standing authorization + Provider outage rule
 
 Canonical decision:
 
 `architecture/foundation/REAL_PROVIDER_VALIDATION_STANDING_AUTHORIZATION.md`
 
-Effect:
+Two permanent rules now apply:
 
 ```text
-approved Task Packet requires real Provider evidence
-+ task defines bounded scenario/call/turn/attempt ceiling
-+ current approved Provider/profile
+Required bounded real Provider proof
 → PRE-AUTHORIZED
-→ execution Agent proceeds without asking Owner again
+→ do not ask Owner again
 ```
 
-Future Task Packets requiring real Provider evidence must cite this standing authorization and specify the smallest reasonable call/turn/attempt ceiling.
+and:
 
-This authorization removes repeated permission interruptions. It does not authorize open-ended benchmarks, Provider/model switching, billing/account changes, secrets/credentials in prompts, unrelated private data, new external services or other scope expansion.
+```text
+bounded attempts exhausted by external Provider timeout/unavailability
++ offline/integration gates green
+→ do not fabricate, switch Provider, or exceed ceiling
+→ commit/push reviewable implementation + evidence
+→ mark real vertical PENDING / EXTERNAL PROVIDER UNAVAILABLE
+→ Independent Review may proceed
+```
 
-G5-01M1 §12.E is already covered. Codex should execute the bounded real-selected-Provider proof after offline gates are green without another Owner confirmation.
+External Provider availability may block reality proof; it does not block code review.
 
-## 3. G4 final closeout
+## 3. Current G5-01M1 external result
 
-G4-11 Owner result:
+Codex reports all offline focused tests, SQLite Timeline/Save/Restore integration and affected G2/G3/G4 regressions green.
 
-`my-world/docs/g4_11/G4-11UAT_OWNER_RESULT.md`
+The two authorized real Kimi K3 attempts both timed out during the **ordinary Narrative stage** after 420 seconds:
 
-Owner confirmed that Han/刘备 and Afterglow/莉维娅 materially feel like different RPG worlds. Cross-world narrative prose voice similarity remains a non-blocking quality finding.
-
-G4-11C01 Independent Review:
-
-`my-world/docs/g4_11/G4-11C01_INDEPENDENT_REVIEW.md`
-
-Reviewed implementation:
-
-- production change only adjusted shared `GM_INSTRUCTIONS` wording;
-- Opening and continuation receive the same generic soft narrative-voice guidance;
-- no Source migration, Provider change, style classifier, keyword gate, reject/retry behavior or G5 semantics were introduced;
-- no standalone Owner UAT was required; the style effect is deferred to the next suitable product UAT.
+```text
+attempt 1 → Narrative wait → 420s timeout
+attempt 2 → Narrative wait → 420s timeout
+```
 
 Therefore:
 
-```text
-G4-11C01 PASS / CLOSED
-→ G4-11 PASS / CLOSED
-→ G4-GATE PASS
-→ G4 PASS / CLOSED
-```
+- no Narrative was durably accepted;
+- semantic-analysis lane was not reached;
+- no World mutation occurred;
+- no Provider fallback or third attempt occurred;
+- Owner production settings / Source / Games / Game Library / current SQLite fingerprints remained unchanged.
 
-## 4. Visual work remains deferred
-
-Owner decision remains protected:
+Classification:
 
 ```text
-G4-10 Runtime Asset Resolution
-DEFERRED / MOVED TO G6
+feature-specific real Provider proof
+PENDING / EXTERNAL PROVIDER UNAVAILABLE
+
+engineering implementation
+NOT YET REVIEWED BY GPT
 ```
 
-Canonical decision:
+This is not a G5-01 implementation failure finding because the external failure occurred before the new semantic-materialization path could execute.
 
-`architecture/source/G4_VISUAL_ASSET_DEFERRAL_TO_G6_DECISION.md`
+## 4. Current correction task
 
-G5 must remain independent of portrait / scene / authored-map presentation. Map image still does not equal topology / travel / current location / GIS.
+Implementation correction packet:
 
-## 5. G5-01 semantic freeze
+`my-world/docs/tasks/G5-01M1C01_PROVIDER_OUTAGE_REVIEWABILITY_CORRECTION_TASK.md`
+
+Codex must:
+
+- preserve current local implementation/tests/evidence;
+- fetch/reconcile latest authority without discarding local work;
+- not perform a third Provider attempt;
+- finalize evidence with the two 420-second Narrative-stage timeouts;
+- explicitly mark real Provider proof pending, not PASS;
+- record final `git diff --check`;
+- commit and push implementation/tests/evidence;
+- return `READY FOR INDEPENDENT REVIEW — REAL PROVIDER PROOF PENDING`.
+
+## 5. G5-01 semantic contract remains unchanged
 
 Canonical decision:
 
 `architecture/world/G5_WORLD_TURN_SEMANTIC_MATERIALIZATION_V0_1_DECISION.md`
-
-Core product transition:
-
-```text
-G4:
-Source-grounded durable AI RPG conversation
-
-G5:
-accepted Narrative can produce durable game-local world semantics
-```
 
 Protected ordering:
 
@@ -143,39 +139,7 @@ Player action
 
 Narrative acceptance does **not** depend on semantic-analysis success.
 
-## 6. Current task｜G5-01M1
-
-Implementation packet:
-
-`my-world/docs/tasks/G5-01M1_WORLD_TURN_SEMANTIC_MATERIALIZATION_TASK.md`
-
-Owner: **CODEX**.
-
-Required first vertical:
-
-```text
-accepted ordinary player/GM turn
-→ one isolated semantic analysis request
-→ 0..N durable newly-established consequences
-→ Program-owned World Turn record
-→ existing atomic world mutation / Timeline
-→ matching committed consequences can re-enter later Context
-```
-
-Use current selected Provider/profile. No cross-provider fallback.
-
-The machine-analysis lane may use small structured data, but malformed/transport/empty analysis must fail-soft:
-
-```text
-Conversation remains accepted
-no fake World Turn
-no retry loop
-play continues
-```
-
-## 7. World Turn v0.1 boundary
-
-Conceptual durable namespace:
+Conceptual World Turn v0.1 namespace remains:
 
 ```text
 living_world
@@ -189,28 +153,9 @@ living_world
       changes[]
 ```
 
-This is a turn-level consequence ledger, not a universal ontology.
+This remains a turn-level consequence ledger, not a universal ontology.
 
-Do not pre-build G5-02/03/04 Domains inside M1.
-
-Regenerate/correction safety requirement:
-
-> a semantic record whose source GM hash no longer matches the currently accepted Conversation entry must never be projected into model Context.
-
-## 8. Existing runtime seams to reuse
-
-Current implementation already has:
-
-- exact T0 Source materialization from Final Create;
-- durable accepted Conversation;
-- `Current Game Session Runtime.commit_world_mutation_durably(...)`;
-- Timeline/current-head snapshots;
-- Save/Restore/Recovery;
-- one Game = one SQLite.
-
-G5-01 must extend these seams rather than introduce a second persistence owner.
-
-## 9. Protected cross-stage principles
+## 6. Protected cross-stage principles
 
 ```text
 Model Freedom First
@@ -224,17 +169,29 @@ and:
 
 > **Model authors the world; Runtime makes it durable; Player owns the timeline.**
 
-G5-01 must not add narrative JSON framing, mandatory prose format, output keyword validation or a semantic-extraction gate before visible play can continue.
+Do not add narrative JSON framing, mandatory prose format, output keyword validation, cross-provider fallback, or a semantic-extraction gate before visible play can continue.
 
-## 10. Route after G5-01M1
-
-If GPT Independent Review passes M1:
+## 7. Visual work remains deferred
 
 ```text
-G5-01UAT short Owner product checkpoint
-ACTIVE — OWNER
+G4-10 Runtime Asset Resolution
+DEFERRED / MOVED TO G6
 ```
 
-The UAT should verify one simple lived consequence remains part of the world after later play/reopen while Narrative remains free-form. The deferred G4-11 narrative-voice soft-prompt effect may be observed in the same UAT without creating a separate gate.
+G5 remains independent of portrait / scene / authored-map presentation.
 
-Only after G5-01 Owner PASS may GPT close G5-01 and shape G5-02 Knowledge Provenance.
+## 8. Route after current correction
+
+After Codex pushes reviewable G5-01M1 implementation/evidence, GPT performs Independent Review on actual code.
+
+If engineering review passes while real Provider proof is still unavailable:
+
+```text
+G5-01M1 Engineering Review PASS
++ Real Provider Vertical PENDING
+→ short Owner/product reality checkpoint remains required
+```
+
+The later successful real Provider run or Owner UAT must still prove one lived consequence survives later play/reopen and re-enters later Context.
+
+Only after G5-01 product/reality PASS may GPT close G5-01 and shape G5-02 Knowledge Provenance.
