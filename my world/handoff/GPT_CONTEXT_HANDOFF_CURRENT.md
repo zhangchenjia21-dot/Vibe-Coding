@@ -6,10 +6,10 @@ updated: 2026-09-03
 project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
-current_parent_task: G5-01M1 World Turn / Semantic Materialization Spine
-current_execution_task: G5-01M1C01 Provider Outage / Reviewability Correction
+current_parent_task: G5-01 Minimum Playable T0 + World Turn / Semantic Materialization
+current_execution_task: G5-01M1 Independent Review
 semantic_owner: GPT
-current_execution_owner: CODEX
+current_execution_owner: GPT
 ---
 
 # my world｜GPT CONTEXT HANDOFF CURRENT
@@ -29,8 +29,8 @@ G4-GATE                               PASS
 G5 World Semantics & GM Runtime       ACTIVE
 G5-01 Minimum Playable T0 + World Turn / Semantic Materialization
                                       ACTIVE
-G5-01M1 Semantic Materialization Spine IMPLEMENTED LOCALLY / REVIEW PENDING
-G5-01M1C01 Provider Outage Reviewability ACTIVE — CODEX
+G5-01M1 Semantic Materialization Spine IMPLEMENTED / INDEPENDENT REVIEW ACTIVE — GPT
+G5-01 real Provider vertical          PENDING / EXTERNAL PROVIDER UNAVAILABLE
 G5-02 Knowledge Provenance            NOT YET
 G5-03 NPC / Faction Agency            NOT YET
 G5-04 Event / Priority Evolution      NOT YET
@@ -38,7 +38,45 @@ G5-04 Event / Priority Evolution      NOT YET
 
 Do not start G5-02 before G5-01 engineering review + Owner/product checkpoint.
 
-## 2. Standing Provider authorization and outage policy
+## 2. Temporary execution routing until 2026-09-07
+
+Owner reports Codex weekly quota exhausted until 2026-09-07 and explicitly directs temporary use of Kimi and Grok.
+
+Canonical decision:
+
+`my world/architecture/foundation/TEMPORARY_EXECUTION_ROUTING_2026-09-03_TO_2026-09-06.md`
+
+Through 2026-09-06 23:59 (+08:00):
+
+```text
+GPT        → meaning / architecture / governance / task shaping / final Independent Review
+Kimi       → primary code-changing implementation owner; temporary Codex substitute
+Grok Build → external research / evidence discovery / Provider-reality support / secondary technical cross-check
+Owner      → Product UAT / explicit product verdict
+```
+
+Prefer `Kimi implementation + Grok evidence/research when useful → GPT Independent Review` without inventing unnecessary multi-agent work.
+
+The override automatically expires at 2026-09-07 00:00 (+08:00). Long-term Codex/Kimi/Grok routing resumes absent newer Owner instruction. Do not interrupt correct in-flight Kimi work solely because expiry occurs.
+
+## 3. G5-01M1 has already been pushed
+
+Codex completed and pushed before quota exhaustion:
+
+```text
+IMPLEMENTATION_HEAD  eb171a19dd0b4eeb134392128fb8df7fd5b104cb
+EVIDENCE_HEAD        f9b1be01bd102f3bb1ae6b0b762a6b97d3a5b6f1
+```
+
+Evidence:
+
+`my-world/docs/g5_01/G5-01M1_WORLD_TURN_SEMANTIC_MATERIALIZATION_EVIDENCE.md`
+
+Do not ask Kimi to redo this implementation. Current action is GPT Independent Review of actual committed code/evidence.
+
+If GPT finds a focused correction before 2026-09-07, assign it to Kimi. Grok may assist with external/provider/evidence investigation when useful.
+
+## 4. Standing Provider authorization and outage policy
 
 Canonical decision:
 
@@ -63,22 +101,9 @@ do not fabricate / fallback / switch Provider / exceed attempt ceiling
 
 External Provider availability may block reality proof; it does not block code review.
 
-Future Task Packets requiring real Provider evidence should cite this same decision, state the smallest reasonable attempt ceiling, and state whether unavailable real proof blocks Product/Reality acceptance versus engineering reviewability.
+## 5. Current G5-01M1 Provider outcome
 
-## 3. Current G5-01M1 Provider outcome
-
-Codex reports all offline focused, SQLite Timeline/Save/Restore and affected G2/G3/G4 regressions green.
-
-Two authorized Kimi K3 real requests were attempted. Both timed out during **ordinary Narrative** after 420 seconds.
-
-Consequences:
-
-- no accepted Narrative;
-- semantic-analysis lane not reached;
-- no World mutation;
-- no fallback;
-- no third attempt;
-- Owner production settings / Source / Games / Game Library / current SQLite fingerprints unchanged.
+Two authorized Kimi K3 real requests timed out during ordinary Narrative after 420 seconds. No accepted ordinary Narrative was produced, so the semantic-analysis lane and World mutation were not reached by the real vertical.
 
 Classification:
 
@@ -87,24 +112,12 @@ real selected-Provider vertical
 PENDING / EXTERNAL PROVIDER UNAVAILABLE
 
 engineering implementation
-NOT YET INDEPENDENTLY REVIEWED
+INDEPENDENT REVIEW ACTIVE — GPT
 ```
 
-Do not misclassify this as a semantic-materialization defect unless actual code/evidence shows one. The external failure occurred before the new lane executed.
+No fallback, hidden model switch or third attempt occurred. Committed evidence reports Owner production settings / Source / Games / Game Library / current SQLite fingerprints unchanged.
 
-## 4. Current correction packet
-
-`my-world/docs/tasks/G5-01M1C01_PROVIDER_OUTAGE_REVIEWABILITY_CORRECTION_TASK.md`
-
-Codex must preserve its current local work, fetch/reconcile latest authority, and **must not run a third Provider attempt**.
-
-It should finalize the existing evidence with the two 420-second timeouts, record final `git diff --check`, commit/push implementation/tests/evidence, then return:
-
-```text
-READY FOR INDEPENDENT REVIEW — REAL PROVIDER PROOF PENDING
-```
-
-## 5. G5-01 semantic contract remains frozen
+## 6. G5-01 semantic contract remains frozen
 
 Canonical decision:
 
@@ -137,13 +150,13 @@ living_world
 
 This is a bounded turn-level consequence ledger, not a universal graph/ontology.
 
-## 6. Independent Review focus after push
+## 7. Independent Review focus
 
 GPT must inspect actual code/evidence and especially verify:
 
 1. accepted Narrative remains independent of semantic-analysis success;
 2. production does not parse/control visible prose;
-3. exactly one auxiliary semantic request per new accepted ordinary turn;
+3. exactly one auxiliary semantic request per new accepted ordinary turn version;
 4. valid result commits one atomic world mutation;
 5. invalid/transport analysis creates no fake mutation and no player-action failure;
 6. correction/regenerate cannot project stale old semantic record;
@@ -154,7 +167,7 @@ GPT must inspect actual code/evidence and especially verify:
 11. real Provider proof is honestly marked pending, not falsely passed;
 12. Owner production state remains untouched.
 
-## 7. After engineering review
+## 8. After engineering review
 
 If engineering implementation passes while real Provider proof remains pending, do not close G5-01 product/reality acceptance yet.
 
@@ -172,7 +185,7 @@ The deferred G4-11 narrative-voice soft-prompt effect may be observed in that sa
 
 Only after G5-01 product/reality PASS may GPT close G5-01 and shape G5-02 Knowledge Provenance.
 
-## 8. Other protected truth
+## 9. Other protected truth
 
 - visual runtime remains deferred to G6;
 - no portrait/scene/authored-map runtime in G5;
