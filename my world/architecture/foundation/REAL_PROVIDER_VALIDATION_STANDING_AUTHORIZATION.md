@@ -39,7 +39,34 @@ Task requires real Provider proof
 → execute without asking Owner again
 ```
 
-## 3. What this authorization does NOT allow
+## 3. Provider outage / timeout does not block code review
+
+Real Provider evidence and reviewability are distinct gates.
+
+If the Agent executes the Task Packet's bounded authorized attempts and the current Provider is unavailable, times out, or otherwise fails **before the feature-specific real vertical can be exercised**, the Agent must not fabricate evidence, switch Provider, add hidden fallback, or exceed the task ceiling merely to obtain a PASS.
+
+However, external Provider unavailability by itself MUST NOT force already-completed implementation and green offline/integration evidence to remain uncommitted or unreviewable.
+
+When all task-required offline/in-process/integration gates are green and the bounded real attempts have been honestly exhausted because of external Provider availability:
+
+```text
+implementation + offline/integration evidence complete
++ bounded real Provider attempts exhausted
++ failure is external Provider availability / timeout
+→ commit and push reviewable implementation + evidence
+→ mark real Provider vertical as PENDING / EXTERNAL PROVIDER UNAVAILABLE
+→ return READY FOR INDEPENDENT REVIEW — REAL PROVIDER PROOF PENDING
+```
+
+GPT Independent Review may then inspect and accept or reject the engineering implementation on actual code/evidence. It must not falsely claim that the missing real Provider vertical passed.
+
+A later product/reality gate that genuinely depends on real Provider behavior remains pending until a successful real run or Owner UAT supplies that evidence.
+
+This distinction is deliberate:
+
+> **External Provider availability may block reality proof; it does not block code review.**
+
+## 4. What this authorization does NOT allow
 
 Standing authorization is not permission for arbitrary external activity.
 
@@ -54,7 +81,7 @@ A new Owner confirmation is still required before an Agent expands beyond the ap
 
 If a task merely says real Provider evidence is optional, this authorization does not make the call mandatory. It removes a permission gate; it does not create new work.
 
-## 4. Task Packet requirement going forward
+## 5. Task Packet requirement going forward
 
 Every future my world Task Packet that needs real Provider evidence should state:
 
@@ -65,10 +92,17 @@ Vibe-Coding/my world/architecture/foundation/REAL_PROVIDER_VALIDATION_STANDING_A
 Do not pause for a second Owner confirmation when the bounded required validation remains inside that decision.
 ```
 
-The packet should also specify the smallest reasonable call/turn/attempt ceiling.
+The packet should also specify:
 
-## 5. Current G5-01M1 application
+- the smallest reasonable call/turn/attempt ceiling;
+- what counts as external Provider outage/timeout;
+- whether missing real evidence blocks only Product/Reality acceptance or also a specific engineering gate;
+- that exhausted bounded external failures do not prohibit commit/push/Independent Review unless the task has an explicit, architecture-justified exception.
 
-G5-01M1's required task-owned Han / 208 Red Cliffs / Liu Bei / Expansion none real-selected-Provider proof is covered by this authorization, including the packet's existing maximum of one initial natural persistent-consequence turn plus at most one additional turn if the first legitimately yields no durable consequence.
+## 6. Current G5-01M1 application
 
-Codex should continue from its already-green offline state and execute the required bounded real Provider validation without requesting Owner confirmation again.
+G5-01M1's task-owned Han / 208 Red Cliffs / Liu Bei / Expansion none real-selected-Provider proof was covered by this authorization.
+
+Codex used the permitted two real Kimi K3 requests. Both timed out during the ordinary Narrative stage after 420 seconds, before any accepted Narrative, semantic-analysis request, or World mutation could occur. No fallback and no third attempt were used.
+
+Therefore the real feature vertical remains **PENDING / EXTERNAL PROVIDER UNAVAILABLE**, but the already-green implementation/offline/integration work must be committed and pushed for GPT Independent Review rather than held indefinitely in a local worktree.
