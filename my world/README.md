@@ -24,42 +24,83 @@
 G1 Foundation                         PASS / CLOSED
 G2 AI Conversation Spine              PASS / CLOSED
 G3 Persistent Game / Save / Timeline PASS / CLOSED
-G4-01 ... G4-09                       PASS / CLOSED
+G4 Primary Source Assets & Local Game Creation
+                                      PASS / CLOSED
 G4-10 Runtime Asset Resolution        DEFERRED / MOVED TO G6
-G4-10M1                               SUPERSEDED / DO NOT EXECUTE
-G4-11P1 Engineering Reality Prep      PASS / CLOSED
-G4-11UAT Owner Reality Test           PASS / CLOSED
-G4-11C01 Narrative Voice Soft Prompt  ACTIVE — CODEX
-G4-GATE                               HOLD — C01 engineering review only
+G4-11 Two Primary Asset Families      PASS / CLOSED
+G4-11C01 Narrative Voice Soft Prompt  PASS / CLOSED
+G4-GATE                               PASS
+
+G5 World Semantics & GM Runtime       ACTIVE
+G5-01 Minimum Playable T0 + World Turn / Semantic Materialization
+                                      ACTIVE
+G5-01M1 Semantic Materialization Spine ACTIVE — CODEX
 ```
 
 当前路线：
 
 ```text
-G4-11C01 soft prompt closeout
-→ G4-GATE
-→ G5-01 Minimum Playable T0 + World Turn / Semantic Materialization
+G5-01M1 backend/runtime implementation
+→ GPT Independent Review
+→ short G5-01 Owner product checkpoint
+→ G5-02 Knowledge Provenance
 ```
-
-Owner 已明确把 portrait / scene / authored-map runtime 接入延期到 G6；视觉资源不再是 G4-GATE 或 G5 的前置。
 
 ---
 
-## G4-11 product result
+## G4 final product result
 
-Owner 已确认：
+G4 已经证明：
 
-> **两套 Source 实际玩起来是两个不同的 RPG 世界。**
+```text
+Managed Source Library
+→ exact World / Character / optional Expansion selection
+→ Atomic Final Create
+→ independent Game-local Reality
+→ real AI GM play
+→ durable Save / reopen / Continue
+→ multiple Games without cross-world leakage
+```
 
-因此 Two-Family Reality Test 的核心产品价值已经 PASS。
+Owner 已确认 Han/刘备 与 Afterglow/莉维娅实际玩起来是两个不同的 RPG 世界。
 
-剩余 finding：两个世界的叙述正文仍偏向同一种通用现代中文 RPG 旁白。
+叙述文风仍有 convergence，但这只是 non-blocking quality finding。G4-11C01 已用一条通用 Host-level soft creative prompt 做最小修正，没有 style gate、关键词 validator 或 style-triggered retry；实际效果留到下一次合适 UAT 顺带观察。
 
-该 finding 被分类为 **non-blocking narrative-quality issue**。Owner 授权一次极小的 Host-level soft-prompt tuning，不改 Source，不增加 style gate，不单独再做一轮 Owner UAT；实际效果留到下一次合适的产品 UAT 顺带观察。
+Formal G4 closeout：
+
+`my-world/docs/g4_11/G4_GATE_CLOSEOUT.md`
+
+---
+
+## G5-01｜现在真正开始让世界“留下变化”
 
 Canonical decision：
 
-`architecture/foundation/G4_NARRATIVE_VOICE_SOFT_PROMPT_TUNING_DECISION.md`
+`architecture/world/G5_WORLD_TURN_SEMANTIC_MATERIALIZATION_V0_1_DECISION.md`
+
+第一版只解决：
+
+> GM 在自由 Narrative 中已经明确发生的、未来值得记住的变化，怎样进入 durable Game Reality。
+
+核心 ordering：
+
+```text
+Player action
+→ free-form visible Narrative streaming
+→ durable Conversation acceptance
+→ separate best-effort semantic analysis
+→ optional Program-owned World Turn
+→ existing atomic world mutation / Timeline
+→ committed matching changes can re-enter later Context
+```
+
+保护：
+
+> **Narrative acceptance != semantic-analysis success.**
+
+语义分析失败不会把已经接受的玩家行动改成失败，也不会让 Narrative 承担 JSON/header/sentinel 协议。
+
+World Turn v0.1 只是 turn-level durable consequence ledger，不是万能 entity/fact graph。Knowledge、NPC/Faction Agency、Event Evolution 仍按 G5-02/03/04 由真实 consumer 逐步拉出。
 
 ---
 
@@ -72,12 +113,11 @@ Managed Source Library
 → atomic Final Create
 → independent Game-local Reality
 → real AI GM play
-→ durable Save / reopen / Continue
+→ durable world evolution
+→ Save / reopen / Continue
 ```
 
 第一代不支持无 World / 无 Character 的空白 AI 世界直接建局。
-
-Character Card 是 reusable Character Source，不是“主角专用卡”。Guaranteed NPC 从 Final Create 起属于 canonical cast，但不自动等于 opening appearance / player-known / relationship / current Context membership。
 
 ---
 
@@ -108,31 +148,30 @@ Game topology  One Game = One SQLite
 >
 > **Narrative richness over artificial brevity.**
 >
+> **Model authors the world; Runtime makes it durable; Player owns the timeline.**
+>
 > **Source provides inertia; actors create history.**
 >
 > **Context stays bounded, not starved.**
 
-当前 runtime ordering：
+Current runtime ordering：
 
 ```text
 Model Freedom First
 +
 Visible Narrative First
 +
-Canonical Commit Behind a Turn Finalize Barrier
+Canonical Commit Behind durable infrastructure boundaries
 ```
 
-G4-11C01 新增长期边界：
-
-> **Narrative style is guidance, not an acceptance gate.**
-
-G4/G5 长期区分：
+Long-term distinctions：
 
 ```text
 Application Lifetime != Game Session Lifetime
 Source Library != Game Library
 Source stable identity != exact immutable generation
 Source package total != selected T0 projection != Game-local Reality
+Narrative != machine semantic protocol
 portrait / scene / map image != gameplay semantic authority
 map image != topology / travel / current location / GIS
 ```
@@ -141,38 +180,11 @@ map image != topology / travel / current location / GIS
 
 ## Visual work deferral
 
+Portrait / scene / authored-map Runtime Resolution remains deferred to G6. G5 semantics must not wait for art assets.
+
 Canonical decision：
 
 `architecture/source/G4_VISUAL_ASSET_DEFERRAL_TO_G6_DECISION.md`
-
-现在不建设：
-
-- portrait / scene / authored-map resolver；
-- image generation/editing pipeline；
-- map topology / travel / GIS；
-- visual authoring UI。
-
-G6 在真实 RPG presentation consumer 存在后重新审计并实现所需的 visual runtime seam。
-
----
-
-## 下一阶段
-
-C01 Independent Review PASS 后，正式关闭 G4 并进入 G5。
-
-当前 roadmap 的第一个 G5 task 是：
-
-```text
-G5-01 Minimum Playable T0 + World Turn / Semantic Materialization
-```
-
-它不是直接建完整世界模拟器。第一步要解决的是：一次 Narrative Turn 中真正发生、且未来回合必须记住的变化，怎样成为 durable Game Reality。GPT 必须先冻结 semantic / ownership / acceptance 边界，再交给实现 Agent。
-
----
-
-## 架构专题
-
-统一从 [`MY_WORLD_架构_CURRENT.md`](./MY_WORLD_架构_CURRENT.md) 导航。专题文档保存 contract / trade-off / migration 深度，不与顶层 current 文件争夺 authority。
 
 ---
 
