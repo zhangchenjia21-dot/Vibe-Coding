@@ -1,7 +1,7 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 3.5
+version: 3.6
 created: 2026-08-25
 updated: 2026-09-03
 current_phase: G5
@@ -216,9 +216,9 @@ G5 semantics 不等待美术资源。
 ```text
 G5-01 Minimum Playable T0 + World Turn / Semantic Materialization  PASS / CLOSED
 ↓
-G5-02 Knowledge Provenance                                    ACTIVE
+G5-02 Knowledge Provenance                                    PASS / CLOSED
 ↓
-G5-03 NPC / Faction Agency
+G5-03 NPC / Faction Agency                                    ACTIVE
 ↓
 G5-04 Event / Priority-driven World Evolution
 ↓
@@ -282,15 +282,23 @@ Owner 在 Engineering PASS 后明确选择跳过额外的专门 G5-01 UAT：此�
 
 ## G5-02｜Knowledge Provenance
 
-**ACTIVE**。
+**PASS / CLOSED**。
 
 Canonical decision：
 
 `architecture/world/G5_KNOWLEDGE_PROVENANCE_V0_1_DECISION.md`
 
-First implementation：
+Implementation：
 
 `my-world/docs/tasks/G5-02M1_KNOWN_ACTOR_KNOWLEDGE_PROVENANCE_TASK.md`
+
+Correction：
+
+`my-world/docs/tasks/G5-02M1C01_ACTOR_ROSTER_RECENCY_CORRECTION_TASK.md`
+
+Closeout：
+
+`my-world/docs/g5_02/G5-02_CLOSEOUT.md`
 
 ### Outcome
 
@@ -309,9 +317,7 @@ World / Game Truth
 
 当前 Source 的 `disclosure: gm_reference` 只表示 GM/reference visibility，不能被解释成“所有 NPC 都知道这些信息”。
 
-### G5-02M1 first slice
-
-只让**游戏开始后新产生的知识获取**变成 durable provenance，而且仅覆盖已经有稳定 Game-local identity 的：
+G5-02 v0.1 只让**游戏开始后新产生的知识获取**变成 durable provenance，而且仅覆盖已经有稳定 Game-local identity 的：
 
 ```text
 Player Character
@@ -319,37 +325,13 @@ Player Character
 Guaranteed NPCs
 ```
 
-不把所有 T0 Source 转成 Knowledge Graph，不提前建立 incidental/emergent NPC identity，也不建立 Faction/shared knowledge。
+G5-02 复用 G5-01 已有的一次后台 semantic-analysis request；没有增加第二次 knowledge Provider tax。Knowledge parsing/validation failure 不会拖累 otherwise-valid G5-01 `changes` 或 accepted Narrative。
 
-G5-02M1 复用 G5-01 每回合已有的一次后台 semantic-analysis request；不增加第二次 Provider tax。概念响应：
+Stable actor roster 的 display-name + exact `local_character_id` 已进入同一次 semantic request；unknown/non-roster actor 永远不能成为 durable knowledge authority。
 
-```json
-{
-  "changes": ["durable world consequence"],
-  "knowledge_events": [
-    {
-      "knower_id": "stable-local-character-id",
-      "fact": "actor now has grounds to know this post-T0 fact",
-      "basis": "witnessed|told|discovered|participated"
-    }
-  ]
-}
-```
+Knowledge provenance 使用既有 world snapshot / atomic mutation，不新增 SQLite schema/table。Later GM Context 获得 bounded recent `Actor Knowledge Provenance`，但这仍是 soft semantic guidance，不是 Narrative output classifier/gate。
 
-Knowledge failure 不能拖累 G5-01：
-
-```text
-valid changes
-+ absent/invalid knowledge data
-→ valid changes still eligible to commit
-→ knowledge fails soft
-```
-
-Knowledge provenance 使用既有 world snapshot / atomic mutation，不新增 SQLite schema/table。
-
-第一 consumer 是 later GM Context：GM 仍可看 broad World truth，但额外拿到 bounded Actor Knowledge Provenance，提醒它不能让角色仅因为 GM 知道就自动知道 post-T0 事实。
-
-这是 soft semantic guidance，不是 Narrative output classifier/gate。
+G5-02 的单次 bounded real-provider 尝试在普通 Narrative 阶段超时，因此 feature-specific real proof 保留历史 gap，不伪造成 PASS。单独 Owner UAT 不再额外建立：其第一个真正产品 consumer 是 G5-03 actor agency，会直接验证 NPC 是否从自己的知识而不是 GM omniscience 行动。
 
 Explicitly deferred：
 
@@ -366,11 +348,48 @@ Explicitly deferred：
 
 ## G5-03｜NPC / Faction Agency
 
+**ACTIVE**。
+
+Canonical first-slice decision：
+
+`architecture/world/G5_STABLE_NPC_AGENCY_V0_1_DECISION.md`
+
+First implementation：
+
+`my-world/docs/tasks/G5-03M1_STABLE_NPC_INDEPENDENT_AGENCY_TASK.md`
+
 Outcome：NPC / Faction 不再只是玩家触发器，而能依据当前目标、资源、知识、关系、风险与世界压力采取行动。
 
 > **Source provides inertia; actors create history.**
 
-Guaranteed NPC 可成为真正行动者，但不自动等于 opening appearance / player-known / current Context membership。
+### G5-03M1 first consumer
+
+M1 只让已有 stable Game-local identity 的 Guaranteed NPC 成为独立行动者；Faction identity/agency 不为了对称性提前建设。
+
+Agency 是 background/best-effort lane：
+
+```text
+Player action
+→ visible free-form GM Narrative
+→ durable Conversation acceptance
+→ existing G5-01/G5-02 semantic lane terminal
+→ optional one-NPC agency evaluation
+→ optional atomic agency world mutation
+```
+
+关键产品规则：
+
+- agency 不得成为 Turn Finalize Barrier；
+- 玩家开始下一行动时，旧 agency work 取消/失效而不是阻塞前台；
+- selected NPC agency request 只看到自己的 Character Source、自己的 durable Knowledge Provenance 与自己的 bounded prior actions；
+- 不把 omniscient GM Context / 其他角色 private knowledge 直接喂给 actor；
+- valid `act` 才产生 durable agency record；`hold`/malformed/provider failure fail-soft 且不制造 fake mutation；
+- agency action/effects 可作为 later GM world truth，但不自动成为所有 actor knowledge，也不自动等于 human-player disclosure；
+- active agency 跨 foreground attempt / world-head change / Restore/Recovery 时必须 stale-invalidate，late callback 不得提交。
+
+如果多个 Guaranteed NPC 存在，M1 只做 deterministic fair one-actor-per-source-turn evaluation；真正 pressure/priority scheduling 属于 G5-04。
+
+G5-03M1 结束后，GPT 再基于真实 consumer 决定 parent G5-03 是否需要第二个 Faction slice 才能 closeout。
 
 ---
 
