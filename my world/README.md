@@ -27,23 +27,24 @@ G3 Persistent Game / Save / Timeline PASS / CLOSED
 G4 Primary Source Assets & Local Game Creation
                                       PASS / CLOSED
 G4-10 Runtime Asset Resolution        DEFERRED / MOVED TO G6
-G4-11 Two Primary Asset Families      PASS / CLOSED
-G4-11C01 Narrative Voice Soft Prompt  PASS / CLOSED
 G4-GATE                               PASS
 
 G5 World Semantics & GM Runtime       ACTIVE
-G5-01 Minimum Playable T0 + World Turn / Semantic Materialization
-                                      ACTIVE
-G5-01M1 Semantic Materialization Spine ACTIVE — CODEX
+G5-01 World Turn / Semantic Materialization
+                                      PASS / CLOSED
+G5-02 Knowledge Provenance            PASS / CLOSED
+G5-03 NPC / Faction Agency            ACTIVE
+G5-03M1 Stable Guaranteed-NPC Agency  ACTIVE — KIMI
+G5-04 Event / Priority Evolution      NOT YET
 ```
 
 当前路线：
 
 ```text
-G5-01M1 backend/runtime implementation
+G5-03M1 Stable Guaranteed-NPC independent agency
 → GPT Independent Review
-→ short G5-01 Owner product checkpoint
-→ G5-02 Knowledge Provenance
+→ decide whether G5-03 needs a Faction slice
+→ G5-04 Event / Priority-driven World Evolution
 ```
 
 ---
@@ -64,7 +65,7 @@ Managed Source Library
 
 Owner 已确认 Han/刘备 与 Afterglow/莉维娅实际玩起来是两个不同的 RPG 世界。
 
-叙述文风仍有 convergence，但这只是 non-blocking quality finding。G4-11C01 已用一条通用 Host-level soft creative prompt 做最小修正，没有 style gate、关键词 validator 或 style-triggered retry；实际效果留到下一次合适 UAT 顺带观察。
+叙述文风 convergence 是 non-blocking quality finding。G4-11C01 用一条通用 Host-level soft creative prompt 做最小修正，没有 style gate、关键词 validator 或 style-triggered retry。
 
 Formal G4 closeout：
 
@@ -72,35 +73,49 @@ Formal G4 closeout：
 
 ---
 
-## G5-01｜现在真正开始让世界“留下变化”
+## G5｜让世界从“记住”走向“行动”
 
-Canonical decision：
+G5 已完成两层地基：
 
-`architecture/world/G5_WORLD_TURN_SEMANTIC_MATERIALIZATION_V0_1_DECISION.md`
+```text
+G5-01
+free-form Narrative
+→ durable world consequences
 
-第一版只解决：
+G5-02
+World / GM truth
+!= actor knowledge
+```
 
-> GM 在自由 Narrative 中已经明确发生的、未来值得记住的变化，怎样进入 durable Game Reality。
+当前 G5-03M1 第一次真正消费这两层：
 
-核心 ordering：
+> 让一个已有稳定 Game-local identity 的 Guaranteed NPC，根据自己的 Character Source + 自己真正知道的信息，在玩家没有显式命令它的情况下独立作出行动。
+
+关键 ordering：
 
 ```text
 Player action
-→ free-form visible Narrative streaming
+→ visible GM Narrative
 → durable Conversation acceptance
-→ separate best-effort semantic analysis
-→ optional Program-owned World Turn
-→ existing atomic world mutation / Timeline
-→ committed matching changes can re-enter later Context
+→ existing semantic materialization
+→ optional background NPC agency evaluation
+→ optional durable agency world mutation
 ```
 
 保护：
 
-> **Narrative acceptance != semantic-analysis success.**
+- NPC agency 不得成为玩家下一回合的阻塞 Gate；
+- 玩家开始下一行动时，未完成 agency 取消/失效；
+- NPC 不拿 GM 的全知 Context 或其它角色私密知识；
+- `hold` / malformed / Provider failure fail-soft，不制造假世界变化；
+- agency action/effects 是 GM world truth，但不自动等于所有角色都知道，也不自动等于玩家已获知；
+- Faction agency 和 priority/event scheduling 不在 M1 偷跑。
 
-语义分析失败不会把已经接受的玩家行动改成失败，也不会让 Narrative 承担 JSON/header/sentinel 协议。
+Canonical decisions：
 
-World Turn v0.1 只是 turn-level durable consequence ledger，不是万能 entity/fact graph。Knowledge、NPC/Faction Agency、Event Evolution 仍按 G5-02/03/04 由真实 consumer 逐步拉出。
+- `architecture/world/G5_WORLD_TURN_SEMANTIC_MATERIALIZATION_V0_1_DECISION.md`
+- `architecture/world/G5_KNOWLEDGE_PROVENANCE_V0_1_DECISION.md`
+- `architecture/world/G5_STABLE_NPC_AGENCY_V0_1_DECISION.md`
 
 ---
 
@@ -114,6 +129,7 @@ Managed Source Library
 → independent Game-local Reality
 → real AI GM play
 → durable world evolution
+→ independent actors
 → Save / reopen / Continue
 ```
 
@@ -172,6 +188,7 @@ Source Library != Game Library
 Source stable identity != exact immutable generation
 Source package total != selected T0 projection != Game-local Reality
 Narrative != machine semantic protocol
+Game / World Truth != actor knowledge != human-player disclosure
 portrait / scene / map image != gameplay semantic authority
 map image != topology / travel / current location / GIS
 ```
