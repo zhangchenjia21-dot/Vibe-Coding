@@ -28,14 +28,15 @@ G4-01 ... G4-09                       PASS / CLOSED
 G4-10 Runtime Asset Resolution        DEFERRED / MOVED TO G6
 G4-10M1                               SUPERSEDED / DO NOT EXECUTE
 G4-11 Two Primary Asset Families      ACTIVE
-G4-11P1 Engineering Reality Prep      ACTIVE — CODEX
+G4-11P1 Engineering Reality Prep      PASS / CLOSED
+G4-11UAT Owner Reality Test           ACTIVE — OWNER
 G4-GATE                               NOT YET
 ```
 
 当前路线：
 
 ```text
-G4-11 Two Primary Asset Families Reality Test
+G4-11UAT Owner Two-Family Reality Test
 → G4-GATE
 → G5 World Semantics & GM Runtime
 ```
@@ -78,9 +79,9 @@ t0-1287-ovista
 莉维娅·塞兰
 ```
 
-两边 `Expansion = none`，并使用同一个当前选定 runtime model profile 做工程 real-provider comparison，避免 d20 或模型设置成为额外变量。
+两边 `Expansion = none`。G4-11P1 已用同一个实际 selected runtime model profile 跑通两套 real-provider 工程纵向、Save/reopen 和 A→B→A 隔离。
 
-最终 Product Gate 不是“数据库里两个 asset_id 不同”，而是 Owner 实际游玩后明显感觉：
+当前只剩 Owner Product UAT。最终 Gate 不是“数据库里两个 asset_id 不同”，而是 Owner 实际游玩后明显感觉：
 
 > **这是两个不同的 RPG 世界。**
 
