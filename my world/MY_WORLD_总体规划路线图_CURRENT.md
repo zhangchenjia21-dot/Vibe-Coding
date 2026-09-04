@@ -1,9 +1,9 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 3.6
+version: 3.7
 created: 2026-08-25
-updated: 2026-09-03
+updated: 2026-09-04
 current_phase: G5
 current_status_source: MY_WORLD_CURRENT_STATUS.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
@@ -218,9 +218,9 @@ G5-01 Minimum Playable T0 + World Turn / Semantic Materialization  PASS / CLOSED
 ↓
 G5-02 Knowledge Provenance                                    PASS / CLOSED
 ↓
-G5-03 NPC / Faction Agency                                    ACTIVE
+G5-03 NPC / Faction Agency                                    ENGINEERING PASS / CLOSED
 ↓
-G5-04 Event / Priority-driven World Evolution
+G5-04 Event / Priority-driven World Evolution                 ACTIVE — MW-002
 ↓
 G5-05 Meaningful Choice / Mechanics Integration
 ↓
@@ -292,10 +292,6 @@ Implementation：
 
 `my-world/docs/tasks/G5-02M1_KNOWN_ACTOR_KNOWLEDGE_PROVENANCE_TASK.md`
 
-Correction：
-
-`my-world/docs/tasks/G5-02M1C01_ACTOR_ROSTER_RECENCY_CORRECTION_TASK.md`
-
 Closeout：
 
 `my-world/docs/g5_02/G5-02_CLOSEOUT.md`
@@ -315,23 +311,9 @@ World / Game Truth
 
 > **GM omniscience must not become actor omniscience.**
 
-当前 Source 的 `disclosure: gm_reference` 只表示 GM/reference visibility，不能被解释成“所有 NPC 都知道这些信息”。
+G5-02 让 post-T0 Knowledge acquisition 成为 durable provenance，并保持其与 GM world truth 分离。Knowledge parsing/validation failure 不拖累 otherwise-valid semantic changes 或 accepted Narrative。
 
-G5-02 v0.1 只让**游戏开始后新产生的知识获取**变成 durable provenance，而且仅覆盖已经有稳定 Game-local identity 的：
-
-```text
-Player Character
-+
-Guaranteed NPCs
-```
-
-G5-02 复用 G5-01 已有的一次后台 semantic-analysis request；没有增加第二次 knowledge Provider tax。Knowledge parsing/validation failure 不会拖累 otherwise-valid G5-01 `changes` 或 accepted Narrative。
-
-Stable actor roster 的 display-name + exact `local_character_id` 已进入同一次 semantic request；unknown/non-roster actor 永远不能成为 durable knowledge authority。
-
-Knowledge provenance 使用既有 world snapshot / atomic mutation，不新增 SQLite schema/table。Later GM Context 获得 bounded recent `Actor Knowledge Provenance`，但这仍是 soft semantic guidance，不是 Narrative output classifier/gate。
-
-G5-02 的单次 bounded real-provider 尝试在普通 Narrative 阶段超时，因此 feature-specific real proof 保留历史 gap，不伪造成 PASS。单独 Owner UAT 不再额外建立：其第一个真正产品 consumer 是 G5-03 actor agency，会直接验证 NPC 是否从自己的知识而不是 GM omniscience 行动。
+Stable actor roster 使用 exact `local_character_id`；unknown/non-roster actor 不能成为 durable knowledge authority。
 
 Explicitly deferred：
 
@@ -340,7 +322,6 @@ Explicitly deferred：
 - confidence/reliability scoring；
 - rumor propagation；
 - Faction/shared knowledge；
-- emergent NPC identity platform；
 - separate Player Knowledge UI；
 - long-session retrieval platform。
 
@@ -348,56 +329,112 @@ Explicitly deferred：
 
 ## G5-03｜NPC / Faction Agency
 
-**ACTIVE**。
+**ENGINEERING PASS / CLOSED**。
 
-Canonical first-slice decision：
+Current Agency authority：
 
-`architecture/world/G5_STABLE_NPC_AGENCY_V0_1_DECISION.md`
+- `architecture/world/G5_AGENCY_SCHEDULER_V0_3_DECISION.md`
+- `architecture/world/G5_03_AGENCY_CLOSEOUT_AND_FACTION_DEFERRAL_V1_0_DECISION.md`
 
-First implementation：
+Implementation closeout evidence lives in `my-world/docs/g5_03/`.
 
-`my-world/docs/tasks/G5-03M1_STABLE_NPC_INDEPENDENT_AGENCY_TASK.md`
+### Outcome
 
-Outcome：NPC / Faction 不再只是玩家触发器，而能依据当前目标、资源、知识、关系、风险与世界压力采取行动。
-
-> **Source provides inertia; actors create history.**
-
-### G5-03M1 first consumer
-
-M1 只让已有 stable Game-local identity 的 Guaranteed NPC 成为独立行动者；Faction identity/agency 不为了对称性提前建设。
-
-Agency 是 background/best-effort lane：
+The first real independent-actor vertical is complete:
 
 ```text
-Player action
-→ visible free-form GM Narrative
-→ durable Conversation acceptance
-→ existing G5-01/G5-02 semantic lane terminal
-→ optional one-NPC agency evaluation
-→ optional atomic agency world mutation
+ordinary accepted Player Narrative
+→ semantic lane terminal
+→ standalone Agency Selector on latest world
+→ 0..4 current stable NPC actors
+→ independent actor-scoped requests
+→ optional durable actor actions
+→ Player foreground always wins
 ```
 
-关键产品规则：
+Stable actor ingress now includes:
 
-- agency 不得成为 Turn Finalize Barrier；
-- 玩家开始下一行动时，旧 agency work 取消/失效而不是阻塞前台；
-- selected NPC agency request 只看到自己的 Character Source、自己的 durable Knowledge Provenance 与自己的 bounded prior actions；
-- 不把 omniscient GM Context / 其他角色 private knowledge 直接喂给 actor；
-- valid `act` 才产生 durable agency record；`hold`/malformed/provider failure fail-soft 且不制造 fake mutation；
-- agency action/effects 可作为 later GM world truth，但不自动成为所有 actor knowledge，也不自动等于 human-player disclosure；
-- active agency 跨 foreground attempt / world-head change / Restore/Recovery 时必须 stale-invalidate，late callback 不得提交。
+```text
+Guaranteed Source NPC
++ automatic Source-backed NPC
++ creation-authored Game-local NPC without Card
++ runtime Narrative-materialized NPC without Card
+```
 
-如果多个 Guaranteed NPC 存在，M1 只做 deterministic fair one-actor-per-source-turn evaluation；真正 pressure/priority scheduling 属于 G5-04。
+All use Program-owned Game-local identity. Actor requests remain scoped to that actor's own material, own Knowledge Provenance and own history.
 
-G5-03M1 结束后，GPT 再基于真实 consumer 决定 parent G5-03 是否需要第二个 Faction slice 才能 closeout。
+A separate Faction-agency platform is **deferred**, not claimed complete. There is no concrete consumer yet for persistent Faction identity + shared/private Faction Knowledge + Faction-local action history. Future G5-04 or UI consumers may pull only the smallest Faction capability they actually need.
 
 ---
 
 ## G5-04｜Event / Priority-driven World Evolution
 
-Outcome：世界可在选择性、相关、可控的范围内演化；Player 不再是唯一因果源。
+**ACTIVE — current Work Item: `MW-002 Selective World Evolution Evaluator`.**
 
-不要模拟每个 NPC 每分钟的全部生活。优先由真实 pressure / priority / event consumer 拉出最小世界推进能力。
+Canonical decision：
+
+`architecture/world/G5_SELECTIVE_WORLD_EVOLUTION_V0_1_DECISION.md`
+
+Repository-native task：
+
+`my-world/docs/tasks/MW-002_SELECTIVE_WORLD_EVOLUTION_EVALUATOR_TASK.md`
+
+### Outcome
+
+让世界在 Player 之外选择性地产生历史，同时保留 Player Spotlight 与 Life Loop：
+
+```text
+World Independence + Player Spotlight
+Persistent != Fully Simulated
+Evaluation opportunity != event obligation
+```
+
+历史试玩同时证明：主动世界推进有价值，而连续事件轰炸会让玩家永远只能响应。G5-04 v0.1 因此把 `hold` 视为正确结果，而不是失败。
+
+### First vertical
+
+```text
+ordinary accepted Narrative
+→ semantic lane
+→ existing Agency opportunity terminal
+→ one best-effort World Evolution evaluation
+→ hold OR at most one causally-ready world event
+→ optional durable World mutation
+→ next GM Context sees the event
+→ GM decides when/how it enters the Player scene
+```
+
+Player turn 只提供安全调度窗口，不是事件因果来源。
+
+World event 首先覆盖没有单一 stable NPC intentional owner 的过程：环境、aggregate conflict/front、制度/经济/社会过程、deadline、灾害、已有后果的连锁反应等。具体 stable NPC 的主动选择继续归 G5-03 Agency。
+
+Priority judgment 保持 model-owned。v0.1 明确不建设：
+
+- numeric priority/urgency score；
+- persistent pressure queue/database；
+- fixed `every N turns` cadence；
+- Quest/Thread scheduler；
+- random-event engine；
+- universal Event/Entity/Faction ontology；
+- offline real-time simulation。
+
+Evaluator 可读取 durable frozen Game-local T0 **World-only** projection + current semantic/Agency/evolution world facts；不得读取 mutable Source current，也不得把 Actor-private Knowledge 当 world causality input。
+
+第一真实 consumer 是下一次 production GM continuation Context；event 是 omniscient GM world truth，不自动等于 Player/actor Knowledge，也不强制立即插播给玩家。
+
+### Acceptance route
+
+```text
+MW-002 implementation
+→ GPT actual-code Independent Review
+→ Owner G5-04 UAT
+→ G5-04 closeout
+```
+
+Owner UAT 必须同时验证：
+
+1. quiet/Life Loop 场景真的可以 `hold`，不会人工制造升级；
+2. 真正成熟的世界压力可以在没有 Player 直接推动时自然前进，并在后续 Narrative 中自然被使用。
 
 ---
 
@@ -436,7 +473,7 @@ Engineering evidence 不能代替 Owner 对“世界是否真的活起来”的�
 - free-form Narrative 能产生 durable world consequences；
 - 世界语义在 Save/Restore/Continue 后一致；
 - World Truth / actor knowledge / Player knowledge 有真实边界；
-- NPC/Faction 能成为独立行动者；
+- non-player actors 能成为独立行动者；
 - 世界可以选择性地在 Player 之外演化；
 - Expansion mechanics 能进入世界语义而不是孤立 UI 特效；
 - 没有发展成全宇宙模拟器或模型格式 gate 森林。
