@@ -6,8 +6,8 @@ updated: 2026-09-04
 project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
-current_parent_task: G5-03 NPC / Faction Agency
-current_execution_task: G5-03M2 Stable NPC Materialization / Registry Expansion
+current_parent_task: G5-03M2 Stable Actor Registry + Materialization
+current_execution_task: G5-03M2A Stable Actor Registry Foundation
 semantic_owner: GPT
 current_execution_owner: KIMI
 ---
@@ -23,95 +23,102 @@ G5-01 World Turn / Semantic Materialization     PASS / CLOSED
 G5-02 Knowledge Provenance                      PASS / CLOSED
 G5-03 NPC / Faction Agency                      ACTIVE
 G5-03M1 Multi-Actor Agency v0.3                 ENGINEERING PASS / CLOSED
-G5-03M1R01C02 Dirty Opportunity Consumption     PASS / CLOSED
-G5-03M1R02 Semantic-Terminal Wake Ownership     PASS / CLOSED
-G5-03M2 Stable NPC Materialization              ACTIVE — KIMI
+G5-03M2 Stable Actor Registry                   ACTIVE
+G5-03M2A Registry Foundation                    ACTIVE — KIMI
+G5-03M2B Runtime Narrative Materialization      PLANNED / REQUIRED AFTER M2A PASS
 G5-04 Event / Priority Evolution                NOT YET
 ```
 
 Gemini review remains cancelled. Flow remains Kimi implementation → GPT actual-code Independent Review.
 
-## M1 closure
+## Owner correction that governs M2
 
-R02 implementation `d56ff094885c334a791c17429d76a1e21b7fd92d` is PASS.
+Do not equate “stable NPC” with “pre-authored Character Card”. The Game must be able to keep and later act through characters created locally inside the Game.
 
-Accepted Agency flow:
-
-```text
-ordinary accepted turn
-→ semantic changes + knowledge
-→ one dirty Agency opportunity
-→ semantic settles
-→ standalone selector over post-semantic current world
-→ 0..4 stable actors
-→ separate concurrent actor-scoped Agency executions
-→ 0..N durable actions
-```
-
-Protected: player foreground never waits; selector omniscience does not become actor omniscience; actor execution receives only own frozen Source/Knowledge/history; sibling commits serialize; unrelated foreground/Restore invalidates uncommitted work; no same-opportunity retry; replay does not duplicate.
-
-Parent real G5-03 Provider proof remains `PENDING / EXTERNAL PROVIDER UNAVAILABLE`.
-
-## Current M2
-
-Canonical decision:
-
-`my world/architecture/world/G5_STABLE_NPC_MATERIALIZATION_V0_1_DECISION.md`
-
-Implementation packet:
-
-`my-world/docs/tasks/G5-03M2_STABLE_NPC_CREATION_SNAPSHOT_AND_REGISTRY_EXPANSION_TASK.md`
-
-M2 reuses Final Create's existing Guaranteed-NPC identity/materialization template:
+Required stable NPC origins:
 
 ```text
-Program-owned local_character_id
-+ exact Source provenance
-+ frozen Character T0 source_projection
+1. Guaranteed Source NPC (existing)
+2. automatic Source-backed NPC not explicitly enabled
+3. creation-authored Game-local NPC without Character Card
+4. runtime Narrative-materialized NPC without Character Card
 ```
 
-On first creation-intent build, snapshot additional Character Cards whose existing T0 contract returns `exact_profile` for the selected exact World+Entry. Exclude Player and explicit Guaranteed asset IDs, deterministically sort, and store them under optional Game-local `stable_npcs[]`.
+Canonical:
 
-Same creation ID retry/resume reuses frozen `initial_setup`; never rescan later Source current. Existing Games missing `stable_npcs` remain valid with no retrofit or Source lookup.
+`my world/architecture/world/G5_STABLE_ACTOR_REGISTRY_AND_MATERIALIZATION_V0_2_DECISION.md`
 
-Unified runtime semantics:
+Historical source-only v0.1 decision and packet are superseded.
+
+## Current M2A
+
+Execute:
+
+`my-world/docs/tasks/G5-03M2A_STABLE_ACTOR_REGISTRY_FOUNDATION_TASK.md`
+
+M2A builds only the registry foundation:
+
+- Final Create optional additive `game_local_npcs`, missing -> `[]`;
+- automatic exact-profile Source-backed stable NPC snapshot;
+- Program-owned local IDs for both Source-backed and no-Card creation-authored NPCs;
+- Source-backed records keep exact provenance + frozen T0 projection;
+- no-Card records keep honest `game_local_material` and never fake Source provenance;
+- unified helpers for stable NPC enumeration, actor material and actor roster;
+- G5-02 and G5-03 consumers understand both material families;
+- existing Games without `stable_npcs` remain valid and never retrofit from Source current;
+- helper API already supports accepted turn->GM hash currentness for future runtime-origin records.
+
+Do not implement semantic `new_actor_candidates` in M2A.
+
+## Mandatory M2B after M2A review
+
+Preplanned packet:
+
+`my-world/docs/tasks/G5-03M2B_RUNTIME_NARRATIVE_ACTOR_MATERIALIZATION_TASK.md`
+
+M2B is not optional. It will reuse the existing post-Narrative semantic-analysis call and add optional independently fail-soft `new_actor_candidates`.
+
+Protected runtime path:
 
 ```text
-stable_npc_records = guaranteed_npcs + stable_npcs
-actor_roster       = Player + stable_npc_records
-Agency eligibility = stable_npc_records only
+accepted Narrative establishes a continuity-relevant new person
+→ existing semantic lane optionally describes candidate material
+→ Program mints authoritative local_character_id
+→ same semantic durable mutation records actor
+→ origin binds source_turn_index + source_gm_sha256
+→ semantic terminal wake runs existing Agency selector
+→ newly materialized NPC may become independently active immediately
 ```
 
-Registry membership grants identity/material only, not knowledge or automatic actions.
+Malformed/absent actor extraction must never invalidate Narrative, valid changes, or valid knowledge. No extra mandatory Provider call.
 
-Do not use display-name matching, model-minted IDs, runtime Source current, new SQLite schema/table, universal entity platform, Faction agency, or G5-04.
+Runtime-origin actors are visible only when their origin turn/hash still matches current accepted Conversation, so regenerate/correction makes erased actors inert without deleting history.
 
-## Validation policy
+## Stable actor boundaries
 
-M2 is deterministic and makes zero real Provider calls.
+- display names are labels, never authoritative IDs;
+- model never mints final IDs;
+- no fake Source provenance;
+- registry membership grants identity/material only, not automatic knowledge/action;
+- no runtime Source-current lookup;
+- no universal entity platform;
+- no Faction/G5-04/UI/Public-d20/SQLite scope in M2.
 
-Use focused-first validation. After M2 focused green, run one affected pass only:
-
-- G4-06 Final Create / creation integration;
-- G5-03 focused;
-- G5-02 focused;
-- one relevant G3 Save/Restore suite;
-- `git diff --check`.
-
-Do not restore the prior full-project regression matrix absent a concrete reason.
-
-## Next review focus
+## M2A review focus
 
 When Kimi returns, inspect actual code/evidence for:
 
-1. exact-profile-only automatic snapshot;
-2. Player/Guaranteed asset exclusion and deterministic IDs/order;
-3. creation-intent retry stability despite Source-current changes;
-4. no Source lookup for existing/ordinary runtime Games;
-5. unified actor roster and Agency pool correctness;
-6. automatic stable-NPC actor execution uses its own frozen Source/Knowledge/history;
-7. no knowledge granted merely by registry inclusion;
-8. Save/reopen/Restore stability;
-9. no Faction/G5-04/schema/UI scope creep.
+1. optional `game_local_npcs` backward compatibility;
+2. exact-profile Source snapshot and Player/Guaranteed exclusion;
+3. no-Card actor gets Program ID + Game-local material with no fake provenance;
+4. duplicate display names remain distinct identities;
+5. retry/resume freezes both Source-backed and authored actors;
+6. old Games do not consult Source;
+7. unified roster/Agency eligibility and actor-material resolution;
+8. actor-private Knowledge/history isolation;
+9. synthetic runtime-origin current-hash filtering helper behavior;
+10. Save/reopen/Restore and slim regression evidence.
 
-After M2 review, decide whether any Faction-agency slice remains necessary before G5-03 closure.
+After M2A PASS, activate M2B. M2 is not complete before M2B PASS.
+
+Parent real G5-03 Provider proof remains `PENDING / EXTERNAL PROVIDER UNAVAILABLE`.
