@@ -170,6 +170,26 @@ Execution Envelope
 
 Product-facing Task 必须区分 Engineering Acceptance 与 Product Value Acceptance；需要真人体验时，Agent 最高状态通常是 `READY FOR OWNER UAT`，不能代替 Owner 宣布 Product PASS。
 
+### 6.1 Task Identity / Lineage
+
+正式 Task 还必须遵守：
+
+`governance/TASK_IDENTITY_AND_LINEAGE_V1_0.md`
+
+核心规则：
+
+```text
+Roadmap / Capability Anchor
+!=
+Executable Work Item ID
+!=
+Revision / Review Lineage
+```
+
+不要把 planning hierarchy、Independent Review round、correction round 或 Owner 插入任务继续递归堆进 Task ID。Outcome 未变的实现缺陷使用同一 Work Item + `Revision` / `Review-Round`；出现独立 Outcome / seam / Owner-inserted goal 时 mint 新的短平面 Work Item ID，并用 `Triggered-By` / `Depends-On` / `Blocks` / `Supersedes` 等 metadata 表达关系。
+
+Legacy / in-flight Task 不为美观而重命名；从后续真正的新 executable work 开始采用 flat Work ID 即可。
+
 ---
 
 ## 7. 项目与实现仓库边界
@@ -238,6 +258,7 @@ v1.0 → ... → v1.9 → v2.0 → v2.1
 → 读取本 AGENTS.md
 → 读取项目 current + 相关 skill current + implementation HEAD
 → Freshness + Decision Propagation
+→ Task Identity / Lineage 判定
 → 最小充分工作集
 → 实施 / 验证 / Independent Review / Owner UAT（按任务需要）
 → pre-push HEAD revalidation
