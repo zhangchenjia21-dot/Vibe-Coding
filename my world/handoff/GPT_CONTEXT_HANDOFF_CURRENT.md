@@ -6,8 +6,8 @@ updated: 2026-09-04
 project: my world
 implementation_repo: zhangchenjia21-dot/my-world
 governance_repo: zhangchenjia21-dot/Vibe-Coding
-current_parent_task: G5-03M1R01 Agency Scheduler v0.3
-current_execution_task: G5-03M1R02 Semantic-Terminal Wake Ownership Simplification
+current_parent_task: G5-03 NPC / Faction Agency
+current_execution_task: G5-03M2 Stable NPC Materialization / Registry Expansion
 semantic_owner: GPT
 current_execution_owner: KIMI
 ---
@@ -22,94 +22,96 @@ Refresh both `main`s before authoritative work.
 G5-01 World Turn / Semantic Materialization     PASS / CLOSED
 G5-02 Knowledge Provenance                      PASS / CLOSED
 G5-03 NPC / Faction Agency                      ACTIVE
-G5-03M1R01 Agency Scheduler v0.3                REDESIGN ACTIVE
-G5-03M1R01C01                                   CLOSED INTO C02
-G5-03M1R01C02 Dirty Opportunity Consumption     PASS
-G5-03M1R02 Semantic-Terminal Wake Ownership     ACTIVE — KIMI
-G5-03M2 Stable Actor Materialization            NOT YET
+G5-03M1 Multi-Actor Agency v0.3                 ENGINEERING PASS / CLOSED
+G5-03M1R01C02 Dirty Opportunity Consumption     PASS / CLOSED
+G5-03M1R02 Semantic-Terminal Wake Ownership     PASS / CLOSED
+G5-03M2 Stable NPC Materialization              ACTIVE — KIMI
 G5-04 Event / Priority Evolution                NOT YET
 ```
 
-Canonical remains:
+Gemini review remains cancelled. Flow remains Kimi implementation → GPT actual-code Independent Review.
 
-`my world/architecture/world/G5_AGENCY_SCHEDULER_V0_3_DECISION.md`
+## M1 closure
 
-C02 review:
+R02 implementation `d56ff094885c334a791c17429d76a1e21b7fd92d` is PASS.
 
-`my-world/docs/g5_03/G5-03M1R01C02_INDEPENDENT_REVIEW.md`
-
-Current task:
-
-`my-world/docs/tasks/G5-03M1R02_SEMANTIC_TERMINAL_WAKE_OWNERSHIP_SIMPLIFICATION_TASK.md`
-
-Gemini review remains cancelled. Flow: Kimi implementation → GPT Independent Review.
-
-## C02 accepted
-
-Implementation `2c243815b8e42d510160944333abc57a313f2454` correctly consumes dirty at selector start and removes same-opportunity terminal retry. Test harness was corrected and real Application wiring is now exercised.
-
-## Parent R01 blocker exposed by real wiring
-
-Application activation currently does:
+Accepted Agency flow:
 
 ```text
-_connect_save_runtime()
-→ connects generation_completed to _on_ordinary_turn_accepted_for_agency
-
-then
-
-_prepare_world_turn_after_activation()
-→ constructs WorldTurn, whose constructor later connects generation_completed
+ordinary accepted turn
+→ semantic changes + knowledge
+→ one dirty Agency opportunity
+→ semantic settles
+→ standalone selector over post-semantic current world
+→ 0..4 stable actors
+→ separate concurrent actor-scoped Agency executions
+→ 0..N durable actions
 ```
 
-The Application ordinary-turn callback currently performs both:
+Protected: player foreground never waits; selector omniscience does not become actor omniscience; actor execution receives only own frozen Source/Knowledge/history; sibling commits serialize; unrelated foreground/Restore invalidates uncommitted work; no same-opportunity retry; replay does not duplicate.
+
+Parent real G5-03 Provider proof remains `PENDING / EXTERNAL PROVIDER UNAVAILABLE`.
+
+## Current M2
+
+Canonical decision:
+
+`my world/architecture/world/G5_STABLE_NPC_MATERIALIZATION_V0_1_DECISION.md`
+
+Implementation packet:
+
+`my-world/docs/tasks/G5-03M2_STABLE_NPC_CREATION_SNAPSHOT_AND_REGISTRY_EXPANSION_TASK.md`
+
+M2 reuses Final Create's existing Guaranteed-NPC identity/materialization template:
 
 ```text
-mark_dirty()
-consider_agency()
+Program-owned local_character_id
++ exact Source provenance
++ frozen Character T0 source_projection
 ```
 
-Therefore on `generation_completed`, Application may start selector while WorldTurn still reports `busy=false / queued=0`, before WorldTurn receives that same completion and queues semantic analysis.
+On first creation-intent build, snapshot additional Character Cards whose existing T0 contract returns `exact_profile` for the selected exact World+Entry. Exclude Player and explicit Guaranteed asset IDs, deterministically sort, and store them under optional Game-local `stable_npcs[]`.
 
-This violates v0.3 safe start. Selector must evaluate post-semantic current world/head.
+Same creation ID retry/resume reuses frozen `initial_setup`; never rescan later Source current. Existing Games missing `stable_npcs` remain valid with no retrofit or Source lookup.
 
-## R02 exact fix
-
-No C03. Per correction budget, simplify wake ownership:
+Unified runtime semantics:
 
 ```text
-generation_completed ordinary
-→ mark_dirty only
-
-semantic finished
-→ _on_world_turn_finished_for_scheduler
-→ consider_agency
+stable_npc_records = guaranteed_npcs + stable_npcs
+actor_roster       = Player + stable_npc_records
+Agency eligibility = stable_npc_records only
 ```
 
-No timers, polling, extra state, retry loop or extra Provider call.
+Registry membership grants identity/material only, not knowledge or automatic actions.
 
-Required real-Shell proof:
-
-1. ordinary accepted → semantic stub active → selector count remains 0;
-2. semantic terminal → selector count becomes exactly 1 and dirty becomes false;
-3. one semantic committed change is visible in selector request / post-semantic snapshot;
-4. semantic no-change/failure terminal still releases scheduler fail-soft;
-5. C02 dirty consumption and Opening behavior remain green.
+Do not use display-name matching, model-minted IDs, runtime Source current, new SQLite schema/table, universal entity platform, Faction agency, or G5-04.
 
 ## Validation policy
 
-Keep R02 narrow:
+M2 is deterministic and makes zero real Provider calls.
 
-- iterate G5-03 focused only;
-- final affected pass: G5-01 semantic, G4-01 lifecycle, G4-07B Application, Public d20 Application regression, `git diff --check`;
-- no unrelated full G2/G3/G5-02 reruns without concrete reason.
+Use focused-first validation. After M2 focused green, run one affected pass only:
 
-Zero real Provider calls. Parent real feature proof remains pending honestly.
+- G4-06 Final Create / creation integration;
+- G5-03 focused;
+- G5-02 focused;
+- one relevant G3 Save/Restore suite;
+- `git diff --check`.
 
-## Next
+Do not restore the prior full-project regression matrix absent a concrete reason.
 
-After R02 Independent Review PASS and G5-03M1 Engineering closeout:
+## Next review focus
 
-`G5-03M2 Minimal Stable Actor Materialization / Registry Expansion`
+When Kimi returns, inspect actual code/evidence for:
 
-Temporary Kimi implementation routing remains active through 2026-09-06 23:59 (+08:00); correct in-flight work may finish afterward.
+1. exact-profile-only automatic snapshot;
+2. Player/Guaranteed asset exclusion and deterministic IDs/order;
+3. creation-intent retry stability despite Source-current changes;
+4. no Source lookup for existing/ordinary runtime Games;
+5. unified actor roster and Agency pool correctness;
+6. automatic stable-NPC actor execution uses its own frozen Source/Knowledge/history;
+7. no knowledge granted merely by registry inclusion;
+8. Save/reopen/Restore stability;
+9. no Faction/G5-04/schema/UI scope creep.
+
+After M2 review, decide whether any Faction-agency slice remains necessary before G5-03 closure.
