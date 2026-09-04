@@ -1,13 +1,13 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 12.5
+version: 12.6
 created: 2026-08-26
 updated: 2026-09-04
 phase: G5 World Semantics & GM Runtime
-current_task: G5-03M1R02 Semantic-Terminal Wake Ownership Simplification
+current_task: G5-03M2 Stable NPC Materialization / Registry Expansion
 current_owner: KIMI
-parent_task: G5-03M1R01 Agency Scheduler v0.3
+parent_task: G5-03 NPC / Faction Agency
 semantic_owner: GPT
 owner_uat_required: false
 context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
@@ -29,80 +29,81 @@ G5 World Semantics & GM Runtime             ACTIVE
 G5-01 World Turn / Semantic Materialization PASS / CLOSED
 G5-02 Knowledge Provenance                  PASS / CLOSED
 G5-03 NPC / Faction Agency                  ACTIVE
-G5-03M1R01 Agency Scheduler v0.3            REDESIGN ACTIVE
-G5-03M1R01C01 Scheduler Lifecycle/Snapshot  CLOSED INTO C02
-G5-03M1R01C02 Dirty Opportunity Consumption PASS
-G5-03M1R02 Semantic-Terminal Wake Ownership ACTIVE — KIMI
-G5-03M2 Stable Actor Materialization        NOT YET
+G5-03M1 Multi-Actor Agency v0.3             ENGINEERING PASS / CLOSED
+G5-03M1R01C02 Dirty Opportunity Consumption PASS / CLOSED
+G5-03M1R02 Semantic-Terminal Wake Ownership PASS / CLOSED
+G5-03M2 Stable NPC Materialization          ACTIVE — KIMI
 G5-04 Event / Priority Evolution            NOT YET
 G5-GATE                                     NOT YET
 ```
 
-## 2. C02 review result
+## 2. M1 closeout
 
-Reviewed implementation: `2c243815b8e42d510160944333abc57a313f2454`.
+R02 reviewed implementation:
 
-C02 itself PASS:
+`d56ff094885c334a791c17429d76a1e21b7fd92d`
 
-- selector start consumes dirty opportunity;
-- terminal outcomes do not retry the same opportunity;
-- later accepted turn can create a fresh opportunity;
-- harness now uses fresh selector stubs and distinct actor cap proof;
-- real Application Shell wiring is exercised.
-
-Review:
-
-`my-world/docs/g5_03/G5-03M1R01C02_INDEPENDENT_REVIEW.md`
-
-The new real production proof exposed an adjacent wake-order defect: `_connect_save_runtime()` connects Application `generation_completed → _on_ordinary_turn_accepted_for_agency` before `_prepare_world_turn_after_activation()` constructs/connects the semantic worker. The Application callback currently does `mark_dirty() + consider_agency()` immediately, so selector may start while semantic still reports idle, before that same completion has been queued for semantic analysis.
-
-This violates the already-frozen v0.3 safe-start order and can make selector miss current-turn consequences or become stale after semantic commit changes the world head.
-
-## 3. Current redesign
-
-Per correction budget, do not issue C03. Current task:
-
-`my-world/docs/tasks/G5-03M1R02_SEMANTIC_TERMINAL_WAKE_OWNERSHIP_SIMPLIFICATION_TASK.md`
-
-Required production ownership:
+R02 PASS restores the frozen v0.3 wake ownership:
 
 ```text
 ordinary generation_completed
-→ mark_dirty only
-→ semantic worker runs/settles
+→ mark Agency dirty only
+→ semantic worker settles
 → semantic finished wake
-→ consider_agency
-→ selector starts over post-semantic current world/head
+→ selector evaluates post-semantic current world
 ```
 
-No new product semantics; this restores `G5_AGENCY_SCHEDULER_V0_3_DECISION.md`.
+M1 now has deterministic/integration Engineering proof for standalone selection, multi-actor concurrent execution, actor-private knowledge, sibling durable commits, foreground/Restore cancellation, replay protection, current-hash filtering, dirty opportunity consumption, and post-semantic wake order.
 
-## 4. Validation policy
+No extra Owner UAT is inserted at M1 closure. M2 is the first more informative product slice because it expands the actor pool beyond explicit Guaranteed NPCs.
 
-R02 is intentionally narrow to avoid repeated 1.5-hour correction runs.
+Parent real G5-03 feature proof remains honestly:
 
-Iterate only on G5-03 focused tests. Once green, run one final affected pass:
+`PENDING / EXTERNAL PROVIDER UNAVAILABLE`
 
-- G5-01 semantic materialization;
-- G4-01 Application lifecycle;
-- G4-07B Application integration;
-- Public d20 Application regression;
-- `git diff --check`.
+Do not rewrite that historical/provider-reality gap as PASS.
 
-Do not rerun unrelated full G2/G3/G5-02 suites without a concrete failure reason.
+## 3. Current M2 decision
 
-## 5. Provider
+Canonical:
 
-R02 uses **zero real Provider calls**. Parent real G5-03 feature proof remains honestly pending / external Provider unavailable.
+`architecture/world/G5_STABLE_NPC_MATERIALIZATION_V0_1_DECISION.md`
 
-## 6. Next
+Core:
 
-Only after R02 Independent Review PASS and G5-03M1 Engineering closeout:
+```text
+first new-Game creation intent
+→ inspect validated Character Source inventory
+→ exact_profile for selected exact World+Entry only
+→ exclude Player + explicit Guaranteed asset IDs
+→ deterministic Game-local stable_npcs snapshot
+→ Program-owned local IDs
+→ exact provenance + frozen T0 projection
+→ creation intent owns the exact initial_setup
+```
 
-`G5-03M2 Minimal Stable Actor Materialization / Registry Expansion`
+Important boundaries:
 
-Do not start M2/G5-04 early.
+- automatic stable NPCs remain distinct from `guaranteed_npcs`;
+- same `creation_id` retry/resume reuses frozen intent and does not rescan Source current;
+- old Games missing `stable_npcs` remain valid and are never retrofitted from mutable Source;
+- G5-02 actor roster expands to Player + all stable NPCs;
+- Agency eligible pool expands to Guaranteed + automatic stable NPCs, Player excluded;
+- registry existence grants no knowledge and no automatic action;
+- no display-name identity, model-minted identity, SQLite migration, Faction agency, or G5-04.
 
-## 7. Routing
+## 4. Current execution packet
+
+`my-world/docs/tasks/G5-03M2_STABLE_NPC_CREATION_SNAPSHOT_AND_REGISTRY_EXPANSION_TASK.md`
+
+Validation uses the slim policy: M2 focused first, then one affected pass over Final Create, G5-03, G5-02, one relevant G3 Save/Restore suite, and `git diff --check`.
+
+M2 requires **zero real Provider calls**.
+
+## 5. Next
+
+After M2 Independent Review, GPT decides whether a remaining Faction-agency slice is necessary before closing G5-03. Do not start G5-04 early.
+
+## 6. Routing
 
 Through 2026-09-06 23:59 (+08:00): GPT owns architecture/review; Kimi owns code-changing implementation. Correct in-flight Kimi work may finish after expiry.
