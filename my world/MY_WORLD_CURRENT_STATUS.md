@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 15.1
+version: 15.2
 created: 2026-08-26
 updated: 2026-09-05
 phase: G6 RPG Experience & Internal Declarative UI Host
-current_task: MW-011 G6 RPG Host ViewModel Baseline + MW-012 Zhang Chen Player Character Card
+current_task: MW-011 integration after IR1 + MW-012 Zhang Chen Player Character Card
 current_owner: ZCODE weekend implementation / GPT semantic-review lane
 parent_task: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT
@@ -27,7 +27,7 @@ G5 World Semantics & GM Runtime             PRODUCT PASS / CLOSED
 G5-GATE                                     PRODUCT PASS
 
 G6 RPG Experience & Internal Declarative UI Host ACTIVE
-MW-011 G6 RPG Host ViewModel Baseline       ACTIVE — ZCODE
+MW-011 G6 RPG Host ViewModel Baseline       ENGINEERING PASS — READY TO INTEGRATE / OWNER UAT AFTER INTEGRATION
 MW-012 Zhang Chen Player Character Card     OWNER-INSERTED — READY FOR ZCODE
 ```
 
@@ -104,41 +104,48 @@ First G6 decision:
 
 External World Pack / Mod UI declaration remains G8 work.
 
-## 5. MW-011 active
+## 5. MW-011 IR#1 result
 
-```text
-Work Item: MW-011
-Name: G6 RPG Host ViewModel Baseline
-Capability-Anchor: G6 RPG Experience & Internal Declarative UI Host
-Implementer: Zcode + GLM-5.3-flash
-Reviewer: GPT
-Revision: 1
-Review-Round: 0
-Status: ACTIVE — ZCODE
-Branch: mw-011-g6-rpg-host-viewmodel-baseline
-Worktree: D:/AI/Projects/.worktrees/my-world/mw-011
-```
+Reviewed candidate:
 
-Task packet:
+`my-world@066aff2487cd1059af1943eb5282bf5cfe2c89fb`
 
-`my-world/docs/tasks/MW-011_G6_RPG_HOST_VIEWMODEL_BASELINE_TASK.md`
+Verdict:
 
-Outcome:
+**MW-011 Revision 1 / IR#1 = ENGINEERING PASS — READY TO INTEGRATE / OWNER FOCUSED UAT AFTER INTEGRATION**
+
+Formal review:
+
+`my-world/docs/mw011/MW-011_INDEPENDENT_REVIEW_IR1.md`
+
+The reviewed vertical establishes:
 
 ```text
 existing authoritative/safe data
-→ disposable ViewModel
-→ useful Player Host + World Surface
+→ presentation-only deterministic ViewModel
+→ Player Host + World Overview/Save real consumers
 ```
 
-Minimum product intent:
+Reviewed behavior:
 
-- Player Host no longer contains only identity and dead space after normal play; it may show safe World/Entry context, recent accepted Player actions and Player-turn count;
-- World Surface defaults to Overview rather than always-visible Save controls;
-- Save remains a real bounded surface using existing G3 semantics;
-- Player-known facts remain sourced through the MW-009 disclosure boundary;
-- no fabricated HP/location/inventory/relationship/faction/quest state;
-- no generic declarative UI platform yet.
+- Player Host now shows identity/profile, safe World/Entry context, latest four accepted Player actions and Player-turn count;
+- GM-only Opening does not increment Player-turn count;
+- World Surface defaults to `概览` rather than always-visible Save controls;
+- existing G3 Save UI/semantics remain behind a bounded `存档` surface;
+- Player-known facts still come only through the MW-009 disclosure boundary;
+- NPC-only Knowledge, raw semantic consequences, Agency, World Evolution, instructions/style/internal IDs and Public-d20 control material do not enter the ViewModel/visible Hosts;
+- reopen reconstructs the same ViewModel and Restore removes restored-away actions/knowledge;
+- no fabricated HP/location/inventory/relationship/faction/quest state, no generic declarative platform, no new persistence schema and no Provider summarization were introduced.
+
+Implementer reports 34 focused assertions green, relevant MW-009/MW-010/G3/UI regressions green, `git diff --check` clean, Windows export PASS and Provider calls 0. GitHub exposes no CI status, so runtime counts remain implementer evidence while GPT independently inspected actual code/diff/test assertions.
+
+Non-blocking UI advisories are recorded in IR#1: active toggle buttons can be visually toggled off without changing the current surface; very long Player action text may make the left Host vertically heavy; the focused suite explicitly probes 900×600 and 1600×900 rather than adding a new dedicated 1280×720 assertion.
+
+### Integration note
+
+The candidate was cut from `a0e26a676cbd09658e7ee2a0a522b19efa2330ef`. Implementation `main` later advanced only to register the Owner-inserted MW-012 task/content/governance records. Therefore no MW-011 Revision 2 is requested: Zcode should reconcile/rebase the reviewed branch onto refreshed current `main` without semantic code changes, keep the MW-011 worktree until the integrated SHA is verified, and stop if a real code conflict appears.
+
+After integration, MW-011 proceeds to focused Owner G6 UI UAT.
 
 ## 6. MW-012 Owner-inserted Character Source
 
@@ -194,7 +201,7 @@ Zcode + GLM-5.3-flash → primary implementation owner for new code-changing wor
 GPT                    → semantics / architecture / task shaping / Independent Review
 ```
 
-At **2026-09-07 00:00 (+08:00)**, absent Owner extension, routing automatically returns to Codex-backend / Kimi-frontend according to the task seam.
+At **2026-09-07 00:00 (+08:00)**, absent a new Owner instruction, routing automatically returns to Codex-backend / Kimi-frontend according to the task seam.
 
 All task worktrees:
 
@@ -205,11 +212,11 @@ MW-011 and MW-012 use separate worktrees and must not overwrite each other.
 ## 8. Immediate route
 
 ```text
-MW-011 implementation / review remains G6 mainline
+MW-011 reconcile/integrate reviewed candidate
+→ Owner focused G6 UI UAT
 +
 MW-012 bounded Owner-inserted Character Card integration
-→ GPT Independent Review for each candidate
-→ Owner focused product UAT as appropriate
+→ GPT Independent Review
 → next real G6 consumer / visual vertical
 → Internal Declarative UI Host only after real component needs are established
 ```
