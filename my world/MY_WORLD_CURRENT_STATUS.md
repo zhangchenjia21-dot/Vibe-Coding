@@ -1,13 +1,13 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 13.7
+version: 13.8
 created: 2026-08-26
 updated: 2026-09-05
 phase: G5 World Semantics & GM Runtime
-current_task: MW-005 Three Kingdoms Literary Style Primer v0.1 — Active
-current_owner: KIMI
-parent_task: G4 Primary Source Assets & Local Game — owner-inserted content/runtime slice
+current_task: MW-005 Three Kingdoms Literary Style Primer v0.1 — Active; G5-05 active after MW-006 IR#1
+current_owner: KIMI / GPT semantic-review lane
+parent_task: G5 World Semantics & GM Runtime
 semantic_owner: GPT
 owner_uat_required: true
 context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
@@ -30,15 +30,19 @@ G5-01 World Turn / Semantic Materialization PASS / CLOSED
 G5-02 Knowledge Provenance                  PASS / CLOSED
 G5-03 NPC / Faction Agency                  ENGINEERING PASS / CLOSED
 MW-001 Runtime Narrative Actor Materialization PASS / CLOSED
-G5-04 Event / Priority Evolution            ACTIVE — OWNER UAT PAUSED FOR MW-005
+G5-04 Event / Priority Evolution            PRODUCT PASS / CLOSED
 MW-002 Selective World Evolution Evaluator ENGINEERING PASS / CLOSED
 MW-003 Visual Comfort Theme Pass            ENGINEERING PASS — OWNER UAT
 MW-004 Minimal Player Agency Principle      IMPLEMENTED — OWNER UAT
 MW-005 Three Kingdoms Literary Style Primer ACTIVE — KIMI
+G5-05 Meaningful Choice / Mechanics Integration ACTIVE
+MW-006 Mechanics-Grounded World Consequence Vertical ENGINEERING PASS / CLOSED
 G5-GATE                                     NOT YET
 ```
 
-The project has not advanced to G6. MW-005 is an Owner-inserted Three-Kingdoms-specific source-content/runtime integration experiment anchored to the closed G4 capability. It does not reopen G4, change G5-04 semantics, or authorize G5-05.
+The project has not advanced to G6. MW-005 remains an Owner-inserted Three-Kingdoms-specific source-content/runtime integration experiment anchored to the closed G4 capability. It runs independently from G5-05 and does not reopen G4.
+
+G5-04 is now closed: Owner explicitly completed UAT on 2026-09-05 and authorized the next step. G5-05 is active. MW-006 is the first closed engineering vertical under G5-05; closing MW-006 does **not** close the whole G5-05 capability.
 
 ## 2. MW-005 identity / lineage
 
@@ -65,7 +69,7 @@ Approved Primer input:
 
 `my-world/docs/tasks/inputs/MW-005_THREE_KINGDOMS_STYLE_PRIMER_V0_1.txt`
 
-## 3. Product purpose
+## 3. MW-005 product purpose
 
 Owner UAT showed a gap between plausible Three Kingdoms world behavior and the prose voice. Remote political/military developments could read like a modern strategy-game briefing (`XX方向：...`) rather than entering the story through messenger, report, question/answer, scene and historical-social speech.
 
@@ -75,7 +79,7 @@ Product rule:
 
 > **Give the model better literary/historical exemplars without converting literary reference into world authority or a rigid writing protocol.**
 
-## 4. Frozen authority boundary
+## 4. MW-005 frozen authority boundary
 
 ```text
 Literary Style Reference
@@ -94,7 +98,7 @@ Model Freedom First remains protected. Do not add mandatory `却说` / `且说`,
 
 The user-provided EPUB is a local working source only. It must not be committed or installed as the Runtime corpus. MW-005 uses only the bounded approved Primer input.
 
-## 5. Architecture direction
+## 5. MW-005 architecture direction
 
 Current `world_pack.v0.2` already supports `semantic_sections` with open safe-token `section_type`. Preferred minimal carrier is:
 
@@ -121,25 +125,74 @@ new Game after publication
 
 No Source schema v0.3, retrieval/RAG, embeddings/vector DB, SQLite migration, generic style platform, or settings UI is authorized.
 
-## 6. Review / UAT
+## 6. G5-04 closeout
 
-Kimi return ceiling: `READY FOR INDEPENDENT REVIEW`.
+Owner completed G5-04 UAT and authorized progression on 2026-09-05.
 
-GPT Independent Review must inspect actual code, Source generation publication evidence, tests and exact projector behavior. Automated tests prove authority separation/freeze semantics, not prose quality.
+Canonical product rule remains:
 
-After Engineering PASS, Owner performs A/B UAT by creating a **new** Three Kingdoms game through `run-game.cmd` and judges whether:
+> **World Independence + Player Spotlight.**
 
-- advisers/officials sound more naturally situated without everyone becoming ornate;
-- regional intelligence enters narrative rather than repeated dashboard headings;
-- battle/administrative prose feels less like modern strategic briefing;
-- readability remains high;
-- chapter-novel formulas do not become tics;
-- no future novel plot leaks into current Game;
-- MW-004 Player Agency behavior remains natural.
+`hold` remains a first-class correct result; independent World Evolution is not required every turn and does not automatically seize foreground Narrative or grant Player/Actor Knowledge.
 
-If overfitting appears, prefer reducing/tuning exemplars rather than adding more negative prompt constraints.
+Repository closeout:
 
-## 7. Existing open items
+`my-world/docs/g5_04/G5-04_CLOSEOUT.md`
+
+Status:
+
+```text
+G5-04 = PRODUCT PASS / CLOSED
+MW-002 = ENGINEERING PASS / CLOSED
+```
+
+## 7. G5-05 / MW-006
+
+Owner authorized Zcode + GLM-5.3-flash as a task-local implementation override for the first G5-05 vertical.
+
+```text
+Work Item: MW-006
+Name: Mechanics-Grounded World Consequence Vertical
+Capability-Anchor: G5-05 Meaningful Choice / Mechanics Integration
+Revision: 1
+Review-Round: IR#1
+Implementation SHA: adb3ca45c2e869c7685915de18664ee3ce7e6f39
+Reviewer: GPT
+Status: ENGINEERING PASS / CLOSED
+```
+
+Core authority split:
+
+```text
+existing Program-owned Public d20 result
+→ request-time grounding for the normal G5-01 semantic opportunity
+→ accepted Narrative still determines concrete scene consequences
+→ existing semantic mutation seam materializes supported durable consequences
+```
+
+Protected boundaries:
+
+- no `SUCCESS/FAILURE → fixed world effect` table;
+- no second mechanics truth;
+- no reroll;
+- no Narrative gate/retry protocol;
+- NO_CHECK receives no fake mechanics block;
+- no direct raw-mechanics injection into G5-04;
+- no Actor Knowledge shortcut;
+- no SQLite migration;
+- no MW-005 authority collision.
+
+IR record:
+
+`my-world/docs/mw006/MW-006_INDEPENDENT_REVIEW_IR1.md`
+
+The MW-006 Task Packet is a documented **post-implementation governance backfill** because GPT failed to propagate the intended packet before implementation. IR#1 accepted the Owner-authorized conversation launch instruction as Revision 1's authoritative executable contract.
+
+G5-05 remains ACTIVE after MW-006; the Work Item closes only this first vertical.
+
+## 8. Review / UAT open items
+
+MW-005 remains `ACTIVE — KIMI`. After Engineering PASS, Owner will perform a new-Game A/B UAT for prose quality. Automated tests prove authority separation/freeze semantics, not prose quality.
 
 MW-004 remains `IMPLEMENTED — OWNER UAT`; it is not silently closed. Its protected principle remains:
 
@@ -147,10 +200,12 @@ MW-004 remains `IMPLEMENTED — OWNER UAT`; it is not silently closed. Its prote
 
 MW-003 remains `ENGINEERING PASS — OWNER UAT`; Owner's positive visual feedback is not silently converted into Product PASS.
 
-MW-002 remains CLOSED. G5-04 remains ACTIVE and is paused only for this inserted product experiment. Do not start G5-05 before Owner closes G5-04.
+A pre-existing G3-04 regression assertion is stale after MW-004 because it treats the literal phrase `Current Game Context` in GM instructions as proof that raw persisted context leaked into Provider messages. MW-006 did not introduce that failure; repair it separately rather than folding it into MW-006.
 
-## 8. Routing
+## 9. Routing
 
-Through 2026-09-06 23:59 (+08:00), Kimi owns code-changing implementation while GPT owns semantics/task shaping/Independent Review. MW-004's prior GPT direct edit was a one-item Owner exception only.
+Through 2026-09-06 23:59 (+08:00), Kimi is the default code-changing implementer while GPT owns semantics/task shaping/Independent Review. Owner may issue task-local overrides; MW-006's Zcode + GLM-5.3-flash implementation override is complete.
+
+MW-004's prior GPT direct edit remains a one-item Owner exception only.
 
 Gemini review remains CANCELLED / DO NOT EXECUTE.
