@@ -1,12 +1,12 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 15.3
+version: 15.4
 created: 2026-08-26
 updated: 2026-09-05
 phase: G6 RPG Experience & Internal Declarative UI Host
-current_task: MW-011 + MW-012 reviewed integration / Owner focused UAT
-current_owner: ZCODE weekend implementation / GPT semantic-review lane
+current_task: Owner focused UAT for integrated MW-011 + MW-012
+current_owner: Owner UAT / GPT semantic-review lane
 parent_task: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT
 owner_uat_required: true
@@ -27,8 +27,8 @@ G5 World Semantics & GM Runtime             PRODUCT PASS / CLOSED
 G5-GATE                                     PRODUCT PASS
 
 G6 RPG Experience & Internal Declarative UI Host ACTIVE
-MW-011 G6 RPG Host ViewModel Baseline       ENGINEERING PASS — REBASE VERIFIED — INTEGRATION READY / OWNER UI UAT
-MW-012 Zhang Chen Player Character Card     ENGINEERING PASS — INTEGRATION READY / OWNER PRODUCT UAT
+MW-011 G6 RPG Host ViewModel Baseline       ENGINEERING PASS — INTEGRATED — OWNER UI UAT
+MW-012 Zhang Chen Player Character Card     ENGINEERING PASS — INTEGRATED — OWNER PRODUCT UAT
 ```
 
 Owner completed the combined G5 checkpoint and explicitly issued **PASS / proceed to G6**.
@@ -104,15 +104,19 @@ First G6 decision:
 
 External World Pack / Mod UI declaration remains G8 work.
 
-## 5. MW-011 — Engineering PASS / rebase verified
+## 5. MW-011 — Engineering PASS / integrated
 
 Original reviewed candidate:
 
 `my-world@066aff2487cd1059af1943eb5282bf5cfe2c89fb`
 
-Rebased candidate:
+Rebased verified candidate:
 
 `my-world@503fc6feeea86941c05b65ddbd6ab7113a92f776`
+
+Integrated main commit:
+
+`my-world@7972ab74ccc1d5368f8ca32d4fd4fd83173aa04d`
 
 Formal review:
 
@@ -124,9 +128,9 @@ Post-IR rebase verification:
 
 Verdict:
 
-**MW-011 Revision 1 / IR#1 = ENGINEERING PASS. Rebase verified. No Revision 2 and no new review round required.**
+**MW-011 Revision 1 / IR#1 = ENGINEERING PASS. Rebase verified and integrated to main. No Revision 2 and no new review round required.**
 
-The rebased candidate is one commit above its refreshed base and retains byte-identical inspected production blobs for the RPG ViewModel device/facade, `src/main.tscn` and `src/应用壳.gd`.
+Current `my-world/main` descends from the reviewed rebased candidate, so the reviewed MW-011 outcome is reachable from main without an intervening semantic rewrite.
 
 Reviewed behavior remains:
 
@@ -139,13 +143,17 @@ Reviewed behavior remains:
 - reopen reconstructs the same ViewModel and Restore removes restored-away actions/knowledge;
 - no fabricated HP/location/inventory/relationship/faction/quest state, no generic declarative platform, no new persistence schema and no Provider summarization were introduced.
 
-MW-011 now awaits exact-byte integration to `main`, then Owner focused G6 UI UAT.
+MW-011 now awaits Owner focused G6 UI UAT only.
 
-## 6. MW-012 — Revision 2 Engineering PASS
+## 6. MW-012 — Revision 2 Engineering PASS / integrated
 
 Reviewed R2 candidate:
 
 `my-world@f91e23ac8fe76c3b16bd486d419461cdf70d5a1f`
+
+Integrated main commit:
+
+`my-world@6338af5665c5137d9a9528776e77a13ffb924ea6`
 
 Formal IR#1:
 
@@ -161,13 +169,13 @@ Formal IR#2:
 
 Verdict:
 
-**MW-012 Revision 2 / IR#2 = ENGINEERING PASS — INTEGRATION READY / OWNER PRODUCT UAT.**
+**MW-012 Revision 2 / IR#2 = ENGINEERING PASS — INTEGRATED / OWNER PRODUCT UAT.**
 
 IR#1 findings are resolved:
 
-- T0 wording is now explicitly literacy-only: Zhang Chen initially cannot read clerical-script-era written material, without inventing a spoken-language incapacity or language simulation system;
+- T0 wording is explicitly literacy-only: Zhang Chen initially cannot read clerical-script-era written material, without inventing a spoken-language incapacity or language simulation system;
 - the production publish-script smoke assertion is reachable and executes before test termination;
-- the unrelated MW-004 `.uid` is removed from the final candidate.
+- the unrelated MW-004 `.uid` is absent from the final integrated outcome.
 
 Accepted Source identity:
 
@@ -182,9 +190,24 @@ generation fingerprint (R2): b1a1e5d58fe1383ff41b1f9745199aafe97fed8a1015299cf21
 
 The single T0 profile remains compatible with all seven current Han-end Entries and unrelated worlds remain ineligible. Historical memory remains protagonist belief/knowledge rather than World Truth, guaranteed future canon, NPC destiny or World Evolution command. Meaningful future protagonist choices remain Player-owned.
 
-R2 evidence records bounded Owner-approved production Source publication with `zhang_chen_present=true`, seven current Characters and `owner_games_modified=false`, plus normal production inventory discovery of the same current generation. The Owner-machine AppData state is not independently readable through GitHub, so final visible confirmation remains Owner product UAT.
+R2 evidence records bounded Owner-approved production Source publication with `zhang_chen_present=true`, seven current Characters and `owner_games_modified=false`, plus normal production inventory discovery of the same current generation. Current `my-world/main` now contains the reviewed Source bytes and descends from the reviewed R2 candidate. Final visible confirmation remains Owner product UAT.
 
-## 7. Routing
+## 7. Current main integration verification
+
+Remote implementation main is:
+
+`my-world@6338af5665c5137d9a9528776e77a13ffb924ea6`
+
+Its parentage includes both reviewed outcomes:
+
+```text
+7972ab74ccc1d5368f8ca32d4fd4fd83173aa04d  MW-011 integrated
+6338af5665c5137d9a9528776e77a13ffb924ea6  MW-012 R2 integrated
+```
+
+GitHub ancestry verification confirms current main descends from both `503fc6fe...` and `f91e23ac...`. No further Independent Review round is required solely for integration.
+
+## 8. Routing
 
 Owner weekend override remains active through **2026-09-06 23:59 (+08:00)**:
 
@@ -195,21 +218,18 @@ GPT                    → semantics / architecture / task shaping / Independent
 
 At **2026-09-07 00:00 (+08:00)**, absent a new Owner instruction, routing automatically returns to Codex-backend / Kimi-frontend according to the task seam.
 
-All task worktrees:
+The MW-011 and MW-012 worktrees may be removed only after standard worktree hygiene confirms clean state, reviewed/closed task status, pushed/reachable commits and no unknown user work.
 
-`D:/AI/Projects/.worktrees/my-world/<task-or-revision>`
-
-Keep MW-011 and MW-012 worktrees until their reviewed bytes are integrated and verified reachable from `main`.
-
-## 8. Immediate route
+## 9. Immediate route
 
 ```text
-integrate reviewed MW-011 rebased candidate
-+ integrate reviewed MW-012 R2 candidate
-→ verify current main contains both exact reviewed outcomes
-→ Owner focused UAT:
-   1. G6 Player/World Host information hierarchy
-   2. New Game can select 张琛 and create a Han-end game
+Owner focused UAT:
+1. G6 Player/World Host information hierarchy is materially more useful than the final G5 thin side panels
+2. 概览 / 存档 surface behavior feels natural and Save behavior remains intact
+3. New Game can visibly select 张琛
+4. 张琛 + a Han-end Entry can Final Create successfully in the actual product
+5. Opening prose respects physical transport, no local prior identity, literacy-only limitation and historical-memory non-canon boundary
+→ record Owner verdict
 → next real G6 consumer / visual vertical
 → Internal Declarative UI Host only after real component needs are established
 ```
