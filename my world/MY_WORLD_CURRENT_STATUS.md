@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 15.0
+version: 15.1
 created: 2026-08-26
 updated: 2026-09-05
 phase: G6 RPG Experience & Internal Declarative UI Host
-current_task: MW-011 G6 RPG Host ViewModel Baseline / Zcode
+current_task: MW-011 G6 RPG Host ViewModel Baseline + MW-012 Zhang Chen Player Character Card
 current_owner: ZCODE weekend implementation / GPT semantic-review lane
 parent_task: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT
@@ -28,6 +28,7 @@ G5-GATE                                     PRODUCT PASS
 
 G6 RPG Experience & Internal Declarative UI Host ACTIVE
 MW-011 G6 RPG Host ViewModel Baseline       ACTIVE — ZCODE
+MW-012 Zhang Chen Player Character Card     OWNER-INSERTED — READY FOR ZCODE
 ```
 
 Owner completed the combined G5 checkpoint and explicitly issued **PASS / proceed to G6**.
@@ -35,6 +36,8 @@ Owner completed the combined G5 checkpoint and explicitly issued **PASS / procee
 Formal implementation-repo closeout:
 
 `my-world/docs/g5_gate/G5_GATE_CLOSEOUT.md`
+
+MW-012 is a bounded Owner-inserted first-party Character Source integration during G6. It does **not** reopen G4 or replace the G6 mainline.
 
 ## 2. G5 final disposition
 
@@ -137,7 +140,52 @@ Minimum product intent:
 - no fabricated HP/location/inventory/relationship/faction/quest state;
 - no generic declarative UI platform yet.
 
-## 6. Routing
+## 6. MW-012 Owner-inserted Character Source
+
+```text
+Work Item: MW-012
+Name: Zhang Chen Player Character Card
+Capability-Anchor: G4 Primary Source Assets & Local Game Creation
+Inserted-By: Owner during G6
+Implementer: Zcode + GLM-5.3-flash
+Reviewer: GPT
+Revision: 1
+Review-Round: 0
+Status: OWNER-INSERTED — READY FOR ZCODE
+Branch: mw-012-zhang-chen-player-character-card
+Worktree: D:/AI/Projects/.worktrees/my-world/mw-012
+```
+
+Task packet:
+
+`my-world/docs/tasks/MW-012_ZHANG_CHEN_PLAYER_CHARACTER_CARD_TASK.md`
+
+Owner-approved content input:
+
+`my-world/docs/tasks/inputs/MW-012_ZHANG_CHEN_CHARACTER_CARD_V0_1.md`
+
+Outcome:
+
+```text
+Owner-approved 张琛 character concept
+→ existing Character Card v0.2 Source contract
+→ existing first-party Managed Source ingress
+→ selectable Player Character in Han-end New Game
+→ exact frozen Game-local character projection/context
+```
+
+Protected semantics:
+
+- physical transport into whichever selected Han-end Entry/T0 is chosen;
+- no local identity/network/history at T0;
+- remembered Three Kingdoms history is protagonist memory/belief, **not current World Truth or guaranteed future canon**;
+- history knowledge does not force NPC destinies or automatic visual recognition;
+- meaningful future protagonist choices remain Player-owned;
+- no new Character schema, inventory platform, UI redesign or declarative UI work is part of MW-012.
+
+MW-012 is intentionally bounded and may be executed without changing the G6 task axis. Do not let it expand into a Creator/platform project.
+
+## 7. Routing
 
 Owner weekend override remains active through **2026-09-06 23:59 (+08:00)**:
 
@@ -152,14 +200,18 @@ All task worktrees:
 
 `D:/AI/Projects/.worktrees/my-world/<task-or-revision>`
 
-## 7. Immediate route
+MW-011 and MW-012 use separate worktrees and must not overwrite each other.
+
+## 8. Immediate route
 
 ```text
-MW-011 implementation
-→ GPT Independent Review
-→ Owner focused G6 UI UAT
+MW-011 implementation / review remains G6 mainline
++
+MW-012 bounded Owner-inserted Character Card integration
+→ GPT Independent Review for each candidate
+→ Owner focused product UAT as appropriate
 → next real G6 consumer / visual vertical
 → Internal Declarative UI Host only after real component needs are established
 ```
 
-Do not manufacture G6 platform work merely to accelerate the appearance of a framework.
+Do not manufacture G6 platform work merely to accelerate the appearance of a framework, and do not allow MW-012 to become a new asset framework.
