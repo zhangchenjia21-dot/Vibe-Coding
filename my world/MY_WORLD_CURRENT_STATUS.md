@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 14.5
+version: 14.6
 created: 2026-08-26
 updated: 2026-09-05
 phase: G5 World Semantics & GM Runtime
-current_task: G5-07 / MW-010 G5 Living-World Integrated Reality Matrix / Zcode
+current_task: G5-07 / MW-010 Revision 2 Counterfactual + Knowledge Boundary Completion / Zcode
 current_owner: ZCODE weekend implementation / GPT semantic-review lane
 parent_task: G5 World Semantics & GM Runtime
 semantic_owner: GPT
@@ -42,68 +42,102 @@ MW-008 Safe Markdown-Lite Narrative Rendering ENGINEERING PASS / CLOSED
 G5-06 Runtime → UI Projection               ENGINEERING PASS / CLOSED
 MW-009 Player-Safe Runtime Side Panels      ENGINEERING PASS / CLOSED
 G5-07 World Product Tests                   ACTIVE
-MW-010 G5 Living-World Integrated Reality Matrix ACTIVE — ZCODE
+MW-010 G5 Living-World Integrated Reality Matrix REVISION 2 ACTIVE — IR#1 NOT PASS
 G5-GATE                                     NOT YET
 ```
 
-The project remains in G5. G5-06 has closed after the first real player-safe consumer proved the disclosure boundary; progression is now on G5-07 integration testing.
+The project remains in G5. G5-06 is closed; G5-07 remains active because MW-010 IR#1 found two missing integrated-proof cases. No production defect has been established.
 
-## 2. Owner progression decision
+## 2. MW-010 IR#1 result
 
-Owner requested that we stop spending isolated cycles on side tasks and move through the G5 mainline. Remaining product-feel checks are intentionally batched into the later combined G5 checkpoint.
+Candidate:
+
+`my-world@78c05887600332b93a4d50cd1d63d639841fb2eb`
+
+IR#1 verdict:
+
+**NOT PASS — Revision 2 required.**
+
+Formal review:
+
+`my-world/docs/mw010/MW-010_INDEPENDENT_REVIEW_IR1.md`
+
+Revision addendum:
+
+`my-world/docs/tasks/MW-010_REVISION2_COUNTERFACTUAL_KNOWLEDGE_COMPLETION_ADDENDUM.md`
+
+IR#1 accepted the candidate's overall architecture and zero-production-diff direction. The test already proves:
+
+```text
+quiet hold
+independent NPC Agency + World Evolution advance
+GM context vs player-safe disclosure asymmetry
+Program-owned d20 → MW-006 grounding → G5-01 consequence
+close/reopen reconstruction + no reroll
+Save/Restore removal of Path-A semantic + Player-knowledge truth
+alternate Path B currentness
+```
+
+Two blocking proof gaps remain.
+
+### F01 — restored-away non-player truth
+
+The frozen counterfactual scenario requires Path A after Save S to create its own Agency-or-Evolution truth and then prove Restore removes that Path-A-specific non-player truth from current state/GM context/player-safe consumers.
+
+The IR#1 candidate instead drove Path A with `actors=[]` and `evolution=hold`; the Agency/Evolution truth checked after Restore was pre-S truth that correctly remained current. That does not prove restored-away non-player currentness isolation.
+
+### F02 — NPC Knowledge → later Player disclosure
+
+The frozen Knowledge Boundary requires one NPC-only post-T0 Knowledge Provenance fact that is hidden from the player-safe UI, followed later by Player Character Knowledge Provenance of the same/substantively related information, at which point disclosure becomes allowed.
+
+The IR#1 candidate hid NPC Agency/Evolution correctly, but created no NPC-only `knowledge_events` record in the integrated timeline. Its Player knowledge facts were unrelated mechanics/Path-A facts. Hidden world truth is not equivalent to NPC Knowledge Provenance.
+
+## 3. MW-010 Revision 2 route
+
+Revision 2 keeps the same Work Item and branch lineage:
+
+```text
+Work Item: MW-010
+Revision: 2
+Next Review: IR#2
+Implementer: Zcode + GLM-5.3-flash
+Status: ACTIVE
+```
+
+Preferred result remains:
+
+```text
+production code diff = 0
+```
+
+Required completion:
+
+1. after Save S, Path A creates a uniquely identifiable Agency or World Evolution truth; before Restore it is current/GM-visible but player-safe hidden; after Restore and alternate Path B it is no longer current;
+2. the same timeline contains NPC-only Knowledge Provenance hidden from the player-safe panel, then later Player Character knowledge of related information that becomes visible; strongly prefer putting the later Player disclosure after Save S so Restore also proves the Player disclosure disappears while pre-S NPC-only provenance remains hidden.
+
+If existing production architecture cannot express these cases, Zcode must STOP and report the owning prior capability. Do not repair prior capabilities under MW-010.
+
+## 4. Owner progression decision remains unchanged
+
+Owner requested that the project stop spending isolated cycles on side tasks and move through the G5 mainline. Remaining product-feel checks are batched into one later combined checkpoint.
 
 Therefore:
 
 ```text
 G5-05 = engineering complete; Owner product validation deferred to combined G5 test
-MW-005 = R3 engineering complete; one bounded Owner-requested style-weight polish queued before combined UAT
-MW-003 / MW-004 = still open Owner-UAT items, not separate implementation tracks
+MW-005 = R3 engineering complete; bounded style-weight Revision queued before combined UAT
+MW-003 / MW-004 = open Owner-UAT items, not separate implementation tracks
 G5-06 = engineering closed
-G5-07 = active
+G5-07 = active until MW-010 engineering proof completes
 ```
 
-## 3. MW-009 / G5-06 result
-
-```text
-Work Item: MW-009
-Name: Player-Safe Runtime Side Panels
-Capability-Anchor: G5-06 Runtime → UI Projection
-Implementation/Evidence SHA: c2805e816d8bcda73b7bc662a2fe091e55daf0af
-Review-Round: IR#1
-Reviewer: GPT
-Status: ENGINEERING PASS / CLOSED
-```
-
-Review:
-
-`my-world/docs/mw009/MW-009_INDEPENDENT_REVIEW_IR1.md`
-
-G5-06 closeout:
-
-`my-world/docs/g5_06/G5-06_CLOSEOUT.md`
-
-Protected rule:
-
-```text
-Runtime truth
-!= GM-visible truth
-!= actor-private knowledge
-!= human-player-safe UI projection
-```
-
-The first production consumer now exposes only safe Player identity, safe World/Entry identity and bounded current Player Character knowledge facts. NPC-private knowledge, raw semantic consequences, Agency, World Evolution, instructions, Primer and internal IDs/hashes/fingerprints are physically absent from the player-safe projection object.
-
-Currentness follows accepted Conversation turn/hash semantics. Activation/reopen, semantic-lane terminal and Restore are sufficient refresh seams; no reactive-state platform was required.
-
-No second G5-06 vertical is justified. Richer Character/Relationship/Inventory/Faction/Map/visual surfaces remain G6 work pulled by real consumers.
-
-## 4. G5-07 frozen architecture
+## 5. G5-07 frozen architecture
 
 Canonical decision:
 
 `my world/architecture/world/G5_WORLD_PRODUCT_TEST_MATRIX_V0_1_DECISION.md`
 
-G5-07 is an **integration reality proof**, not another feature phase.
+G5-07 is an integration reality proof, not another feature phase.
 
 Required composed evidence covers:
 
@@ -119,38 +153,6 @@ player-safe disclosure currentness
 
 Automated tests may prove lifecycle/currentness/persistence/privacy composition. Only Owner real play may decide whether the resulting RPG actually feels alive, natural and coherent.
 
-## 5. MW-010 active task
-
-```text
-Work Item: MW-010
-Name: G5 Living-World Integrated Reality Matrix
-Capability-Anchor: G5-07 World Product Tests
-Implementer: Zcode + GLM-5.3-flash
-Reviewer: GPT
-Revision: 1
-Review-Round: 0
-Status: ACTIVE — ZCODE
-```
-
-Task Packet:
-
-`my-world/docs/tasks/MW-010_G5_LIVING_WORLD_INTEGRATED_REALITY_MATRIX_TASK.md`
-
-Preferred result:
-
-```text
-production diff = 0
-+ real FinalCreate / CurrentGameRuntime / SQLite integration matrix
-+ deterministic task-owned model stubs
-+ evidence
-```
-
-If the matrix reveals a defect in a previously closed capability, Zcode must stop and report the owning capability rather than silently repairing it under MW-010.
-
-Required worktree:
-
-`D:/AI/Projects/.worktrees/my-world/mw-010`
-
 ## 6. G5-05 engineering checkpoint
 
 MW-006 + MW-007 establish:
@@ -162,8 +164,6 @@ Program-owned Public d20 result
 → durable world consequence
 → Save / close / reopen / Continue / Restore coherent
 ```
-
-No second mechanics truth, fixed outcome-effect table, reroll redesign, Narrative gate/retry, new SQLite schema or generic persistence platform was introduced.
 
 The remaining product validation is deferred to the combined G5 Owner UAT:
 
@@ -179,21 +179,13 @@ Also confirm NO_CHECK remains natural and mechanics do not dominate ordinary pla
 
 ## 7. MW-005 bounded style-weight polish queued
 
-MW-005 Revision 3 / IR#3 remains the current engineering baseline. Owner still wants a modest additional style weight before the combined G5 UAT.
+MW-005 Revision 3 / IR#3 remains the current engineering baseline. Owner wants one modest additional style weight before the combined G5 UAT.
 
-This is **queued but not allowed to interrupt MW-010**. Before the combined Owner test, route one narrow MW-005 Revision that strengthens the existing Narrative-only positive voice preference without:
+The queued implementation contract is:
 
-- changing Primer/source bytes;
-- republishing Source generation;
-- entering Public-d20 control, G5-01 semantic or G5-04 causal lanes;
-- adding output gates/classifiers/retries;
-- forcing chapter-novel formula or pseudo-classical prose.
+`my-world/docs/tasks/MW-005_REVISION4_BOUNDED_STYLE_WEIGHT_POLISH_ADDENDUM.md`
 
-Do not create another style platform. Test the polish together with the combined G5 product pass rather than opening another isolated UAT loop.
-
-Current Source generation remains:
-
-`58966f73dfade50b0aa7536aad38a8840e614016975e8beba0735f7dd14ab443`
+It remains separate from MW-010 and must not alter Primer/source bytes, Source generation, mechanics/control, semantic or World Evolution authority.
 
 ## 8. Routing / worktree rule
 
@@ -210,21 +202,16 @@ All task worktrees:
 
 `D:/AI/Projects/.worktrees/my-world/<task-or-revision>`
 
-Registered worktrees must be removed with `git worktree remove` only after clean+pushed/reachable+closed/no-unknown-user-work verification.
+Keep the active MW-010 worktree through IR#2. Do not delete/recreate it merely because Revision 2 is the same outcome lineage.
 
 ## 9. Remaining G5 route
 
 ```text
-MW-010 G5 integrated engineering matrix
-→ GPT Independent Review
-→ bounded MW-005 style-weight polish before combined Owner UAT
+MW-010 Revision 2
+→ GPT IR#2
+→ if PASS: G5-07 engineering closeout
+→ MW-005 bounded style-weight polish
 → one combined Owner G5 product checkpoint
-   ├─ G5-05 mechanics product feel
-   ├─ G5-06 side-panel usefulness/privacy
-   ├─ MW-005 prose voice
-   ├─ MW-004 protagonist-choice boundary
-   ├─ MW-003 visual comfort
-   └─ living-world pacing / independence / knowledge behavior
 → G5-GATE verdict
 → G6 RPG Experience & Internal Declarative UI Host
 ```
