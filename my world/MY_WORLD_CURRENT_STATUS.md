@@ -1,13 +1,13 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 13.5
+version: 13.6
 created: 2026-08-26
 updated: 2026-09-05
 phase: G5 World Semantics & GM Runtime
-current_task: MW-003 Visual Comfort Theme Pass — Owner UAT
+current_task: MW-004 Minimal Player Agency Principle — Owner UAT
 current_owner: OWNER
-parent_task: G6 RPG Experience & Internal Declarative UI Host — early inserted slice
+parent_task: G2 AI Conversation Spine — owner-inserted semantic correction
 semantic_owner: GPT
 owner_uat_required: true
 context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
@@ -30,98 +30,91 @@ G5-01 World Turn / Semantic Materialization PASS / CLOSED
 G5-02 Knowledge Provenance                  PASS / CLOSED
 G5-03 NPC / Faction Agency                  ENGINEERING PASS / CLOSED
 MW-001 Runtime Narrative Actor Materialization PASS / CLOSED
-G5-04 Event / Priority Evolution            ACTIVE — OWNER UAT PAUSED
+G5-04 Event / Priority Evolution            ACTIVE — OWNER UAT PAUSED FOR MW-004 CHECK
 MW-002 Selective World Evolution Evaluator ENGINEERING PASS / CLOSED
 MW-003 Visual Comfort Theme Pass            ENGINEERING PASS — OWNER UAT
+MW-004 Minimal Player Agency Principle      IMPLEMENTED — OWNER UAT
 G5-GATE                                     NOT YET
 ```
 
-The project has **not** advanced to G6. `MW-003` is an Owner-inserted early G6 product-polish slice executed before resuming G5-04 Owner UAT.
+The project has not advanced to G6. MW-003 remains a separate early G6 visual-polish slice with positive Owner feedback but no silently inferred Product PASS.
 
-## 2. MW-003 identity / lineage
+MW-004 is a tiny Owner-inserted cross-cutting product-semantics correction anchored to G2 AI Conversation Spine. It does not reopen G2, redesign control modes, change G5-04 architecture, or authorize G5-05.
+
+## 2. MW-004 identity / lineage
 
 ```text
-Work Item: MW-003
-Name: Visual Comfort Theme Pass
-Capability-Anchor: G6 RPG Experience & Internal Declarative UI Host
+Work Item: MW-004
+Name: Minimal Player Agency Principle
+Capability-Anchor: G2 AI Conversation Spine
 Inserted-By: Owner
-Blocks: resume of G5-04 Owner UAT
+Triggered-By: G5-04 Owner UAT observation of GM making an unexpressed scene-exit choice for the protagonist
 Revision: 1
-Review-Round: IR#1
-Implementation Base: 42006215838c07910ab8b948cac628a4f43dde4e
-Implementation: eb13d559092e288506ce280ea01e9ef3c8a62290
-Evidence: 561ff0d5ff80ad1224c55d6f7768474da242ebd0
-Reviewer: GPT
-Engineering Verdict: PASS
-Product Verdict: PENDING OWNER EXPLICIT VERDICT
+Implementation Base: b9ea5cb3ebe9e91c9c2ab1f4a93daf30b440767d
+Implementer: GPT — explicit Owner delegation for this tiny bounded edit
+Independent Reviewer: not self-assigned
+Status: IMPLEMENTED — OWNER UAT
 ```
 
 Task Packet:
 
-`my-world/docs/tasks/MW-003_VISUAL_COMFORT_THEME_PASS_TASK.md`
+`my-world/docs/tasks/MW-004_MINIMAL_PLAYER_AGENCY_PRINCIPLE_TASK.md`
 
-Independent Review:
+## 3. MW-004 semantic boundary
 
-`my-world/docs/mw003/MW-003_INDEPENDENT_REVIEW_IR1.md`
+The entire product correction is intentionally small:
 
-## 3. MW-003 IR#1 result
+> **The GM owns freedom to advance the world; the Player owns new meaningful choices for the protagonist.**
 
-GPT refreshed both authoritative `main`s and reviewed the actual implementation range `4200621583… → 561ff0d5ff…`.
+Shared GM instructions now preserve three things together:
 
-The implementation is a bounded visual-only pass:
+- GM may freely advance world, NPCs, scenes, consequences of already expressed Player action, and connective behavior that is not itself a meaningful choice;
+- if narration would create a new meaningful protagonist choice not expressed by the Player and not clearly implied by current intent, that choice stays with the Player;
+- `Light` does not expand GM authority to make meaningful protagonist choices; it only permits more natural non-decisional connective detail.
 
-- one central palette owns surface/text/semantic color roles;
-- root Godot Theme assembly covers labels, panels, buttons, inputs, popup menus, focus/selection, separators and scrollbars;
-- runtime-created Narrative/mechanic/status controls consume the same palette;
-- Main Menu, Model Settings, New Game Wizard and in-game UI are covered;
-- no layout/typography redesign or general theme-settings platform was introduced;
-- no World Evolution, Agency, Public-d20 mechanism, Provider, persistence, Timeline, SQLite schema or G5-05 behavior changed.
+No parser/classifier, Narrative rejection/finalize barrier, retry loop, keyword blacklist, forced stop/question behavior, fixed format, Full/Narrative redesign, Provider protocol, or G5-04 mechanism change is authorized.
 
-Committed evidence reports:
+Focused proof is added at:
 
-- MW-003 real-render focused harness: **30 PASS / 0 FAIL**;
-- G4-05 New Game UI path: subsequent full reruns **0 FAIL**;
-- G4-07B playable UI integration: **0 FAIL**;
-- G3-04 Save/Load UI: **0 FAIL**;
-- G3-07 recovery layout at three resolutions: **0 FAIL**;
-- G4-01 lifecycle: **0 FAIL**;
-- export freshness validation: PASS;
-- `git diff --check`: clean;
-- real Provider calls: 0.
+`my-world/tests/mw004/最小玩家主权原则测试.gd`
 
-No Revision 2 is required absent a concrete new visual defect.
+GPT's current environment has no Godot runtime, so no claim is made that GPT executed this focused test.
 
-## 4. Owner visual-comfort UAT
+## 4. Owner MW-004 UAT
 
-Owner has already reported that the current build **looks much better**. This is strong positive product evidence, but governance does not silently turn it into Product PASS without an explicit Owner verdict.
+Use the real `run-game.cmd` path and continue a scene where the protagonist still has an obvious meaningful choice.
 
-Continue visual optimization only if a concrete reachable problem remains, such as:
+PASS means:
 
-- sustained-reading discomfort after 10–20 minutes;
-- muted/disabled text becomes difficult to read;
-- focus/hover/selection states are ambiguous;
-- warning/error colors are still too harsh or too weak;
-- a major surface visibly breaks palette coherence.
+- prose remains natural and unconstrained;
+- GM still freely advances NPC/world/scene response;
+- tiny connective protagonist actions remain natural;
+- GM does not invent a new meaningful choice such as leaving, agreeing, refusing, revealing, committing, or abandoning without Player expression / clear implication;
+- the model does not become timid or repeatedly ask permission.
 
-Absent a concrete issue, the preferred route is to stop polishing, issue Owner Product PASS for MW-003, and resume G5-04 UAT.
+If this feels natural, resume G5-04 Owner UAT immediately. Do not expand MW-004 without new concrete evidence.
 
-## 5. Protected G5-04 state
+## 5. MW-003 state
 
-MW-002 remains **ENGINEERING PASS / CLOSED**. G5-04 remains **ACTIVE — OWNER UAT**, paused only for scheduling.
+MW-003 remains **ENGINEERING PASS — OWNER UAT**. Owner has already reported the palette looks much better. No Revision 2 is required absent a concrete visual defect. Explicit Product PASS is still pending if Owner wishes to formally close it.
+
+## 6. Protected G5-04 state
+
+MW-002 remains **ENGINEERING PASS / CLOSED**. G5-04 remains **ACTIVE — OWNER UAT**, briefly paused only to check MW-004 behavior.
 
 Frozen G5-04 product rule remains:
 
 > **The world must be able to move without direct Player causation, but must not manufacture an event every turn.**
 
-After MW-003 closes, Owner still needs the two G5-04 UAT scenarios:
+Owner still needs both:
 
 1. Quiet / Life Loop — genuine `hold`, no artificial escalation;
 2. Genuine ripe pressure — one credible independent world consequence that persists and later surfaces naturally.
 
-Do not start G5-05 before Owner later closes G5-04.
+Do not start G5-05 before Owner closes G5-04.
 
-## 6. Routing
+## 7. Routing
 
-Through 2026-09-06 23:59 (+08:00): GPT owns semantics/architecture/task shaping/review; Kimi owns all code-changing implementation. Correct in-flight Kimi work may finish after expiry.
+Through 2026-09-06 23:59 (+08:00), Kimi normally owns code-changing implementation while GPT owns semantics/review. For MW-004 only, Owner explicitly delegated the tiny bounded prompt edit to GPT. This is a one-item exception and does not alter general routing. GPT must not issue an Independent Review verdict on its own implementation.
 
 Gemini review remains CANCELLED / DO NOT EXECUTE.
