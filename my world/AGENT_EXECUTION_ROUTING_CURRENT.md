@@ -1,7 +1,7 @@
 ---
 title: my world｜Execution Agent Routing
 status: current-project-governance
-version: 3.0
+version: 3.1
 created: 2026-08-30
 updated: 2026-09-06
 owner: Owner + GPT
@@ -15,11 +15,9 @@ owner: Owner + GPT
 
 ## 1. Core rule
 
-> **MW-015 完成后，所有新的 implementation task 默认只使用 Codex。**
+> **所有新的 production implementation task 默认只使用 Codex。**
 
-当前已经授权并正在执行的 `MW-015 Character + Important Experiences Surfaces v0.1` 仍由 **KimiCode** 完成本轮，不因本次路由更新中途换人。
-
-从 MW-015 之后开始：
+`MW-015 Character + Important Experiences Surfaces v0.1` 已完成原 KimiCode 授权轮次并进入 Owner UAT。后续默认分工：
 
 ```text
 GPT   → Product / Architecture / Task Shaping / Dispatch / Independent Review
@@ -49,8 +47,6 @@ GPT 不作为默认 production implementation owner。
 
 ### Codex
 
-Primary implementation role after MW-015:
-
 > **所有新的 production implementation task 的默认且唯一执行 Agent。**
 
 包括但不限于：
@@ -70,22 +66,13 @@ Primary implementation role after MW-015:
 
 任务仍应按 Scope、Risk、Acceptance 和 Layering 做严格边界控制；“只用 Codex”不等于允许一个 Task Packet 无限扩 Scope。
 
-### KimiCode
-
-Current disposition:
-
-```text
-MW-015
-→ remains assigned to KimiCode until this round completes
-```
-
-After MW-015:
+### KimiCode / Zcode / other implementation agents
 
 ```text
 NOT DEFAULT / NOT ROUTED FOR NEW TASKS
 ```
 
-只有 Owner 以后再次明确指定时，KimiCode 才可成为新的 task-local implementer。
+只有 Owner 以后再次明确指定时，才可成为新的 task-local implementer。
 
 ### Grok Build / other search-heavy tools
 
@@ -97,9 +84,9 @@ Primary role remains:
 
 Search result 不自动成为 Architecture authority，也不成为 production implementation 默认执行者。
 
-## 3. Assignment rule after MW-015
+## 3. Assignment rule
 
-MW-015 之后，GPT 不再需要在实现 Agent 之间做能力/成本路由。正式派工流程简化为：
+正式派工流程：
 
 ```text
 Product / Architecture Gate
@@ -112,7 +99,9 @@ GPT Independent Review
 ↓
 Integration only after Engineering PASS
 ↓
-Owner UAT for product-facing outcome
+Owner-build preparation for product-facing work
+↓
+Owner UAT
 ```
 
 GPT 仍需判断：
@@ -124,7 +113,7 @@ Complexity
 × Architecture / Authority Coupling
 ```
 
-但这些维度用于决定：
+这些维度用于决定：
 
 - Task 是否要拆分；
 - 是否需要 Spike；
@@ -152,45 +141,81 @@ STOP
 - implementer 自己宣布 Independent Review PASS；
 - 因“反正都是 Codex”而把多个独立 Outcome 塞进一个巨大 Task。
 
-## 5. Evidence / handoff rule
+## 5. Evidence / implementation handoff rule
 
 所有 code-changing task：
 
 - 使用 task-specific branch / worktree；
 - 最终 evidence 必须来自 exact clean candidate；
-- Agent 最高返回 `READY FOR INDEPENDENT REVIEW`；
+- Implementer 最高返回 `READY FOR INDEPENDENT REVIEW`；
 - GPT review actual diff / tests / runtime evidence；
+- Engineering PASS 后才允许 integration；
 - Owner 对 product-facing outcome 做最终 UAT。
 
-## 6. Current project-specific disposition
+未经 GPT Independent Review 的 task branch 不得安装到 Owner canonical playable checkout 并冒充正式试玩版本。
 
-Owner 于 2026-09-06 明确更新路由：
+## 6. Owner UAT build handoff — product-facing work mandatory
+
+Owner canonical local playable checkout：
+
+`D:/AI/Projects/my-world`
+
+当前 `run-game.cmd` / `run-game.ps1` 会保证 Windows export 与**当前本地 checkout**一致，但不会证明本地 checkout 已经同步到 GitHub 上最新、已审核并集成的 `main`。
+
+因此 product-facing task 在 integration 后必须增加明确的 UAT-build handoff：
 
 ```text
-MW-015 当前轮次
-→ KimiCode 继续完成，不中途换 Agent
-
-MW-015 之后的新 implementation task
-→ Codex only by default
+Engineering PASS
+→ integrate reviewed candidate
+→ safely synchronize D:/AI/Projects/my-world to exact integrated main
+→ validate exact local HEAD
+→ rebuild / validate Windows export
+→ Owner Launch Ready
+→ Owner UAT
 ```
 
-因此此前 v2.0 的长期分工：
+默认由具备本机执行能力的 Codex 完成该 UAT-build preparation，除非 Owner 另有指定。
+
+执行要求：
+
+1. 先检查 `D:/AI/Projects/my-world` 的 branch / status / worktree state；
+2. 不覆盖 unknown dirty work、本地未推 commit 或分叉；
+3. 只有 clean 且可安全 fast-forward 时，才 fetch 并同步到 intended integrated `origin/main` / integration SHA；
+4. 明确验证 local `HEAD` 等于本次 UAT 应测试的集成 commit；
+5. 执行 `run-game.ps1 -ValidateExportOnly` 或等价命令，确认 `build/windows/my-world.exe`、`.pck` 和 freshness metadata 对应当前 checkout；
+6. 返回 exact local HEAD + export validation result；
+7. 只有这一步 PASS 后才通知 Owner 运行 `run-game.cmd`；
+8. 如果 checkout dirty、diverged、unexpected branch 或无法安全同步，STOP 并报告，不使用 `reset --hard`、`clean -fd`、force 等破坏性手段隐藏问题。
+
+不要把“每个任务都修改 `run-game.cmd`”当刷新机制。Launcher 保持通用；正确机制是：
+
+> **reviewed main synchronization → fresh export validation → Owner UAT handoff**
+
+不需要 Owner UAT 的纯后台 / 非产品面任务，不自动要求这一 build handoff。
+
+## 7. Current project-specific disposition
+
+```text
+MW-015
+→ ENGINEERING PASS / INTEGRATED / OWNER UAT PENDING
+→ current immediate need is canonical local checkout + fresh export preparation
+
+new implementation task
+→ Codex only by default
+
+MW-013 Internal Declarative UI Host v0.1
+→ HOLD / NOT AUTHORIZED YET
+```
+
+此前 v2.0 的长期分工：
 
 ```text
 Codex    → complex / critical implementation
 KimiCode → bounded UI / ordinary surfaces
 ```
 
-在 MW-015 完成后失效，不再作为 current routing。
+已失效，不再作为 current routing。
 
-Zcode 仍仅在 Owner 明确再次指定时使用；此前 temporary override 不恢复。
+Zcode / KimiCode 仅在 Owner 明确再次指定时使用。
 
 Gemini review remains CANCELLED / DO NOT EXECUTE。
-
-`MW-013 Internal Declarative UI Host v0.1` 当前仍：
-
-```text
-HOLD / NOT AUTHORIZED YET
-```
-
-未来若重新授权 MW-013，其默认 implementer 也应为 Codex，除非 Owner 当时另有明确指令。
