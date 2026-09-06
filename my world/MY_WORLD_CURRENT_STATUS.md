@@ -1,7 +1,7 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 16.5
+version: 16.6
 created: 2026-08-26
 updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
@@ -40,15 +40,15 @@ Primary IA draft:
 
 `architecture/ui/G6_SURFACE_INFORMATION_ARCHITECTURE_DRAFT_V0_1.md`
 
-Current version: **v0.4 / DRAFT / FOR OWNER DISCUSSION**.
-
 Focused semantic/domain audit:
 
 `architecture/ui/G6_CHARACTER_AND_IMPORTANT_EXPERIENCES_SEMANTIC_AUDIT_DRAFT_V0_1.md`
 
-Current version: **v0.2 / DRAFT / FOR OWNER DISCUSSION**.
+New frozen authority:
 
-Current frozen shell direction:
+`architecture/ui/G6_MODEL_DRIVEN_INFORMATION_CURATION_AUTHORITY_DECISION.md`
+
+Current shell direction:
 
 ```text
 Player Status Host
@@ -76,16 +76,7 @@ World Information Host
 存档
 ```
 
-Only grounded surfaces proceed. A Surface requires:
-
-```text
-real player question
-+ real domain owner
-+ player-safe projection
-+ non-trivial product value
-```
-
-No fake RPG state or empty tabs.
+Only grounded surfaces proceed. A Surface requires a real player question, real data ownership, player-safe projection and non-trivial player value. No fake RPG state or empty tabs.
 
 ## 4. Owner decisions recorded in G6 IA
 
@@ -118,75 +109,85 @@ Important Experiences
 → meaningful milestone/change history
 ```
 
-Neither UI Surface becomes canonical truth owner.
+Neither UI Surface becomes a second truth source.
 
-## 5. Model-driven information curation — Owner direction
+## 5. Model-driven information curation — FROZEN OWNER DECISION
 
-Owner explicitly rejected a Program-heavy significance classifier.
+Owner explicitly rejected Program-heavy semantic judging for information surfaces.
 
-Current principle:
+Canonical authority:
 
-> **Model judges semantic importance; Program enforces authority, safety and durability.**
+`architecture/ui/G6_MODEL_DRIVEN_INFORMATION_CURATION_AUTHORITY_DECISION.md`
 
-Meaning:
+Frozen principle:
 
-```text
-Model
-→ decides whether a change is semantically important
-→ decides whether it belongs in Character / Important Experiences / future information surfaces
-→ decides whether current Character material should add / replace / remove / remain unchanged
-→ writes concise player-facing summary text
+> **Model owns semantic interpretation and curation; Program owns normalized storage, temporal integrity and presentation.**
 
-Program
-→ does NOT decide importance through keyword rules / regex / score tables / fixed turn thresholds
-→ validates accepted turn/hash linkage
-→ validates allowed target + payload shape/size
-→ enforces Existing Domain wins
-→ enforces Player-owned self-definition evidence
-→ enforces player-safe disclosure
-→ commits idempotently
-→ preserves Save / Restore / Regenerate currentness and persistence integrity
-```
+Therefore the model, not Program heuristics, decides:
 
-Owner explicitly accepts an additional bounded model call when that improves semantic accuracy, consistency and reduces Runtime complexity.
+- what happened semantically;
+- what is important;
+- whether Character current state should change;
+- whether an event belongs in Important Experiences;
+- which enabled information Surface should receive a structured update;
+- whether accepted Player/Narrative context already expresses a meaningful protagonist decision;
+- how to summarize the result for the player.
 
-Preferred shape under discussion:
+Program must not build a parallel semantic judge from keyword rules, score tables, regexes, event-type branches or protagonist-choice evidence heuristics.
+
+Program responsibilities remain structural/infrastructure only:
 
 ```text
-accepted Player input + accepted GM Narrative
-+ current player-safe Character state
-+ bounded recent milestones
-+ relevant formal Domain facts / authority hints
-→ model-driven post-turn Information Curator
-→ bounded semantic proposals
-→ narrow Program validation + durable commit
+accepted current-turn/current-timeline binding
+stable identity
+payload syntax/type/size normalization
+atomic persistence
+idempotent replay
+Save / Restore / Regenerate currentness
+stale-future isolation
+crash / retry correctness
+canonical storage
+presentation serialization / layout
 ```
 
-This curator is semantic maintenance, not rendering. It must not turn Narrative delivery into a hard wait/gate; malformed/failed curation fails soft and can be retried without invalidating the accepted Narrative.
+Existing Domain wins remains a data-organization instruction to the model, not a reason to create a Program semantic router.
 
-## 6. Character evolution boundary under discussion
+Player ownership of new meaningful protagonist choices remains a product principle, but the model is trusted to infer whether the accepted interaction actually expressed such a choice. Program does not implement a semantic evidence gate.
+
+Owner explicitly accepts an additional bounded model call when it improves curation quality and reduces Runtime complexity.
+
+Recommended direction:
+
+```text
+accepted Player input + accepted GM Narrative + current relevant state
+→ one post-turn Information Curator model call
+→ bounded structured curation result
+→ Program normalization + durable commit
+→ player-safe projection
+```
+
+Information Curator should be non-blocking by default: curation failure must not invalidate accepted Narrative or gate the next Player action.
+
+## 6. Character evolution boundary
 
 Current baseline:
 
 ```text
 objective durable Character facts
-→ model may identify from world causality
+→ model may recognize and curate them from accepted game context
 
 non-voluntary long-term impacts
-→ model may identify; Existing Domain wins if one exists
+→ model may recognize them; dedicated Domain is used when one actually exists
 
 major protagonist self-definition
-→ model may propose only with Player-originated / Player-authorized evidence
+→ model decides whether accepted Player/Narrative context truly establishes the choice
+→ no Program semantic evidence gate
 
 short-term state
-→ model should leave outside Character Sheet
+→ model normally keeps it out of Character Sheet
 ```
 
-These are authority/product rules for the model and validator, not a request for a giant Program rule engine.
-
-Existing Domain wins remains protected for Inventory / Relationship / Knowledge / Injury / Faction / Timeline / Thread / Mechanic State.
-
-Focused audit proposes Character sections around:
+Focused Character sections remain:
 
 ```text
 basic identity
@@ -198,27 +199,15 @@ long-term limitations / traits
 long-term goals / self-direction
 ```
 
-## 7. Important Experiences boundary under discussion
+## 7. Important Experiences boundary
 
-`重要经历` is not:
+`重要经历` is not full World Timeline, every Turn/transcript log, current open tasks, or a second biography database.
 
-- full world Timeline;
-- every Turn / transcript log;
-- current open tasks;
-- a second biography database.
+The model decides contextual milestone significance. Examples such as identity changes, major capability gains/losses, long-term direction changes, trajectory-changing successes/failures and life-scale relationship events are guidance, not Runtime rules.
 
-Milestone examples include life-scale identity, capability, direction, trajectory and relationship changes, but examples are guidance for model semantic judgment — not Runtime keyword lists or scoring rules.
+Ordinary-looking events are allowed to become milestones when their actual context/impact makes them important.
 
-Current target:
-
-```text
-authoritative lived history / Character semantic change / relevant formal Domain event
-→ model-driven protagonist milestone curation
-→ bounded durable/current milestone material
-→ player-safe Important Experiences projection
-```
-
-Restore to before a milestone must remove both the milestone projection and any current Character change caused by that future.
+Restore to before a milestone must remove both the current milestone projection and any Character state that only exists in the restored-away future.
 
 ## 8. Current implementation audit
 
@@ -231,17 +220,14 @@ Current Runtime already has:
 - frozen Player Character `source_projection.player_profile`;
 - fail-closed MW-011 profile projection.
 
-But there is not yet a dedicated authoritative/player-safe shape for:
+But there is not yet a dedicated model-curated durable/player-safe shape for:
 
 ```text
-current lived Player Character semantic facets
-current social identity / role
-long-term capability / limitation evolution
-Player-authorized long-term goal / principle evolution
+current lived Player Character semantic state
 protagonist milestone history
 ```
 
-Current world semantic turns are bounded generic change strings, not a safe targeted Character owner. Current MW-011 profile projector intentionally reads only frozen Game-local `player_profile`; it cannot satisfy an evolving Character Sheet by itself.
+Current world semantic turns are bounded generic change strings, not a current Character information owner. Current MW-011 profile projector intentionally reads only frozen Game-local `player_profile`; it cannot satisfy an evolving Character Sheet by itself.
 
 ## 9. Likely implementation seam after Product Freeze
 
@@ -249,9 +235,10 @@ Current likely split:
 
 ```text
 Codex
-→ model-driven Character / milestone curator seam
-→ minimal game-local Player Character semantic authority
-→ Player-authorization evidence validation
+→ post-turn Information Curator model seam
+→ bounded structured curation contract
+→ normalized durable Character current-state material
+→ normalized durable protagonist milestone material
 → Save/Restore/Regenerate/currentness
 → player-safe Character + Important Experiences projections
 
@@ -262,7 +249,9 @@ KimiCode
 → left empty/collapsed behavior when no portrait/mechanic contribution
 ```
 
-No implementation task is authorized yet. Product semantics must freeze first.
+Do not implement a Character importance classifier, milestone score engine, keyword router or Program protagonist-choice semantic gate.
+
+No implementation task is authorized yet. Product semantics must finish freezing first.
 
 ## 10. Visual Runtime disposition
 
@@ -298,9 +287,8 @@ Owner
 ## 13. Immediate route
 
 ```text
-Owner + GPT finish Character + Important Experiences semantics
-→ confirm model-driven Information Curator as formal architecture rule
-→ freeze semantic/domain audit
+Owner + GPT finish remaining Character + Important Experiences product points
+→ freeze semantic/domain audit under model-driven curation authority
 → shape executable backend/UI seam
 → Codex and/or KimiCode implementation
 → GPT Independent Review
