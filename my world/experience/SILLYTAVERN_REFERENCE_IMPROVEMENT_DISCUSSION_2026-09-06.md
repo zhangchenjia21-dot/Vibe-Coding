@@ -1,7 +1,7 @@
 ---
 title: my world｜SillyTavern 参考研究改进讨论通过清单
 status: working-approved-candidate-list
-version: 1.2
+version: 1.3
 created: 2026-09-06
 updated: 2026-09-06
 source_reference: ./SILLYTAVERN_UPSTREAM_FUNCTIONAL_REFERENCE_AUDIT_2026-09-06.md
@@ -13,142 +13,79 @@ roadmap_authorization: none
 
 ## 0. 用途
 
-本文件只记录 Owner 在基于原版 SillyTavern 功能参考研究进行的产品改进讨论中，**明确表示通过的提案**。
+本文件只记录 Owner 在基于原版 SillyTavern 功能参考研究进行的产品改进讨论中，**明确表示通过的提案**，并单独记录尚待 Owner 明确 verdict 的 Owner-originated 提案。
 
 重要边界：
 
 - `通过提案` != `立即实施`；
-- 本文件不是 CURRENT Roadmap，不是 Task DAG，不是 Architecture Decision；
-- 在本轮改进讨论完成前，不据此创建新的 MW Work Item；
+- 本文件不是 CURRENT Roadmap、Task DAG 或 Architecture Decision；
+- 本轮改进讨论完成前，不据此创建新的 MW Work Item；
 - 讨论结束后，由 GPT 基于全部通过提案统一做重叠、依赖、冲突、阶段与 UAT 审计，再提交 Revised Task Axis 给 Owner；
-- 只有路线重构经 Owner 批准后，才进入正式 Product / Architecture Freeze 与 Task Packet。
-
-未明确通过的提案不进入本清单；它们既不视为已批准，也不自动视为永久否决。
+- 只有路线重构经 Owner 批准后，才更新正式 Product / Architecture / Roadmap / Status 并进入 Task Packet。
 
 ---
 
 ## 1. 已通过提案
 
-### P-01｜玩家安全的生成状态 / 诊断
+### P-01｜玩家安全的生成状态 / 诊断｜原提案 1
 
-**Owner verdict：通过（原提案 1）。**
+让关键 AI 后台链路具备有限、玩家安全、按需展开的可观察性，区分 processing / success / no-update / malformed / timeout / cancelled / stale-currentness / presentation failure 等真实状态。
 
-让关键 AI 后台链路具备有限、玩家安全、按需展开的可观察性，使“人物卡没出现、推荐没生成、整理没更新”等情况能区分：仍在处理、模型无有效输出、结构校验失败、currentness 失效、超时/取消、保存/展示问题等。
+普通玩家只看安全、可理解的阶段状态；Owner/developer 高级诊断可进一步查看实际 Provider/model、请求是否发出、结构终态和 accepted-prefix/currentness。不得泄露 NPC-private、未公开人物、GM-private context、credential；诊断不是模型思维解释，也不是第二事实源。
 
-候选产品层：普通玩家只看安全状态；Owner / developer 高级诊断可进一步看实际 Provider/model、请求是否发出、结构终态、accepted prefix/currentness 等。
+### P-02｜叙事偏好 / Narrative Preference｜原提案 3
 
-硬边界：不泄露 NPC 私密资料、未公开角色、幕后计划、GM-private context、credential；不把 Prompt 明细冒充模型思维；诊断不是第二事实源，叶 UI 不接 omniscient state 自行过滤。
-
-### P-02｜叙事偏好 / Narrative Preference
-
-**Owner verdict：通过（原提案 3）。**
-
-用少量高层偏好与自然语言补充控制叙事的节奏、镜头、细节密度和关注重点，而不是复制 Author's Note / Prompt Manager 的提示词工程面板。
-
-核心边界：
+允许通过少量高层偏好与自然语言补充调节节奏、镜头、细节密度和关注重点，而不是复制 Prompt 工程面板。
 
 > **Narrative Preference 只影响表达与镜头，不成为 World Truth、NPC 意图、结果保证或剧情状态机。**
 
-允许“重要对话写细、普通赶路快速略过、少解释多动作”；不允许“所有战斗必须赢、某 NPC 必须爱上玩家、强制未来、固定每回合字数”等结果控制。
+后续需冻结长期偏好与单回合临时叙事要求的 owner / 注入边界。
 
-后续需冻结长期偏好 vs 单回合临时要求的 ownership 与 GM-request 注入边界。
+### P-03｜结构化模型输出可靠性｜原提案 6
 
-### P-03｜结构化模型输出可靠性
+对本来就要求 machine schema 的后台 AI lane，优先使用 Provider 明确支持的 Structured Output / JSON Schema 等能力，Program 仍做严格结构验证。
 
-**Owner verdict：通过（原提案 6）。**
+不得靠 Regex、fence stripping、字段猜测、补造缺失内容、无限重试或静默 Provider fallback 建立修补森林。先选一个真实 lane 验证，再决定是否推广。
 
-对本来就要求机器结构输出的后台 AI lane，优先使用 Provider 明确支持的 Structured Output / JSON Schema 等原生能力，降低“语义正确但包装格式错误”造成的整项失效。
+### P-04｜Source Library 作品化 / 内容发现体验｜原提案 7
 
-典型证据：MW-019 真实验证中模型返回正确的五条行动与 JSON 内容，但外包 Markdown fence，被当前严格契约正确拒绝。
+把“选择机器资产/数据包”逐步升级成“选择我要玩的世界、角色和玩法内容”。候选包括封面、公开简介、标签、作者、版本说明、Expansion 功能说明、player-safe compatibility 与建局前预览。
 
-硬边界：不靠 Regex/fence stripping/字段猜测建立语义修补森林；不自动补造缺失内容；不无限重试；不静默切换 Provider；Program 仍做结构验证；Provider 不支持时继续严格 JSON + fail-soft。
+Discovery metadata != Runtime truth；既有 Game 继续绑定 exact frozen generation；不因此提前建设在线商店、账号、云或万能包管理器。
 
-采用时应先选一个真实 lane 做 vertical，再决定是否推广，避免提前抽象通用平台。
+### P-05｜玩家可读的冒险纪事导出｜原提案 9
 
-### P-04｜Source Library 作品化 / 内容发现体验
-
-**Owner verdict：通过（原提案 7）。**
-
-把“选择机器资产/数据包”的建局体验逐步升级为“选择我要玩的世界、角色和玩法内容”。
-
-候选展示包括封面/缩略图、公开简介、标签、作者、版本说明、Expansion 功能说明、player-safe compatibility/dependency 提示与建局前预览。
-
-硬边界：公开介绍 != GM-private Source material；discovery metadata != Runtime World Truth；既有 Game 继续绑定 exact frozen generation；不因此提前建设在线商店、账号、云或万能 Package Manager。
-
-### P-05｜玩家可读的冒险纪事导出
-
-**Owner verdict：通过（原提案 9）。**
-
-让长期时间线最终可导出为属于这局世界与玩家选择的可阅读作品记录。第一版优先确定性整理 accepted Player action + GM Narrative、Important Experiences、允许范围内的 People 等玩家可见材料，输出 Markdown / HTML 等阅读格式。
-
-必须区分：
+让长期时间线可导出为属于该局世界与玩家选择的阅读作品。第一版优先确定性整理 accepted Player action + GM Narrative、Important Experiences 和允许范围内的 People 等玩家可见材料，候选格式 Markdown / HTML。
 
 > **可读冒险纪事 != 可恢复 Game Backup / Migration Package。**
 
-默认不导出 GM-private truth、NPC private Knowledge、Agency/Evolution、credential。未来若提供 AI 文学化版本，必须标识为派生版且可回溯 accepted history，不反向成为游戏真相。
+不导出 GM-private truth、NPC-private Knowledge、Agency/Evolution、credential；未来 AI 文学化版本只能是可追溯的 derived edition。
 
-### P-06｜Reference Library / 大型世界参考资料层
+### P-06｜Reference Library / 大型世界参考资料层｜原提案 11
 
-**Owner verdict：通过（原提案 11）。**
-
-为历史、制度、地理、文化、技术等大型参考资料建立可复用、按需取用的 Reference Library，使大型世界不必把所有研究材料永久塞入 World Pack / 每轮上下文。
-
-典型内容：官制、物价、地图与地理、交通、军制、服饰礼仪、历史人物研究等。
-
-最关键语义：
+为制度、地理、文化、技术、历史研究等大型材料建立可复用、按需取用的 Reference Library。
 
 > **Reference says X != 当前 Game 中 X 仍然成立。**
 
-Reference retrieval 只负责提供“可能相关的背景材料”，不能裁定当前世界事实、人物身份、玩家知情或未来必然事件。历史基线与已经演化的 Game-local Reality 必须严格分层；Restore/branch 也不得检索未来分支材料。
+检索只提供候选背景材料，不裁定当前世界事实、人物身份、玩家知情或未来事件；必须遵守 Game-local 演化、Timeline/Restore currentness 和 Source/Game 分层。
 
-后续重点放在 G7/G8：Reference binding、player/GM disclosure、检索 currentness、Source vs Game frozen semantics，以及何时真正需要向量/RAG。
+### P-07｜Creator Preview Sandbox｜原提案 12
 
-### P-07｜Creator Preview Sandbox
-
-**Owner verdict：通过（原提案 12）。**
-
-未来 G8 Creator 中，为 World / Character / Expansion Draft 提供发布前的临时预览/试运行能力，例如“测试开场”“测试人物反应”“测试某个机制描述实际会产生什么体验”。
-
-核心边界：
+未来 G8 Creator 中允许测试 World / Character / Expansion Draft 的开场、人物反应或机制表现。
 
 > **Preview Sandbox 永远不是正式 Game。**
 
-它不写正式 Game、不进入 Timeline、不创建正式 People/Knowledge、不修改已发布 Source、不把 Preview Narrative 认定为发生过的历史。满意后仍需用户显式 Save / Publish Source。
+Preview 不写正式 Game/Timeline/People/Knowledge，不修改已发布 Source，不成为历史；满意后仍需显式 Save / Publish。
 
-优先复用正式 Provider/validation contract，但要给 Preview 使用 task-owned / sandbox state，避免污染 Owner 真实数据。
+### P-08｜叙事模型 / 后台辅助模型分离配置｜原提案 13
 
-### P-08｜叙事模型 / 后台辅助模型分离配置
+未来允许 GM Narrative 与后台辅助任务使用不同的显式模型配置，以改善延迟、成本和额度；默认仍使用同一个模型。
 
-**Owner verdict：通过（原提案 13）。**
+不静默 fallback；不是所有 semantic/identity/curation lane 都允许使用更便宜模型，必须由真实质量验证决定；实际 Provider/model 应可被 P-01 诊断观测。
 
-未来允许将高价值 GM Narrative 与后台辅助任务使用的模型配置分开，以改善等待时间、额度与成本；但默认仍使用同一模型，普通玩家不必理解多模型调度。
+### P-09｜玩家收藏关键剧情节点 / Bookmark｜原提案 14
 
-候选形态：
-
-```text
-叙事模型：Kimi K3
-后台辅助模型：与叙事模型相同 ▼
-```
-
-高级模式才允许显式选择另一套已验证配置。
-
-硬边界：
-
-- 默认同模型；
-- 不静默 fallback；
-- 不是所有后台 lane 都能降级到便宜模型；
-- World semantic / identity / curation 等是否允许分离必须由真实质量验证决定；
-- 每次任务实际使用的 Provider/model 应能被 P-01 诊断观测。
-
-进入条件应包括真实延迟/成本/额度问题或明确性能收益，不为“架构漂亮”提前建设复杂 router。
-
-### P-09｜玩家收藏关键剧情节点 / Bookmark
-
-**Owner verdict：通过（原提案 14）。**
-
-允许玩家在任意重要 Narrative 节点手动“收藏这一刻”，以后从 Save/Timeline/Chronicle 等入口快速跳回阅读。
-
-语义必须区分：
+允许玩家手动收藏某个 Narrative 节点，未来快速跳回阅读。
 
 ```text
 Important Experience = 模型判断“塑造了我什么”
@@ -156,15 +93,105 @@ Save / Recovery       = 可恢复世界状态
 Bookmark              = 玩家判断“这一刻我以后想再看”
 ```
 
-Bookmark 是 Player-owned annotation，不提高该段历史在模型中的事实权重、不自动进入长期记忆，也不等于创建 Save。
+Bookmark 是 Player-owned annotation，不提高 AI 事实权重、不自动进入长期记忆，也不等于 Save。未来可作为 Chronicle 章节候选。
 
-未来可与冒险纪事导出联动，把收藏节点作为章节候选；是否支持“从该收藏创建分支/存档”需另行冻结完整 Timeline semantics。
+### P-10｜玩家纠正 AI 派生信息｜原提案 16
+
+**Owner verdict：通过。**
+
+Character / Important Experiences / People 等模型派生信息允许玩家低摩擦纠正、删除或重述，使系统不必试图用规则保证模型永远不犯错。
+
+核心边界：
+
+> **纠正派生信息 != 修改世界事实。**
+
+例如玩家把 People 卡中的“我信任李亭”改成“我只是暂时合作”，表达的是对玩家侧派生表述的纠正，不会改写李亭真实态度；删除一条 Important Experience 也不意味着 accepted history 中该事件没有发生。
+
+后续需冻结 correction 的 durable owner、对 Curator 的优先级、Restore/Regenerate currentness，以及它与普通 Player Note 的边界。Program 不得把纠正实现成 personality/relationship keyword machine。
+
+### P-11｜玩家私人笔记 / Player Notes｜原提案 17
+
+**Owner verdict：通过。**
+
+提供纯 Player-owned 笔记本，用于记录怀疑、计划、线索和个人想法。
+
+Player Notes 不是 World Truth、NPC Knowledge、Character Sheet、Important Experience、Quest 或 Curator 自动产物。第一版默认**不自动喂给 GM**，避免“玩家猜测”被模型误当成世界事实；以后若需要，可另行讨论由玩家显式标记“允许 GM 参考”。
+
+未来可选择在冒险纪事导出中附带私人笔记，但默认隐私与导出范围需清楚。
+
+### P-12｜作品套装 / 推荐 Composition｜原提案 20
+
+**Owner verdict：通过。**
+
+允许作者把多个 Source 组织成一个可理解的作品推荐组合，例如：
+
+```text
+《张琛：汉末求生》
+World            三国乱世
+Entry            189 年冬 · 洛阳以东
+Player Character 张琛
+Recommended      公共 d20 / 汉末经济系统
+Optional NPC     …
+```
+
+玩家可以“一键按推荐组合开始”，也可以进入高级设置调整可选内容。
+
+核心边界：作品套装只是 creation-time Composition Preset，不是新的 Runtime Truth；Final Create 后 Game 仍冻结各组件 exact generation。不扩张成在线商店、远程代码包或通用依赖管理器。
+
+路线重构时应优先判断是否与 P-04 Source Library 作品化合并成同一产品阶段，而不是机械拆成独立 Work Item。
 
 ---
 
-## 2. 当前讨论状态
+## 2. Owner-originated 待确认提案
 
-当前已通过 9 项：
+### Proposal 21｜角色性格 ↔ 玩家行动 ↔ 推荐行动的动态反馈闭环
+
+**来源：Owner 2026-09-06 主动提出。当前状态：待 Owner 明确“通过 21”后才进入已通过清单。**
+
+Owner 目标：
+
+> 未来推荐行动应根据玩家主角的当前性格生成；玩家真正提交的自由输入行动，又会反过来影响主角性格，从而使未来推荐行动随角色成长而变化。
+
+建议语义闭环：
+
+```text
+当前 Character / 性格
+↓
+Action Recommender 将其作为玩家安全的“当前行动倾向”参考
+↓
+生成更符合此刻这个人的 5 个建议，但绝不限制自由输入
+↓
+玩家点击后编辑 / 或完全自由输入
+↓
+只有最终实际提交并进入 accepted history 的玩家行动才有资格成为性格演化证据
+↓
+现有 Model-driven Character Curation 判断这次/长期行为是否真的改变“现在的我是谁”
+↓
+Character 当前性格自然演化
+↓
+下一轮推荐使用新的当前 Character projection
+```
+
+建议冻结的关键边界：
+
+- 性格是 recommendation **tendency，不是合法行动 whitelist**；
+- 推荐本身不改变性格；点击但未发送不产生任何 Character effect；
+- 编辑后的最终提交文本才是玩家选择，不能把原推荐草稿当选择证据；
+- 单次反常行动不应机械触发人格突变；是否构成持久变化由模型结合上下文判断；
+- Program 不做“勇敢 +1 / 谨慎 -1”、关键词人格分类或固定人格数值条；
+- 玩家若持续做出与旧性格不同的选择，Character Sheet 应能逐渐反映真实演化；
+- 推荐 Prompt 应允许合理偏离、成长和尝试，避免只反复强化既有人格形成自我锁定；
+- Recommender 只能消费 player-safe current Character projection，不得为了“更懂角色”拿 GM-private / omniscient World material；
+- Restore / Regenerate 后 Character currentness 与 recommendations 必须一起回到该历史点；
+- P-10 玩家纠正 Character 派生信息若最终成为正式能力，推荐应遵守纠正后的 current player-safe Character projection。
+
+该提案不是当前 MW-019 Revision 的自动范围。若批准，路线重构时应判断它是 Character Curation × Recommendation 的新独立 outcome，还是某个后续 G6 vertical。
+
+---
+
+## 3. 当前讨论状态
+
+当前已通过 12 项：
 
 ```text
 P-01 生成状态 / 诊断                       ← 原提案 1
@@ -176,7 +203,14 @@ P-06 Reference Library                    ← 原提案 11
 P-07 Creator Preview Sandbox              ← 原提案 12
 P-08 叙事模型 / 后台辅助模型分离配置      ← 原提案 13
 P-09 玩家收藏关键剧情节点                 ← 原提案 14
+P-10 玩家纠正 AI 派生信息                 ← 原提案 16
+P-11 玩家私人笔记                         ← 原提案 17
+P-12 作品套装 / 推荐 Composition           ← 原提案 20
 ```
+
+待明确 verdict：
+
+- Proposal 21｜角色性格 ↔ 玩家行动 ↔ 推荐行动动态反馈闭环（Owner-originated）。
 
 当前未进入通过清单（不等于永久否决）：
 
@@ -185,13 +219,13 @@ P-09 玩家收藏关键剧情节点                 ← 原提案 14
 - 常用行动收藏（原提案 5）；
 - SillyTavern Character / Lorebook 导入转换器（原提案 8）；
 - 按需 TTS（原提案 10）；
-- 候选式 Regenerate / Swipe（原提案 15）。
-
-除非 Owner 后续明确批准，上述内容不进入最终路线重构输入。
+- 候选式 Regenerate / Swipe（原提案 15）；
+- 历史全文搜索（原提案 18）；
+- 换一组推荐行动（原提案 19）。
 
 ---
 
-## 3. 本轮讨论结束后的统一处理
+## 4. 本轮讨论结束后的统一处理
 
 等 Owner 明确表示本轮改进讨论完成后：
 
@@ -202,7 +236,7 @@ GPT 做重叠 / 依赖 / 冲突审计
 ↓
 与当前 G6–G9 Roadmap 对照
 ↓
-决定哪些是新 Work Item、哪些并入已有阶段、哪些只保留长期候选
+决定新 Work Item / 合并阶段 / 长期候选
 ↓
 重新排列 Reality Gate / Owner UAT
 ↓
