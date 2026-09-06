@@ -1,18 +1,21 @@
 ---
-title: my world｜G6 Surface / Information Architecture Draft v0.1
+title: my world｜G6 Surface / Information Architecture Draft v0.2
 status: DRAFT / FOR OWNER DISCUSSION
-version: 0.1
+version: 0.2
 created: 2026-09-06
+updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT + Owner
 historical_reference: zhangchenjia21-dot/the-world
 ---
 
-# G6 Surface / Information Architecture Draft v0.1
+# G6 Surface / Information Architecture Draft v0.2
 
 > **DRAFT — NOT FROZEN — NOT IMPLEMENTATION AUTHORITY**
 
 本文件用于 Owner + GPT 讨论 `my world` 的三栏职责与右侧 RPG Surface 分类。它吸收 `the-world` 真实试玩形成的 UI 经验，但不机械复制旧 DSH/Markdown 实现。
+
+v0.2 根据 Owner 2026-09-06 明确纠正：**左侧 Player Host 不承担“我是谁”的信息架构职责；它长期应是角色立绘 + 当前角色状态 / mechanics HUD 的 presentation host。完整身份、背景、性格、能力、局限等 Character Sheet 信息属于右侧 `角色` Surface。**
 
 ## 1. Historical evidence from The World
 
@@ -37,7 +40,7 @@ historical_reference: zhangchenjia21-dot/the-world
 其长期 UI projection 经验大致为：
 
 ```text
-角色 HUD      ← Player truth
+角色 HUD      ← Player / mechanic current state
 时间/地点     ← current scene truth
 Journal       ← open threads
 人物图鉴      ← durable characters
@@ -59,17 +62,19 @@ Journal       ← open threads
 Player Host | Narrative Host | World Surface Host
 ```
 
-三栏分别回答：
+三栏职责修订为：
 
 ```text
 Player Host
-→ 我是谁？我现在怎么样？
+→ 角色立绘 + 当前角色状态 / mechanics HUD
+→ 展示“现在的角色状态”，不承担完整 Character identity/profile
 
 Narrative Host
 → 现在发生了什么？我接下来想做什么？
 
 World Surface Host
-→ 这个世界里有哪些值得我主动查看的信息？
+→ 我是谁 / 这个世界里有哪些值得我主动查看的信息？
+→ Character / People / Journal / Inventory / System / Map / Save...
 ```
 
 正式原则：
@@ -77,34 +82,68 @@ World Surface Host
 > **Canonical truth ownership != player information architecture.**
 >
 > **UI is a projection, not a second truth source.**
+>
+> **Core Host owns placement; real Domain / Expansion owns state semantics.**
 
 ## 3. Draft responsibility split
 
-### 3.1 Player Host — 高频 HUD，不是完整百科
+### 3.1 Player Host — Portrait + live status HUD
 
-长期目标：Player Host 应成为“扫一眼即可读完”的高频 HUD。
+Owner 当前方向：左栏长期不承担“我是谁”的文本信息架构职责。
 
-候选长期内容：
+Player Host 更准确的产品职责是：
 
-```text
-主角姓名 / 一行身份
-当前角色概况 / 关键高频状态
-当前地点 / 时间            # 只有正式 Domain 存在后
-高频资源 / 装备摘要        # 只有正式 Runtime state 存在后
-少量 session / turn 信息
-[查看角色详情]
-```
+> **角色的可视锚点 + 当前可玩状态的高频 HUD。**
 
-当前 MW-011 为解决信息过薄，暂时把完整 `player_profile` 放在左栏；Owner 已接受此状态，但指出未来需要重新分栏。
-
-因此：
+长期候选内容：
 
 ```text
-current rich left panel = ACCEPTED TRANSITIONAL STATE
-long-term Player Host   = compact high-frequency HUD
+角色立绘 / portrait             # Character authored visual，存在才显示
+
+角色状态 / mechanics contributions
+├─ 生命值 / 魔力值               # 只有相应 Expansion / Domain 存在后
+├─ 力量 / 敏捷 / 体力等属性       # 同上，不由 Core 虚构
+├─ 伤势 / Buff / Debuff           # 同上
+├─ 饥饿 / 疲劳 / 生存状态         # 同上
+├─ 资源 / 能量 / 特殊机制摘要     # 同上
+└─ 其它高频 current-status widget # 由已经证明的真实 mechanic-state consumer 拉出
 ```
 
-### 3.2 Narrative Host — 不变
+不属于左栏长期职责：
+
+```text
+姓名 / 年龄 / 来历 / 身份叙述
+背景 / 性格 / 能力说明 / 局限
+目标 / 原则 / Biography
+World / Entry identity
+recent actions / player-turn count
+Player-known world facts
+完整装备 / 行囊明细
+```
+
+这些信息应进入右侧对应 Surface，而不是为了填满左栏而常驻显示。
+
+重要边界：
+
+```text
+Player Host slot exists
+!= Core owns HP / MP / attributes / injuries / inventory
+```
+
+Core 只提供稳定 placement / layout / safe contribution seam；具体角色状态必须来自正式 Domain 或 Expansion mechanic state。
+
+如果当前 Game 没有 portrait，也没有任何合法 status contribution，**允许 Player Host 为空、极简或折叠**；不得拿 Character biography / world metadata 填空。
+
+当前 MW-011 把完整 `player_profile` 放左栏，是为修复“面板有面积但完全没信息”的过渡实现，Owner 已接受其阶段性价值，但当前 IA 已明确：
+
+```text
+current rich left panel = ACCEPTED TRANSITIONAL IMPLEMENTATION
+long-term Player Host   = portrait + live status/mechanics HUD
+```
+
+是否在第一个 `角色` Surface 就立即搬空左栏，还是等合法 portrait/status consumer 出现后再完成物理迁移，仍待 Owner 讨论。
+
+### 3.2 Narrative Host — primary play surface
 
 继续保持全产品视觉中心：
 
@@ -113,13 +152,15 @@ long-term Player Host   = compact high-frequency HUD
 - Player natural-language Composer；
 - Cancel / Regenerate / Retry 等低风险 turn actions。
 
-不把右侧 Surface 导航、Character Sheet 或系统状态塞进中央 Narrative。
+不把 Character Sheet、World Surface 导航或 mechanics dashboard 塞进中央 Narrative。
 
-### 3.3 World Surface Host — 玩家主动查询的 RPG 信息
+### 3.3 World Surface Host — Player information browser
 
-初版母版继承 The World 已验证分类，但只显示有真实 Domain / player-safe projection 的 Surface。
+右侧承担**主动查询 / 详情 / 管理型 RPG 信息架构**。
 
-建议长期候选：
+它既可以回答“我是谁”，也回答“世界里有哪些值得主动查看的信息”。
+
+初版母版继承 The World 已验证分类，但只显示有真实 Domain / player-safe projection 的 Surface：
 
 ```text
 概览
@@ -138,47 +179,54 @@ long-term Player Host   = compact high-frequency HUD
 
 | Surface | 玩家问题 | 当前 Domain / Projection 成熟度 | Draft disposition |
 |---|---|---:|---|
-| 概览 | 这一刻世界与我处在什么局面？ | 高 | 已存在，继续保留 |
-| 角色 | 我的完整角色资料是什么？ | 高 | **建议第一个新真实 Surface** |
+| 概览 | 这一刻世界与局势有哪些值得快速了解的信息？ | 高 | 已存在，继续保留 |
+| 角色 | 我是谁？我的完整角色资料是什么？ | 高 | **建议第一个新真实 Surface** |
 | 人物 | 我已经知道/遇见了哪些人？他们现在怎样？ | 中 | 建议第二候选；先审 player-safe actor projection |
 | 事务 | 还有什么承诺、线索、未解决问题？ | 低 | Deferred，当前无正式 Thread/Journal Domain |
 | 行囊 | 我此刻真正拥有什么？ | 低 | Deferred，当前无正式 Inventory Runtime Domain |
-| 系统 | 本局启用了什么机制？机制当前怎样？ | 中 | 跟随 G6 Expansion mechanic-state consumer |
+| 系统 | 本局启用了什么机制？机制当前怎样？ | 中 | 跟随 G6 Expansion mechanic-state consumer；其中高频 current-status 可贡献到左栏 HUD |
 | 地图 | 我在哪里？空间/区域如何理解？ | 低 | Deferred；无 spatial authority，视觉 resolver 也 deferred |
 | 存档 | 如何保存、恢复、理解历史节点？ | 高 | 已存在；继续保留并逐步完善 |
 
-## 5. Draft: first new Surface = 角色
+## 5. Draft: first new Surface = 角色 / Character Sheet
 
 理由：
 
 1. `player_profile` 已有完整、player-safe、Game-local frozen projection；
-2. Owner 刚刚确认左栏信息完整，但也指出“很多内容未来应分到右侧”；
+2. Owner 明确要求“我是谁”类信息归右侧，而非左侧 HUD；
 3. 不需要新增 Runtime truth；
-4. 可以让左栏回归 HUD，而右侧承担 Character Sheet；
-5. 这是旧 The World 已经真实验证过的 IA。
+4. 可以第一次把 **Character identity/profile** 与 **live mechanic/status HUD** 分开；
+5. 这是旧 The World 已真实验证的 IA 方向。
 
-Draft 角色 Surface 可包含：
+Draft `角色` Surface 可包含：
 
 ```text
 角色
 ├─ 基本身份
+│  ├─ 姓名
+│  ├─ 年龄 / 性别（若 authored）
+│  ├─ 当前/起始身份描述
+│  └─ Character / T0 profile summary
 ├─ 背景
 ├─ 性格
-├─ 能力
+├─ 能力 / 专长说明       # authored capability description，不等于 numeric mechanic stats
 ├─ 局限
 ├─ 初始目标 / 长期原则
-├─ 起始携带物      # authored starting facts，不冒充 dynamic Inventory
-└─ 当前已知事实    # 来自现有 player-known projection，是否放此处待讨论
+├─ 起始携带物             # authored starting facts，不冒充 dynamic Inventory
+└─ 其它低频 Character reference material（只来自 player-safe projection）
 ```
 
-需要特别区分：
+必须区分：
 
 ```text
+Character authored capability description
+!= Expansion-owned numeric/stat state
+
 Character authored starting possessions
 != Runtime Inventory current possessions
 ```
 
-没有 Inventory Domain 前，不把“军用水壶/指南针”等起始携带物包装成会动态增减的背包系统。
+例如张琛的“体格强健 / 徒手格斗基本功”属于 Character Sheet；未来 Expansion 提供的 `力量 14 / HP 23/30` 属于 live mechanic state，优先展示在左栏 HUD，并可在对应 System/detail surface 展开。
 
 ## 6. Draft: 人物 Surface
 
@@ -214,6 +262,8 @@ Character authored starting possessions
 
 所以暂不实现动态行囊。
 
+角色卡里的起始携带物可以作为 Character authored reference 留在 `角色` Surface，但不得声称等于当前 Inventory。
+
 ### 事务
 
 旧 The World 有 `THREADS.md` 作为明确 open-thread owner；当前 `my world` 没有正式 Journal/Thread Domain。
@@ -226,16 +276,26 @@ Character authored starting possessions
 
 当前 G6 Visual Runtime re-entry 已裁定 implementation deferred，因此 Map 继续等待真实需求。
 
-### 系统
+### 系统 / mechanic state
 
 旧 The World 的“系统”只有在本局真的有长期 mechanic state 时才出现。
 
-当前 `my world` 也应保持同样原则：
+当前 `my world` 同样保持：
 
 ```text
 no durable mechanic state
 → no fake System page
+→ no fake left-HUD stats
 ```
+
+未来 Expansion mechanic-state consumer 可同时拥有两种 presentation：
+
+```text
+high-frequency current state → Player Host HUD contribution
+full mechanic detail         → System Surface
+```
+
+二者都只是同一 authoritative mechanic state 的不同 projection，不是两套状态。
 
 ## 8. Save / Timeline draft grouping
 
@@ -252,9 +312,9 @@ no durable mechanic state
 
 原因：Runtime Timeline Node 是 persistence authority，不代表每个节点都是玩家可点击恢复点。
 
-## 9. Surface appearance rule
+## 9. Surface / HUD appearance rule
 
-一个 Surface 进入产品至少要同时满足：
+一个 Surface 或 HUD contribution 进入产品至少要满足：
 
 ```text
 real player question
@@ -267,7 +327,8 @@ real player question
 
 ```text
 为了“像 RPG”而创建空 Tab
-为了 UI 先造 fake HP / location / inventory / faction state
+为了填左栏先造 fake HP / MP / stats / injury / inventory
+从 authored Character prose 推导 numeric mechanic state
 从 omniscient world_state 到 leaf UI 再过滤
 从 raw Source semantic prose 直接拼玩家页面
 ```
@@ -281,16 +342,19 @@ PRODUCT PASS / CLOSED
 G6 Surface / IA convergence
 CURRENT DISCUSSION
 ↓
-Role / Character Surface
-+ compact Player HUD redistribution
+Character Surface
+→ establish “identity/profile belongs right”
+→ decide timing of removing transitional profile/world/session text from left
 ↓
 People Surface
 + player-safe known-actor projection as needed
 ↓
+Expansion mechanic-state consumer
+→ System Surface full detail
+→ Player Host receives only real high-frequency status contribution
+↓
 choose next grounded Surface from real evidence
 (事务 / 行囊 / 势力 / Timeline / Map — not precommitted)
-↓
-Expansion mechanic-state consumer / System Surface
 ↓
 repeated real component patterns exist
 ↓
@@ -301,17 +365,24 @@ bounded Action Intent
 responsive / Theme / navigation / final G6 polish
 ```
 
-Visual asset runtime can re-enter anywhere after a real authored first-party visual consumer appears; it is not permanently cancelled.
+Visual asset runtime can re-enter when a real authored portrait / scene / map consumer exists. Character portrait is the most natural future Player Host visual consumer, but no resolver is built merely to fill the slot.
 
-## 11. Owner discussion questions
+## 11. Owner discussion questions — updated
 
-本 Draft 下一轮需要 Owner 重点裁定：
+v0.2 已明确接受以下 Owner direction as discussion anchor：
 
-1. 左栏长期是否接受定位成“高频 Player HUD”，完整角色卡迁到右侧 `角色`？
-2. 右侧一级分类是否以 `概览 / 角色 / 人物 / 行囊 / 事务 / 系统 / 地图 / 存档` 作为母版？哪些名称想改？
-3. `人物` 是否先承担关系/所属信息，而不是现在就拆 `关系`、`势力` 两个一级 Tab？
-4. 张琛“起始携带物”在没有 Inventory Domain 前，是继续放角色详情，还是完全不显示？
-5. `当前已知事实` 更适合角色页、概览页，还是未来单独 Journal/Knowledge 结构？
-6. Save 与 Timeline 是否接受一级 `存档` + 二级 Timeline 的方向？
+```text
+Player Host = portrait + live role/mechanics status HUD
+“我是谁”      = right-side Character Surface
+fake stats     = forbidden
+```
+
+下一轮重点讨论：
+
+1. `角色` Surface 的一级结构是否采用：基本身份 / 背景 / 性格 / 能力说明 / 局限 / 目标原则 / 起始携带物？
+2. Character Sheet 是否还应显示 `当前已知事实`，还是该信息只留在 `概览` / 未来 Journal/Knowledge？
+3. 在合法 portrait/status contribution 尚不存在时，左栏是**折叠/缩窄**，还是暂时保留 MW-011 transitional content 直到第一项 status consumer 到来？
+4. `人物` 是否先承担关系/所属信息，而不是现在就拆 `关系`、`势力` 两个一级 Tab？
+5. Save 与 Timeline 是否接受一级 `存档` + 二级 Timeline 的方向？
 
 Owner 讨论完成前，本文件保持 DRAFT，不生成对应 implementation Task。
