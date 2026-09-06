@@ -15,6 +15,10 @@
 
 > **Root is map; subfolders are depth.**
 
+## 功能参考审计（非正式路线 / 不授权实现）
+
+[原版 SillyTavern 功能参考审计、可选方向与取舍](./experience/SILLYTAVERN_UPSTREAM_FUNCTIONAL_REFERENCE_AUDIT_2026-09-06.md) — 固定原版 release 源码版本，提炼功能体验、适配边界与未来候选；不复制代码、架构或插件宿主。参考候选须经 Owner 讨论后才能进入正式路线；不改变 MW-019，也不替代 MW-018 / MW-019 的组合 UAT。
+
 ## 当前阶段
 
 ```text
