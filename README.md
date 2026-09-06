@@ -16,6 +16,9 @@ skill/
 项目经验/
 → 跨项目 Lifecycle、复盘与通用开发经验
 
+workbench/
+→ Personal Workbench 项目 Product / Architecture / Roadmap / Decisions / Current Status / Reference Audit
+
 my world/
 → my world 项目 Product / Principles / Architecture / Roadmap / Current Status
 
@@ -48,6 +51,7 @@ Skill 子树规则见 [`skill/AGENTS.md`](./skill/AGENTS.md)，迁移 provenance
 ## 仓库边界
 
 - 项目治理、跨项目经验、可复用 Skill：**本仓库**；
+- Personal Workbench 代码/测试/运行与 repository-native Task 事实：`zhangchenjia21-dot/Workbench`；
 - `my world` 代码/测试/Godot 运行事实：`zhangchenjia21-dot/my-world`；
 - SillyTavern 当前实现事实：`zhangchenjia21-dot/sillytavern`；
 - The World 实现与游戏工作区：`zhangchenjia21-dot/the-world`；
