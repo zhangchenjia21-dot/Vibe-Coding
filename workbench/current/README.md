@@ -6,96 +6,76 @@
 
 | 文件 | 作用 | 状态 |
 |---|---|---|
-| [`项目总纲.md`](项目总纲.md) | 当前产品方向、Authority、仓库边界与治理规则 | current v0.4 |
+| [`项目总纲.md`](项目总纲.md) | 当前产品方向、Authority、仓库边界与治理规则 | current v0.6 |
 | [`产品定义.md`](产品定义.md) | Primary Purpose / JTBD / CORE / V0 Scope / Success / Failure / Hard Constraints | **current v1.0 — frozen product baseline** |
 | [`开发路线.md`](开发路线.md) | Frozen Task Axis / First Usable / Complete V0 / UAT sequencing | **v1.2 — ROUTE-FROZEN** |
-| [`项目状态.md`](项目状态.md) | Current Stage / Goal / Gate / Active Work / Next Action | **current — TA-1A UAT CORRECTION ACTIVE** |
+| [`项目状态.md`](项目状态.md) | Current Stage / Goal / Gate / Active Work / Next Action | **current — TA-1B AUTHORIZED FOR DISPATCH** |
 
 ## 当前 Architecture
 
 - [`../architecture/架构方案.md`](../architecture/架构方案.md) — **v1.1 / ROUTE-FROZEN V0 ARCHITECTURE**
 - [`../architecture/架构问题登记表.md`](../architecture/架构问题登记表.md) — G0.3 supporting input
 
-正式 Route Freeze：
+正式 Route Freeze：[`../decisions/D-003_V0RouteFreeze与TA-1AImplementationAuthorization.md`](../decisions/D-003_V0RouteFreeze与TA-1AImplementationAuthorization.md)
 
-[`../decisions/D-003_V0RouteFreeze与TA-1AImplementationAuthorization.md`](../decisions/D-003_V0RouteFreeze与TA-1AImplementationAuthorization.md)
-
-当前 UAT correction：
-
-[`../decisions/D-004_TA-1AOwnerUATCorrectionScope.md`](../decisions/D-004_TA-1AOwnerUATCorrectionScope.md)
+TA-1A Stage Exit：[`../decisions/D-005_TA-1AStageExit与TA-1BAuthorization.md`](../decisions/D-005_TA-1AStageExit与TA-1BAuthorization.md)
 
 ## 当前产品与路线
 
 ```text
 Personal State / Information & Action Desktop
-
-CORE
-├─ Today
-├─ Plan
-└─ Tracks
-
-V0
-= Thin Tracks + Usable Plan + Derived Today
-
+CORE = Today / Plan / Tracks
+V0 = Thin Tracks + Usable Plan + Derived Today
 Desktop Host = Electron
 Canonical Persistence = SQLite
 ```
 
-路线仍为：
+路线：
 
 ```text
-TA-1A First Usable
-→ Owner real-data UAT
-→ TA-1B Complete V0
+TA-1A First Usable        = PASS / INTEGRATED
+→ TA-1B Complete V0       = CURRENT / AUTHORIZED FOR DISPATCH
 → Complete V0 UAT
 → TA-2 Correction / Hardening
 → TA-3 V0 Acceptance
 ```
 
-当前 TA-1A 首轮 Owner UAT 结果：**REWORK REQUIRED**。因此 TA-1A 尚未 Exit，TA-1B 未授权。
+Implementation canonical base：
 
-## 当前 TA-1A Correction
+`zhangchenjia21-dot/Workbench main@50bebd2b07619e4e06852ad8a20c110be0553315`
 
-必须修正：
+## TA-1B 当前授权边界
 
-- Plan Month View 可读性与低摩擦日程维护；
-- 日期格 left-click 当天详情；
-- right-click `新建 / 编辑 / 清空日程`；
-- 当天详情多选删除；
-- Today Current Vector 移除“今日确认 / 已完成”和 Today 直接编辑入口；
-- Current Vector 使用更醒目的独立视觉层级。
-
-不进入本轮：
+进入 frozen V0 中被 First Usable 有意延后的能力：
 
 - recurrence；
 - Reminder；
-- Memo；
 - Unscheduled；
+- Memo；
 - Week View；
-- AI / GPT / Codex assisted Track maintenance；
-- 其它 TA-1B / Future 能力。
+- Today 对当天 recurrence / Reminder / Memo 的派生；
+- 完整 date / DST / exception / backup-restore regression。
 
-Tracks 手工维护的“生硬感”目前只作为观察项，不足以重开产品或提前接 AI。
+不得回退 TA-1A 已通过的 Month View / day detail / right-click / multi-delete / Current Vector correction。
+
+继续 Deferred：Milestones / AI / Sync / Custom / Plugin / SDK / Knowledge / Habit / Finance / Health / AI Collaboration / cloud sync 等。
 
 ## 当前流转
 
 ```text
-Owner UAT REWORK
-→ 00 scope convergence / D-004
-→ 04 short PWB-001 UAT Correction Addendum
-→ Codex correction on same task branch
-→ 05 independent re-review
-→ Owner focused re-UAT
-→ 00 TA-1A Stage Exit decision
+TA-1A Review + Owner UAT PASS
+→ 00 Stage Exit + main integration
+→ 04 TA-1B Task Packet / Dispatch
+→ Codex implementation
+→ 05 Independent Review
+→ Owner Complete V0 UAT
+→ 00 next Stage decision
 ```
-
-普通 correction 完成后 Codex **直接去 05**，不再经过 04 中转。
 
 ## 强制规则
 
-- Product / Architecture / Route 本轮不重开；
-- PWB-001 仍是同一 TA-1A Task；
-- 04 本轮只做 Acceptance Amendment，不得扩大到 TA-1B；
-- 05 复审必须验证 correction 和已通过项 regression；
-- TA-1B 不得在 TA-1A focused re-UAT PASS 前启动；
+- 04 只把 TA-1B frozen scope 转成 executable work，不扩大产品范围；
+- Codex 完成后直接去 05，不经过 04 中转；
+- 普通 implementation rework 由 05 ↔ Codex 闭环；
+- Product / Architecture / Route blocker 才回 00 决定是否流转 01 / 03；
 - implementation code / tests / runtime / executable Task 由 `zhangchenjia21-dot/Workbench` 拥有。

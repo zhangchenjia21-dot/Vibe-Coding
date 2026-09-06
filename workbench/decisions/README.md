@@ -7,7 +7,8 @@
 - [`D-001_暂停AI协作V0并重开产品方向.md`](D-001_暂停AI协作V0并重开产品方向.md) — 旧 AI Collaboration V0 退出 current、整体归档并重新打开 Product Direction。
 - [`D-002_正式Pivot到PersonalStateCore.md`](D-002_正式Pivot到PersonalStateCore.md) — 正式 Pivot 到 Personal State / Information & Action Desktop；Today / Plan / Tracks 成为 CORE。
 - [`D-003_V0RouteFreeze与TA-1AImplementationAuthorization.md`](D-003_V0RouteFreeze与TA-1AImplementationAuthorization.md) — V0 Route Freeze PASS，并授权 TA-1A First Usable implementation。
-- [`D-004_TA-1AOwnerUATCorrectionScope.md`](D-004_TA-1AOwnerUATCorrectionScope.md) — TA-1A 首轮 Owner UAT 未通过；收敛 Month View / Current Vector 必要 correction，TA-1B 继续 blocked。
+- [`D-004_TA-1AOwnerUATCorrectionScope.md`](D-004_TA-1AOwnerUATCorrectionScope.md) — TA-1A 首轮 Owner UAT 未通过；收敛 Month View / Current Vector 必要 correction。
+- [`D-005_TA-1AStageExit与TA-1BAuthorization.md`](D-005_TA-1AStageExit与TA-1BAuthorization.md) — TA-1A Review / Correction / focused UAT 全部通过，Stage Exit PASS；集成 implementation main 并授权 TA-1B Dispatch。
 
 ## 什么应该进入这里
 
@@ -26,20 +27,4 @@
 - 某轮 Independent Review 的一次性证据；
 - 可以直接更新现有 current Owner 而无需独立 Decision Record 的普通状态变化。
 
-## Decision record 最小字段
-
-建议至少包含：
-
-```text
-Status
-Date
-Decision
-Context
-Why
-Alternatives considered
-Consequences
-Affected current owners / tasks
-Supersedes / Superseded by（如适用）
-```
-
-正式决定产生后必须执行 Decision Propagation；不得只新增 decision 文件却让 `current/项目状态.md`、Roadmap、Architecture 或已发 Task 继续保持旧事实。
+正式决定产生后必须执行 Decision Propagation；不得只新增 decision 文件却让 current Roadmap / Architecture / Status 或已发 Task 保持旧事实。
