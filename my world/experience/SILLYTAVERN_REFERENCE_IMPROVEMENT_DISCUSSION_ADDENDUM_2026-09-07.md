@@ -1,7 +1,7 @@
 ---
 title: my world｜SillyTavern 参考研究改进讨论通过清单补充记录
 status: working-approved-candidate-list-addendum
-version: 1.0
+version: 1.1
 created: 2026-09-07
 updated: 2026-09-07
 parent_record: ./SILLYTAVERN_REFERENCE_IMPROVEMENT_DISCUSSION_2026-09-06.md
@@ -90,10 +90,62 @@ Manifest 必须来自 Game-local frozen composition，不能重新查询 Source 
 - malformed / fail-soft 的后台能力不能伪装成已经发生的变化；
 - Restore / Regenerate 后变化记录必须遵守对应 accepted-history currentness。
 
+### P-33｜Model Profiles / 模型配置预设｜原提案 52
+
+**Owner verdict：通过。**
+
+允许用户保存和一键切换整套 AI 配置方案，例如 Narrative model、Background model、Provider endpoint、reasoning level、timeout 与其它明确的 lane assignment / compatibility settings，从而低摩擦管理多套真实 Provider / Model 工作方式。
+
+核心边界：
+
+- Profile 只保存可安全持久化的配置，不把 API Key / credential 打包进作品或共享资产；
+- Credentials 与 Model Profile 分离，由本机 credential owner 管理；
+- Source 可以记录“作者验证过哪些模型/方案”，但不能绑定或强制使用作者自己的 Provider；
+- 切换 Profile 后应触发/复用 P-24 Compatibility Preflight，明确哪些 lane 支持、哪些未经验证；
+- 与 P-08 Narrative / Background model 分离、P-18 使用可视化、P-24 Compatibility 统一设计，避免多套平行配置系统。
+
+### P-34｜Debug Mode / 自动异常原因输出｜原提案 55（Owner 修正版）
+
+**Owner verdict：通过，并明确把原“Bug Report Package”收敛为独立 Debug Mode。**
+
+提供一个可切换的 **调试模式**。在没有异常时，调试模式与普通模式的玩家体验应尽量保持一致，不持续用开发日志打扰正常游玩；一旦关键 AI lane、结构校验、currentness、Save/Restore、mechanics、projection/persistence 等出现异常，调试模式自动输出可理解的错误原因和必要诊断信息。
+
+候选异常输出可以包括：
+
+```text
+推荐行动失败
+原因：结构化输出校验失败（actions 数量不等于 5）
+回合：87
+Provider / Model：Kimi / K3
+结果：Narrative 已正常接受；推荐行动 fail-soft，不影响世界状态
+```
+
+或：
+
+```text
+人物整理结果被丢弃
+原因：回调绑定的 accepted prefix 已过期
+当前回合：91
+原请求回合：89
+结果：stale callback 未写入当前 People
+```
+
+核心边界：
+
+- 普通模式继续保持简洁，不自动展示高级技术细节；
+- Debug Mode 平时不改变游戏逻辑、模型输入、世界结果或成功/失败语义；
+- 调试模式只提高 observability，不成为第二事实源，也不能为了“更容易调试”放宽结构校验或 currentness；
+- 自动错误原因来自 Program 已知 terminal state / validation / currentness / persistence evidence，不要求模型生成“为什么自己这样想”；
+- 不暴露 API Key、credential、无关本机隐私路径、NPC-private / GM-private 内容；
+- 必要时允许按需展开更详细证据，但默认先给人能看懂的错误原因；
+- 应与 P-01 生成状态/诊断、P-18 AI 使用可视化、P-24 Compatibility Preflight 统一观测模型，避免再造独立日志真相源。
+
+该提案替代原 55 的“手工生成 Bug Report Package”作为当前通过方向；未来若真实协作需要可导出诊断包，可再作为 Debug Mode 的派生能力讨论，不在本提案中自动授权。
+
 ---
 
 ## 2. 当前累计
 
-主记录 28 项 + 本补充记录 4 项 = **当前累计通过 32 项**。
+主记录 28 项 + 本补充记录 6 项 = **当前累计通过 34 项**。
 
 本文件仍不是正式 Roadmap 或实现授权。
