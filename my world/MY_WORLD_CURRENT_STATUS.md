@@ -1,12 +1,12 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 16.6
+version: 16.7
 created: 2026-08-26
 updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
-current_task: G6 Character + Important Experiences Semantic / Domain Audit
-current_owner: GPT product-architecture lane + Owner
+current_task: MW-014 Model-driven Character + Important Experiences Curation v0.1
+current_owner: Codex implementation lane
 parent_task: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT
 owner_uat_required: false
@@ -30,25 +30,14 @@ G6 RPG Experience & Internal Declarative UI Host ACTIVE
 MW-011 RPG Host / Player Profile outcome    PRODUCT PASS / CLOSED
 MW-012 Zhang Chen Player Character Card     ENGINEERING PASS / INTEGRATED / PRODUCT INGRESS ACCEPTED
 G6 Visual Runtime re-entry                  AUDITED — IMPLEMENTATION DEFERRED
-G6 Surface / Information Architecture       ACTIVE — CHARACTER + IMPORTANT EXPERIENCES AUDIT
+G6 Character + Important Experiences        SEMANTIC / IA FROZEN
+MW-014 Model-driven Information Curation    READY FOR CODEX
 MW-013 Internal Declarative UI Host v0.1    HOLD / NOT AUTHORIZED YET
 ```
 
-## 2. Current discussion authorities
+## 2. Frozen G6 information architecture direction
 
-Primary IA draft:
-
-`architecture/ui/G6_SURFACE_INFORMATION_ARCHITECTURE_DRAFT_V0_1.md`
-
-Focused semantic/domain audit:
-
-`architecture/ui/G6_CHARACTER_AND_IMPORTANT_EXPERIENCES_SEMANTIC_AUDIT_DRAFT_V0_1.md`
-
-New frozen authority:
-
-`architecture/ui/G6_MODEL_DRIVEN_INFORMATION_CURATION_AUTHORITY_DECISION.md`
-
-Current shell direction:
+Session shell:
 
 ```text
 Player Status Host
@@ -57,12 +46,13 @@ Player Status Host
 
 Narrative Host
 → GM Narrative + Player natural-language action
+→ primary visual/interaction surface
 
 World Information Host
-→ player-active information surfaces
+→ active player information surfaces
 ```
 
-## 3. Current right-side mother taxonomy under discussion
+Right-side mother taxonomy:
 
 ```text
 概览
@@ -76,44 +66,38 @@ World Information Host
 存档
 ```
 
-Only grounded surfaces proceed. A Surface requires a real player question, real data ownership, player-safe projection and non-trivial player value. No fake RPG state or empty tabs.
+Only grounded Surfaces proceed; no fake RPG state or empty tabs.
 
-## 4. Owner decisions recorded in G6 IA
+## 3. Character + Important Experiences — FROZEN
 
-Owner has explicitly established:
+Canonical product/architecture authority:
+
+`architecture/ui/G6_CHARACTER_AND_IMPORTANT_EXPERIENCES_V1_0_DECISION.md`
+
+Frozen split:
 
 ```text
 角色 / Character
 → evolving current Character Sheet
-→ answers “现在的我是谁”
-→ not a static opening Character Card viewer
-→ current state only by default, not mutation history
+→ “现在的我是谁”
+→ current state only by default
 
 重要经历 / Important Experiences
-→ separate top-level Surface
-→ chronological protagonist-centered milestone history
-→ answers “我是怎样走到现在的”
+→ protagonist-centered milestone history
+→ “我是怎样走到现在的”
 
 行囊 / Inventory
 → owns starting/current possessions in player IA
 → starting possessions do not belong in Character Surface
 ```
 
-Character and Important Experiences may project the same lived change differently:
+Character may include current origin/background, current social identity/role, personality/values/principles, non-numeric capabilities, long-term limitations/traits and long-term goals/self-direction.
 
-```text
-Character
-→ current result
+Long-term goals belong to Character; current unresolved commitments/tasks belong to future `事务`.
 
-Important Experiences
-→ meaningful milestone/change history
-```
+Character Surface completion will end the MW-011 transitional use of biography/profile in the left Player Status Host. If there is no legitimate portrait/mechanic contribution at that point, left may collapse/narrow instead of duplicating biography.
 
-Neither UI Surface becomes a second truth source.
-
-## 5. Model-driven information curation — FROZEN OWNER DECISION
-
-Owner explicitly rejected Program-heavy semantic judging for information surfaces.
+## 4. Model-driven information curation — FROZEN
 
 Canonical authority:
 
@@ -123,143 +107,119 @@ Frozen principle:
 
 > **Model owns semantic interpretation and curation; Program owns normalized storage, temporal integrity and presentation.**
 
-Therefore the model, not Program heuristics, decides:
+The model decides:
 
 - what happened semantically;
 - what is important;
-- whether Character current state should change;
-- whether an event belongs in Important Experiences;
-- which enabled information Surface should receive a structured update;
+- whether current Character information changes;
+- whether an event is an Important Experience;
 - whether accepted Player/Narrative context already expresses a meaningful protagonist decision;
-- how to summarize the result for the player.
+- which enabled information Surface should receive a structured update;
+- how the player-facing summary should read.
 
-Program must not build a parallel semantic judge from keyword rules, score tables, regexes, event-type branches or protagonist-choice evidence heuristics.
+Program must not implement a parallel semantic judge through keyword/regex rules, importance score tables, per-event semantic branches, protagonist-choice evidence heuristics or mechanical long-term thresholds.
 
-Program responsibilities remain structural/infrastructure only:
+Program responsibilities are machine-level:
 
 ```text
-accepted current-turn/current-timeline binding
+current Game/current Timeline binding
+accepted Turn/version binding
 stable identity
-payload syntax/type/size normalization
+bounded payload syntax/type/size normalization
 atomic persistence
 idempotent replay
 Save / Restore / Regenerate currentness
 stale-future isolation
 crash / retry correctness
-canonical storage
-presentation serialization / layout
+player-safe serialization/projection
 ```
 
-Existing Domain wins remains a data-organization instruction to the model, not a reason to create a Program semantic router.
+Owner explicitly accepts an additional bounded model call when it improves semantic quality and reduces Runtime complexity.
 
-Player ownership of new meaningful protagonist choices remains a product principle, but the model is trusted to infer whether the accepted interaction actually expressed such a choice. Program does not implement a semantic evidence gate.
+## 5. Current implementation gap
 
-Owner explicitly accepts an additional bounded model call when it improves curation quality and reduces Runtime complexity.
+Current Runtime already has durable accepted-turn world semantics, Knowledge provenance, stable actor materialization, Save/Restore/Timeline currentness, frozen Player Character `source_projection.player_profile`, and the MW-011 fail-closed profile projection.
 
-Recommended direction:
+It does **not** yet have the required model-curated durable/current shape for:
 
 ```text
-accepted Player input + accepted GM Narrative + current relevant state
-→ one post-turn Information Curator model call
-→ bounded structured curation result
-→ Program normalization + durable commit
-→ player-safe projection
+current lived Player Character information
+protagonist Important Experiences history
 ```
 
-Information Curator should be non-blocking by default: curation failure must not invalidate accepted Narrative or gate the next Player action.
+The existing MW-011 projector reads only frozen Game-local `player_profile`; it cannot satisfy an evolving Character Sheet.
 
-## 6. Character evolution boundary
+## 6. ACTIVE — MW-014
 
-Current baseline:
+Executable task:
+
+`my-world/docs/tasks/MW-014_MODEL_DRIVEN_CHARACTER_AND_MILESTONE_CURATION_V0_1_TASK.md`
+
+Identity:
 
 ```text
-objective durable Character facts
-→ model may recognize and curate them from accepted game context
-
-non-voluntary long-term impacts
-→ model may recognize them; dedicated Domain is used when one actually exists
-
-major protagonist self-definition
-→ model decides whether accepted Player/Narrative context truly establishes the choice
-→ no Program semantic evidence gate
-
-short-term state
-→ model normally keeps it out of Character Sheet
+Work Item: MW-014
+Name: Model-driven Character + Important Experiences Curation v0.1
+Primary Implementer: Codex
+Reviewer: GPT
+Revision: 1
+Review-Round: 0
+Status: READY FOR CODEX
+Branch: mw-014-model-driven-information-curator-v01
+Worktree: D:/AI/Projects/.worktrees/my-world/mw-014
+Return ceiling: READY FOR INDEPENDENT REVIEW
 ```
 
-Focused Character sections remain:
+Required backend vertical:
 
 ```text
-basic identity
-origin/background
-current social identity / role
-personality / values / principles
-long-term non-numeric capabilities
-long-term limitations / traits
-long-term goals / self-direction
+accepted Player input + accepted GM Narrative
++ bounded current protagonist information
++ bounded recent Important Experiences
+↓
+Post-turn Information Curator model call
+↓
+bounded structured curation result
+↓
+Program normalization + durable currentness
+↓
+current Character material
++ protagonist milestone material
+↓
+player-safe Character + Important Experiences projections
 ```
 
-## 7. Important Experiences boundary
+Curator is non-blocking background semantic maintenance. Curation failure must not invalidate accepted Narrative or gate the next Player action by default.
 
-`重要经历` is not full World Timeline, every Turn/transcript log, current open tasks, or a second biography database.
+MW-014 does not implement the final Godot Character/Important Experiences UI.
 
-The model decides contextual milestone significance. Examples such as identity changes, major capability gains/losses, long-term direction changes, trajectory-changing successes/failures and life-scale relationship events are guidance, not Runtime rules.
+## 7. After MW-014
 
-Ordinary-looking events are allowed to become milestones when their actual context/impact makes them important.
-
-Restore to before a milestone must remove both the current milestone projection and any Character state that only exists in the restored-away future.
-
-## 8. Current implementation audit
-
-Current Runtime already has:
-
-- durable accepted-turn world semantic consequences;
-- Knowledge provenance;
-- stable actor identity/materialization;
-- Save / Restore / Timeline currentness;
-- frozen Player Character `source_projection.player_profile`;
-- fail-closed MW-011 profile projection.
-
-But there is not yet a dedicated model-curated durable/player-safe shape for:
+After Codex returns a clean pushed candidate:
 
 ```text
-current lived Player Character semantic state
-protagonist milestone history
+GPT Independent Review
+→ Engineering PASS required
+→ integrate exact reviewed candidate
+→ shape/authorize KimiCode UI consumer
 ```
 
-Current world semantic turns are bounded generic change strings, not a current Character information owner. Current MW-011 profile projector intentionally reads only frozen Game-local `player_profile`; it cannot satisfy an evolving Character Sheet by itself.
+Expected next UI work will implement:
 
-## 9. Likely implementation seam after Product Freeze
+- right-side Character Surface;
+- right-side Important Experiences Surface;
+- migration of transitional biography/profile out of left Player Status Host;
+- left empty/collapsed behavior when no portrait/mechanic contribution.
 
-Current likely split:
+Do not pre-authorize this UI task until MW-014 produces a stable reviewed projection seam.
 
-```text
-Codex
-→ post-turn Information Curator model seam
-→ bounded structured curation contract
-→ normalized durable Character current-state material
-→ normalized durable protagonist milestone material
-→ Save/Restore/Regenerate/currentness
-→ player-safe Character + Important Experiences projections
+## 8. Visual Runtime disposition
 
-KimiCode
-→ right-side Character Surface
-→ right-side Important Experiences Surface
-→ move transitional biography/profile out of left
-→ left empty/collapsed behavior when no portrait/mechanic contribution
-```
+Runtime Asset Resolution / portrait / scene / authored-map implementation remains deferred until real authored first-party visual demand exists.
 
-Do not implement a Character importance classifier, milestone score engine, keyword router or Program protagonist-choice semantic gate.
+Character portrait is a legitimate future Player Status Host consumer, but no media resolver is built merely to fill the slot.
 
-No implementation task is authorized yet. Product semantics must finish freezing first.
-
-## 10. Visual Runtime disposition
-
-Runtime Asset Resolution / portrait / scene / authored-map implementation remains deferred until a real authored first-party visual demand exists.
-
-Character portrait is a valid future Player Status Host consumer, but no media resolver is built merely to fill the slot.
-
-## 11. MW-013 disposition
+## 9. MW-013 disposition
 
 ```text
 MW-013 Internal Declarative UI Host v0.1
@@ -268,31 +228,31 @@ MW-013 Internal Declarative UI Host v0.1
 
 Re-evaluate only after multiple real Surfaces / mechanic consumers expose repeated component patterns.
 
-## 12. Agent routing — current Owner rule
+## 10. Agent routing
 
 ```text
 GPT
 → product semantics / architecture / Task Shaping / assignment / Independent Review
 
 Codex
-→ high-complexity / architecture-critical / high-blast-radius implementation
+→ high-complexity / architecture-critical / Runtime/authority implementation
 
 KimiCode
-→ bounded UI / interaction / ordinary surfaces / content tooling / tests
+→ bounded UI / interaction / ordinary Surface consumers after stable seams exist
 
 Owner
 → Product UAT / explicit product verdict
 ```
 
-## 13. Immediate route
+## 11. Immediate route
 
 ```text
-Owner + GPT finish remaining Character + Important Experiences product points
-→ freeze semantic/domain audit under model-driven curation authority
-→ shape executable backend/UI seam
-→ Codex and/or KimiCode implementation
+MW-014 Codex implementation
+→ GPT Independent Review
+→ integrate only after Engineering PASS
+→ shape/authorize KimiCode Character + Important Experiences UI consumer
 → GPT Independent Review
 → Owner UAT
-→ People Surface / mechanic-state consumer / next grounded surfaces
-→ only then re-evaluate MW-013
+→ People Surface / mechanic-state consumer / next grounded Surfaces
+→ only later re-evaluate MW-013
 ```
