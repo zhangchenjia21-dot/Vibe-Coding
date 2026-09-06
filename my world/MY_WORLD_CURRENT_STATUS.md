@@ -1,12 +1,12 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 15.7
+version: 15.8
 created: 2026-08-26
 updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
-current_task: MW-011 Revision 3 — Engineering PASS / integration then Owner UI UAT
-current_owner: ZCODE current-task integration / GPT semantic-review lane
+current_task: MW-011 Revision 3 — Integrated / Owner UI UAT
+current_owner: Owner UAT / GPT semantic-review lane
 parent_task: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT
 owner_uat_required: true
@@ -30,19 +30,19 @@ G6 RPG Experience & Internal Declarative UI Host ACTIVE
 MW-011 R1 G6 RPG Host ViewModel Baseline    ENGINEERING PASS / INTEGRATED
 MW-011 R1 Owner UI UAT                      NOT PASS — Player Host too information-thin
 MW-011 R2 Player Profile Surface            IR#2 NOT PASS
-MW-011 R3 Committed Profile Source Fix      ENGINEERING PASS / INTEGRATION READY
+MW-011 R3 Player Profile Surface            ENGINEERING PASS / INTEGRATED — OWNER UI UAT
 MW-012 Zhang Chen Player Character Card     ENGINEERING PASS / INTEGRATED
 ```
 
 G5 remains closed. G6 remains active.
 
-## 2. Current authoritative review state
+## 2. MW-011 R3 authoritative state
 
-R3 reviewed branch head:
+Reviewed branch head:
 
 `my-world@78bd5ce26b5ec8a465a9f5d6fbcdb536925d5fc0`
 
-R3 production/content test HEAD:
+Reviewed production/content test HEAD:
 
 `my-world@16c42d576b28c6119c26ff310b426d0caec202ce`
 
@@ -50,17 +50,25 @@ Formal review:
 
 `my-world/docs/mw011/MW-011_INDEPENDENT_REVIEW_IR3.md`
 
+Integration commit:
+
+`my-world@12eedba6a6da47d351d33fb544efbdaa188c85b8`
+
+Integration verification:
+
+`my-world/docs/mw011/MW-011_R3_INTEGRATION_VERIFICATION.md`
+
 Verdict:
 
-**MW-011 Revision 3 / IR#3 = ENGINEERING PASS — INTEGRATION READY / OWNER UI UAT AFTER INTEGRATION.**
+**MW-011 Revision 3 / IR#3 = ENGINEERING PASS — INTEGRATED / OWNER UI UAT.**
 
-The branch-head delta after `16c42d5...` is evidence-only. Production/content bytes tested at `16c42d5...` remain identical at reviewed head `78bd5ce2...`.
+The integration merge has the exact reviewed branch head `78bd5ce2...` as a direct parent. Independent comparison from that reviewed head to integrated main shows only review/governance document changes after the reviewed outcome; no production, Source content, profile, ViewModel, projector or UI bytes were rewritten.
 
-Current implementation `main` advanced separately for IR#2/R3 governance documents, so the reviewed R3 lineage must be reconciled onto refreshed `main` without semantic changes before Owner UAT.
+No additional Independent Review round is required solely for integration.
 
 ## 3. R3 accepted product/mechanism outcome
 
-The UAT-driven Player Character profile path is now accepted:
+The UAT-driven Player Character profile path is now on main:
 
 ```text
 optional bounded Character Card v0.2 player_profile
@@ -117,7 +125,7 @@ zhang_chen_present = true
 owner_games_modified = false
 ```
 
-The Owner's older Zhang Chen `0.1.0` Game correctly remains visually profile-empty because Game-local Source ancestry is frozen. Owner UAT must create a **fresh Zhang Chen 0.1.1 Game** after integration.
+The Owner's older Zhang Chen `0.1.0` Game correctly remains visually profile-empty because Game-local Source ancestry is frozen. Owner UAT must create a **fresh Zhang Chen 0.1.1 Game**.
 
 ## 5. Evidence / regression disposition
 
@@ -138,7 +146,7 @@ Provider calls                        0
 SQLite schema/table                   unchanged
 ```
 
-GitHub exposes no CI status for the candidate, so runtime counts remain implementer-run evidence; GPT independently inspected the actual candidate diff, Source bytes, profile projection, ViewModel, UI renderer and focused test assertions.
+GitHub exposes no CI status for the candidate, so runtime counts remain implementer-run evidence; GPT independently inspected the actual candidate diff, Source bytes, profile projection, ViewModel, UI renderer, focused test assertions and final integration ancestry.
 
 Non-blocking documentation advisory: the human-readable evidence changed-file list omitted two generated `.gd.uid` companions, while GitHub compare includes them. IR#3 independently reconciles the exact file set; this does not require Revision 4.
 
@@ -175,11 +183,9 @@ External World Pack / Mod UI declaration remains G8 work.
 
 ## 8. Agent routing — Owner update 2026-09-06
 
-The Owner has upgraded to GPT Pro and explicitly changed the implementation routing for **new tasks**.
+The Owner has upgraded to GPT Pro and explicitly changed implementation routing for **new tasks**.
 
-The already-running MW-011 R3 line remains with **Zcode** through its integration/closeout so the active task is not switched mid-flight.
-
-For subsequent new implementation tasks, GPT performs Task Shaping and assigns between **Codex** and **KimiCode** according to complexity, importance, blast radius and architectural authority:
+MW-011 R3 has completed its Zcode integration/closeout. For subsequent new implementation tasks, GPT performs Task Shaping and assigns between **Codex** and **KimiCode** according to complexity, importance, blast radius and architectural authority:
 
 ```text
 Codex
@@ -203,18 +209,17 @@ Owner
 
 Cleanly separable mixed tasks may be split `Codex mechanism/backend + KimiCode UI/consumer`. If a task cannot be safely split and touches core authority/persistence/runtime, prefer Codex.
 
-This Owner instruction supersedes the previous temporary rule that all new code-changing work through 2026-09-06 defaulted to Zcode.
+Do not default subsequent new work back to Zcode unless the Owner explicitly changes routing again.
 
 ## 9. Immediate route
 
 ```text
-Zcode reconcile reviewed MW-011 R3 lineage onto refreshed current main
-→ no semantic changes; STOP on real production conflict
-→ focused integration smoke / export as appropriate
-→ push remote main and return exact SHA
-→ Owner creates a fresh Zhang Chen 0.1.1 Game
+Owner creates a fresh Zhang Chen 0.1.1 Game
 → Owner UI UAT on rich Player Host
+→ verify headline/summary + seven authored profile groups are visible and usable
+→ verify left Host scrolls while Narrative remains primary
 → record product verdict
+→ if PASS, close MW-011 product outcome
 → shape next real G6 consumer / visual vertical
-→ assign that new task to Codex or KimiCode under the new Owner routing
+→ assign that new task to Codex or KimiCode under current Owner routing
 ```
