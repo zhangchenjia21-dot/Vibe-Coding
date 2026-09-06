@@ -1,8 +1,9 @@
 ---
 title: my world｜G6 Character + Important Experiences Semantic / Domain Audit Draft
 status: DRAFT / FOR OWNER DISCUSSION
-version: 0.1
+version: 0.2
 created: 2026-09-06
+updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT + Owner
 parent: architecture/ui/G6_SURFACE_INFORMATION_ARCHITECTURE_DRAFT_V0_1.md
@@ -36,6 +37,10 @@ Inventory（右）
 
 Character 默认显示**当前状态**；变化过程不塞回 Character，而进入 `重要经历`。
 
+Owner 进一步明确：
+
+> **“哪些信息重要、哪些信息值得进入信息栏/重要经历”的语义判断，应交给模型，而不是由游戏系统通过大量规则、关键词、打分器或启发式程序完成。宁可增加一次模型调用，也不要把开放语义判断硬编码成臃肿 Runtime。**
+
 ## 2. Core semantic rule
 
 ```text
@@ -55,6 +60,12 @@ UI 只做 player-safe projection，不成为第二 truth source。
 > **Existing Domain wins. No duplicate canonical truth for the sake of flexibility.**
 
 当 Location / Relationship / Knowledge / Injury / Inventory / Faction / Thread / Mechanic State 等已有或未来成为正式 Domain 后，Character 不重复拥有这些事实。
+
+新增正式讨论基线：
+
+> **Model judges semantic importance; Program enforces authority, safety and durability.**
+>
+> **模型判断“这件事意味着什么、是否重要、适合进入哪个玩家信息 Surface”；程序只负责事实来源、权限、安全、幂等、持久化与时间线一致性。**
 
 ## 3. Character Sheet v0.1 information model
 
@@ -94,6 +105,10 @@ historical change log
 
 ## 4. Character update classes
 
+这些类别是**authority / product boundary**，不是要求 Runtime 写成大型 if/else 分类器。
+
+模型负责结合当前 accepted turn、已有 Character state、相关 Domain truth 与玩家输入做语义判断；程序只验证候选是否落在允许 authority 范围内。
+
 ### A. Objective durable Character facts
 
 世界因果可以自然建立，不要求额外 Player confirmation：
@@ -123,6 +138,8 @@ historical change log
 
 GM 的文学心理描写可以自由发生，但**不能仅凭一段 Narrative 自动升级为永久 Character 自我定义**。
 
+程序不需要理解“效忠”“归隐”等语义；模型提出候选，程序只需要确认这类 Player-owned mutation 带有可验证的 Player-originated / Player-authorized evidence reference。
+
 ### D. Short-term state
 
 不进入 Character：
@@ -132,6 +149,8 @@ GM 的文学心理描写可以自由发生，但**不能仅凭一段 Narrative �
 - 临时 Buff / Debuff；
 - 短期疲劳、饥饿；
 - 一次性伤势在未成为长期 Condition 前。
+
+是否已经达到“长期人物变化”由模型判断，而不是 Program 通过天数/次数阈值机械决定。
 
 ## 5. Long-term goals vs 事务
 
@@ -160,11 +179,13 @@ Character
 - 调查昨夜袭击者
 ```
 
-事务关闭不自动变成重要经历；只有达到 protagonist milestone significance 才进入 `重要经历`。
+事务关闭不自动变成重要经历；是否构成 protagonist milestone 由模型基于实际意义判断。
 
 ## 6. Important Experiences semantic threshold
 
-`重要经历` 不是 durable fact dump。进入经历至少应满足以下一类高价值条件：
+`重要经历` 不是 durable fact dump。
+
+以下类型只是**给模型的高价值语义指南 / examples**，不是 Runtime 规则树、关键词表或打分器：
 
 ### 6.1 Identity-changing
 
@@ -194,20 +215,91 @@ Character
 
 Relationship truth 仍由 Relationship/People owner 持有；但结义、婚姻、至亲死亡、重大背叛等如果足以改变主角人生，可以在 `重要经历` 中作为 milestone 投影。
 
-默认不进入：
+默认低价值例子：普通战斗、一般对话、普通检定、一次买卖、普通任务完成、短期受伤、普通新 NPC、小资源变化。
+
+但这些都不是硬禁止：如果某次表面普通的谈话/战斗实际上改变了主角人生，模型仍可判断其为重要经历。
+
+正式原则：
+
+> **Semantic significance is contextual, not rule-enumerable.**
+
+## 7. Model-driven Information Curator
+
+建议 G6 的最小能力不是 Program-owned “重要性判定器”，而是一个**模型驱动的 post-turn information curation step**。
+
+可复用现有 semantic-analysis seam，或者在准确性/职责隔离更好时允许增加一次独立模型调用。Owner 明确接受“多一次模型调用换取更高准确性与更低程序复杂度”。
+
+建议输入：
 
 ```text
-普通战斗
-一般对话
-普通检定成功/失败
-一次买卖
-一次普通任务完成
-短期受伤
-每次认识新 NPC
-每次小升职 / 小资源变化
+accepted Player input
++ accepted GM Narrative
++ current player-safe Character state
++ recent protagonist milestones（bounded）
++ relevant formal Domain facts / authority hints
++ Surface contracts / Player-agency rules
 ```
 
-## 7. Important Experiences storage/projection principle
+模型输出 bounded semantic proposals，例如：
+
+```text
+character_updates[]
+important_experiences[]
+(optional later) overview/highlight suggestions[]
+```
+
+每个 proposal 只需包含最小语义材料：目标区块/Surface、player-facing text、必要的 replace/add/remove intent、以及可验证 evidence reference。
+
+模型负责：
+
+- 判断某变化是否长期重要；
+- 判断是否值得进入 Character / Important Experiences / future Overview 等信息 Surface；
+- 判断应更新、替换、移除还是保持原状；
+- 生成简洁规范的玩家可见摘要；
+- 在上下文中理解“普通事件是否因后果而变得重要”。
+
+程序**不负责**：
+
+- 关键词分类；
+- “升官 +5 / 战斗 +3”重要性打分；
+- 正则推断身份；
+- 固定 N 回合后自动判定长期；
+- 从 Narrative 中用 hard-coded parser 猜人格变化；
+- 为每种未来 RPG 概念建立专用 heuristic。
+
+## 8. Program responsibilities remain narrow and hard
+
+把语义判断交给模型，不等于把 authority 交给模型。
+
+程序仍必须负责：
+
+```text
+accepted turn/hash linkage
+stable identity
+payload shape/size validation
+allowed target/surface validation
+Existing Domain wins boundary
+Player-owned self-definition evidence requirement
+player-safe disclosure boundary
+idempotent commit/replay
+Save / Restore / Regenerate currentness
+persistence integrity
+fail-closed behavior on malformed/ambiguous proposal
+```
+
+程序只回答：
+
+> **“这个模型提案有没有权限、格式是否有效、能不能安全 durable？”**
+
+而不回答：
+
+> **“这件事在人生意义上到底重不重要？”**
+
+这保持：
+
+> **Model authors meaning; Runtime makes it safe and durable.**
+
+## 9. Important Experiences storage/projection principle
 
 `重要经历` Surface 不单独维护第二份 biography truth。
 
@@ -217,7 +309,8 @@ Relationship truth 仍由 Relationship/People owner 持有；但结义、婚姻�
 authoritative lived history
 + current-valid Character semantic change
 + relevant current-valid formal Domain event
-→ protagonist milestone selection / materialization
+→ model-driven protagonist milestone curation
+→ bounded durable/current milestone material
 → player-safe Important Experiences projection
 ```
 
@@ -231,9 +324,9 @@ Important Experiences
 → 记录何时、为什么发生了重要改变
 ```
 
-这不是 duplicate canonical truth；两个 Surface 都只是 projection。
+这不是 duplicate canonical truth；两个 Surface 都只是 projection / curated material over authoritative history。
 
-## 8. Time / growth behavior
+## 10. Time / growth behavior
 
 重要经历按 Game-world time / causally meaningful sequence 自然增长。
 
@@ -247,7 +340,7 @@ Important Experiences
 
 Character 页面默认只显示**当前状态**，不展示旧值链；旧变化通过 Important Experiences / future history UI 查阅。
 
-## 9. Save / Restore / Regenerate currentness
+## 11. Save / Restore / Regenerate currentness
 
 Character 与 Important Experiences 必须服从同一 current timeline：
 
@@ -268,9 +361,9 @@ reopen current Game
 
 不为 UI 物理删除 displaced history；currentness/projection 决定当前玩家看到什么。
 
-## 10. Current implementation audit
+## 12. Current implementation audit
 
-### 10.1 What exists
+### 12.1 What exists
 
 Current Runtime already has:
 
@@ -281,7 +374,7 @@ Current Runtime already has:
 - frozen `world_state.player_character.source_projection.player_profile`;
 - fail-closed player-safe profile projection for MW-011.
 
-### 10.2 What does not yet exist
+### 12.2 What does not yet exist
 
 Current implementation does **not** yet provide a dedicated authoritative/player-safe shape for:
 
@@ -293,26 +386,22 @@ Player-authorized long-term goal / principle evolution
 protagonist milestone history
 ```
 
-`living_world.semantic_turns_by_index` currently stores bounded generic change strings. It is useful world consequence history, but it is not a typed/targeted current Character owner and cannot safely be handed to leaf UI for keyword inference.
+`living_world.semantic_turns_by_index` currently stores bounded generic change strings. It is useful world consequence history, but it is not a targeted current Character owner and cannot safely be handed to leaf UI for keyword inference.
 
 The MW-011 `PlayerCharacterProfileProjectionDevice` intentionally reads only frozen `player_character.source_projection.player_profile`, validates it, and never falls back to raw `semantic_sections`, Source current or raw world state. Therefore it cannot satisfy an evolving Character Sheet by itself.
 
-## 11. Minimal capability suggested by this consumer
+## 13. Minimal capability suggested by this consumer
 
-Do **not** build a universal Character ECS/facet platform.
+Do **not** build a universal Character ECS/facet platform or Program-owned significance engine.
 
 The smallest likely backend vertical is:
 
 ```text
-existing accepted semantic lane
-→ bounded player-Character semantic candidates
-→ authority classification
-   A objective durable fact
-   B existing-domain-owned fact
-   C Player-authorized self-definition
-   D short-term / reject from Character
-→ durable current Character semantic state
-→ optional protagonist milestone materialization for significant changes
+accepted turn
+→ model-driven Character / milestone curation
+→ bounded semantic proposals
+→ narrow Program authority/safety validation
+→ durable current Character material + milestone material
 → Save/Restore/Regenerate currentness
 → player-safe Character projection
 → player-safe Important Experiences projection
@@ -323,21 +412,24 @@ Hard constraints:
 - no UI parsing raw Narrative to infer identity;
 - no second Character truth in ViewModel;
 - no generic arbitrary schema mutation;
+- no Program keyword/score/heuristic significance classifier;
 - Existing Domain wins;
-- no model authority over Player-owned major internal choices;
+- no model authority over Player-owned major internal choices without evidence;
 - no Provider call purely to render UI;
 - same accepted change replay must be idempotent;
 - stale/regenerated/Restored-away change must not remain current.
 
-## 12. Likely implementation seam after Product Freeze
+Model curation call is semantic maintenance, not rendering. It may run as a bounded post-turn/background step and must not make the accepted Narrative wait for completion or failure.
+
+## 14. Likely implementation seam after Product Freeze
 
 Because this capability changes Runtime authority and player-safe projection, implementation should be split by seam:
 
 ```text
 Codex
-→ minimal game-local Player Character semantic authority
-→ protagonist milestone authority/materialization
-→ Player-authorization boundary
+→ model-driven Character / milestone curator seam
+→ minimal game-local Player Character semantic storage/authority
+→ Player-authorization evidence validation
 → Save/Restore/Regenerate/currentness
 → safe L3 projection + backend tests
 
@@ -351,16 +443,20 @@ KimiCode
 → UI/interaction/layout tests
 ```
 
-Do not ask KimiCode to infer backend Character truth from raw Narrative or ViewModel text.
+Do not ask KimiCode to infer backend Character truth from raw Narrative or ViewModel text。
 
-## 13. Remaining Owner decisions before freeze
+## 15. Remaining Owner decisions before freeze
 
-建议下一轮只需要确认以下产品点：
+此前五项产品点已有明确方向：
 
-1. `长期目标 / 自我方向` 是否正式保留在 Character，`事务` 只负责 current open work；
-2. `重要经历` 是否接受上述 milestone threshold，允许同一 change 同时投影 Character current result + Important Experience history；
-3. Important Experiences 是否保存完整重要人生、不设内容删除上限，仅通过折叠/分页控制长局 UI；
-4. Character Surface 完成但尚无 portrait/mechanic contribution 时，左栏是否允许自动折叠/收窄；
-5. `当前已知事实` 继续留在概览，还是后续建立独立 Knowledge/Journal Surface。
+1. `长期目标 / 自我方向` 保留在 Character；`事务` 只负责 current open work；
+2. 同一 change 可同时投影 Character current result + Important Experience history；
+3. Important Experiences 保存完整重要人生，不设内容删除上限，仅通过折叠/分页控制长局 UI；
+4. Character Surface 完成但尚无 portrait/mechanic contribution 时，左栏允许自动折叠/收窄；
+5. `当前已知事实` 暂留概览，未来由真实 Knowledge/Journal consumer 决定是否拆分。
 
-这些确认完成后，可以将 Character + Important Experiences semantic/domain audit 从 DRAFT 冻结，并开始 Task Shaping。
+新增 Owner direction：
+
+6. 信息重要性 / Surface 收录判断默认由模型完成；Program 不建设大型 semantic classifier / heuristic engine；允许为准确性增加一次独立模型 curation 调用。
+
+在确认第 6 项作为正式架构原则后，本 Audit 即可进入 FREEZE，并开始 Task Shaping。
