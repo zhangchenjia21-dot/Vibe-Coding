@@ -8,12 +8,12 @@
 |---|---|---|
 | [`项目总纲.md`](项目总纲.md) | 当前产品方向、Authority、仓库边界与 Stage 0 规则 | current v0.4 |
 | [`产品定义.md`](产品定义.md) | Primary Purpose / JTBD / CORE / V0 Scope / Success / Failure / Hard Constraints | **current v1.0 — G0.1 / G0.2 PASS** |
-| [`开发路线.md`](开发路线.md) | Owner-reviewed Draft Task Axis / First Usable / Reference Audit Handoff | **v1.0 — G0.3 SUBMISSION，NOT ROUTE-FROZEN** |
-| [`项目状态.md`](项目状态.md) | Current Stage / Goal / Blocker / Gate / Active Work / Next Action | current；Gate 结论仅由 00 维护 |
+| [`开发路线.md`](开发路线.md) | Owner-reviewed Draft Task Axis / First Usable / Reference Audit Handoff | **v1.0 — G0.3 PASS，NOT ROUTE-FROZEN** |
+| [`项目状态.md`](项目状态.md) | Current Stage / Goal / Blocker / Gate / Active Work / Next Action | **current — G0.4 NEXT** |
 
-架构开放问题与 Owner 已认可约束：
+架构问题与 Owner 已认可约束：
 
-- [`../architecture/架构问题登记表.md`](../architecture/架构问题登记表.md) — **v1.0 / OWNER-REVIEWED / G0.3 SUBMISSION / NOT ROUTE-FROZEN**
+- [`../architecture/架构问题登记表.md`](../architecture/架构问题登记表.md) — **v1.0 / OWNER-REVIEWED / G0.3 PASS INPUT / NOT ROUTE-FROZEN**
 
 ## 当前正式产品方向
 
@@ -29,25 +29,54 @@ V0
 = Thin Tracks + Usable Plan + Derived Today
 ```
 
-Owner 已批准上述方向；正式裁定见：
+正式 Pivot 裁定：
 
 [`../decisions/D-002_正式Pivot到PersonalStateCore.md`](../decisions/D-002_正式Pivot到PersonalStateCore.md)
 
-## 当前 G0.3 Submission 关键边界
+## 当前 Stage 0 Gate
 
-Owner 与 03 已讨论并明确认可：
+```text
+Product Direction        = APPROVED
+G0.1 Product Baseline    = PASS
+G0.2 Scope               = PASS
+G0.3 Draft Task Axis     = PASS
+G0.4 Reference Audit     = NEXT / AUTHORIZED FOR RESEARCH
+G0.5 Revised Route       = WAITING FOR G0.4
+G0.6 Route Freeze        = NOT PASS
+Implementation           = NOT AUTHORIZED
+```
+
+G0.3 PASS 只表示当前 Draft Route 已足够完整，可以进入独立 Reference / Path Audit；**不表示路线已经被证明正确，也不表示 Route Freeze。**
+
+## 当前 G0.3 关键边界
+
+Owner 与 03 已讨论并认可的主要约束包括：
 
 - Today 主要从 Plan / Tracks 派生，不建立第二份业务 truth；
 - Today “已完成”只是当天视觉确认，不推进 Plan / Track，不做统计 / streak / 评分；
 - Current Vector 日期区间禁止重叠；
 - 循环事项采用 series definition + dynamic occurrence + exception；
 - 循环编辑 / 删除 V0 只提供“仅这一次 / 整个循环”；
-- Core Personal State 本地可靠保存，并需要手动 backup / restore 与 migration 能力；
+- Core Personal State 本地可靠保存，并需要 restart recovery、手动 backup / restore 与 migration；
 - 系统托盘属于 V0 Required；开机启动 Deferred；
 - Today / Plan / Tracks 采用克制的 V0 IA，不提前建设 Personal OS 平台；
-- Route Freeze 后倾向集中实现完整小型 V0，再进行第一次完整 Owner Product UAT；实现内部仍必须有工程 Reality Gates。
+- Route Freeze 后当前 Draft 倾向集中实现完整小型 V0，再进行第一次完整 Owner Product UAT；但该顺序仍必须由 G0.4 主动攻击。
 
-这些内容已经进入 `开发路线.md` 与 `architecture/架构问题登记表.md`，但**仍不等于 G0.3 PASS 或 Route Freeze**。
+## 当前流转
+
+```text
+Product Direction APPROVED
+→ G0.1 PASS
+→ G0.2 PASS
+→ G0.3 PASS
+→ 02: Reference Audit Pass 1 + Pass 2 / 必要 Spike
+→ 03 + Owner: Revised Route / Architecture Candidate
+→ 00: G0.5 Gate Review
+→ 00 + Owner: G0.6 Route Freeze
+→ Implementation（仅在 Freeze PASS 后）
+```
+
+02 的直接任务输入是 `开发路线.md` 中的 **Reference Audit Handoff to 02**。其职责是主动寻找反证、遗漏和顺序问题，不是替当前路线找支持材料。
 
 ## 历史路线
 
@@ -65,30 +94,17 @@ HOLD / HISTORICAL / FUTURE RE-DISCOVERY
 
 ## Product Discovery Evidence
 
-本轮 Pivot Discovery 的原始讨论收敛保存在：
+当前 Pivot Discovery 的讨论证据：
 
 [`../discussion/产品方向评审.md`](../discussion/产品方向评审.md)
 
-它是产品决策的讨论证据，不与 `current/产品定义.md` 竞争 Authority。
-
-## 当前流转
-
-```text
-Product Direction APPROVED
-→ G0.1 Product Baseline PASS
-→ G0.2 Scope PASS
-→ 03 + Owner: Architecture Questions + Draft Task Axis（已形成 G0.3 submission）
-→ 00: G0.3 Gate Review
-→ 若 PASS：02 Reference Audit Pass 1 + Pass 2 / 必要 Spike
-→ 03 + Owner: Revised Route / Architecture
-→ 00 + Owner: Route Freeze
-→ Implementation
-```
+它不与 `current/产品定义.md` 竞争 Authority。
 
 ## 强制规则
 
-- `current/` 不是草稿暂存区。
-- 当前 `开发路线.md` 已经获得 Owner Promotion 授权，但仍只是 G0.3 submission；只有 00 可以判定 Gate PASS。
-- Reference Audit 证据进入 `../research/`；经 Owner 提升的长期架构进入 `../architecture/`；正式 Owner 裁定进入 `../decisions/`。
-- 实现代码、测试、runtime 与 executable Task 回到 `zhangchenjia21-dot/Workbench`。
+- `current/` 不是草稿暂存区；
+- G0.4 Research / Spike evidence 进入 `../research/`，不得自动升级为 Architecture Decision；
+- 02 发现路线问题后，必须先向 Owner 提交 finding / impact / proposal，再由 03 + Owner 修订路线；
+- 经 Owner 提升的长期架构进入 `../architecture/`；正式项目级裁定进入 `../decisions/`；
+- 实现代码、测试、runtime 与 executable Task 回到 `zhangchenjia21-dot/Workbench`；
 - 当前 Route Freeze 未通过，正式 implementation 未授权。
