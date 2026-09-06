@@ -1,7 +1,7 @@
 ---
 title: my world｜SillyTavern 参考研究改进讨论通过清单
 status: working-approved-candidate-list
-version: 1.3
+version: 1.4
 created: 2026-09-06
 updated: 2026-09-06
 source_reference: ./SILLYTAVERN_UPSTREAM_FUNCTIONAL_REFERENCE_AUDIT_2026-09-06.md
@@ -13,7 +13,7 @@ roadmap_authorization: none
 
 ## 0. 用途
 
-本文件只记录 Owner 在基于原版 SillyTavern 功能参考研究进行的产品改进讨论中，**明确表示通过的提案**，并单独记录尚待 Owner 明确 verdict 的 Owner-originated 提案。
+本文件只记录 Owner 在基于原版 SillyTavern 功能参考研究进行的产品改进讨论中，**明确表示通过的提案**。
 
 重要边界：
 
@@ -97,11 +97,7 @@ Bookmark 是 Player-owned annotation，不提高 AI 事实权重、不自动进�
 
 ### P-10｜玩家纠正 AI 派生信息｜原提案 16
 
-**Owner verdict：通过。**
-
 Character / Important Experiences / People 等模型派生信息允许玩家低摩擦纠正、删除或重述，使系统不必试图用规则保证模型永远不犯错。
-
-核心边界：
 
 > **纠正派生信息 != 修改世界事实。**
 
@@ -111,8 +107,6 @@ Character / Important Experiences / People 等模型派生信息允许玩家低�
 
 ### P-11｜玩家私人笔记 / Player Notes｜原提案 17
 
-**Owner verdict：通过。**
-
 提供纯 Player-owned 笔记本，用于记录怀疑、计划、线索和个人想法。
 
 Player Notes 不是 World Truth、NPC Knowledge、Character Sheet、Important Experience、Quest 或 Curator 自动产物。第一版默认**不自动喂给 GM**，避免“玩家猜测”被模型误当成世界事实；以后若需要，可另行讨论由玩家显式标记“允许 GM 参考”。
@@ -120,8 +114,6 @@ Player Notes 不是 World Truth、NPC Knowledge、Character Sheet、Important Ex
 未来可选择在冒险纪事导出中附带私人笔记，但默认隐私与导出范围需清楚。
 
 ### P-12｜作品套装 / 推荐 Composition｜原提案 20
-
-**Owner verdict：通过。**
 
 允许作者把多个 Source 组织成一个可理解的作品推荐组合，例如：
 
@@ -136,62 +128,108 @@ Optional NPC     …
 
 玩家可以“一键按推荐组合开始”，也可以进入高级设置调整可选内容。
 
-核心边界：作品套装只是 creation-time Composition Preset，不是新的 Runtime Truth；Final Create 后 Game 仍冻结各组件 exact generation。不扩张成在线商店、远程代码包或通用依赖管理器。
+作品套装只是 creation-time Composition Preset，不是新的 Runtime Truth；Final Create 后 Game 仍冻结各组件 exact generation。不扩张成在线商店、远程代码包或通用依赖管理器。
 
-路线重构时应优先判断是否与 P-04 Source Library 作品化合并成同一产品阶段，而不是机械拆成独立 Work Item。
+路线重构时优先判断是否与 P-04 Source Library 作品化合并成同一产品阶段，而不是机械拆成独立 Work Item。
 
----
+### P-13｜角色性格 ↔ 玩家行动 ↔ 推荐行动动态反馈闭环｜原提案 21
 
-## 2. Owner-originated 待确认提案
+**Owner verdict：通过；该提案由 Owner 主动提出。**
 
-### Proposal 21｜角色性格 ↔ 玩家行动 ↔ 推荐行动的动态反馈闭环
+未来推荐行动应参考玩家主角**当前、player-safe 的 Character / 性格投影**；玩家最终真正提交并进入 accepted history 的自由行动，又由现有 Model-driven Character Curation 判断是否构成持久人格/自我方向变化，从而反过来影响未来推荐。
 
-**来源：Owner 2026-09-06 主动提出。当前状态：待 Owner 明确“通过 21”后才进入已通过清单。**
-
-Owner 目标：
-
-> 未来推荐行动应根据玩家主角的当前性格生成；玩家真正提交的自由输入行动，又会反过来影响主角性格，从而使未来推荐行动随角色成长而变化。
-
-建议语义闭环：
+建议闭环：
 
 ```text
 当前 Character / 性格
 ↓
-Action Recommender 将其作为玩家安全的“当前行动倾向”参考
+Action Recommender 把它作为行动倾向参考
 ↓
-生成更符合此刻这个人的 5 个建议，但绝不限制自由输入
+生成更符合“此刻这个人”的 5 个建议，但不限制自由输入
 ↓
 玩家点击后编辑 / 或完全自由输入
 ↓
-只有最终实际提交并进入 accepted history 的玩家行动才有资格成为性格演化证据
+只有最终提交并 accepted 的玩家行动成为性格演化证据
 ↓
-现有 Model-driven Character Curation 判断这次/长期行为是否真的改变“现在的我是谁”
+Character Curator 判断长期行为是否真的改变“现在的我是谁”
 ↓
 Character 当前性格自然演化
 ↓
-下一轮推荐使用新的当前 Character projection
+未来推荐读取新的 current Character projection
 ```
 
-建议冻结的关键边界：
+关键边界：
 
-- 性格是 recommendation **tendency，不是合法行动 whitelist**；
-- 推荐本身不改变性格；点击但未发送不产生任何 Character effect；
-- 编辑后的最终提交文本才是玩家选择，不能把原推荐草稿当选择证据；
-- 单次反常行动不应机械触发人格突变；是否构成持久变化由模型结合上下文判断；
+- 性格是 recommendation tendency，不是 legal-action whitelist；
+- 推荐本身不改变性格，点击未发送也不产生 Character effect；
+- 编辑后的最终提交文本才是玩家选择；
+- 单次反常行动不机械触发人格突变；
 - Program 不做“勇敢 +1 / 谨慎 -1”、关键词人格分类或固定人格数值条；
-- 玩家若持续做出与旧性格不同的选择，Character Sheet 应能逐渐反映真实演化；
-- 推荐 Prompt 应允许合理偏离、成长和尝试，避免只反复强化既有人格形成自我锁定；
-- Recommender 只能消费 player-safe current Character projection，不得为了“更懂角色”拿 GM-private / omniscient World material；
-- Restore / Regenerate 后 Character currentness 与 recommendations 必须一起回到该历史点；
-- P-10 玩家纠正 Character 派生信息若最终成为正式能力，推荐应遵守纠正后的 current player-safe Character projection。
+- 推荐必须允许合理偏离、尝试和成长，避免旧性格 → 同类推荐 → 同类选择的自我锁定；
+- Recommender 只能消费 player-safe current Character projection，不读取 GM-private / omniscient World material；
+- Restore / Regenerate 后 Character currentness 与 recommendation currentness 必须一起回到对应历史点；
+- P-10 玩家纠正 Character 派生信息后，推荐应遵守纠正后的 current player-safe Character projection。
 
-该提案不是当前 MW-019 Revision 的自动范围。若批准，路线重构时应判断它是 Character Curation × Recommendation 的新独立 outcome，还是某个后续 G6 vertical。
+该能力不是 MW-019 自动 Revision 范围；路线重构时需判断它是 Character Curation × Recommendation 的新 outcome，还是后续 G6 vertical。
+
+### P-14｜对话式 Creator / AI-assisted Source Authoring｜原提案 23
+
+未来 Creator 允许用户通过自然语言与 AI 讨论 World / Entry / Character / Expansion Draft，并把每次 AI 建议收敛成**可见、可验证、可拒绝的 Draft ChangeSet**。
+
+候选流程：
+
+```text
+用户与 Creator AI 讨论
+↓
+AI 提议 typed Draft changes
+↓
+界面明确展示“本次拟修改什么 / 没修改什么”
+↓
+Validator 检查
+↓
+用户接受 / 拒绝 / 继续讨论
+↓
+只修改 Draft
+↓
+显式 Save / Publish 后才进入正式 Source
+```
+
+核心边界：Conversation 不直接成为 Source Truth；AI 不能静默发布、覆盖已发布 Source 或修改正式 Game。Creator AI 的作用是帮助形成 Draft，不绕过 Source contract、validation、版本与 publish gate。
+
+该提案与 P-07 Creator Preview Sandbox 天然组成“对话创作 → 查看 ChangeSet → Preview → 继续改 → Publish”的 G8 Creator 主循环，路线重构时优先整体设计而非重复建设。
+
+### P-15｜事务 / 线索 / Open Threads Surface｜原提案 24
+
+增加一个模型维护的 player-safe `事务` Surface，回答：
+
+> **“我现在还有哪些正在处理、尚未解决、值得持续记住的事情？”**
+
+可以包括：
+
+- 当前问题；
+- 尚未核实的线索；
+- 已作出的承诺；
+- 玩家明确表达的计划；
+- 当前未解决的风险或 open thread。
+
+它不是传统预写 RPG 的 Quest List，不使用“主线/支线/完成 3/5”来反向驱动世界，也不要求所有事情都变成任务。
+
+关键边界：
+
+- 是否形成/更新/关闭事务由模型根据 accepted player-visible history 判断；
+- Program 不做“调查/寻找/承诺”等关键词任务识别；
+- NPC-private / Agency / hidden Evolution 不能提前泄露到事务；
+- `事务` 是玩家当前关注事项的派生整理，不是 GM 剧情脚本或世界目标队列；
+- Restore / Regenerate 后必须跟随 accepted-history currentness；
+- 玩家自由放弃或改变计划时，模型可以更新/移除，不把旧任务永久钉死。
+
+该提案会填充既有 Mother Taxonomy 中的 `事务`，并提供一个真实的新 Information Curator consumer；路线重构时应评估它与 Character / Experiences / People 的统一 Curator 扩展方式，而不是新增独立语义规则系统。
 
 ---
 
-## 3. 当前讨论状态
+## 2. 当前讨论状态
 
-当前已通过 12 项：
+当前已通过 15 项：
 
 ```text
 P-01 生成状态 / 诊断                       ← 原提案 1
@@ -206,11 +244,10 @@ P-09 玩家收藏关键剧情节点                 ← 原提案 14
 P-10 玩家纠正 AI 派生信息                 ← 原提案 16
 P-11 玩家私人笔记                         ← 原提案 17
 P-12 作品套装 / 推荐 Composition           ← 原提案 20
+P-13 性格 × 玩家行动 × 推荐动态闭环        ← 原提案 21
+P-14 对话式 Creator                       ← 原提案 23
+P-15 事务 / 线索 / Open Threads Surface    ← 原提案 24
 ```
-
-待明确 verdict：
-
-- Proposal 21｜角色性格 ↔ 玩家行动 ↔ 推荐行动动态反馈闭环（Owner-originated）。
 
 当前未进入通过清单（不等于永久否决）：
 
@@ -221,11 +258,15 @@ P-12 作品套装 / 推荐 Composition           ← 原提案 20
 - 按需 TTS（原提案 10）；
 - 候选式 Regenerate / Swipe（原提案 15）；
 - 历史全文搜索（原提案 18）；
-- 换一组推荐行动（原提案 19）。
+- 换一组推荐行动（原提案 19）；
+- 完整可迁移 Game Package（原提案 22）；
+- Player-known Map（原提案 25）。
+
+除非 Owner 后续明确批准，上述内容不进入最终路线重构输入。
 
 ---
 
-## 4. 本轮讨论结束后的统一处理
+## 3. 本轮讨论结束后的统一处理
 
 等 Owner 明确表示本轮改进讨论完成后：
 
