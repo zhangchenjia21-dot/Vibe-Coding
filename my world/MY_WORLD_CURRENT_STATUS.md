@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 16.2
+version: 16.3
 created: 2026-08-26
 updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
-current_task: G6 Surface / Information Architecture Audit + Owner Discussion
+current_task: G6 Character + Important Experiences Surface / Information Architecture Discussion
 current_owner: GPT product-architecture lane + Owner
 parent_task: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT
@@ -34,141 +34,41 @@ G6 Surface / Information Architecture       ACTIVE — OWNER + GPT DISCUSSION
 MW-013 Internal Declarative UI Host v0.1    HOLD / NOT AUTHORIZED YET
 ```
 
-## 2. Core governance refresh — 2026-09-06
-
-After MW-011 Product PASS and the Owner's route challenge, the project core files were refreshed to reflect actual G6 state rather than stale G4/G5 planning.
-
-Updated current authorities:
-
-```text
-MY_WORLD_项目启动总纲_CURRENT.md        v2.1 / current_phase G6
-MY_WORLD_核心设计原则_CURRENT.md        v2.0 / G6
-MY_WORLD_架构_CURRENT.md                v3.0 / current_phase G6
-MY_WORLD_总体规划路线图_CURRENT.md       v4.0 / current_phase G6
-AGENT_EXECUTION_ROUTING_CURRENT.md      v2.0 / Codex + KimiCode routing
-README.md                               refreshed G6 entry map
-MY_WORLD_CURRENT_STATUS.md              v16.2
-```
-
-Current discussion authority:
+## 2. Current discussion authority
 
 `architecture/ui/G6_SURFACE_INFORMATION_ARCHITECTURE_DRAFT_V0_1.md`
 
-Status:
+Current version: **v0.4 / DRAFT / FOR OWNER DISCUSSION**.
+
+Current frozen shell direction:
 
 ```text
-DRAFT / FOR OWNER DISCUSSION
-NOT FROZEN
-NOT IMPLEMENTATION AUTHORITY
+Player Status Host
+→ portrait + live mechanics/status HUD only
+→ no “who am I” biography/profile ownership
+
+Narrative Host
+→ GM Narrative + Player natural-language action
+
+World Information Host
+→ player-active information surfaces
 ```
 
-## 3. MW-011 final closeout
-
-```text
-MW-011 R1 / IR#1       ENGINEERING PASS / INTEGRATED
-R1 Owner UI UAT        NOT PASS — Player Host too thin
-MW-011 R2 / IR#2       NOT PASS
-MW-011 R3 / IR#3       ENGINEERING PASS / INTEGRATED
-R3 Owner UI UAT        PRODUCT PASS
-MW-011                  CLOSED
-```
-
-Formal records:
-
-- `my-world/docs/mw011/MW-011_INDEPENDENT_REVIEW_IR3.md`
-- `my-world/docs/mw011/MW-011_R3_INTEGRATION_VERIFICATION.md`
-- `my-world/docs/mw011/MW-011_OWNER_UAT_R3_RESULT.md`
-
-Owner UAT confirmed fresh Zhang Chen `0.1.1` now displays materially useful Character information.
-
-Current rich left-panel content is accepted as a transitional implementation only; the G6 IA discussion now owns its eventual redistribution.
-
-## 4. G6 corrected canonical route
-
-```text
-Runtime projection / ViewModel / first real consumer    DONE — MW-011
-→ Visual Runtime re-entry audit                         DONE — implementation DEFERRED
-→ real RPG Surfaces / player information architecture  CURRENT
-→ Expansion mechanic-state consumer
-→ Internal Declarative UI Host v0.1
-→ bounded Action Intent
-→ responsive / Theme / navigation
-→ Owner UAT / visual polish
-```
-
-Route correction authority:
-
-`architecture/ui/G6_ROUTE_CORRECTION_AFTER_MW011_UAT_2026-09-06.md`
-
-## 5. Current Surface / IA discussion — Owner correction recorded
-
-Historical evidence from `zhangchenjia21-dot/the-world` is reused as product evidence, not implementation authority.
-
-Mother taxonomy under discussion:
+## 3. Current right-side mother taxonomy under discussion
 
 ```text
 概览
 角色
+重要经历
 人物
-行囊
 事务
+行囊
 系统
 地图
 存档
 ```
 
-Core IA principle:
-
-> **Workspace / Domain truth is organized for maintenance; UI is organized for player decisions.**
-
-Owner explicitly corrected the long-term three-Host split on 2026-09-06:
-
-```text
-Player Host
-→ role portrait / authored portrait when available
-→ live Character / mechanic status HUD only
-→ HP / MP / attributes / injuries / resources only when a real Expansion / Domain owns them
-→ does NOT own “who am I” biography/profile information
-
-Narrative Host
-→ GM Narrative + Player natural-language action
-→ primary visual/interaction surface
-
-World Surface Host
-→ Character identity/profile + People / Journal / Inventory / Mechanics / Map / Save etc.
-→ only when real Domain + player-safe projection exist
-```
-
-Therefore:
-
-```text
-姓名 / 年龄 / 来历 / 背景 / 性格 / authored能力说明 / 局限 / 目标原则
-→ right-side 角色 / Character Sheet
-
-HP / MP / numeric stats / injury / buffs / live resources
-→ Expansion or Domain-owned mechanic state
-→ high-frequency projection may appear in Player Host HUD
-```
-
-No fake stats may be created merely to fill the left column.
-
-Current strongest first Surface candidate remains:
-
-```text
-角色 / Character Sheet
-```
-
-Second candidate:
-
-```text
-人物 / People
-```
-
-No code task is authorized until Owner + GPT freeze the first Surface outcome.
-
-## 6. Surface / HUD appearance rule
-
-A new player-facing Surface or HUD contribution requires:
+Only grounded surfaces proceed. A Surface requires:
 
 ```text
 real player question
@@ -177,63 +77,95 @@ real player question
 + non-trivial product value
 ```
 
-Do not create:
+No fake RPG state or empty tabs.
 
-- fake HP / MP / numeric attributes / injuries;
-- fake location;
-- fake dynamic Inventory from authored starting possessions;
-- keyword-guessed Quest/Thread state;
-- omniscient NPC/relationship/faction views;
-- empty RPG tabs;
-- generic Surface infrastructure with no first consumer.
+## 4. Owner decisions recorded in G6 IA
+
+Owner has explicitly established:
+
+```text
+角色 / Character
+→ evolving current Character Sheet
+→ answers “现在的我是谁”
+→ not a static opening Character Card viewer
+
+重要经历 / Important Experiences
+→ separate top-level Surface
+→ chronological protagonist-centered milestone history
+→ answers “我是怎样走到现在的”
+
+行囊 / Inventory
+→ owns starting/current possessions in player IA
+→ starting possessions do not belong in Character Surface
+```
+
+Character and Important Experiences may project the same lived change differently:
+
+```text
+Character
+→ current result
+
+Important Experiences
+→ the meaningful change/milestone that produced it
+```
+
+Neither UI Surface becomes canonical truth owner.
+
+## 5. Character evolution boundary under discussion
+
+Current baseline:
+
+```text
+objective durable Character facts
+→ may be established by world causality
+
+non-voluntary long-term impacts
+→ may be durable; Existing Domain wins if one exists
+
+major protagonist self-definition
+→ requires Player-originated / Player-authorized evidence
+
+short-term state
+→ does not enter Character Sheet
+```
+
+Existing Domain wins remains protected for Inventory / Relationship / Knowledge / Injury / Faction / Timeline / Thread / Mechanic State.
+
+## 6. Important Experiences boundary under discussion
+
+`重要经历` is not:
+
+- full world Timeline;
+- every Turn / transcript log;
+- current open tasks;
+- a second biography database.
+
+Long-term target:
+
+```text
+authoritative lived history / Character semantic change / relevant formal Domain event
+→ bounded protagonist milestone projection/materialization
+→ player-safe Important Experiences Surface
+```
+
+Restore to before a milestone must remove both the milestone projection and any current Character change caused by that future.
 
 ## 7. Visual Runtime disposition
 
-Canonical audit:
+Runtime Asset Resolution / portrait / scene / authored-map implementation remains deferred until a real authored first-party visual demand exists.
 
-`architecture/ui/G6_VISUAL_RUNTIME_REENTRY_AUDIT_2026-09-06.md`
-
-Result:
-
-```text
-Runtime Asset Resolution implementation = DEFERRED
-portrait / scene / authored-map implementation = DEFERRED
-```
-
-Re-enter only when there is a real authored first-party visual consumer or product outcome blocked by visual absence.
-
-Character portrait is now recognized as a legitimate future Player Host consumer, but no resolver is built merely to fill the slot.
+Character portrait is a valid future Player Status Host consumer, but no media resolver is built merely to fill the slot.
 
 ## 8. MW-013 disposition
 
-`MW-013 Internal Declarative UI Host v0.1` was shaped before the Owner challenged the sequence.
-
-Current formal state:
-
 ```text
-MW-013 = HOLD / NOT AUTHORIZED TO IMPLEMENT YET
+MW-013 Internal Declarative UI Host v0.1
+= HOLD / NOT AUTHORIZED TO IMPLEMENT YET
 ```
 
-References:
+Re-evaluate only after multiple real Surfaces / mechanic consumers expose repeated component patterns.
 
-- `my-world/docs/tasks/MW-013_INTERNAL_DECLARATIVE_UI_HOST_V0_1_TASK.md`
-- `my-world/docs/tasks/MW-013_HOLD_NOTICE.md`
-
-If Codex has already created isolated work, preserve branch/worktree and stop. Do not merge or continue until explicit re-authorization.
-
-## 9. Zhang Chen current generation
-
-```text
-asset_id: character.han_end.zhang_chen
-schema: character_card.v0.2
-version: 0.1.1
-generation fingerprint:
-0b6cb72af535ef6147f71cb7592fe6ba048626dd997acf54c4e6893c848b59e4
-```
-
-Protected semantics remain unchanged.
-
-## 10. Agent routing — current Owner rule
+## 9. Agent routing — current Owner rule
 
 ```text
 GPT
@@ -249,18 +181,16 @@ Owner
 → Product UAT / explicit product verdict
 ```
 
-Do not default new work back to Zcode unless Owner explicitly changes routing.
-
-## 11. Immediate route
+## 10. Immediate route
 
 ```text
-Owner + GPT discuss G6 Surface / IA Draft
-→ freeze Player Host vs World Surface responsibilities
-→ freeze first Character Surface outcome
-→ shape exact executable task
-→ assign Codex or KimiCode according to actual seam/risk
+Owner + GPT finish Character + Important Experiences semantics
+→ freeze milestone threshold + Character/current-vs-history boundary
+→ audit minimal game-local authority/projection needed
+→ shape executable backend/UI seam
+→ assign Codex and/or KimiCode
 → GPT Independent Review
 → Owner UAT
 → People Surface / mechanic-state consumer / next grounded surfaces
-→ only then re-evaluate MW-013 Declarative UI Host
+→ only then re-evaluate MW-013
 ```
