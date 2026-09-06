@@ -1,20 +1,18 @@
 # Personal Workbench｜Architecture
 
-本目录只保存 **已经经过 Owner 讨论并明确提升的跨阶段架构约束、contract、ownership/state model 与关键设计裁定**。
+本目录保存 **已经经过 Owner 讨论、证据验证并进入 current 的 V0 架构约束、contract、ownership/state model 与关键设计裁定**。
 
-当前项目处于：
+当前状态：
 
-> **Stage 0｜Pre-Implementation Alignment / G0.5 Submission**
-
-Route Freeze 尚未由 00 + Owner 完成，因此当前 Architecture Candidate 虽已 Owner-reviewed / approved for submission，仍不是 production implementation authorization。
+> **ROUTE-FROZEN / V0 IMPLEMENTATION AUTHORIZED FOR TA-1A**
 
 ## 当前 Architecture Owner
 
 ### [`架构方案.md`](架构方案.md)
 
-**v1.0 / OWNER-APPROVED G0.5 CANDIDATE / NOT ROUTE-FROZEN**
+**v1.1 / ROUTE-FROZEN / CURRENT V0 ARCHITECTURE**
 
-当前主要架构候选：
+冻结内容包括：
 
 - Electron = V0 Desktop Host；
 - SQLite = local canonical persistent store；
@@ -26,58 +24,58 @@ Route Freeze 尚未由 00 + Owner 完成，因此当前 Architecture Candidate �
 - Current Vector `[startDate, endDate]` inclusive + no-overlap；
 - recurrence = series + dynamic occurrence + exception；
 - whole-series edit 清除已有 exceptions 前必须显式警告 / 确认；
-- backup / restore / migration safety contracts；
+- consistent backup / validated staged restore / safety snapshot；
+- schema version + ordered transactional migrations + upgrade safety backup；
 - system tray V0 lifecycle；
-- First Usable → Owner real-data UAT → Complete V0 的路线顺序。
+- First Usable = TA-1A，随后立即 Owner real-data UAT。
 
 ### [`架构问题登记表.md`](架构问题登记表.md)
 
-**v1.0 / G0.3 QUESTION REGISTER / SUPPORTING INPUT**
+G0.3 QUESTION REGISTER / SUPPORTING INPUT。
 
-保留 G0.3 时暴露的问题、风险来源和原始状态。G0.4 已解决或 G0.5 已收敛的问题，以 `架构方案.md` 的较新候选结论为准。
+保留问题来源、风险背景和原始状态；对于已由 G0.4 / G0.5 / G0.6 关闭的问题，以 frozen `架构方案.md` 与 Decision Record 为准。
+
+## Route Freeze Decision
+
+正式裁定：
+
+[`../decisions/D-003_V0RouteFreeze与TA-1AImplementationAuthorization.md`](../decisions/D-003_V0RouteFreeze与TA-1AImplementationAuthorization.md)
+
+当前：
+
+```text
+G0.5 Revised Route / Architecture = PASS
+G0.6 Route Freeze = PASS
+Implementation = AUTHORIZED FOR TA-1A DISPATCH
+```
 
 ## Evidence Chain
 
-当前 Architecture Candidate 依据：
+Frozen Architecture 依据：
 
 1. `../current/产品定义.md`；
 2. `架构问题登记表.md`；
 3. `../research/G0.4_Reference_Audit_Report.md`；
 4. `../research/G0.4_Technical_Spike_Results.md`；
-5. Owner 与 03 的 G0.5 逐项讨论与明确批准。
+5. Owner 与 03 的 G0.5 讨论与批准；
+6. 00 G0.5 Review；
+7. Owner G0.6 Route Freeze Approval。
 
-G0.4 已由 00 判定 PASS；Technical Spikes 已证明：
+## Implementation Detail Boundary
 
-- Electron / Tauri packaged tray lifecycle 均可行；
-- SQLite durability / backup / restore / migration 可行；
-- recurrence stable identity / exception / Today acknowledgement / date boundary 可行。
-
-这些 evidence 支撑 G0.5 Candidate，但最终 Route Freeze 仍需 00 + Owner 审核。
-
-## Current High-sunk-cost Contracts
-
-G0.5 Candidate 已收敛：
-
-- Desktop Host：Electron；
-- Persistence：SQLite；
-- identity：stable internal IDs；
-- recurrence occurrence：original scheduled occurrence identity；
-- date semantics：date-only ≠ timestamp，local recurrence ≠ fixed UTC instant；
-- backup / restore：consistent snapshot + validation + restore safety snapshot；
-- migration：schema version + ordered transactional migration + upgrade safety backup；
-- UAT ordering：TA-1A First Usable 后提前 Owner UAT。
-
-仍不在当前架构中冻结：
+以下仍未作为架构冻结，可在 04 Task / implementation 中选择，只要不改变 frozen contracts：
 
 - 具体 SQLite binding / ORM；
-- production schema 字段级 DDL；
+- 字段级 production schema / DDL；
 - UI component framework；
 - installer / updater 具体实现；
-- Future AI / sync / plugin / custom-page platform。
+- internal folder/module organization。
 
-## Route Freeze Residual
+如果实现现实证明 frozen contract 本身错误，不得由 Agent 静默改写；必须回 03 + Owner + 00 做显式 change / Gate。
 
-G0.6 前保留一个极小 Owner Windows focused check：
+## TA-1A Exit Residual
+
+以下 Owner-machine focused check 已获 Owner 接受，不再阻塞 Route Freeze，但必须在 TA-1A Exit 前完成：
 
 ```text
 launch
@@ -87,15 +85,13 @@ launch
 → tray real exit
 ```
 
-这不是新大型 Spike，也不授权业务实现。
+失败则 TA-1A 不得 Exit，并进入 05 Root Cause / 必要架构回流。
 
-## Canonical Rule
+## Canonical rule
 
-- Product / Roadmap 当前状态由 `../current/` 拥有；
-- G0.5 Architecture Candidate 由本目录 `架构方案.md` 拥有；
+- Product / Roadmap / Stage 状态由 `../current/` 拥有；
+- Frozen V0 Architecture 由 `架构方案.md` 拥有；
 - Reference / Spike evidence 由 `../research/` 拥有；
-- Gate / Stage 状态由 `../current/项目状态.md` 与 00 拥有；
-- 代码与 runtime implementation fact 由 `zhangchenjia21-dot/Workbench` 拥有；
-- `99_归档/workbench/` 只作历史证据。
-
-> 当前状态：**G0.5 OWNER-APPROVED SUBMISSION / NOT ROUTE-FROZEN / IMPLEMENTATION NOT AUTHORIZED**。
+- Owner 正式项目级裁定由 `../decisions/` 拥有；
+- 代码、runtime implementation fact 与 executable Task 由 `zhangchenjia21-dot/Workbench` 拥有；
+- `99_归档/workbench/` 只提供历史证据。
