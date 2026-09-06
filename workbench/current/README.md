@@ -8,14 +8,15 @@
 |---|---|---|
 | [`项目总纲.md`](项目总纲.md) | 项目基础定位、Authority、协作模型、仓库边界与 Stage 0 约束 | current v0.2 |
 | [`产品定义.md`](产品定义.md) | Primary Purpose / JTBD / Core Value / Core Journey / V0 Scope / Success Criteria | **DRAFT v0.1 — G0.1 / G0.2 PASS，NOT ROUTE-FROZEN** |
-| [`项目状态.md`](项目状态.md) | Current Stage / Goal / Blocker / Gate / Active Work / Next Action | current |
+| [`开发路线.md`](开发路线.md) | Draft Task Axis / First Reality Gate / First Usable / Reference Audit Handoff | **DRAFT v0.1 — G0.3 SUBMISSION，NOT ROUTE-FROZEN，NOT IMPLEMENTATION AUTHORIZATION** |
+| [`项目状态.md`](项目状态.md) | Current Stage / Goal / Blocker / Gate / Active Work / Next Action | current；Gate 结论仍由 00 维护 |
 
 ## 待建立的 Current Owner
 
 以下文件只有在对应专业聊天完成工作并通过必要审核后才建立，不提前创建空 Authority：
 
-- Current Roadmap / Task Axis Owner — 下一步由 `03｜架构与开发路线` 形成 Draft v0，再经 Reference Audit / Owner review 演化；
-- 必要的其它长期 current owner — 仅在已有文件无法清晰承载时新增。
+- 必要的其它长期 current owner — 仅在已有文件无法清晰承载时新增；
+- Revised Route / Architecture 应优先原位演化现有稳定语义 Owner，除非事实所有权明确需要拆分。
 
 ## 当前流转
 
@@ -23,13 +24,18 @@
 Product Definition v0.1
 → G0.1 Product Baseline PASS
 → G0.2 Scope PASS
-→ 03: Architecture Questions Register + Draft Task Axis v0
-→ 02: Reference Audit Pass 1 + Pass 2 / TV-01～TV-05
+→ 03: Architecture Questions Register + Draft Task Axis v0（已形成，提交 00 审核）
+→ 00: G0.3 Gate Review
+→ 若 G0.3 PASS：02 Reference Audit Pass 1 + Pass 2 / TV-01～TV-05
 → 03: Revised Route / Architecture
 → 00 + Owner: Route Freeze
 ```
 
-通过 Product Baseline / Scope 只授权后续 **Stage 0 planning / research**，不授权正式 implementation。
+Architecture Questions Register 位于：
+
+- [`../architecture/架构问题登记表.md`](../architecture/架构问题登记表.md) — **DRAFT / EXPLORATION / NOT ROUTE-FROZEN**。
+
+通过 Product Baseline / Scope 只授权后续 **Stage 0 planning / research**，不授权正式 implementation。当前 `开发路线.md` 的存在也**不等于 G0.3 PASS**；只有 `00｜项目总控` 可以更新 Gate 状态。
 
 ## 规则
 
