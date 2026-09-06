@@ -21,10 +21,20 @@
 
 文件中即使历史上写有 `DECIDED`，若该决定没有 Owner 明确批准，也只能按 `PROPOSED / HYPOTHESIS` 理解。
 
-## 当前待讨论草案
+## 当前状态
 
-- [`开发路线_未审核草案.md`](开发路线_未审核草案.md) — 03 生成的 G0.3 Draft Task Axis；未经 Owner 讨论，已从 `current/` 降权迁入。
-- [`架构问题登记表_未审核草案.md`](架构问题登记表_未审核草案.md) — 03 生成的 Architecture Questions Register；未经 Owner 讨论，已从 `architecture/` 降权迁入。
+当前没有需要保留在 active `discussion/` 的旧 AI Collaboration 草案。
+
+此前 03 生成的：
+
+- `开发路线_未审核草案.md`
+- `架构问题登记表_未审核草案.md`
+
+已随 AI Collaboration V0 整体归档到：
+
+`Vibe-Coding/99_归档/workbench/AI协作路线_V0/`
+
+新的 Personal OS / Product Pivot Discovery 草案默认继续留在聊天，除非 Owner 明确要求保存。
 
 ## Promotion
 

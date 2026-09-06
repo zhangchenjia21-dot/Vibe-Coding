@@ -1,51 +1,68 @@
 # Personal Workbench｜Current 路由
 
-本目录只保存 **已经进入当前项目路线的核心事实 Owner**。未经 Owner 审核的新 Product / Architecture / Roadmap / Task Axis 提案不得因为标记为 DRAFT 就进入本目录。
+本目录只保存 **当前仍生效、已经经过 Owner 认可的项目级事实 Owner**。
+
+当前项目正在重新评估 Primary Purpose，因此这里**暂时没有 Product Definition / Roadmap / Architecture current owner**。
 
 ## 当前 Owner
 
 | 文件 | 作用 | 状态 |
 |---|---|---|
-| [`项目总纲.md`](项目总纲.md) | 项目基础定位、Authority、协作模型、仓库边界与 Stage 0 约束 | current v0.2 |
-| [`产品定义.md`](产品定义.md) | Primary Purpose / JTBD / Core Value / Core Journey / V0 Scope / Success Criteria | **DRAFT v0.1 — G0.1 / G0.2 PASS，NOT ROUTE-FROZEN** |
+| [`项目总纲.md`](项目总纲.md) | 方向重评阶段的项目定位、Authority、仓库边界与治理规则 | current v0.3 |
 | [`项目状态.md`](项目状态.md) | Current Stage / Goal / Blocker / Gate / Active Work / Next Action | current；Gate 结论仅由 00 维护 |
 
-## 待 Owner 讨论的 03 草案
+## 已退出 current 的旧路线
 
-03 已形成一版未经 Owner 审核的 G0.3 工作草案。由于未经过 Owner Discussion & Promotion Gate，它们已降权保存到：
+原 **AI Collaboration V0** 已于 2026-09-06 由 Owner 明确要求归档，不再作为当前产品基线。
 
-- [`../discussion/开发路线_未审核草案.md`](../discussion/开发路线_未审核草案.md)
-- [`../discussion/架构问题登记表_未审核草案.md`](../discussion/架构问题登记表_未审核草案.md)
+历史资料统一位于：
 
-这些文件：
+[`../../99_归档/workbench/AI协作路线_V0/`](../../99_归档/workbench/AI协作路线_V0/)
 
-- 不是 current route；
-- 不是 Architecture Authority；
-- 不是 G0.3 submission；
-- 其中任何 `DECIDED` 字样都不能作为已生效决定；
-- 不得触发 02 / 04 / implementation。
+其中包括旧 Product Definition、旧总纲/状态快照、未审核 Task Axis / Architecture Questions 草案以及旧 Idea Pool。
+
+这些资料：
+
+- 只作历史 / 经验 / 未来 revisit evidence；
+- 不参与 current Authority；
+- 旧 `G0.1 / G0.2 PASS` 不可迁移到新方向；
+- 旧草案中的 `DECIDED` 字样不构成当前决定。
+
+## 当前产品方向状态
+
+```text
+AI Collaboration V0
+→ HOLD / HISTORICAL
+
+Personal OS / Life Operating System
+→ PROPOSED CANDIDATE / PRODUCT DISCOVERY
+
+Current Product Definition
+→ NONE
+```
+
+当前不应根据参考图自动创建 `Today / Plan / Tracks / Dashboard` 等 Requirement；也不应因为 AI Collaboration 曾经是 current 就继续沿用其 Scope。
 
 ## 当前流转
 
 ```text
-Product Definition v0.1
-→ G0.1 Product Baseline PASS
-→ G0.2 Scope PASS
-→ 03 已生成未审核 Working Draft
-→ Owner 与 03 逐项讨论 / 修改 / 批准
-→ 获 Owner 明确批准后才允许 GitHub Promotion
-→ 00: G0.3 Gate Review
-→ 若 G0.3 PASS：02 Reference Audit Pass 1 + Pass 2 / TV-01～TV-05
-→ 03: Revised Route / Architecture
-→ Owner Discussion + Approval
-→ 00 + Owner: Route Freeze
+Product Direction Re-evaluation
+→ 01 与 Owner 做 Pivot Discovery
+→ Owner 明确选择方向
+→ 形成新的 Product Definition
+→ 00 重新审核 G0.1 Product Baseline
+→ G0.2 Scope
+→ G0.3 Draft Task Axis
+→ G0.4 Reference Audit
+→ G0.5 Revised Route / Architecture
+→ G0.6 Route Freeze
+→ Implementation
 ```
 
 ## 规则
 
 - `current/` 不是草稿暂存区。
 - `DRAFT` 标签不等于 GitHub Promotion permission。
-- 未经 Owner 审核的新路线 / 新架构默认只在聊天讨论；Owner 明确要求保存草案时才进 `../discussion/`。
+- 未经 Owner 审核的新产品 / 路线 / 架构默认只在聊天讨论；Owner 明确要求保存草案时才进 `../discussion/`。
 - Reference Audit 证据写入 `../research/`；经 Owner 提升的长期架构写入 `../architecture/`；正式 Owner 裁定写入 `../decisions/`。
 - 实现代码、测试、runtime 与 executable Task 回到 `zhangchenjia21-dot/Workbench`。
-- 当前 Owner 原位更新，不新增 `final2/latest/new` 平行版本。

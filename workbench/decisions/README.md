@@ -2,6 +2,10 @@
 
 本目录保存 **已经由 Product Owner 明确批准、需要长期生效或影响多个工作流的项目级正式裁定**。
 
+## Current decisions
+
+- [`D-001_暂停AI协作V0并重开产品方向.md`](D-001_暂停AI协作V0并重开产品方向.md) — 旧 AI Collaboration V0 退出 current、整体归档并重新打开 Product Direction；Personal OS 仍只是候选，不自动获批。
+
 ## 什么应该进入这里
 
 - Scope / Non-scope 的重大边界；

@@ -27,7 +27,7 @@ Vibe-Coding/AGENTS.md
 - 经 Owner 审核并明确提升的跨阶段长期架构约束：`architecture/`
 - Owner 正式裁定：`decisions/`
 - 代码 / 测试 / runtime / CI / repository-native executable Task / implementation Review：`zhangchenjia21-dot/Workbench`
-- superseded / closed process evidence：仓库根 `99_归档/workbench/`
+- superseded / HOLD / closed process evidence：仓库根 `99_归档/workbench/`
 - 跨项目可复用方法：仓库根 `skill/`
 
 ## 3. 00–05 聊天协作路由
@@ -39,7 +39,7 @@ Vibe-Coding/AGENTS.md
 → 主要写 current/项目状态.md 与已批准的 decisions
 
 01｜产品定义
-→ 形成 Primary Purpose / Core Value / Core Journey / Scope / Success Criteria
+→ 形成 / 重新评估 Primary Purpose / Core Value / Core Journey / Scope / Success Criteria
 → 默认先在聊天中与 Owner 讨论
 → Owner 明确批准后，才可写入 / 更新 current Product Definition Owner
 
@@ -67,8 +67,6 @@ Vibe-Coding/AGENTS.md
 
 ## 4. Owner Discussion & Promotion Gate
 
-这是 Personal Workbench 的强制治理规则。
-
 凡是会新增或改变以下任一事实：
 
 - Product Definition / Scope；
@@ -91,8 +89,8 @@ Vibe-Coding/AGENTS.md
 ### 明确规则
 
 - **Owner 沉默、未反对、离开聊天、或“任务已生成”均不构成批准。**
-- 标记 `DRAFT` / `EXPLORATION` **不等于获得了 GitHub 写入许可**。
-- 未经 Owner 审核的新结论只能使用 `PROPOSED` / `HYPOTHESIS` / `OPEN` / `DEFERRED` 等状态，不得使用 `DECIDED` 表示已经生效。
+- 标记 `DRAFT` / `EXPLORATION` **不等于获得 GitHub 写入许可**。
+- 未经 Owner 审核的新结论只能使用 `PROPOSED` / `HYPOTHESIS` / `OPEN` / `DEFERRED` / `HOLD` 等状态，不得使用 `DECIDED` 表示已经生效。
 - 专业聊天框可以自行完成分析，但不能自行完成“决策升级”。
 - 专业聊天框可以说 `READY FOR OWNER REVIEW`；在 Owner 审核前不得说“已完成并进入下一 Gate”。
 - 只有 00 可以正式记录 `Gx.y = PASS / FAIL / NEXT`；需要 Owner Approval 的 Gate，00 也不得从沉默推定批准。
@@ -101,11 +99,7 @@ Vibe-Coding/AGENTS.md
 
 默认草案留在聊天中。
 
-只有 Owner 明确要求保存草案时，才写入：
-
-`discussion/`
-
-`discussion/` 中内容：
+只有 Owner 明确要求保存草案时，才写入 `discussion/`。其中内容：
 
 - 不是 current Owner；
 - 不是 Architecture Authority；
@@ -115,25 +109,27 @@ Vibe-Coding/AGENTS.md
 
 ### 允许直接写入的窄例外
 
-以下情况不需要重复 Owner Approval，但不得借例外扩权：
-
 1. 00 对**已经明确批准的决定**做机械 Decision Propagation / Status 更新；
 2. 用户在当前任务中已明确要求“写入 / 保存 / 更新 GitHub”；
-3. 02 被明确要求持久化客观 research / spike evidence，但这些 evidence 仍不能自动升级为 decision；
+3. 02 被明确要求持久化客观 research / spike evidence，但 evidence 仍不能自动升级为 decision；
 4. Gate 已满足后，04 / 05 按已经批准的 Task / Review protocol 写 implementation evidence。
 
-## 5. Stage Gate 约束
+## 5. 当前 Stage 0 约束
 
-当前为 **Stage 0｜Pre-Implementation Alignment**。
+当前处于：
 
-除明确标记为 `EXPLORATION / SPIKE / PROTOTYPE` 的低成本探索外，在 Route Freeze / Product Definition Gate PASS 前：
+**Stage 0｜Product Direction Re-evaluation / Pivot Discovery**。
+
+原 AI Collaboration V0 已进入 `HOLD` 并归档，不再构成 current Product / Roadmap / Architecture。当前尚无新的已批准 Product Definition。
+
+因此在新方向重新通过 Product Baseline / Scope 并最终 Route Freeze 前：
 
 - 不授权正式大规模编码；
-- 不把框架、Harness、Agent、协议或技术栈假设写成冻结架构；
-- 不假定 Workbench 已具备未来设计中的 Agent 调度、日志、自动 Review 等能力；
-- 不因为历史聊天中曾讨论过某方案，就把它视为 current decision。
+- 不把 Personal OS、Today / Plan / Tracks、DeepSeek Harness、任一 AI 集成方式或技术栈当作已批准 current；
+- 不复用旧 AI Collaboration 路线的 G0.1 / G0.2 PASS 作为新方向的 Gate PASS；
+- 旧归档只可用于历史回溯 / 经验提取，不得覆盖新 Product Discovery。
 
-正式推进遵循仓库 current `skill/gpt/lifecycle-dev-process/SKILL.md`。
+正式推进继续遵循仓库 current `skill/gpt/lifecycle-dev-process/SKILL.md`。
 
 ## 6. Authority 与冲突
 
@@ -144,8 +140,10 @@ Vibe-Coding/AGENTS.md
 3. `zhangchenjia21-dot/Workbench` 可验证的代码、测试、运行与 Git 事实；
 4. Vibe-Coding current governance / Lifecycle；
 5. Vibe-Coding current Skill；
-6. `discussion/`、`research/`、项目经验、历史聊天、Legacy Reference；
+6. `discussion/`、`research/`、`99_归档/workbench/`、项目经验、历史聊天、Legacy Reference；
 7. Agent 一般经验与模型记忆。
+
+归档资料永远不能因为“以前曾 PASS / DECIDED”而自动恢复 current authority。
 
 两个 current source 实质冲突时，不得静默拼接第三套方案；先按 authority / status / supersedes 解决，仍无法解决则回到 00 提交 Owner 裁定。
 
