@@ -1,12 +1,12 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 16.19
+version: 16.20
 created: 2026-08-26
 updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
-current_task: MW-018 Owner UAT build handoff — People Curation + Card Surface
-current_owner: Codex local UAT-build preparation lane
+current_task: MW-019 Five Recommended Actions
+current_owner: Codex implementation lane
 parent_task: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT
 owner_uat_required: true
@@ -34,7 +34,9 @@ G6 People Surface product semantics         FROZEN
 MW-016 People Architecture Audit            PASS / CLOSED
 G6 People identity + curation architecture  FROZEN
 MW-017 People Identity Bridge               ENGINEERING PASS / INTEGRATED
-MW-018 People Curation + Card Surface        ENGINEERING PASS / INTEGRATED / OWNER UAT PENDING
+MW-018 People Curation + Card Surface        ENGINEERING PASS / INTEGRATED / OWNER UAT DEFERRED
+G6 Five Recommended Actions semantics       FROZEN
+MW-019 Five Recommended Actions             READY FOR CODEX
 MW-013 Internal Declarative UI Host          HOLD / NOT AUTHORIZED
 ```
 
@@ -47,6 +49,7 @@ Player Status Host
 
 Narrative Host
 → GM Narrative + Player natural-language action
+→ current action recommendations near composer
 → primary visual/interaction surface
 
 World Information Host
@@ -151,7 +154,7 @@ Integration verification:
 
 MW-017 proved exact identity binding, same-turn runtime actor mint-before-bind, durable current receipts, full Player+GM prefix currentness, Restore epoch cancellation, fail-soft semantic terminal behavior and no disclosure of raw actor material.
 
-## 7. MW-018 — ENGINEERING PASS / INTEGRATED / OWNER UAT PENDING
+## 7. MW-018 — ENGINEERING PASS / INTEGRATED / OWNER UAT DEFERRED
 
 Task:
 
@@ -161,27 +164,15 @@ Reviewed candidate:
 
 `c8150a2ee9fa79d929cd0bb5f899132d3d2f6563`
 
-Reviewed code commit:
-
-`e9157f79860437207b73e894647be9f1278f5a74`
-
 Independent Review:
 
 `my-world/docs/mw018/MW-018_INDEPENDENT_REVIEW_IR1.md`
-
-Review/integration tip:
-
-`767001fb3e1962a28e77c778d72bb6e2ee0c7406`
 
 Integration verification:
 
 `my-world/docs/mw018/MW-018_INTEGRATION_VERIFICATION.md`
 
-Integration verification commit:
-
-`d0028be5004bc6563547e1f1d3f0aea06e817052`
-
-Integrated product result:
+Current integrated People result:
 
 ```text
 right 信息 navigation
@@ -195,88 +186,143 @@ right 信息 navigation
 → accepted replacement / Restore / reopen re-project current history immediately
 ```
 
-Reviewed evidence:
+Engineering evidence is PASS. Product PASS is still pending.
 
-- focused final: 135 checks / 0 failures;
-- rendered visual checks: 127 / 0 across maximized, 1280×720 and 960×540;
-- MW-017 / MW-014 / MW-015 and relevant G5 regressions pass;
-- Windows Desktop export passes;
-- `git diff --check` clean;
-- one bounded real configured Kimi K3 vertical used exactly one World semantic call + one existing Information Curator call and produced a valid `李亭` card with unchanged Owner production fingerprints.
+### Owner route update
 
-### Retained Owner-UAT reliability risk
-
-The same real Kimi K3 run materialized new actor `沈青`, but the model referenced a transient candidate ref in `people_bindings` without placing `candidate_ref` on the candidate itself. The exact identity bridge therefore correctly refused to guess and no 沈青 card was produced.
-
-This is not authorization for Program name matching. Owner UAT should intentionally include a newly introduced person and evaluate whether new-person card creation is sufficiently reliable in real play.
-
-No Product PASS exists until Owner accepts the real application.
-
-## 8. CURRENT — Owner UAT build handoff
-
-Before Owner UAT:
+Owner explicitly chose on 2026-09-06:
 
 ```text
-D:/AI/Projects/my-world
-→ inspect branch/status/worktrees
-→ preserve all unknown/dirty local work
-→ safely fetch + fast-forward main to exact current origin/main
-→ verify exact local HEAD
-→ run run-game.ps1 -ValidateExportOnly
-→ Owner Launch Ready
+Do not run standalone MW-018 UAT now
+→ implement Five Recommended Actions first
+→ then test People + Recommendations together in one Owner build/session
 ```
 
-Never use reset/clean/force to hide local divergence. Never install the old task branch as the Owner build.
+Therefore MW-018 state is **OWNER UAT DEFERRED**, not Product PASS and not NOT PASS.
 
-## 9. Owner UAT target
+Retained People UAT risk remains new-person first-card reliability: a real Kimi K3 validation materialized `沈青` but omitted its transient candidate correlation field, so the safe identity bridge correctly declined to guess and no card appeared for that new actor.
 
-Owner should play at least one normal player-authored turn involving a person and verify:
+## 8. Five Recommended Actions — PRODUCT / ARCHITECTURE FROZEN
+
+Canonical decision:
+
+`architecture/ui/G6_FIVE_RECOMMENDED_ACTIONS_V1_0_DECISION.md`
+
+Product rule:
+
+> **Five recommended actions != five allowed actions.**
+
+Target experience:
 
 ```text
-人物 tab exists
-→ useful card appears or updates
-→ card starts collapsed
-→ collapsed state is quick to scan
-→ expand reveals player-known relationship / latest-known details
-→ no obvious private/omniscient/debug information leaks
-→ later learned information updates the card
+accepted GM Narrative
+→ dedicated player-safe background Action Recommender
+→ exactly 5 model-generated suggested actions
+→ click one PREFILLS existing composer
+→ player edits freely
+→ existing Send / Ctrl+Enter remains authoritative
 ```
 
-Owner should preferably test **a newly introduced person** as well as an already-known person because model candidate-ref reliability remains the main open product risk.
+Key boundaries:
 
-Verdict:
+- free-form natural-language input always remains available;
+- recommendation click never auto-sends;
+- recommendation generation is independent/fail-soft and cannot block foreground play;
+- recommendations use only bounded player-visible accepted Conversation material;
+- no raw World / actor / private Knowledge / Agency / Evolution / Source material;
+- recommendations are ephemeral derived UI, not Game truth and not persisted;
+- successful accepted GM-only opening also receives recommendations;
+- Restore/reopen may generate one fresh set for the current accepted prefix;
+- new foreground action / Regenerate clears stale recommendations immediately;
+- no hidden Provider fallback;
+- no generic Action Intent / MW-013 framework is pulled forward.
 
-`PASS` or `NOT PASS — with concrete product/UAT findings`.
+## 9. CURRENT — MW-019 Five Recommended Actions
 
-## 10. Next route
+Task Packet:
+
+`my-world/docs/tasks/MW-019_FIVE_RECOMMENDED_ACTIONS_TASK.md`
+
+Identity:
 
 ```text
-Codex canonical local build preparation
-→ Owner UAT MW-018
-
-if PASS:
-→ MW-018 PRODUCT PASS / CLOSED
-→ choose/freeze next grounded G6 outcome
-→ current proposed next product candidate: five model-generated suggested actions while preserving free-form input
-
-if NOT PASS:
-→ same MW-018 lineage if outcome is unchanged
-→ GPT root-cause / scope classification
-→ Codex correction
-→ Independent Review + integration + Owner UAT again
+Work Item: MW-019
+Type: product-facing Narrative Host vertical
+Primary Implementer: Codex
+Reviewer: GPT
+Product UAT: Owner
+Status: READY FOR CODEX
+Branch: mw-019-five-recommended-actions
+Worktree: D:/AI/Projects/.worktrees/my-world/mw-019
+Return ceiling: READY FOR INDEPENDENT REVIEW
 ```
 
-MW-013 remains HOLD until multiple grounded Surfaces/mechanic consumers prove repeated patterns.
+Required product result:
 
-## 11. Agent routing
+```text
+GM Narrative accepted
+→ five useful recommendation buttons appear near composer
+→ buttons are optional guidance
+→ click fills PlayerInput only
+→ player can edit or ignore
+→ normal send/d20 path is unchanged
+```
+
+Implementation should use a dedicated bounded player-safe recommendation call in parallel with existing post-Narrative background lanes. Do not alter the authoritative raw Narrative response format and do not reuse omniscient World semantic input for player-facing suggestions.
+
+## 10. Roadmap correction / generic Action Intent
+
+Canonical roadmap is now v4.1.
+
+MW-019 is a fixed first-party Narrative interaction consumer. It may later provide evidence for generic G6-G `Bounded Action Intent`, but MW-019 does not authorize a generic intent schema/dispatcher or arbitrary callback system.
+
+MW-013 remains HOLD.
+
+## 11. Combined Owner UAT route
+
+After MW-019:
+
+```text
+Codex implementation
+→ GPT Independent Review
+→ Engineering PASS
+→ integrate reviewed main
+→ safely sync D:/AI/Projects/my-world
+→ ValidateExportOnly
+→ one fresh Owner build
+→ combined Owner UAT: MW-018 People + MW-019 Recommendations
+```
+
+Combined UAT still produces separate verdict lineage:
+
+- People issue → MW-018 revision;
+- Recommendation issue → MW-019 revision.
+
+MW-019 Owner UAT must check:
+
+```text
+opening / completed GM turn produces five recommendations
+→ suggestions are useful without feeling mandatory
+→ no obvious hidden/omniscient information
+→ click fills composer but does not send
+→ text remains freely editable
+→ manual free-form action remains effortless
+→ stale options never survive next action / Regenerate / Restore
+```
+
+Owner product question:
+
+> **“这些推荐让我更容易开始行动，同时我仍然觉得自己什么都能做吗？”**
+
+## 12. Agent routing
 
 ```text
 GPT
 → product semantics / architecture / Task Shaping / dispatch / Independent Review
 
 Codex
-→ sole default production implementer and local UAT-build preparation agent
+→ sole default production implementer
 
 Owner
-→ Product UAT / explicit product verdict for player-facing outcomes
+→ combined Product UAT / explicit product verdict for MW-018 and MW-019
 ```
