@@ -4,7 +4,10 @@
 
 ## Current decisions
 
-- [`D-001_暂停AI协作V0并重开产品方向.md`](D-001_暂停AI协作V0并重开产品方向.md) — 旧 AI Collaboration V0 退出 current、整体归档并重新打开 Product Direction；Personal OS 仍只是候选，不自动获批。
+- [`D-001_暂停AI协作V0并重开产品方向.md`](D-001_暂停AI协作V0并重开产品方向.md) — 旧 AI Collaboration V0 退出 current、整体归档并重新打开 Product Direction。
+- [`D-002_正式Pivot到PersonalStateCore.md`](D-002_正式Pivot到PersonalStateCore.md) — 正式 Pivot 到 Personal State / Information & Action Desktop；Today / Plan / Tracks 成为 CORE。
+- [`D-003_V0RouteFreeze与TA-1AImplementationAuthorization.md`](D-003_V0RouteFreeze与TA-1AImplementationAuthorization.md) — V0 Route Freeze PASS，并授权 TA-1A First Usable implementation。
+- [`D-004_TA-1AOwnerUATCorrectionScope.md`](D-004_TA-1AOwnerUATCorrectionScope.md) — TA-1A 首轮 Owner UAT 未通过；收敛 Month View / Current Vector 必要 correction，TA-1B 继续 blocked。
 
 ## 什么应该进入这里
 
@@ -19,7 +22,7 @@
 
 - 仍在讨论的候选方案；
 - 单纯 Reference finding；
-- 某次 Task 的实现细节；
+- 某次 Task 的普通实现细节；
 - 某轮 Independent Review 的一次性证据；
 - 可以直接更新现有 current Owner 而无需独立 Decision Record 的普通状态变化。
 
