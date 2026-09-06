@@ -1,87 +1,101 @@
 # Personal Workbench｜Architecture
 
-本目录只保存 **已经经过 Owner 讨论并明确提升的跨阶段长期架构约束、contract、ownership/state model 与关键设计裁定**。
+本目录只保存 **已经经过 Owner 讨论并明确提升的跨阶段架构约束、contract、ownership/state model 与关键设计裁定**。
 
 当前项目处于：
 
-> **Stage 0｜Pre-Implementation Alignment**
+> **Stage 0｜Pre-Implementation Alignment / G0.5 Submission**
 
-当前仍未 Route Freeze，因此本目录中的已批准内容只代表 Owner 已认可的架构约束与问题边界，不代表 Electron / Tauri / Native / database / schema 等技术路线已经冻结。
+Route Freeze 尚未由 00 + Owner 完成，因此当前 Architecture Candidate 虽已 Owner-reviewed / approved for submission，仍不是 production implementation authorization。
 
 ## 当前 Architecture Owner
 
-- [`架构问题登记表.md`](架构问题登记表.md) — **v1.0 / OWNER-REVIEWED / G0.3 PASS INPUT / NOT ROUTE-FROZEN**
-  - 收敛 Today / Plan / Tracks ownership；
-  - Track / Plan / recurrence / Current Vector / Today acknowledgement 开放问题；
-  - persistence / backup / migration；
-  - Desktop host / system tray；
-  - UI / IA；
-  - Future extension boundary；
-  - Route Freeze 前高沉没成本问题。
+### [`架构方案.md`](架构方案.md)
 
-G0.3 已由 00 判定 PASS。其含义是：该登记表与 `../current/开发路线.md` 已足够完整，可以进入 G0.4 Reference / Path Audit；**不表示其中 OPEN 技术问题已经解决，也不表示 Architecture Freeze。**
+**v1.0 / OWNER-APPROVED G0.5 CANDIDATE / NOT ROUTE-FROZEN**
 
-## 当前 Owner-approved Architecture Constraints
+当前主要架构候选：
 
-当前已明确：
+- Electron = V0 Desktop Host；
+- SQLite = local canonical persistent store；
+- Tracks / Plan authoritative，Today 主要 derived；
+- Today acknowledgement 为极窄当日辅助状态；
+- immutable internal identity；
+- occurrence identity = `SeriesStableID + OriginalScheduledOccurrenceKey`；
+- date-only / local wall-time / instant 明确分离；
+- Current Vector `[startDate, endDate]` inclusive + no-overlap；
+- recurrence = series + dynamic occurrence + exception；
+- whole-series edit 清除已有 exceptions 前必须显式警告 / 确认；
+- backup / restore / migration safety contracts；
+- system tray V0 lifecycle；
+- First Usable → Owner real-data UAT → Complete V0 的路线顺序。
 
-- Workbench 自己拥有 Core Personal State；
-- Today 主要是 derived view，不复制 Plan / Tracks 的 live truth；
-- Today 的“已完成”只作为当天视觉确认，不推进 Plan / Track；
-- Current Vector 日期区间禁止重叠；
-- recurrence 使用 series definition + dynamic occurrence + exception；
-- recurrence edit / delete V0 只支持“仅这一次 / 整个循环”；
-- 核心数据本地可靠保存；V0 需要 restart recovery、backup / restore 与 migration；
-- system tray 属于 V0 Required，开机启动 Deferred；
-- Plan 不采用万能事项表单强行统一不同用户语义；
-- Sources / Update Mode 不在 V0 建同步 / AI 平台；
-- Future Milestones / AI / Sync / Custom / Plugin / SDK 等继续 Deferred。
+### [`架构问题登记表.md`](架构问题登记表.md)
 
-## G0.4 必须攻击的开放高风险技术决策
+**v1.0 / G0.3 QUESTION REGISTER / SUPPORTING INPUT**
 
-- Electron / Tauri / Native / Web-local host；
-- local store / database；
-- exact schema；
-- occurrence stable identity；
-- timezone / date-only semantics；
-- Today acknowledgement persistence；
-- backup format / restore behavior；
-- migration mechanism；
-- packaging / update mechanism；
-- 当前 `TA-1` 集中实现 + 首次完整 Owner UAT 的 ordering risk。
+保留 G0.3 时暴露的问题、风险来源和原始状态。G0.4 已解决或 G0.5 已收敛的问题，以 `架构方案.md` 的较新候选结论为准。
 
-这些问题应优先进入 `../research/` 的 Reference Audit / Spike evidence，不得因为 G0.3 PASS 自动升级成技术决定。
+## Evidence Chain
 
-## 历史路线
+当前 Architecture Candidate 依据：
 
-原 AI Collaboration V0 的 Architecture Questions Register 已随旧路线归档至：
+1. `../current/产品定义.md`；
+2. `架构问题登记表.md`；
+3. `../research/G0.4_Reference_Audit_Report.md`；
+4. `../research/G0.4_Technical_Spike_Results.md`；
+5. Owner 与 03 的 G0.5 逐项讨论与明确批准。
 
-`Vibe-Coding/99_归档/workbench/AI协作路线_V0/架构问题登记表_未审核草案_v0.1.md`
+G0.4 已由 00 判定 PASS；Technical Spikes 已证明：
 
-该文件只作历史证据，不是当前 Architecture Authority。
+- Electron / Tauri packaged tray lifecycle 均可行；
+- SQLite durability / backup / restore / migration 可行；
+- recurrence stable identity / exception / Today acknowledgement / date boundary 可行。
 
-## 写入条件
+这些 evidence 支撑 G0.5 Candidate，但最终 Route Freeze 仍需 00 + Owner 审核。
 
-新的架构内容进入本目录前必须：
+## Current High-sunk-cost Contracts
 
-1. 有 Owner-approved Product Baseline；
-2. 已在专业聊天中向 Owner 展示关键问题 / 选项 / 风险；
-3. Owner 明确批准对应内容进入 architecture；
-4. 文档状态与实际批准范围一致；
-5. 未裁定部分继续标 `OPEN / HYPOTHESIS / PROPOSED / DEFERRED`，不得伪装成冻结决定。
+G0.5 Candidate 已收敛：
 
-如果只是 Working Draft / Proposal：
+- Desktop Host：Electron；
+- Persistence：SQLite；
+- identity：stable internal IDs；
+- recurrence occurrence：original scheduled occurrence identity；
+- date semantics：date-only ≠ timestamp，local recurrence ≠ fixed UTC instant；
+- backup / restore：consistent snapshot + validation + restore safety snapshot；
+- migration：schema version + ordered transactional migration + upgrade safety backup；
+- UAT ordering：TA-1A First Usable 后提前 Owner UAT。
 
-- 默认留在聊天；
-- 只有 Owner 明确要求保存草案时，才进入 `../discussion/`。
+仍不在当前架构中冻结：
 
-## Canonical rule
+- 具体 SQLite binding / ORM；
+- production schema 字段级 DDL；
+- UI component framework；
+- installer / updater 具体实现；
+- Future AI / sync / plugin / custom-page platform。
+
+## Route Freeze Residual
+
+G0.6 前保留一个极小 Owner Windows focused check：
+
+```text
+launch
+→ notification-area icon 实际可见
+→ 鼠标点击恢复 / focus
+→ close → tray
+→ tray real exit
+```
+
+这不是新大型 Spike，也不授权业务实现。
+
+## Canonical Rule
 
 - Product / Roadmap 当前状态由 `../current/` 拥有；
-- 未审核提案由聊天或 `../discussion/` 承载；
-- G0.4 Reference / Spike evidence 由 `../research/` 拥有；
-- Owner 正式项目级裁定由 `../decisions/` 拥有；
+- G0.5 Architecture Candidate 由本目录 `架构方案.md` 拥有；
+- Reference / Spike evidence 由 `../research/` 拥有；
+- Gate / Stage 状态由 `../current/项目状态.md` 与 00 拥有；
 - 代码与 runtime implementation fact 由 `zhangchenjia21-dot/Workbench` 拥有；
-- `99_归档/workbench/` 只提供历史证据，不参与 current authority。
+- `99_归档/workbench/` 只作历史证据。
 
-> 当前状态：**G0.3 PASS / G0.4 NEXT / NOT ROUTE-FROZEN / IMPLEMENTATION NOT AUTHORIZED**。
+> 当前状态：**G0.5 OWNER-APPROVED SUBMISSION / NOT ROUTE-FROZEN / IMPLEMENTATION NOT AUTHORIZED**。
