@@ -1,12 +1,12 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 16.15
+version: 16.16
 created: 2026-08-26
 updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
-current_task: G6-D Next Grounded Surface Audit — People
-current_owner: GPT + Owner product/architecture discussion lane
+current_task: MW-016 People Surface Architecture Audit
+current_owner: Codex architecture-audit lane
 parent_task: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT
 owner_uat_required: false
@@ -30,9 +30,11 @@ G6 RPG Experience & Internal Declarative UI Host ACTIVE
 MW-011 RPG Host / Player Profile outcome    PRODUCT PASS / CLOSED
 MW-012 Zhang Chen Player Character Card     ENGINEERING PASS / INTEGRATED / PRODUCT INGRESS ACCEPTED
 G6 Visual Runtime re-entry                  AUDITED — IMPLEMENTATION DEFERRED
-G6 Character + Important Experiences        SEMANTIC / IA FROZEN
+G6 Character + Important Experiences        PRODUCT BASELINE ACCEPTED
 MW-014 Model-driven Information Curation    ENGINEERING PASS / INTEGRATED
 MW-015 Character + Important Experiences    PRODUCT PASS / CLOSED
+G6 People Surface product semantics         FROZEN
+MW-016 People Surface Architecture Audit    READY FOR CODEX AUDIT
 MW-013 Internal Declarative UI Host v0.1    HOLD / NOT AUTHORIZED YET
 ```
 
@@ -66,11 +68,13 @@ Current mother taxonomy:
 存档
 ```
 
-Only grounded Surfaces appear. Current implemented right-side set is:
+Current implemented right-side set:
 
 ```text
 概览 / 角色 / 重要经历 / 存档
 ```
+
+Only grounded Surfaces appear. Do not create fake RPG pages or expose omniscient Runtime state merely to fill UI.
 
 ## 3. Character + Important Experiences — PRODUCT BASELINE ACCEPTED
 
@@ -84,15 +88,10 @@ Canonical authority:
 角色 / Character
 → evolving current Character Sheet
 → “现在的我是谁”
-→ current state, not mutation log
 
 重要经历 / Important Experiences
 → protagonist-centered milestone history
 → “我是怎样走到现在的”
-
-行囊 / Inventory
-→ owns starting/current possessions in player IA
-→ starting possessions do not belong in Character Surface
 ```
 
 Frozen curation principle:
@@ -101,26 +100,7 @@ Frozen curation principle:
 
 Program must not add keyword/regex semantic routing, importance scores, event-type rule trees or protagonist-choice heuristics.
 
-## 4. MW-014 — ENGINEERING PASS / INTEGRATED
-
-Reviewed backend seam:
-
-`src/信息整理/L3_外交层/角色经历投影公开接口.gd`
-
-It exposes presentation-safe current Character + Important Experiences and requires no Provider call merely to render/reopen.
-
-MW-014 established lived-turn curation; MW-015 R2 added the distinct Game/T0 initial Character baseline under the same information-curation owner.
-
-Formal records:
-
-- `my-world/docs/mw014/MW-014_INDEPENDENT_REVIEW_IR1.md`
-- `my-world/docs/mw014/MW-014_INTEGRATION_VERIFICATION.md`
-
-## 5. MW-015 — PRODUCT PASS / CLOSED
-
-R1 established the right-side information navigation and migrated biography/profile material away from the left Player Status Host, but Owner UAT found the initial Character Surface too thin.
-
-R2 corrected that product regression through a model-driven Game/T0 Initial Character Baseline independent of opening success.
+## 4. MW-015 — PRODUCT PASS / CLOSED
 
 Final accepted product path:
 
@@ -137,18 +117,93 @@ Final Owner record:
 
 `my-world/docs/mw015/r2/MW-015_R2_OWNER_UAT_RESULT.md`
 
-Final disposition:
+Owner explicitly accepted the current semantic/product outcome. Visual density, typography, spacing and hierarchy remain deferred G6 UI polish and do not reopen MW-015.
+
+## 5. People Surface — PRODUCT SEMANTICS FROZEN
+
+Canonical authority:
+
+`architecture/ui/G6_PEOPLE_SURFACE_V1_0_DECISION.md`
+
+Owner decision:
 
 ```text
-MW-015 R1 Owner UAT                         NOT PASS
-MW-015 R2 Engineering / Independent Review  PASS / INTEGRATED
-MW-015 R2 Owner UAT                         PRODUCT PASS
-MW-015                                      CLOSED
+人物 / People
+→ card-based presentation
+→ cards collapsed by default
+→ collapsed state shows only key identity / very brief latest-known summary
+→ relationship and detailed information live in expanded state
+→ each card represents only the player's current latest-known snapshot of that person
 ```
 
-Owner accepted the current information architecture / semantic outcome. Visual density, typography, spacing and hierarchy remain a **deferred G6 UI polish** concern and do not reopen MW-015.
+Core semantics:
 
-## 6. Agent routing
+- People is not an omniscient actor registry;
+- a card may exist when accepted player-visible history has made the player meaningfully aware of a distinct person and the model judges that person worth maintaining;
+- direct meeting is not mandatory; reliable in-game knowledge may also establish a card;
+- Source existence, stable actor existence, GM omniscience or the protagonist's original-world historical knowledge do not automatically create a card;
+- off-screen NPC changes do not update People until the player actually learns them;
+- later player-visible information may replace/correct/remove prior player-known information;
+- People keeps the latest player-known snapshot, not a biography/history log;
+- expanded card may contain natural-language player-known relationship summary, but no numeric Relationship/affinity system is authorized;
+- stable Game-local actor identity is required; display name is not authoritative identity;
+- model decides semantic inclusion/update; Program owns identity, structure, currentness and presentation.
+
+`World Truth != actor Knowledge != human-player disclosure` remains protected.
+
+## 6. Existing implementation evidence relevant to People
+
+G5 already provides:
+
+- Program-owned stable NPC local identities;
+- Guaranteed / Source-backed / creation-authored / runtime-narrative actor families;
+- runtime actor materialization from accepted Narrative;
+- actor Knowledge provenance;
+- actor Agency/currentness boundaries.
+
+But current player-safe UI projection only proves player-character known facts and does not yet expose a dedicated per-person latest-known read model.
+
+Important implementation risk:
+
+```text
+stable actor registry
+!= player-visible People list
+```
+
+Current `stable_actor_material(...)` may contain Source-backed/Game-local actor material that is not automatically player-safe. People must not dump it to the curator/UI.
+
+## 7. CURRENT — MW-016 architecture audit
+
+Task Packet:
+
+`my-world/docs/tasks/MW-016_PEOPLE_SURFACE_ARCHITECTURE_AUDIT_TASK.md`
+
+Identity:
+
+```text
+Work Item: MW-016
+Type: planning / architecture audit
+Executor: Codex
+Architecture/Semantic Owner: GPT
+Status: READY FOR CODEX AUDIT
+Return ceiling: READY FOR GPT ARCHITECTURE DECISION
+Production implementation: NOT AUTHORIZED YET
+```
+
+Audit must resolve with code evidence:
+
+1. exact People-card → stable `local_character_id` binding without authoritative display-name matching;
+2. same-turn runtime actor materialization vs Information Curator ordering/identity race;
+3. minimum safe identity-resolution metadata the curator may receive;
+4. durable owner shape for current People player-known snapshots;
+5. bounded curation contract shape;
+6. model-owned card eligibility/update/removal without Program heuristics;
+7. Restore / Regenerate / reopen currentness;
+8. whether one Information Curator can continue to maintain Character + Important Experiences + People without an unnecessary extra model call.
+
+No People UI or production contract change is authorized during this audit.
+
+## 8. Agent routing
 
 Canonical authority:
 
@@ -159,7 +214,7 @@ GPT
 → product semantics / architecture / Task Shaping / dispatch / Independent Review
 
 Codex
-→ sole default implementation agent for new production implementation
+→ sole default implementation agent and current repo-level architecture audit executor
 
 Owner
 → Product UAT / explicit product verdict
@@ -167,35 +222,7 @@ Owner
 
 KimiCode / Zcode / other implementation agents require explicit future Owner re-authorization.
 
-## 7. CURRENT — next grounded G6 outcome audit
-
-Roadmap G6-D requires real Surfaces to be pulled by actual player questions and real data owners rather than by traditional RPG completeness.
-
-After Character + Important Experiences, the current strongest next candidate is:
-
-```text
-人物 / People
-→ “我知道 / 遇见了哪些人？他们现在对我而言是什么样的人？”
-```
-
-Current evidence says People has potential product value because G5 already contains persistent actors, actor Knowledge/Agency boundaries and runtime-created actor materialization. However, the current general player-safe projection exposes only player-known facts and does **not yet prove a dedicated actor/relationship-safe read model**.
-
-Therefore current work is **product/architecture audit, not implementation authorization yet**.
-
-Before creating a Codex Task Packet, GPT + Owner must freeze at minimum:
-
-- the exact player question People answers;
-- which actors qualify to appear;
-- what information is allowed to be shown about each person;
-- how `World Truth != actor Knowledge != human-player disclosure` constrains the page;
-- whether relationship/attitude is a real current owner or still insufficiently grounded;
-- whether one bounded model-curation extension is needed, or existing deterministic safe projections are enough;
-- Save / Restore / Regenerate currentness expectations;
-- empty/unknown behavior without inventing social state.
-
-Do not implement People merely by dumping all actors from omniscient `world_state`.
-
-## 8. Visual Runtime / MW-013 disposition
+## 9. Visual Runtime / MW-013 disposition
 
 ```text
 Runtime Asset Resolution / portrait / scene / authored-map
@@ -207,13 +234,12 @@ MW-013 Internal Declarative UI Host v0.1
 
 Do not re-enter MW-013 until multiple grounded real Surfaces / mechanic consumers expose repeated patterns.
 
-## 9. Immediate route
+## 10. Immediate route
 
 ```text
-People Surface product/architecture audit
-→ Owner discussion / semantic freeze
-→ determine whether current Runtime already has enough safe actor/relationship material
-→ if grounded: shape next flat MW-xxx Codex Task Packet
+MW-016 Codex architecture audit
+→ GPT architecture decision / freeze identity + disclosure + curation owner
+→ if grounded: shape People implementation Task Packet / implementation revision
 → Codex implementation
 → GPT Independent Review
 → integrate after Engineering PASS
@@ -221,4 +247,4 @@ People Surface product/architecture audit
 → Owner UAT
 ```
 
-If People audit proves the data owner/player-safe projection is not mature enough, do not force the Surface; choose the next grounded G6 consumer from current evidence instead.
+If the audit proves People cannot be safely grounded without a larger prerequisite, stop and classify that prerequisite rather than dumping stable actors or hidden material into the UI.
