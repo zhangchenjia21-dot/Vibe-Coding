@@ -1,12 +1,12 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 16.11
+version: 16.12
 created: 2026-08-26
 updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
-current_task: MW-015 Owner UAT — Character + Important Experiences Surfaces v0.1
-current_owner: Owner product UAT lane
+current_task: MW-015 R2 — Character Information Preservation Correction
+current_owner: Codex implementation lane
 parent_task: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT
 owner_uat_required: true
@@ -32,7 +32,8 @@ MW-012 Zhang Chen Player Character Card     ENGINEERING PASS / INTEGRATED / PROD
 G6 Visual Runtime re-entry                  AUDITED — IMPLEMENTATION DEFERRED
 G6 Character + Important Experiences        SEMANTIC / IA FROZEN
 MW-014 Model-driven Information Curation    ENGINEERING PASS / INTEGRATED
-MW-015 Character + Important Experiences UI ENGINEERING PASS / INTEGRATED / OWNER UAT PENDING
+MW-015 R1 Character + Important Exp UI       ENGINEERING PASS / INTEGRATED / OWNER UAT NOT PASS
+MW-015 R2 Character Information Preservation READY FOR CODEX
 MW-013 Internal Declarative UI Host v0.1    HOLD / NOT AUTHORIZED YET
 ```
 
@@ -108,99 +109,119 @@ Reviewed backend seam:
 
 It exposes presentation-safe current Character + Important Experiences and requires no Provider call merely to render/reopen.
 
+MW-014 R1 explicitly requires the frozen starting `player_profile` to remain visible/useful before lived curator updates.
+
 Formal records:
 
 - `my-world/docs/mw014/MW-014_INDEPENDENT_REVIEW_IR1.md`
 - `my-world/docs/mw014/MW-014_INTEGRATION_VERIFICATION.md`
 
-## 5. MW-015 — ENGINEERING PASS / INTEGRATED / OWNER UAT PENDING
+## 5. MW-015 R1 — OWNER UAT NOT PASS
 
-Task:
-
-`my-world/docs/tasks/MW-015_CHARACTER_AND_IMPORTANT_EXPERIENCES_UI_V0_1_TASK.md`
-
-Reviewed implementation candidate:
-
-```text
-3387cba213a2680b08f78b07a63ee0ecee5417ce
-```
-
-Independent Review record commit:
-
-```text
-0e7aed125f9f4d46d8ca86070d11b80f130ed213
-```
-
-Integration merge:
-
-```text
-967a856e02b761576cc4dcb773a693530dcf2fc9
-```
-
-Post-integration verification doc:
-
-`my-world/docs/mw015/MW-015_INTEGRATION_VERIFICATION.md`
-
-Engineering outcome:
+R1 implementation and integration remain valid engineering evidence for the shell/navigation migration:
 
 ```text
 right information navigation
 → 概览 | 角色 | 重要经历 | 存档
 
-角色
-→ renders current MW-014 Character projection
-
-重要经历
-→ renders current ordered MW-014 milestone projection
-
 left Player Status Host
-→ transitional biography/profile/world/recent-actions/turn-count removed
-→ currently collapses/hides because no real portrait/mechanic contribution exists
+→ biography/profile/world/recent-actions/turn-count removed
+→ collapses/hides when no real portrait/mechanic contribution exists
 ```
 
-Engineering evidence reviewed by GPT includes the real-shell focused suite, MW-014/G3/G5/MW-009/MW-011/MW-012 regressions, responsive checks, Windows export and zero render-time Provider calls.
-
-This is **not Product PASS** until Owner accepts the real app experience.
-
-## 6. Owner UAT target
-
-Owner should verify in the real application:
+Owner UAT on 2026-09-06 found a material product regression in `角色`:
 
 ```text
-open Game
-→ right panel is 信息
-→ tabs are 概览 / 角色 / 重要经历 / 存档
-→ 角色 contains current protagonist information
-→ left biography filler is gone and no fake status appears
-→ play a meaningful turn
-→ curator result becomes visible without reopening
-→ 重要经历 reflects a meaningful milestone when the model judges one
-→ Restore / Regenerate returns Character / Important Experiences to matching current history
+角色
+→ only thin headline + summary visible
+→ previously accepted rich Character information is missing
 ```
 
-Owner verdict options:
+This is **NOT PASS**.
+
+The left Host collapse itself is not rejected.
+
+Formal Owner record:
+
+`my-world/docs/mw015/MW-015_OWNER_UAT_R1_RESULT.md`
+
+Root-cause classification:
 
 ```text
-PASS
-NOT PASS — with concrete product/UAT findings
+MW-011 Owner PASS
+→ rich starting Character information had proven product value
+
+MW-014 contract
+→ frozen starting player_profile must remain visible/useful before lived curation
+
+MW-015 R1 shaping
+→ intentionally reduced initial Character to headline/summary to avoid Inventory leakage
+→ over-pruned legitimate Character material
+→ product-value regression
 ```
 
-## 7. Agent routing — OWNER UPDATE
+## 6. ACTIVE — MW-015 R2
+
+Task:
+
+`my-world/docs/tasks/MW-015_R2_CHARACTER_INFORMATION_PRESERVATION_TASK.md`
+
+Identity:
+
+```text
+Work Item: MW-015
+Revision: 2
+Primary Implementer: Codex
+Reviewer: GPT
+Status: READY FOR CODEX
+Branch: mw-015-r2-character-information-preservation
+Worktree: D:/AI/Projects/.worktrees/my-world/mw-015-r2
+Return ceiling: READY FOR INDEPENDENT REVIEW
+```
+
+Required product correction:
+
+```text
+left Player Status Host
+→ remains collapsed/hidden while no legitimate status content exists
+
+right 角色 Surface
+→ materially rich Character Sheet immediately
+→ preserves legitimate frozen Game-local starting Character material
+→ excludes starting possessions / other-domain material
+→ evolves after successful model curation
+```
+
+Character-owned baseline includes, when present:
+
+```text
+identity/basic profile
+origin/background
+current social identity/role
+personality/values/principles
+non-numeric capabilities
+limitations/long-term traits
+long-term goals/self-direction
+```
+
+Do not repair with title keywords, regexes, Zhang-Chen special cases or other Program semantic classifiers.
+
+If the frozen Game-local representation cannot distinguish Character-owned material from Inventory/other domains deterministically, Codex must STOP with an architecture finding rather than invent heuristics.
+
+Existing Games must regain the rich Character view when the required frozen material already exists in that Game; no Source-current backfill is allowed.
+
+## 7. Agent routing
 
 Canonical authority:
 
-`AGENT_EXECUTION_ROUTING_CURRENT.md v3.0`
-
-MW-015 was the final already-authorized KimiCode round.
-
-After MW-015:
+`AGENT_EXECUTION_ROUTING_CURRENT.md v3.1`
 
 ```text
 GPT
 → product semantics / architecture / Task Shaping / dispatch / Independent Review
 
 Codex
-→ sole default implementation agent for all new production tasks
+→ sole default implementation agent for new production implementation
 
 Owner
 → Product UAT / explicit product verdict
@@ -208,7 +229,21 @@ Owner
 
 KimiCode / Zcode / other implementation agents require explicit future Owner re-authorization.
 
-## 8. Visual Runtime / MW-013 disposition
+## 8. Owner-build handoff
+
+For every product-facing outcome after Engineering PASS + integration:
+
+```text
+sync D:/AI/Projects/my-world safely to exact integrated main
+→ validate exact local HEAD
+→ run run-game.ps1 -ValidateExportOnly
+→ Owner Launch Ready
+→ Owner UAT
+```
+
+Never present an unreviewed task branch as the Owner build.
+
+## 9. Visual Runtime / MW-013 disposition
 
 ```text
 Runtime Asset Resolution / portrait / scene / authored-map
@@ -218,20 +253,20 @@ MW-013 Internal Declarative UI Host v0.1
 → HOLD / NOT AUTHORIZED YET
 ```
 
-Do not re-enter MW-013 until multiple grounded real Surfaces / mechanic consumers expose repeated patterns.
-
-## 9. Immediate route
+## 10. Immediate route
 
 ```text
-Owner UAT — MW-015
-→ if PASS: mark MW-015 PRODUCT PASS / CLOSED
+MW-015 R2 Codex implementation
+→ GPT Independent Review
+→ integrate only after Engineering PASS
+→ canonical local checkout sync + fresh export
+→ Owner UAT again
+
+if Owner UAT PASS:
+→ MW-015 PRODUCT PASS / CLOSED
 → choose next grounded G6 outcome
-→ all new implementation tasks default to Codex
 
 if NOT PASS:
-→ GPT root-cause / scope classification
-→ same MW-015 revision lineage for same-outcome defects
-→ Codex implements the required correction
-→ GPT Independent Review
-→ Owner UAT again
+→ same MW-015 lineage if outcome remains unchanged
+→ root-cause / architecture classification
 ```
