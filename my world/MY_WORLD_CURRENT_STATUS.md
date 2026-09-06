@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 16.12
+version: 16.13
 created: 2026-08-26
 updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
-current_task: MW-015 R2 — Character Information Preservation Correction
+current_task: MW-015 R2 — Model-driven Initial Character Curation Correction
 current_owner: Codex implementation lane
 parent_task: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT
@@ -32,8 +32,8 @@ MW-012 Zhang Chen Player Character Card     ENGINEERING PASS / INTEGRATED / PROD
 G6 Visual Runtime re-entry                  AUDITED — IMPLEMENTATION DEFERRED
 G6 Character + Important Experiences        SEMANTIC / IA FROZEN
 MW-014 Model-driven Information Curation    ENGINEERING PASS / INTEGRATED
-MW-015 R1 Character + Important Exp UI       ENGINEERING PASS / INTEGRATED / OWNER UAT NOT PASS
-MW-015 R2 Character Information Preservation READY FOR CODEX
+MW-015 R1 Character + Important Exp UI      ENGINEERING PASS / INTEGRATED / OWNER UAT NOT PASS
+MW-015 R2 Initial Character Curation        ARCHITECTURE GAP RESOLVED / READY FOR CODEX RESUME
 MW-013 Internal Declarative UI Host v0.1    HOLD / NOT AUTHORIZED YET
 ```
 
@@ -79,6 +79,7 @@ Canonical authority:
 
 - `architecture/ui/G6_CHARACTER_AND_IMPORTANT_EXPERIENCES_V1_0_DECISION.md`
 - `architecture/ui/G6_MODEL_DRIVEN_INFORMATION_CURATION_AUTHORITY_DECISION.md`
+- `architecture/ui/G6_INITIAL_CHARACTER_CURATION_BASELINE_V1_0_DECISION.md`
 
 ```text
 角色 / Character
@@ -109,7 +110,7 @@ Reviewed backend seam:
 
 It exposes presentation-safe current Character + Important Experiences and requires no Provider call merely to render/reopen.
 
-MW-014 R1 explicitly requires the frozen starting `player_profile` to remain visible/useful before lived curator updates.
+MW-014 established lived-turn curation but its durable owner originally represented only turn-shaped records. R2 exposed the missing pre-turn baseline representation.
 
 Formal records:
 
@@ -145,22 +146,58 @@ Formal Owner record:
 
 `my-world/docs/mw015/MW-015_OWNER_UAT_R1_RESULT.md`
 
-Root-cause classification:
+## 6. MW-015 R2 architecture gap — RESOLVED
+
+Codex stopped correctly at evidence commit:
+
+`cbe0f12c411f046cc17318fd1be856dcd2c13e43`
+
+Gap report:
+
+`my-world/docs/mw015/r2/MW-015_R2_INITIAL_CURATION_ARCHITECTURE_GAP.md`
+
+Finding:
 
 ```text
-MW-011 Owner PASS
-→ rich starting Character information had proven product value
+existing information_curation owner
+→ only {schema, turns}
+→ no legal durable slot for model-curated Character before accepted history exists
 
-MW-014 contract
-→ frozen starting player_profile must remain visible/useful before lived curation
-
-MW-015 R1 shaping
-→ intentionally reduced initial Character to headline/summary to avoid Inventory leakage
-→ over-pruned legitimate Character material
-→ product-value regression
+real accepted opening
+→ technically usable as a turn anchor
+→ but would make Character initialization depend on opening success
 ```
 
-## 6. ACTIVE — MW-015 R2
+GPT architecture decision:
+
+```text
+DO NOT require opening success
+DO NOT fabricate a Conversation Turn
+
+Initial Character Curation
+→ Game/T0-scoped model-curated baseline
+→ same information_curation owner
+→ narrow backward-compatible owner/schema evolution authorized
+→ no new SQLite table
+→ no Source-current lookup
+→ model still owns semantic selection
+```
+
+Canonical decision:
+
+`architecture/ui/G6_INITIAL_CHARACTER_CURATION_BASELINE_V1_0_DECISION.md`
+
+Important semantics:
+
+- initial baseline is bound to frozen Game-local player-safe starting protagonist material, not Player/GM prefix hashes;
+- existing turn record parent/identity chain should remain independent and valid;
+- projection order is thin fallback → valid initial baseline → current lived-turn curation;
+- opening success/cancel/failure does not determine baseline eligibility;
+- static T0 biography does not create Important Experiences;
+- Regenerate does not semantically invalidate the Game/T0 baseline;
+- Restore must still remove future lived curation and may safely preserve/re-attach/re-materialize the same valid baseline when frozen T0 binding matches.
+
+## 7. ACTIVE — MW-015 R2
 
 Task:
 
@@ -173,8 +210,8 @@ Work Item: MW-015
 Revision: 2
 Primary Implementer: Codex
 Reviewer: GPT
-Status: READY FOR CODEX
-Branch: mw-015-r2-character-information-preservation
+Status: READY FOR CODEX — ARCHITECTURE GAP RESOLVED
+Branch: mw-015-r2-model-driven-initial-character-curation
 Worktree: D:/AI/Projects/.worktrees/my-world/mw-015-r2
 Return ceiling: READY FOR INDEPENDENT REVIEW
 ```
@@ -182,35 +219,19 @@ Return ceiling: READY FOR INDEPENDENT REVIEW
 Required product correction:
 
 ```text
+open Game
+→ right 角色 becomes materially useful without requiring a new Player Turn
+→ baseline does not depend on successful GM opening
+→ selection/summarization is model-driven
+→ later lived curation evolves the same Character Surface
+
 left Player Status Host
 → remains collapsed/hidden while no legitimate status content exists
-
-right 角色 Surface
-→ materially rich Character Sheet immediately
-→ preserves legitimate frozen Game-local starting Character material
-→ excludes starting possessions / other-domain material
-→ evolves after successful model curation
 ```
 
-Character-owned baseline includes, when present:
+Codex may continue the same R2 branch/worktree after refreshing both mains and reading the new architecture decision plus revised Task Packet.
 
-```text
-identity/basic profile
-origin/background
-current social identity/role
-personality/values/principles
-non-numeric capabilities
-limitations/long-term traits
-long-term goals/self-direction
-```
-
-Do not repair with title keywords, regexes, Zhang-Chen special cases or other Program semantic classifiers.
-
-If the frozen Game-local representation cannot distinguish Character-owned material from Inventory/other domains deterministically, Codex must STOP with an architecture finding rather than invent heuristics.
-
-Existing Games must regain the rich Character view when the required frozen material already exists in that Game; no Source-current backfill is allowed.
-
-## 7. Agent routing
+## 8. Agent routing
 
 Canonical authority:
 
@@ -229,7 +250,7 @@ Owner
 
 KimiCode / Zcode / other implementation agents require explicit future Owner re-authorization.
 
-## 8. Owner-build handoff
+## 9. Owner-build handoff
 
 For every product-facing outcome after Engineering PASS + integration:
 
@@ -243,7 +264,7 @@ sync D:/AI/Projects/my-world safely to exact integrated main
 
 Never present an unreviewed task branch as the Owner build.
 
-## 9. Visual Runtime / MW-013 disposition
+## 10. Visual Runtime / MW-013 disposition
 
 ```text
 Runtime Asset Resolution / portrait / scene / authored-map
@@ -253,10 +274,10 @@ MW-013 Internal Declarative UI Host v0.1
 → HOLD / NOT AUTHORIZED YET
 ```
 
-## 10. Immediate route
+## 11. Immediate route
 
 ```text
-MW-015 R2 Codex implementation
+MW-015 R2 Codex resume implementation under frozen initial-baseline decision
 → GPT Independent Review
 → integrate only after Engineering PASS
 → canonical local checkout sync + fresh export
