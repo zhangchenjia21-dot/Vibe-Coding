@@ -65,7 +65,44 @@ Vibe-Coding/AGENTS.md
 → Stage Exit / Gate 结论仍回 00 + Owner
 ```
 
-## 4. Owner Discussion & Promotion Gate
+## 4. Cross-chat Routing Prompt Protocol
+
+当 00 或其它专业聊天需要把工作交给另一个已经完成初始化的专业聊天时，**默认使用短指令，只传递增量，不重复项目背景**。
+
+专业聊天应主动读取 GitHub current source，而不是依赖上游 Prompt 复制项目事实。
+
+标准交接指令只需包含：
+
+```text
+1. 当前要做什么 / Goal
+2. 从哪里读 current input
+3. 本轮必须交付什么
+4. 关键限制 / 禁止事项
+5. 完成后回到哪里 / Return condition
+```
+
+默认不要重复：
+
+- 已经存在于 `current/` 的 Product / Architecture / Roadmap 全文；
+- 已经存在于 `AGENTS.md` 的 Authority / Promotion / Gate 规则；
+- 已经存在于专业聊天初始化 Prompt 的角色职责；
+- 大段历史背景和已归档路线；
+- 专业聊天能够通过 current source 自行解析的信息。
+
+只有在以下情况才允许长指令：
+
+- 新聊天尚未初始化；
+- current source 不足以表达一次性特殊约束；
+- 跨项目 / 跨仓库任务存在容易误解的临时上下文；
+- 用户明确要求生成完整 Task / Prompt Artifact。
+
+原则：
+
+> **GitHub 保存项目事实，Prompt 只传递本轮增量。**
+
+> **不要把交接 Prompt 变成第二份 Product / Architecture specification。**
+
+## 5. Owner Discussion & Promotion Gate
 
 凡是会新增或改变以下任一事实：
 
@@ -89,7 +126,7 @@ Vibe-Coding/AGENTS.md
 ### 明确规则
 
 - **Owner 沉默、未反对、离开聊天、或“任务已生成”均不构成批准。**
-- 标记 `DRAFT` / `EXPLORATION` **不等于获得 GitHub 写入许可**。
+- 标记 `DRAFT` / `EXPLORATION` **不等于获得了 GitHub 写入许可**。
 - 未经 Owner 审核的新结论只能使用 `PROPOSED` / `HYPOTHESIS` / `OPEN` / `DEFERRED` / `HOLD` 等状态，不得使用 `DECIDED` 表示已经生效。
 - 专业聊天框可以自行完成分析，但不能自行完成“决策升级”。
 - 专业聊天框可以说 `READY FOR OWNER REVIEW`；在 Owner 审核前不得说“已完成并进入下一 Gate”。
@@ -114,24 +151,25 @@ Vibe-Coding/AGENTS.md
 3. 02 被明确要求持久化客观 research / spike evidence，但 evidence 仍不能自动升级为 decision；
 4. Gate 已满足后，04 / 05 按已经批准的 Task / Review protocol 写 implementation evidence。
 
-## 5. 当前 Stage 0 约束
+## 6. 当前 Stage 0 约束
 
 当前处于：
 
-**Stage 0｜Product Direction Re-evaluation / Pivot Discovery**。
+**Stage 0｜Pre-Implementation Alignment**。
 
-原 AI Collaboration V0 已进入 `HOLD` 并归档，不再构成 current Product / Roadmap / Architecture。当前尚无新的已批准 Product Definition。
+当前 Product Direction 已批准，G0.1 / G0.2 / G0.3 已 PASS；当前进入 G0.4 Reference Audit。Route Freeze 尚未通过。
 
-因此在新方向重新通过 Product Baseline / Scope 并最终 Route Freeze 前：
+因此：
 
 - 不授权正式大规模编码；
-- 不把 Personal OS、Today / Plan / Tracks、DeepSeek Harness、任一 AI 集成方式或技术栈当作已批准 current；
-- 不复用旧 AI Collaboration 路线的 G0.1 / G0.2 PASS 作为新方向的 Gate PASS；
-- 旧归档只可用于历史回溯 / 经验提取，不得覆盖新 Product Discovery。
+- 不把 Electron / Tauri / Native / local store / schema 等开放技术问题当作已冻结架构；
+- 不因为 G0.3 PASS 就假定 Draft Route 已经正确；
+- G0.4 必须主动寻找反证、遗漏、ordering risk 与 route-changing finding；
+- 原 AI Collaboration V0 继续保持 `HOLD / HISTORICAL / NON-CURRENT`，不得覆盖当前 Personal State 路线。
 
 正式推进继续遵循仓库 current `skill/gpt/lifecycle-dev-process/SKILL.md`。
 
-## 6. Authority 与冲突
+## 7. Authority 与冲突
 
 项目内默认顺序：
 
@@ -147,7 +185,7 @@ Vibe-Coding/AGENTS.md
 
 两个 current source 实质冲突时，不得静默拼接第三套方案；先按 authority / status / supersedes 解决，仍无法解决则回到 00 提交 Owner 裁定。
 
-## 7. 写入链
+## 8. 写入链
 
 ```text
 Freshness
