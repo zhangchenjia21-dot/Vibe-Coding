@@ -1,12 +1,12 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 15.4
+version: 15.5
 created: 2026-08-26
-updated: 2026-09-05
+updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
-current_task: Owner focused UAT for integrated MW-011 + MW-012
-current_owner: Owner UAT / GPT semantic-review lane
+current_task: MW-011 Revision 2 Player Character Profile Surface
+current_owner: ZCODE weekend implementation / GPT semantic-review lane
 parent_task: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT
 owner_uat_required: true
@@ -27,58 +27,156 @@ G5 World Semantics & GM Runtime             PRODUCT PASS / CLOSED
 G5-GATE                                     PRODUCT PASS
 
 G6 RPG Experience & Internal Declarative UI Host ACTIVE
-MW-011 G6 RPG Host ViewModel Baseline       ENGINEERING PASS — INTEGRATED — OWNER UI UAT
-MW-012 Zhang Chen Player Character Card     ENGINEERING PASS — INTEGRATED — OWNER PRODUCT UAT
+MW-011 G6 RPG Host ViewModel Baseline       R1 ENGINEERING PASS / INTEGRATED; OWNER UI UAT NOT PASS
+MW-011 Revision 2 Player Profile Surface    ACTIVE — ZCODE
+MW-012 Zhang Chen Player Character Card     ENGINEERING PASS / INTEGRATED; CONTENT INGRESS CONFIRMED BY UAT
 ```
 
-Owner completed the combined G5 checkpoint and explicitly issued **PASS / proceed to G6**.
+G5 remains closed. G6 remains active.
 
-Formal implementation-repo closeout:
+## 2. Current implementation baseline
 
-`my-world/docs/g5_gate/G5_GATE_CLOSEOUT.md`
+Remote implementation main before MW-011 R2 task issuance was:
 
-MW-012 remains a bounded Owner-inserted first-party Character Source integration during G6. It does **not** reopen G4 or replace the G6 mainline.
+`my-world@6338af5665c5137d9a9528776e77a13ffb924ea6`
 
-## 2. G5 final disposition
-
-The combined Owner PASS resolves the remaining product checkpoints:
+It contains both previously reviewed outcomes:
 
 ```text
-MW-003 Visual Comfort Theme Pass                  PRODUCT PASS / CLOSED
-MW-004 Minimal Player Agency Principle            PRODUCT PASS / CLOSED
-MW-005 Three Kingdoms Literary Style Primer R4    PRODUCT PASS / CLOSED
-G5-05 Meaningful Choice / Mechanics Integration   PRODUCT PASS / CLOSED
-MW-008 Safe Markdown-Lite Narrative Rendering     PRODUCT PASS / CLOSED
-G5-06 / MW-009 thin player-safe consumer          PRODUCT ACCEPTED FOR G5
-G5-07 World Product Tests                         PRODUCT PASS / CLOSED
+7972ab74ccc1d5368f8ca32d4fd4fd83173aa04d  MW-011 R1 integrated
+6338af5665c5137d9a9528776e77a13ffb924ea6  MW-012 R2 integrated
 ```
 
-G5-GATE therefore passes with the intended semantics:
+R1 review / integration records remain authoritative for their engineering boundaries.
 
-- free-form Narrative can produce durable consequences;
-- Save/reopen/Restore preserve coherent current world semantics;
-- World Truth / actor Knowledge / Player disclosure have real boundaries;
-- stable NPCs may act independently;
-- the world can selectively evolve outside direct Player causation and may correctly hold;
-- Public d20 mechanics can ground living-world consequences without becoming a second truth system;
-- no full-universe simulation or model-output gate forest was introduced.
+## 3. MW-011 R1 Owner UAT result
 
-## 3. Owner UAT observation promoted to G6
+The Owner tested the integrated playable build with Zhang Chen selected as Player Character.
 
-The final G5 session confirmed that MW-009 side panels update correctly and preserve disclosure safety, but the Owner judged their **information density and information hierarchy too thin for the final RPG UI**.
+Observed positive results:
 
-This is accepted as a G6 requirement rather than a G5 defect:
+- Narrative style/prose is acceptable to the Owner;
+- Zhang Chen-specific Character content is clearly reaching GM context and influencing the opening Narrative;
+- Player Host identity/profile and World Surface Overview/Save shell are present;
+- Narrative remains the dominant center surface.
+
+Observed product failure:
+
+> despite the very detailed Zhang Chen Character Card, the left Player Host still shows essentially only identity/T0 context plus empty recent-action/session metadata at a fresh opening, leaving large dead space.
+
+Therefore:
 
 ```text
-G5 proved a safe real consumer
-G6 must make that consumer genuinely useful as an RPG product surface
+MW-011 R1 Engineering = PASS
+MW-011 R1 Owner Product UAT = NOT PASS
 ```
 
-Do not reopen MW-009 merely to add filler fields.
+Formal UAT record:
 
-## 4. G6 canonical order
+`my-world/docs/mw011/MW-011_OWNER_UAT_R1_RESULT.md`
 
-Roadmap and supporting UI architecture require consumer-first development:
+This is a same-outcome information-density defect, so task lineage continues as **MW-011 Revision 2**, not a new MW ID.
+
+## 4. Root cause
+
+Current data path is intentionally safe but too narrow:
+
+```text
+rich Character semantic_sections
+→ frozen Character source_projection
+→ MW-009 player-safe projection
+   (identity/profile/world/entry/known_facts only)
+→ MW-011 ViewModel
+   (+ recent actions / Player-turn count)
+→ Player Host
+```
+
+Character Card v0.2 semantic sections currently permit only `gm_reference` / `gm_private`. MW-011 R1 correctly did not expose those sections directly to the player. The missing product seam is an explicit player-facing Character profile projection.
+
+Do not solve this by reclassifying every `gm_reference` section as player-visible or by letting UI parse raw Character Markdown.
+
+## 5. MW-011 Revision 2 — ACTIVE
+
+Canonical architecture:
+
+`my world/architecture/ui/G6_PLAYER_CHARACTER_PROFILE_PROJECTION_V0_1_DECISION.md`
+
+Executable addendum:
+
+`my-world/docs/tasks/MW-011_REVISION2_PLAYER_CHARACTER_PROFILE_SURFACE_ADDENDUM.md`
+
+Identity:
+
+```text
+Work Item: MW-011
+Revision: 2
+Review Round: IR#1 → IR#2
+Name: Player Character Profile Projection + Player Host Surface
+Implementer: Zcode + GLM-5.3-flash
+Reviewer: GPT
+Branch: mw-011-r2-player-character-profile-surface
+Worktree: D:/AI/Projects/.worktrees/my-world/mw-011-r2
+Status: ACTIVE — ZCODE
+Return ceiling: READY FOR INDEPENDENT REVIEW
+```
+
+Required outcome:
+
+```text
+optional bounded Character player_profile
+→ frozen Game-local selected Character projection
+→ separate fail-closed Player Character Profile Projection
+→ MW-011 presentation-only ViewModel
+→ rich but bounded Player Host
+```
+
+R2 must preserve R1 and G5 safety boundaries. It must not expose raw `semantic_sections`, GM reference/private material, omniscient Runtime truth or latest Source Library bytes to an existing Game.
+
+## 6. Player profile architecture
+
+Character Card v0.2 gains one optional internal presentation field:
+
+```text
+player_profile:
+  headline
+  summary
+  groups[]:
+    group_id
+    title
+    items[]
+```
+
+This is authored presentation material, not gameplay/world authority. Existing v0.2 cards without it remain valid.
+
+A new bounded domain projector reads only the Game-local frozen `player_profile`. MW-009 remains the owner of current Player-known facts and is not broadened to consume raw Character sections.
+
+Old Games created from Character generations without the profile must remain unchanged and must not backfill from the current Source Library.
+
+## 7. Zhang Chen R2 consumer requirement
+
+The integrated MW-012 Character semantics remain protected and are not reopened.
+
+MW-011 R2 may create a new Zhang Chen Source generation whose only semantic change is **none**: it adds a player-facing structured presentation profile faithfully derived from the already Owner-approved material.
+
+Expected visible profile includes:
+
+```text
+24岁 · 现代穿越者
+退役武警义务兵 / 985高校出身 / 历史与军事爱好者
+背景
+性格
+能力
+局限
+初始目标
+行为原则
+随身物品
+```
+
+The Source package should normally increment from `0.1.0` to `0.1.1`, producing a new immutable generation fingerprint for future Games. Existing Games remain frozen on their prior generation.
+
+## 8. G6 protected order
+
+G6 remains consumer-first:
 
 ```text
 Runtime projection
@@ -94,120 +192,20 @@ Runtime projection
 → Owner UAT / visual polish
 ```
 
-Supporting design:
+MW-011 R2 is still a real consumer correction. It must not expand into a universal UI DSL, Character stat ontology, Mod schema or Creator.
 
-`my world/architecture/ui/声明式UIHost设计.md`
+## 9. G5 invariants still protected
 
-First G6 decision:
+- free-form Narrative remains primary and is not gated by semantic/Knowledge/Agency/Evolution extraction;
+- World Truth != actor Knowledge != human-player disclosure;
+- stable NPCs may act independently;
+- World Evolution may hold or selectively advance;
+- Public d20 remains program-owned mechanics grounding, not a second world truth;
+- Save/reopen/Restore currentness remains authoritative;
+- Literary Style Reference remains expression-only;
+- raw accepted Narrative bytes remain authoritative; Markdown-lite remains disposable UI projection.
 
-`my world/architecture/ui/G6_RPG_HOST_VIEWMODEL_V0_1_DECISION.md`
-
-External World Pack / Mod UI declaration remains G8 work.
-
-## 5. MW-011 — Engineering PASS / integrated
-
-Original reviewed candidate:
-
-`my-world@066aff2487cd1059af1943eb5282bf5cfe2c89fb`
-
-Rebased verified candidate:
-
-`my-world@503fc6feeea86941c05b65ddbd6ab7113a92f776`
-
-Integrated main commit:
-
-`my-world@7972ab74ccc1d5368f8ca32d4fd4fd83173aa04d`
-
-Formal review:
-
-`my-world/docs/mw011/MW-011_INDEPENDENT_REVIEW_IR1.md`
-
-Post-IR rebase verification:
-
-`my-world/docs/mw011/MW-011_POST_IR1_REBASE_VERIFICATION.md`
-
-Verdict:
-
-**MW-011 Revision 1 / IR#1 = ENGINEERING PASS. Rebase verified and integrated to main. No Revision 2 and no new review round required.**
-
-Current `my-world/main` descends from the reviewed rebased candidate, so the reviewed MW-011 outcome is reachable from main without an intervening semantic rewrite.
-
-Reviewed behavior remains:
-
-- Player Host shows identity/profile, safe World/Entry context, latest four accepted Player actions and Player-turn count;
-- GM-only Opening does not increment Player-turn count;
-- World Surface defaults to `概览` rather than always-visible Save controls;
-- existing G3 Save UI/semantics remain behind a bounded `存档` surface;
-- Player-known facts still come only through the MW-009 disclosure boundary;
-- NPC-only Knowledge, raw semantic consequences, Agency, World Evolution, instructions/style/internal IDs and Public-d20 control material do not enter the ViewModel/visible Hosts;
-- reopen reconstructs the same ViewModel and Restore removes restored-away actions/knowledge;
-- no fabricated HP/location/inventory/relationship/faction/quest state, no generic declarative platform, no new persistence schema and no Provider summarization were introduced.
-
-MW-011 now awaits Owner focused G6 UI UAT only.
-
-## 6. MW-012 — Revision 2 Engineering PASS / integrated
-
-Reviewed R2 candidate:
-
-`my-world@f91e23ac8fe76c3b16bd486d419461cdf70d5a1f`
-
-Integrated main commit:
-
-`my-world@6338af5665c5137d9a9528776e77a13ffb924ea6`
-
-Formal IR#1:
-
-`my-world/docs/mw012/MW-012_INDEPENDENT_REVIEW_IR1.md`
-
-R2 addendum:
-
-`my-world/docs/tasks/MW-012_REVISION2_CONTENT_AND_PUBLISH_PROOF_ADDENDUM.md`
-
-Formal IR#2:
-
-`my-world/docs/mw012/MW-012_INDEPENDENT_REVIEW_IR2.md`
-
-Verdict:
-
-**MW-012 Revision 2 / IR#2 = ENGINEERING PASS — INTEGRATED / OWNER PRODUCT UAT.**
-
-IR#1 findings are resolved:
-
-- T0 wording is explicitly literacy-only: Zhang Chen initially cannot read clerical-script-era written material, without inventing a spoken-language incapacity or language simulation system;
-- the production publish-script smoke assertion is reachable and executes before test termination;
-- the unrelated MW-004 `.uid` is absent from the final integrated outcome.
-
-Accepted Source identity:
-
-```text
-asset_id: character.han_end.zhang_chen
-schema: character_card.v0.2
-version: 0.1.0
-display_name: 张琛
-profile: han-t0-transport / 现代来客起点
-generation fingerprint (R2): b1a1e5d58fe1383ff41b1f9745199aafe97fed8a1015299cf21dfb6f02091553
-```
-
-The single T0 profile remains compatible with all seven current Han-end Entries and unrelated worlds remain ineligible. Historical memory remains protagonist belief/knowledge rather than World Truth, guaranteed future canon, NPC destiny or World Evolution command. Meaningful future protagonist choices remain Player-owned.
-
-R2 evidence records bounded Owner-approved production Source publication with `zhang_chen_present=true`, seven current Characters and `owner_games_modified=false`, plus normal production inventory discovery of the same current generation. Current `my-world/main` now contains the reviewed Source bytes and descends from the reviewed R2 candidate. Final visible confirmation remains Owner product UAT.
-
-## 7. Current main integration verification
-
-Remote implementation main is:
-
-`my-world@6338af5665c5137d9a9528776e77a13ffb924ea6`
-
-Its parentage includes both reviewed outcomes:
-
-```text
-7972ab74ccc1d5368f8ca32d4fd4fd83173aa04d  MW-011 integrated
-6338af5665c5137d9a9528776e77a13ffb924ea6  MW-012 R2 integrated
-```
-
-GitHub ancestry verification confirms current main descends from both `503fc6fe...` and `f91e23ac...`. No further Independent Review round is required solely for integration.
-
-## 8. Routing
+## 10. Routing
 
 Owner weekend override remains active through **2026-09-06 23:59 (+08:00)**:
 
@@ -216,22 +214,23 @@ Zcode + GLM-5.3-flash → primary implementation owner for new code-changing wor
 GPT                    → semantics / architecture / task shaping / Independent Review
 ```
 
-At **2026-09-07 00:00 (+08:00)**, absent a new Owner instruction, routing automatically returns to Codex-backend / Kimi-frontend according to the task seam.
+At **2026-09-07 00:00 (+08:00)**, absent a new Owner instruction, routing returns to Codex-backend / Kimi-frontend according to the implementation seam.
 
-The MW-011 and MW-012 worktrees may be removed only after standard worktree hygiene confirms clean state, reviewed/closed task status, pushed/reachable commits and no unknown user work.
+Task worktree policy remains:
 
-## 9. Immediate route
+`D:/AI/Projects/.worktrees/my-world/<task-or-revision>`
+
+Keep MW-011 R2 worktree through GPT Independent Review.
+
+## 11. Immediate route
 
 ```text
-Owner focused UAT:
-1. G6 Player/World Host information hierarchy is materially more useful than the final G5 thin side panels
-2. 概览 / 存档 surface behavior feels natural and Save behavior remains intact
-3. New Game can visibly select 张琛
-4. 张琛 + a Han-end Entry can Final Create successfully in the actual product
-5. Opening prose respects physical transport, no local prior identity, literacy-only limitation and historical-memory non-canon boundary
-→ record Owner verdict
-→ next real G6 consumer / visual vertical
-→ Internal Declarative UI Host only after real component needs are established
+Zcode implements MW-011 R2 from the frozen decision/addendum
+→ push exact candidate
+→ GPT IR#2 on actual diff/tests/evidence
+→ integrate reviewed candidate
+→ publish new Zhang Chen current generation
+→ Owner creates a fresh Zhang Chen Game
+→ Owner UI UAT on rich Player Host
+→ continue next real G6 consumer/visual vertical
 ```
-
-Do not manufacture G6 platform work merely to accelerate the appearance of a framework, and do not allow MW-012 to become a broad authoring platform task.
