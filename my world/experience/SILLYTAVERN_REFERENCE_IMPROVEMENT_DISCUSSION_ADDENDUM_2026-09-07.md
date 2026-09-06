@@ -1,7 +1,7 @@
 ---
 title: my world｜SillyTavern 参考研究改进讨论通过清单补充记录
-status: working-approved-candidate-list-addendum
-version: 1.1
+status: discussion-closed-input-to-revised-axis
+version: 1.2
 created: 2026-09-07
 updated: 2026-09-07
 parent_record: ./SILLYTAVERN_REFERENCE_IMPROVEMENT_DISCUSSION_2026-09-06.md
@@ -15,12 +15,13 @@ roadmap_authorization: none
 
 本文件续接主通过清单，记录后续讨论中 Owner 明确通过的提案。它与主记录共同构成本轮讨论结束后 Revised Task Axis 的输入。
 
-重要边界不变：
+重要边界：
 
 - 通过 != 立即实施；
 - 不据此创建新的 MW Work Item；
-- 不修改 CURRENT Roadmap / Architecture / Status；
-- 等 Owner 明确结束本轮讨论后，由 GPT 统一做重叠、依赖、冲突、阶段和 UAT 审计。
+- 本文件本身不修改 CURRENT Roadmap / Architecture / Status；
+- 本轮讨论已经结束，下一步由 GPT 统一做重叠、依赖、冲突、阶段和 UAT 审计，形成 Revised Task Axis；
+- Revised Task Axis 仍需 Owner 批准后才能 Promotion 到 CURRENT Roadmap / Architecture / Status 并进入正式 Implementation。
 
 主记录此前累计通过：28 项。
 
@@ -146,6 +147,20 @@ Provider / Model：Kimi / K3
 
 ## 2. 当前累计
 
-主记录 28 项 + 本补充记录 6 项 = **当前累计通过 34 项**。
+主记录 28 项 + 本补充记录 6 项 = **最终累计通过 34 项**。
 
-本文件仍不是正式 Roadmap 或实现授权。
+原提案 56–60：Owner 明确全部不通过，不进入 Revised Task Axis 输入。
+
+---
+
+## 3. 讨论关闭与路线重构最高优先级
+
+Owner 于 2026-09-07 明确结束本轮改进提案发散，并授权开始重构任务列表。
+
+路线重构必须服从新的最高优先级：
+
+> **优先保证游戏尽快完成完整游戏闭环。核心开发先做；扩展功能、体验优化、Creator、Reference、模型管理、诊断与其它外围增强后置。**
+
+因此 Revised Task Axis 不得把 34 个通过提案机械转换成 34 个近期任务；必须先判断哪些是 V0 Core Closure 的 Stage Minimum，哪些属于 Post-closure Core Hardening，哪些只是 Product/UX Maturity 或 Future Platform。
+
+当前 MW-018 + MW-019 Combined Owner UAT Gate 不因路线重构而被跳过；在 Owner 明确改变优先级前，它仍是当前产品 Gate。
