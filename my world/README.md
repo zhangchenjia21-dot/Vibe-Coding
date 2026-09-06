@@ -1,96 +1,107 @@
 # my world｜项目治理入口
 
-`my world` 是独立单人 AI RPG 项目。实时任务状态以 `MY_WORLD_CURRENT_STATUS.md` 为准。
+`my world` 是独立、local-first、single-player-first 的长期 AI RPG 项目。
+
+实时 Task / PASS / UAT 以 [`MY_WORLD_CURRENT_STATUS.md`](./MY_WORLD_CURRENT_STATUS.md) 为准。
 
 ## Start Here
 
-1. [`MY_WORLD_项目启动总纲_CURRENT.md`](./MY_WORLD_项目启动总纲_CURRENT.md)
-2. [`MY_WORLD_核心设计原则_CURRENT.md`](./MY_WORLD_核心设计原则_CURRENT.md)
-3. [`MY_WORLD_架构_CURRENT.md`](./MY_WORLD_架构_CURRENT.md)
-4. [`MY_WORLD_总体规划路线图_CURRENT.md`](./MY_WORLD_总体规划路线图_CURRENT.md)
-5. [`MY_WORLD_CURRENT_STATUS.md`](./MY_WORLD_CURRENT_STATUS.md)
+1. [`MY_WORLD_项目启动总纲_CURRENT.md`](./MY_WORLD_项目启动总纲_CURRENT.md) — 为什么做、核心体验、产品边界
+2. [`MY_WORLD_核心设计原则_CURRENT.md`](./MY_WORLD_核心设计原则_CURRENT.md) — 跨阶段长期原则
+3. [`MY_WORLD_架构_CURRENT.md`](./MY_WORLD_架构_CURRENT.md) — 当前系统地图与 owner / boundary
+4. [`MY_WORLD_总体规划路线图_CURRENT.md`](./MY_WORLD_总体规划路线图_CURRENT.md) — G1–G9 阶段路线
+5. [`MY_WORLD_CURRENT_STATUS.md`](./MY_WORLD_CURRENT_STATUS.md) — 当前真实状态 / active work
+6. [`AGENT_EXECUTION_ROUTING_CURRENT.md`](./AGENT_EXECUTION_ROUTING_CURRENT.md) — Codex / KimiCode / GPT 当前分工
 
 > **Root is map; subfolders are depth.**
 
-## 当前状态
+## 当前阶段
 
 ```text
-G1 Foundation                         PASS / CLOSED
-G2 AI Conversation Spine              PASS / CLOSED
-G3 Persistence / Save / Timeline     PASS / CLOSED
-G4 Primary Source Assets & Local Game PASS / CLOSED
-G4-10 Runtime Asset Resolution        DEFERRED / MOVED TO G6
+G1 Foundation                               PASS / CLOSED
+G2 AI Conversation Spine                    PASS / CLOSED
+G3 Persistence / Save / Timeline            PASS / CLOSED
+G4 Primary Source Assets & Local Game       PASS / CLOSED
+G5 World Semantics & GM Runtime             PRODUCT PASS / CLOSED
+G5-GATE                                     PRODUCT PASS
 
-G5 World Semantics & GM Runtime       ACTIVE
-G5-01 World Turn                      PASS / CLOSED
-G5-02 Knowledge Provenance            PASS / CLOSED
-G5-03 NPC / Faction Agency            ACTIVE
-G5-03M1 old single-NPC task           SUPERSEDED / DO NOT EXECUTE
-G5-03M1 Multi-Actor Agency Cycle      ACTIVE — KIMI
-G5-03M2 Stable Actor Materialization  NEXT AFTER M1 REVIEW
-G5-04 Event / Priority Evolution      NOT YET
+G6 RPG Experience & Internal Declarative UI Host ACTIVE
 ```
 
-## 当前路线
+G6 当前已经完成：
 
 ```text
-G5-03M1 Multi-Actor Agency Cycle
-→ GPT Independent Review
-→ G5-03M2 Minimal Stable Actor Materialization / Registry Expansion
-→ decide remaining Faction slice from actual consumer
-→ G5-04 Event / Priority-driven World Evolution
+MW-011 RPG Host / Player Profile             PRODUCT PASS / CLOSED
+MW-012 Zhang Chen Character Card             ENGINEERING PASS / INTEGRATED
+Visual Runtime re-entry audit                DONE — implementation DEFERRED
 ```
 
-## G5 当前核心
-
-G5 已证明：
+当前正在做的不是新的 coding implementation，而是：
 
 ```text
-free-form Narrative
-→ durable world consequences
-
-World / GM truth
-!= actor knowledge
+G6 Surface / Information Architecture Audit
+→ Owner + GPT discussion
 ```
 
-G5-03 现在开始证明：
+讨论 Draft：
 
-> **Source provides inertia; actors create history.**
+`architecture/ui/G6_SURFACE_INFORMATION_ARCHITECTURE_DRAFT_V0_1.md`
 
-Owner 已明确纠正旧的 one-NPC-per-turn 设计。当前 Agency Cycle 是：
+## 当前 G6 路线
+
+Canonical 顺序：
 
 ```text
-accepted ordinary turn
-→ existing semantic-analysis request performs Agency Selection
-→ 0..4 relevant stable NPC candidates
-→ separate actor-scoped execution per selected NPC
-→ selected requests may progress concurrently
-→ several NPC actions may become durable in the same world window
+Runtime projection / ViewModel / first real consumer   DONE
+→ Visual Runtime re-entry audit                        DONE / DEFER IMPLEMENTATION
+→ real RPG Surfaces / information architecture         CURRENT
+→ Expansion mechanic-state consumer
+→ Internal Declarative UI Host v0.1
+→ bounded Action Intent
+→ responsive / Theme / navigation
+→ Owner UAT / visual polish
 ```
 
-不再使用 round-robin 单 NPC 作为主要 scheduler。
+`MW-013 Internal Declarative UI Host v0.1` 曾被过早调度，现正式：
 
-每个 actor execution 只能使用该 actor 自己的 Character Source、自己的 durable Knowledge Provenance 与自己的 agency history；不能因为 GM 全知就继承别人的私密知识。
+```text
+MW-013 = HOLD / NOT AUTHORIZED YET
+```
 
-Agency 始终是 background/fail-soft：玩家下一行动、Restore/Recovery 或 timeline 切换优先；未提交的旧 agency 必须失效，不能把 Provider 延迟变成玩家输入 Gate。
+先让真实 `角色 / 人物 / 其它 grounded Surface` 拉出重复 UI 模式，再抽象 Declarative Host。
 
-当前 M1 用 Guaranteed NPC 作为已有稳定身份的 bootstrap pool。Guaranteed NPC 不是永久 agency 边界。Owner 提出的曹操 / 孙权 / 诸葛亮同一世界窗口可能同时行动，已经为下一步 G5-03M2 stable actor materialization 提供了真实 consumer。
+## 三栏长期骨架
 
-Canonical current agency decision：
+```text
+Player Host | Narrative Host | World Surface Host
+```
 
-`architecture/world/G5_MULTI_ACTOR_AGENCY_CYCLE_V0_2_DECISION.md`
+当前产品方向：
 
-Current implementation packet：
+```text
+Player Host
+→ 我是谁？我现在怎么样？
+→ 长期趋向高频、紧凑 HUD
 
-`my-world/docs/tasks/G5-03M1_MULTI_ACTOR_AGENCY_CYCLE_TASK.md`
+Narrative Host
+→ 现在发生了什么？我接下来想做什么？
+→ 永远是局内视觉与交互重心
 
-Historical `G5_STABLE_NPC_AGENCY_V0_1_DECISION.md` 与 `G5-03M1_STABLE_NPC_INDEPENDENT_AGENCY_TASK.md` 已 superseded，不得执行旧的 single-actor rule。
+World Surface Host
+→ 这个世界有哪些值得主动查看的信息？
+→ 概览 / 角色 / 人物 / 行囊 / 事务 / 系统 / 地图 / 存档 等候选
+→ 只在真实 Domain + player-safe projection 成立后出现
+```
 
-## 长期原则速览
+历史 `The World` 的已验证经验继续作为 evidence：
 
-> **Vertical before platform. Consumer before infrastructure.**
->
+> **Workspace is organized for truth maintenance; UI is organized for player decisions.**
+
+## 长期核心原则速览
+
 > **Model Freedom First.**
+>
+> **Visible Narrative First.**
 >
 > **Narrative richness over artificial brevity.**
 >
@@ -98,8 +109,28 @@ Historical `G5_STABLE_NPC_AGENCY_V0_1_DECISION.md` 与 `G5-03M1_STABLE_NPC_INDEP
 >
 > **Source provides inertia; actors create history.**
 >
-> **GM omniscience must not become actor omniscience.**
+> **World Truth != actor Knowledge != human-player disclosure.**
+>
+> **UI is a projection, not a second truth source.**
+>
+> **Vertical before platform. Consumer before infrastructure.**
 >
 > **Context stays bounded, not starved.**
 
-Visual runtime remains deferred to G6.
+## 当前 Agent 路由
+
+```text
+GPT
+→ product semantics / architecture / Task Shaping / assignment / Independent Review
+
+Codex
+→ high-complexity / architecture-critical / high-blast-radius implementation
+
+KimiCode
+→ bounded frontend/UI/interaction / ordinary surfaces / content tooling / tests
+
+Owner
+→ Product UAT / explicit product verdict
+```
+
+不再默认把新任务交给 Zcode。具体以 `AGENT_EXECUTION_ROUTING_CURRENT.md` 为准。
