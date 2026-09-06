@@ -1,7 +1,7 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 16.9
+version: 16.10
 created: 2026-08-26
 updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
@@ -238,21 +238,43 @@ MW-013 Internal Declarative UI Host v0.1
 
 Re-evaluate only after multiple real Surfaces / mechanic consumers expose repeated component patterns.
 
-## 10. Agent routing
+## 10. Agent routing — OWNER UPDATE 2026-09-06
+
+Canonical routing authority:
+
+`AGENT_EXECUTION_ROUTING_CURRENT.md v3.0`
+
+Current exception:
+
+```text
+MW-015
+→ KimiCode continues this already-authorized round
+→ do not reassign mid-task
+```
+
+After MW-015, Owner explicitly requires:
 
 ```text
 GPT
-→ product semantics / architecture / Task Shaping / assignment / Independent Review
+→ product semantics / architecture / Task Shaping / dispatch / Independent Review
 
 Codex
-→ high-complexity / architecture-critical / Runtime/authority implementation
-
-KimiCode
-→ bounded UI / interaction / ordinary Surface consumers after stable seams exist
+→ default and sole implementation agent for all new production tasks
 
 Owner
 → Product UAT / explicit product verdict
 ```
+
+Therefore the previous default split:
+
+```text
+Codex    → complex/critical implementation
+KimiCode → bounded UI/ordinary surfaces
+```
+
+expires after MW-015. KimiCode, Zcode or other implementation agents may only be used for a future task if Owner explicitly re-authorizes them.
+
+Complexity / importance / blast radius still control Task splitting, Acceptance depth and Review rigor, but no longer select between Codex and KimiCode.
 
 ## 11. Immediate route
 
@@ -261,6 +283,7 @@ MW-015 KimiCode implementation
 → GPT Independent Review
 → integrate only after Engineering PASS
 → Owner UAT
+→ all subsequent new implementation tasks default to Codex
 → People Surface / mechanic-state consumer / next grounded Surfaces
 → repeated patterns
 → only later re-evaluate MW-013
