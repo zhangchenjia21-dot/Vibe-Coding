@@ -1,15 +1,15 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 16.10
+version: 16.11
 created: 2026-08-26
 updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
-current_task: MW-015 Character + Important Experiences Surfaces v0.1
-current_owner: KimiCode implementation lane
+current_task: MW-015 Owner UAT — Character + Important Experiences Surfaces v0.1
+current_owner: Owner product UAT lane
 parent_task: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT
-owner_uat_required: false
+owner_uat_required: true
 context_handoff: handoff/GPT_CONTEXT_HANDOFF_CURRENT.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
@@ -32,22 +32,16 @@ MW-012 Zhang Chen Player Character Card     ENGINEERING PASS / INTEGRATED / PROD
 G6 Visual Runtime re-entry                  AUDITED — IMPLEMENTATION DEFERRED
 G6 Character + Important Experiences        SEMANTIC / IA FROZEN
 MW-014 Model-driven Information Curation    ENGINEERING PASS / INTEGRATED
-MW-015 Character + Important Experiences UI READY FOR KIMICODE
+MW-015 Character + Important Experiences UI ENGINEERING PASS / INTEGRATED / OWNER UAT PENDING
 MW-013 Internal Declarative UI Host v0.1    HOLD / NOT AUTHORIZED YET
 ```
 
-## 2. Current architecture direction
-
-Canonical architecture map has been aligned to G6 v3.1:
-
-`MY_WORLD_架构_CURRENT.md`
-
-Session shell:
+## 2. Frozen G6 information architecture
 
 ```text
 Player Status Host
 → portrait + live mechanics/status HUD only
-→ no “who am I” biography/profile ownership
+→ no biography/profile ownership
 → may collapse/hide when no legitimate content exists
 
 Narrative Host
@@ -72,7 +66,7 @@ Current mother taxonomy:
 存档
 ```
 
-Only grounded Surfaces appear. Current grounded right-side consumer set for MW-015 is:
+Only grounded Surfaces appear. Current implemented right-side set is:
 
 ```text
 概览 / 角色 / 重要经历 / 存档
@@ -82,15 +76,14 @@ Only grounded Surfaces appear. Current grounded right-side consumer set for MW-0
 
 Canonical authority:
 
-`architecture/ui/G6_CHARACTER_AND_IMPORTANT_EXPERIENCES_V1_0_DECISION.md`
-
-Frozen split:
+- `architecture/ui/G6_CHARACTER_AND_IMPORTANT_EXPERIENCES_V1_0_DECISION.md`
+- `architecture/ui/G6_MODEL_DRIVEN_INFORMATION_CURATION_AUTHORITY_DECISION.md`
 
 ```text
 角色 / Character
 → evolving current Character Sheet
 → “现在的我是谁”
-→ current state only by default
+→ current state, not mutation log
 
 重要经历 / Important Experiences
 → protagonist-centered milestone history
@@ -101,190 +94,144 @@ Frozen split:
 → starting possessions do not belong in Character Surface
 ```
 
-Character includes current origin/background, current social identity/role, personality/values/principles, non-numeric capabilities, long-term limitations/traits and long-term goals/self-direction.
-
-Long-term goals belong to Character; current unresolved commitments/tasks belong to future `事务`.
-
-Character Surface completion ends the MW-011 transitional use of biography/profile in the left Player Status Host. Current v0.1 has no grounded portrait/mechanic contribution, so the left Host may collapse/hide instead of duplicating biography or fake status.
-
-## 4. Model-driven information curation — FROZEN
-
-Canonical authority:
-
-`architecture/ui/G6_MODEL_DRIVEN_INFORMATION_CURATION_AUTHORITY_DECISION.md`
-
-Frozen principle:
+Frozen curation principle:
 
 > **Model owns semantic interpretation and curation; Program owns normalized storage, temporal integrity and presentation.**
 
-The model decides semantic meaning, importance, Character evolution, milestone selection and player-facing summarization. Program must not build a parallel semantic judge through keyword/regex rules, importance scores, event-type trees, protagonist-choice evidence heuristics or mechanical long-term thresholds.
+Program must not add keyword/regex semantic routing, importance scores, event-type rule trees or protagonist-choice heuristics.
 
-MW-015 is a pure presentation consumer over the reviewed MW-014 seam; it must not re-interpret Narrative semantics locally.
+## 4. MW-014 — ENGINEERING PASS / INTEGRATED
 
-## 5. MW-014 — ENGINEERING PASS / INTEGRATED
-
-Task:
-
-`my-world/docs/tasks/MW-014_MODEL_DRIVEN_CHARACTER_AND_MILESTONE_CURATION_V0_1_TASK.md`
-
-Independent Review:
-
-`my-world/docs/mw014/MW-014_INDEPENDENT_REVIEW_IR1.md`
-
-Integration verification:
-
-`my-world/docs/mw014/MW-014_INTEGRATION_VERIFICATION.md`
-
-Reviewed candidate:
-
-```text
-8a3b64d0747ebf9c987c32af93e804672a8cbbe3
-```
-
-Integrated review lineage:
-
-```text
-048b2a76ff8238a7e9025da268a24ae924281856
-```
-
-Current implementation main after integration documentation before MW-015 shaping was:
-
-```text
-7a0eeb35f8f836fa6df98288bef98a8f535b8393
-```
-
-Reviewed player-safe L3 seam for the UI consumer:
+Reviewed backend seam:
 
 `src/信息整理/L3_外交层/角色经历投影公开接口.gd`
 
-It exposes current Character + Important Experiences without a render-time Provider call or raw/private Runtime data.
+It exposes presentation-safe current Character + Important Experiences and requires no Provider call merely to render/reopen.
 
-## 6. G6 root/supporting IA drift — ALIGNED
+Formal records:
 
-Before MW-015 shaping, stale supporting prose that still assigned “who am I” to the left Host or omitted `重要经历` was aligned.
+- `my-world/docs/mw014/MW-014_INDEPENDENT_REVIEW_IR1.md`
+- `my-world/docs/mw014/MW-014_INTEGRATION_VERIFICATION.md`
 
-Updated current supporting authorities include:
+## 5. MW-015 — ENGINEERING PASS / INTEGRATED / OWNER UAT PENDING
 
-```text
-MY_WORLD_架构_CURRENT.md v3.1
-architecture/ui/声明式UIHost设计.md v1.4
-```
-
-Current meaning is now consistent:
-
-```text
-left  = portrait + live status only
-right = current Character / Important Experiences / other grounded information
-MW-013 remains HOLD
-```
-
-## 7. ACTIVE — MW-015
-
-Executable task:
+Task:
 
 `my-world/docs/tasks/MW-015_CHARACTER_AND_IMPORTANT_EXPERIENCES_UI_V0_1_TASK.md`
 
-Identity:
+Reviewed implementation candidate:
 
 ```text
-Work Item: MW-015
-Name: Character + Important Experiences Surfaces v0.1
-Primary Implementer: KimiCode
-Reviewer: GPT
-Revision: 1
-Review-Round: 0
-Status: READY FOR KIMICODE
-Branch: mw-015-character-important-experiences-ui-v01
-Worktree: D:/AI/Projects/.worktrees/my-world/mw-015
-Return ceiling: READY FOR INDEPENDENT REVIEW
+3387cba213a2680b08f78b07a63ee0ecee5417ce
 ```
 
-Required product vertical:
+Independent Review record commit:
 
 ```text
-MW-014 player-safe projection
-↓
-right-side 概览 | 角色 | 重要经历 | 存档
-↓
-current Character Sheet + milestone history
-↓
-MW-011 biography/profile leaves the left Host
-↓
-empty current Player Status Host collapses/hides
+0e7aed125f9f4d46d8ca86070d11b80f130ed213
 ```
 
-Key scope constraints:
-
-- no raw `world_state` / Narrative semantic inference in UI;
-- no Program semantic classifier;
-- no Inventory / People / Thread / Map / System fake tabs;
-- no portrait resolver / fake HP or attributes;
-- no MW-013 Declarative Host;
-- Save ownership/callbacks remain G3-owned;
-- Curator success should refresh the visible surfaces without reopening.
-
-## 8. Visual Runtime disposition
-
-Runtime Asset Resolution / portrait / scene / authored-map implementation remains deferred until real authored first-party visual demand exists.
-
-Character portrait is a legitimate future Player Status Host consumer, but no media resolver is built merely to fill the slot.
-
-## 9. MW-013 disposition
+Integration merge:
 
 ```text
-MW-013 Internal Declarative UI Host v0.1
-= HOLD / NOT AUTHORIZED TO IMPLEMENT YET
+967a856e02b761576cc4dcb773a693530dcf2fc9
 ```
 
-Re-evaluate only after multiple real Surfaces / mechanic consumers expose repeated component patterns.
+Post-integration verification doc:
 
-## 10. Agent routing — OWNER UPDATE 2026-09-06
+`my-world/docs/mw015/MW-015_INTEGRATION_VERIFICATION.md`
 
-Canonical routing authority:
+Engineering outcome:
+
+```text
+right information navigation
+→ 概览 | 角色 | 重要经历 | 存档
+
+角色
+→ renders current MW-014 Character projection
+
+重要经历
+→ renders current ordered MW-014 milestone projection
+
+left Player Status Host
+→ transitional biography/profile/world/recent-actions/turn-count removed
+→ currently collapses/hides because no real portrait/mechanic contribution exists
+```
+
+Engineering evidence reviewed by GPT includes the real-shell focused suite, MW-014/G3/G5/MW-009/MW-011/MW-012 regressions, responsive checks, Windows export and zero render-time Provider calls.
+
+This is **not Product PASS** until Owner accepts the real app experience.
+
+## 6. Owner UAT target
+
+Owner should verify in the real application:
+
+```text
+open Game
+→ right panel is 信息
+→ tabs are 概览 / 角色 / 重要经历 / 存档
+→ 角色 contains current protagonist information
+→ left biography filler is gone and no fake status appears
+→ play a meaningful turn
+→ curator result becomes visible without reopening
+→ 重要经历 reflects a meaningful milestone when the model judges one
+→ Restore / Regenerate returns Character / Important Experiences to matching current history
+```
+
+Owner verdict options:
+
+```text
+PASS
+NOT PASS — with concrete product/UAT findings
+```
+
+## 7. Agent routing — OWNER UPDATE
+
+Canonical authority:
 
 `AGENT_EXECUTION_ROUTING_CURRENT.md v3.0`
 
-Current exception:
+MW-015 was the final already-authorized KimiCode round.
 
-```text
-MW-015
-→ KimiCode continues this already-authorized round
-→ do not reassign mid-task
-```
-
-After MW-015, Owner explicitly requires:
+After MW-015:
 
 ```text
 GPT
 → product semantics / architecture / Task Shaping / dispatch / Independent Review
 
 Codex
-→ default and sole implementation agent for all new production tasks
+→ sole default implementation agent for all new production tasks
 
 Owner
 → Product UAT / explicit product verdict
 ```
 
-Therefore the previous default split:
+KimiCode / Zcode / other implementation agents require explicit future Owner re-authorization.
+
+## 8. Visual Runtime / MW-013 disposition
 
 ```text
-Codex    → complex/critical implementation
-KimiCode → bounded UI/ordinary surfaces
+Runtime Asset Resolution / portrait / scene / authored-map
+→ DEFERRED until real authored visual demand exists
+
+MW-013 Internal Declarative UI Host v0.1
+→ HOLD / NOT AUTHORIZED YET
 ```
 
-expires after MW-015. KimiCode, Zcode or other implementation agents may only be used for a future task if Owner explicitly re-authorizes them.
+Do not re-enter MW-013 until multiple grounded real Surfaces / mechanic consumers expose repeated patterns.
 
-Complexity / importance / blast radius still control Task splitting, Acceptance depth and Review rigor, but no longer select between Codex and KimiCode.
-
-## 11. Immediate route
+## 9. Immediate route
 
 ```text
-MW-015 KimiCode implementation
+Owner UAT — MW-015
+→ if PASS: mark MW-015 PRODUCT PASS / CLOSED
+→ choose next grounded G6 outcome
+→ all new implementation tasks default to Codex
+
+if NOT PASS:
+→ GPT root-cause / scope classification
+→ same MW-015 revision lineage for same-outcome defects
+→ Codex implements the required correction
 → GPT Independent Review
-→ integrate only after Engineering PASS
-→ Owner UAT
-→ all subsequent new implementation tasks default to Codex
-→ People Surface / mechanic-state consumer / next grounded Surfaces
-→ repeated patterns
-→ only later re-evaluate MW-013
+→ Owner UAT again
 ```
