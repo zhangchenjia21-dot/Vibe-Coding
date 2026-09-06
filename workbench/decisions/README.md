@@ -10,6 +10,7 @@
 - [`D-004_TA-1AOwnerUATCorrectionScope.md`](D-004_TA-1AOwnerUATCorrectionScope.md) — TA-1A 首轮 Owner UAT 未通过；收敛 Month View / Current Vector 必要 correction。
 - [`D-005_TA-1AStageExit与TA-1BAuthorization.md`](D-005_TA-1AStageExit与TA-1BAuthorization.md) — TA-1A Review / Correction / focused UAT 全部通过，Stage Exit PASS；集成 implementation main 并授权 TA-1B Dispatch。
 - [`D-006_TA-1BStageExit与TA-2Authorization.md`](D-006_TA-1BStageExit与TA-2Authorization.md) — TA-1B Independent Review + Complete V0 UAT PASS，Stage Exit；集成 Complete V0 并授权 TA-2 Reliability Hardening。
+- [`D-007_TA-2StageExit与TA-3V0AcceptanceAuthorization.md`](D-007_TA-2StageExit与TA-3V0AcceptanceAuthorization.md) — TA-2 Reliability Hardening PASS_WITH_NOTES / Stage Exit；集成 accepted hardening baseline 并授权 TA-3 Final V0 Acceptance。
 
 ## 什么应该进入这里
 
