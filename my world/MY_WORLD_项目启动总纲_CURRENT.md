@@ -1,10 +1,11 @@
 ---
 title: my world｜项目启动总纲
 status: current-canonical-product-spec
-version: 2.0
+version: 2.1
 created: 2026-08-25
-updated: 2026-08-28
+updated: 2026-09-06
 product_definition_gate: PASS
+current_phase: G6
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 local_project_dir: D:\AI\Projects\my-world
 ---
@@ -13,15 +14,14 @@ local_project_dir: D:\AI\Projects\my-world
 
 ## 0. 文档职责
 
-本文件只拥有 `my world` 的**产品定义**：为什么做、给谁做、核心价值、核心体验、第一代建局方式、范围与成功标准。
+本文件拥有 `my world` 的产品定义：为什么做、给谁做、核心价值、核心体验、第一代产品形态、范围与成功标准。
 
 它不重复维护：
 
-- 当前 Task / PASS / UAT：`MY_WORLD_CURRENT_STATUS.md`；
-- 系统架构与专题设计：`MY_WORLD_架构_CURRENT.md`；
-- 跨阶段设计哲学：`MY_WORLD_核心设计原则_CURRENT.md`；
-- 阶段与 Task DAG：`MY_WORLD_总体规划路线图_CURRENT.md`；
-- 可复用开发路径与历史经验：`experience/AI_RPG开发路径与阶段设计经验_v1.0_2026-08-28.md`。
+- 当前 Task / PASS / UAT：`MY_WORLD_CURRENT_STATUS.md`
+- 系统架构：`MY_WORLD_架构_CURRENT.md`
+- 跨阶段原则：`MY_WORLD_核心设计原则_CURRENT.md`
+- 阶段 DAG：`MY_WORLD_总体规划路线图_CURRENT.md`
 
 正式起点：
 
@@ -33,35 +33,34 @@ local_project_dir: D:\AI\Projects\my-world
 
 > **让单个玩家通过自然语言，与优秀 AI GM 在一个长期持续、可保存、可恢复、会自主演化的 2D RPG 世界中长期游玩。**
 
-玩家主要不是操作传统地图角色移动，也不是阅读预写分支剧情，而是：
+玩家的主要行为：
 
 ```text
-阅读 GM 叙事
-↓
-用自然语言决定行动
-↓
-世界与人物按自身因果回应
-↓
-状态、关系、地点、历史与后果长期保留
-↓
-继续形成属于本局的历史
+阅读 GM Narrative
+→ 用自然语言决定行动
+→ 世界与人物按自身因果回应
+→ 重要状态 / 人物 / 关系 / 历史 / 后果长期存在
+→ UI 帮助玩家理解当前世界
+→ 继续形成只属于本局的历史
 ```
 
 ---
 
 ## 2. Core Value
 
-相比“直接打开通用模型让它陪我玩 RPG”，`my world` 必须提供：
+相比“直接打开通用模型陪我玩 RPG”，`my world` 必须提供：
 
-- 长期持续的世界，而不是一次聊天的临时设定；
-- 高自由度自然语言行动，而不是封闭选项树；
-- 高质量 AI GM Narrative 与临场创造力；
-- 自主 NPC / Faction，而不是只等待玩家触发的角色；
-- 世界事实、知识、关系与后果可以长期存在；
-- 原生可靠的 Save / Restore / Recovery；
-- 角色立绘、场景图、地图、人物与机制 UI 等真正 RPG 产品体验；
-- 可安装、可组合、可创作的 World Pack / Character Card / Expansion Pack / Mod；
-- local-first、single-player-first，不依赖服务器才能开始玩。
+- 长期持续世界，而不是一次聊天设定；
+- 高自由度自然语言行动；
+- 高质量、可长篇展开的 AI GM Narrative；
+- 自主 NPC / World Evolution；
+- durable world truth + knowledge boundary；
+- 原生可靠 Save / Restore / Recovery；
+- 多个独立 Game；
+- World / Character / Expansion 组合式建局；
+- 角色、人物、世界、机制、存档等真正的 RPG 信息体验；
+- 未来可扩展 portrait / scene / map / Mod / authoring；
+- local-first、single-player-first。
 
 核心价值：
 
@@ -73,33 +72,62 @@ local_project_dir: D:\AI\Projects\my-world
 
 ### 3.1 视觉 / 交互
 
-第一代是：
+第一代：
 
 > **2D 对话式 RPG / 互动小说。**
 
-主体验：
+核心：
 
 ```text
 AI GM Narrative
 +
-玩家自然语言输入
+Player natural-language input
 ```
 
-逐步加入角色立绘、场景图、世界/区域地图、角色/关系/任务/势力/物品/机制等 RPG Surface，以及适度动画、音效和转场。
+长期加入：Character Sheet、People、Inventory、Journal、Mechanic、Save/Timeline、Map、portrait、scene art、audio/transition 等。
 
 不以自由移动 3D 世界为目标。
 
-### 3.2 运行形态
+### 3.2 三栏长期骨架
 
-- 本地优先；
-- 单人优先，预计长期保持单人；
-- 第一代不建设服务器依赖、账户系统和多人同步；
-- 模型先通过本地游戏调用远程 Provider API；
-- Local Model 是未来扩展，不是第一代 blocker。
+```text
+Player Host | Narrative Host | World Surface Host
+```
 
-### 3.3 Primary Source Assets
+分别回答：
 
-第一代正式内容来源分为三类主资产：
+```text
+Player Host
+→ 我是谁？我现在怎么样？
+
+Narrative Host
+→ 现在发生了什么？我接下来想做什么？
+
+World Surface Host
+→ 这个世界有哪些值得我主动查看的信息？
+```
+
+Narrative 永远是视觉与交互重心。
+
+来自 The World 的正式经验：
+
+> **Workspace is organized for truth maintenance; UI is organized for player decisions.**
+
+因此玩家 IA 不需要与数据库表、Domain owner 或 Source 文件结构一一对应。
+
+### 3.3 运行形态
+
+- local-first；
+- single-player-first，预计长期单人；
+- 第一代无服务器账户 / 多人同步依赖；
+- 通过 Provider API 使用模型；
+- Local Model 是未来能力，不是 blocker。
+
+---
+
+## 4. Primary Source Assets
+
+第一代：
 
 ```text
 World Pack
@@ -107,104 +135,70 @@ Character Card
 Expansion Pack
 ```
 
-共同拥有稳定 Source identity / version / exact generation，但三类资产不强行塞进一个万能语义 Schema。
+共享 stable Source identity / version / exact generation，但不强塞万能 Schema。
 
-#### World Pack
+### World Pack
 
-定义 T0 前的参考世界、世界/GM instructions、Source Lore、Entry/T0、初始世界材料和 authored assets。
+定义 T0 前世界参考、Entry/T0、world/GM material、authored assets。
 
-#### Character Card
+### Character Card
 
-定义一个可复用角色 Source。它既可以被明确选择为玩家角色，也可以被明确选择为“本局保证纳入”的 NPC。
+定义 reusable Character Source，可作为 Player Character 或 Guaranteed NPC。
 
-玩家选择某张 NPC Character Card 的正式含义是：
+Guaranteed NPC 只意味着从 Final Create 起属于 canonical cast，不自动意味着第一幕出现、同地点、互相认识、存在关系或每回合进入 Context。
 
-> **这个 exact Character Source 从建局开始就是本局 canonical cast 的一部分。**
+Character 可以额外拥有 bounded player-facing presentation projection；human-player UI 不直接读取 raw GM/private Source prose。
 
-但它**不自动意味着**：
+### Expansion Pack
 
-- 第一幕出现；
-- 与玩家同地点；
-- 玩家认识他；
-- NPC 认识玩家；
-- 自动建立关系；
-- 每 Turn 进入 Context。
-
-出现时间、位置、关系和离屏行动由本局世界因果与后续 Runtime 决定。
-
-#### Expansion Pack
-
-定义可组合的额外机制/GM/runtime capability Source。第一代允许 `0..N` Expansion；玩家可以明确选择“本局不使用拓展包”。
-
-G4 第一轮试玩不要求真实 Expansion；先证明 World + Character 的资产建局主循环，再单独接入第一个真实 Expansion Runtime effect，避免同时调试三类复杂性。
+定义可组合机制 / GM / Runtime capability。必须先证明真实 gameplay effect，再证明 durable state，再证明 UI consumer；最后才外部化 authoring/UI contract。
 
 ---
 
-## 4. 第一代建局产品路线：Asset-only New Game
-
-第一代正式收缩为**只有一条创建游戏主路径**：
+## 5. 第一代建局路线：Asset-only New Game
 
 ```text
 Main Menu
 → New Game
-→ 选择 Exactly 1 World Pack
-→ 选择 Entry / T0（若 World 提供）
-→ Expansion Pack：0..N，可明确选择 none
-→ 选择 Exactly 1 Player Character Card
-→ 选择 0..N Guaranteed NPC Character Cards
-→ 完善少量本局设定
+→ Exactly 1 World Pack
+→ Entry / T0
+→ 0..N Expansion
+→ Exactly 1 Player Character Card
+→ 0..N Guaranteed NPC Cards
+→ minimal settings
 → Compatibility Review
-→ 明确 Final Create
-→ 独立 Game-local Reality
-→ 进入真实 AI GM Opening
+→ Atomic Final Create
+→ independent Game-local Reality
+→ real AI GM Opening
 ```
 
-“完善少量本局设定”第一代至少允许：
+当前 minimal settings 包括 Game display name、Protagonist Control Mode、必要 opening supplement 等。
 
-- Game display name；
-- Protagonist Control Mode：`Full / Light / Narrative`；
-- optional opening supplement / player note；
-- World-specific 必要最小参数只有在真实 Pack 证明需要时才增量加入。
+第一代明确不支持：
 
-默认推荐 `Light Delegation`：GM 可以压缩旅途与低价值琐事，但必须在 meaningful choice、重大承诺、路线/关系/阵营等关键玩家决定前停下。
-
-### 第一代明确不支持的建局路径
-
-为降低早期工程量和避免再次重建复杂 Creation Platform，第一代不支持：
-
-- 无 World Pack 创建游戏；
-- 从一句自由文本自动生成完整新世界后直接建局；
-- 无 Character Card 的临时玩家角色建局；
-- 绕过 Source Library 直接把临时 Draft / 任意文件塞进 Final Game；
-- Final Create 时临时自动发布资产；
+- 无 World Pack 建局；
+- 一句自由文本直接生成完整世界并开局；
+- 无 Character Card 临时建局；
+- Draft 绕过 Source Library 进入 Game；
+- Final Create 自动发布 Source；
 - Creator Draft 直接成为 Game truth。
-
-这些不是永久否定，只是第一代明确不做。若未来真实玩家需求成立，再从候选路线增量增加其它建局途径。
 
 ---
 
-## 5. Core Experience / Core Loop
+## 6. Core Experience / Core Loop
 
 ```text
-启动应用
-↓
-Main Menu
-↓
-Continue Existing Game / Asset-only New Game
-↓
-进入世界
-↓
-Runtime 恢复当前世界与必要 Context
-↓
-AI GM Narrative / 玩家自然语言行动
-↓
-世界、NPC、Faction 与机制产生发展
-↓
-需要长期存在的变化 durable
-↓
-UI 投影当前游戏真相
-↓
-Save / 离开 / 以后继续同一世界
+Launch
+→ Main Menu
+→ Continue / New Game
+→ Runtime 恢复 current world + bounded Context
+→ GM Narrative
+→ Player natural-language action
+→ world / actor / mechanic consequences
+→ durable commit
+→ player-safe UI projection
+→ Save / leave / reopen / restore
+→ continue same lived world
 ```
 
 长期同时存在：
@@ -217,19 +211,23 @@ Life Loop
 自由活动 → 日常 → 人物互动 → 关系 / 人格积累
 ```
 
-节奏原则：
-
 > **Compress dead time; stop at meaningful choice.**
 
 ---
 
-## 6. Non-negotiable Product Principles
+## 7. Non-negotiable Product Principles
 
 ### Model freedom
 
-> **Model freedom first. Reversibility over prevention.**
+> **Model Freedom First. Reversibility over prevention.**
 
-开放式 AI RPG 不以消灭所有模型错误为目标。普通可逆错误优先通过 Context、Cancel、Regenerate/Retry、明确 Save/Restore 等恢复，而不是层层增加 Narrative whitelist、Regex、Confirmation 与 Validator。
+普通可逆错误优先 Context / Retry / Restore，不建立 Narrative hard-gate forest。
+
+### Narrative
+
+> **Visible Narrative First.**
+>
+> **Narrative richness over artificial brevity.**
 
 ### Player / World / GM
 
@@ -239,109 +237,94 @@ World owns Consequence
 GM owns Playability of the Consequence
 ```
 
-玩家可以尝试任何行动，但世界不保证成功。
-
-### World agency
+### Living World
 
 > **Source provides inertia; actors create history.**
 >
 > **Off-screen != Inactive.**
-
-玩家不是唯一历史创造者；重要 NPC / Faction 有自己的目标、风险、义务和 next move。
+>
+> **Persistent != Fully Simulated.**
 
 ### Knowledge
 
 ```text
-World Truth != NPC Knowledge != Player Knowledge
+World Truth != actor Knowledge != human-player disclosure
 ```
-
-知识边界是世界可信度目标，但不能无限扩张成 Narrative 审查系统。
-
-### UI truth
-
-> **UI is a projection of game truth, not a second truth source.**
 
 ### Reversibility
 
 > **Player owns the timeline.**
->
-> **Reversibility != frictionless arbitrary rewind.**
->
-> **Save Point != Timeline Node.**
 
-局部生成错误应低成本纠正；重大历史恢复要表达明确意图。内部 Timeline 不自动成为每个历史 Turn 的公开回档按钮。
-
-### Source / Game-local separation
+### Source
 
 > **Source defines the starting reference; game-local reality owns lived history.**
 
-Source 的更新、安装新版本或外部资产变化不得静默改写已有 Game。
+### UI
 
----
-
-## 7. Foundation Strategy
-
-> **Commodity Foundation, Owned Game Semantics.**
+> **UI is a projection of game truth, not a second truth source.**
 >
-> **Engine-native, not engine-semantic-coupled.**
+> **Canonical ownership != player information architecture.**
 
-成熟 Engine/Foundation 负责窗口、渲染、2D、UI、输入、字体、图片、音频、动画、资源与平台打包等通用能力。
+### Development order
 
-`my world` 自己拥有：
-
-- Application / Game lifecycle；
-- Game；
-- World；
-- Timeline；
-- Save Point；
-- Conversation / Turn；
-- Agent Context；
-- NPC / Knowledge / Relationship / Faction；
-- Thread / Quest / Mechanic State / World Event；
-- Source Library / Game Creation Composition；
-- World Pack / Character Card / Expansion Pack / Mod semantics。
-
-当前技术结论与详细导航统一见 `MY_WORLD_架构_CURRENT.md`。
+> **Vertical before platform. Consumer before infrastructure.**
 
 ---
 
-## 8. Product UI Direction
+## 8. G6 Product UI Direction
 
-应用级产品入口：
+当前 G6 已证明：Player Host / World Overview 可以安全消费 real ViewModel；张琛完整 player-facing profile 已通过 Owner UAT。
 
-```text
-Main Menu
-├─ Continue / Game Library
-├─ New Game
-└─ Quit
-```
+下一阶段不是一次做齐所有传统 RPG 页面，而是收敛玩家 IA。
 
-局内长期桌面骨架：
+当前讨论母版：
 
 ```text
-Player Host | Narrative Host | World Surface Host
-左主角信息  | 中央叙事与输入 | 右世界信息
+概览
+角色
+人物
+行囊
+事务
+系统
+地图
+存档
 ```
 
-Narrative 永远是局内视觉与交互重心。
-
-声明式 UI Host 的顺序必须是：
+出现规则：
 
 ```text
-真实固定 UI
-→ stable Host Slots
-→ real Domain projections
-→ Internal Declarative Host
-→ external World Pack / Mod UI contract
+real player question
++ real domain owner
++ player-safe projection
++ real product value
 ```
 
-第一代 Expansion 在 G4 只要求真实 Runtime effect；不因为“拓展包未来会有专用 UI”就提前建设任意外部 UI 插件平台。
+禁止为了“看起来像 RPG”制造 fake HP / location / inventory / faction / quest state 或空页。
+
+当前倾向：
+
+```text
+Player Host
+→ 长期收敛为高频 HUD
+
+角色 Surface
+→ 完整 Character Sheet
+
+人物 Surface
+→ player-known / relation-oriented People view
+```
+
+最终分类仍由 Owner 讨论冻结，不在本总纲里提前锁死。
+
+Discussion Draft：
+
+`architecture/ui/G6_SURFACE_INFORMATION_ARCHITECTURE_DRAFT_V0_1.md`
 
 ---
 
-## 9. Persistence / Long-term World Product Requirement
+## 9. Persistence / Long-term World Requirement
 
-必须原生区分：
+原生区分：
 
 ```text
 Application
@@ -354,173 +337,119 @@ Agent Context
 UI Preference
 ```
 
-关键产品要求：
+要求：
 
-- durable world mutation 不依赖周期模型 consolidation 才收敛；
-- 关闭 / 重开仍是同一世界；
-- 玩家可以明确 Save / Load；
-- Restore 同时恢复世界和相符 Context；
-- 被回滚未来不能泄漏给 AI；
-- Load 旧 Save 不应轻易不可逆销毁刚才的 current future；
-- 多个 Game 在 G4 后可以独立共存和切换；
-- arbitrary per-turn rewind 当前不是默认第一代功能。
-
----
-
-## 10. Source Library / Game Library Product Requirement
-
-第一代 New Game 只能从 Managed Local Source Library 中选择正式 Source。
-
-Library 必须区分：
-
-```text
-Source stable identity
-Source version
-Exact immutable generation / content fingerprint
-Current installed generation for future New Game
-Historical generations still pinned by existing Games
-```
-
-第一代 New Game UI 默认只展示当前安装版本，不提供复杂历史版本 picker；Program 在玩家明确选择时 pin exact generation。
-
-这既降低 UI 状态复杂度，又保证旧 Game 不会因 Source 更新而变化。
-
-Game Library 则拥有多个独立 Game 的产品生命周期；它与 Source Library 是两个不同 owner。
+- durable mutation 持续一致；
+- close/reopen 仍是同一世界；
+- Save / Restore 可信；
+- Restore 不泄漏未来 Context；
+- 多 Game 独立；
+- old Game 不被 Source update 静默改写；
+- arbitrary per-turn public rewind 不是默认目标。
 
 ---
 
-## 11. Context Product Requirement
+## 10. Context Requirement
 
-世界和历史可以长期增长，但 ordinary Turn 的 model working set 必须保持有界：
+世界和历史可以长期增长，ordinary Turn working set 必须有界：
 
 ```text
 System Total State
 != Runtime Relevant Set
-!= Model Visible Working Set
+!= Model-visible Working Set
 ```
 
-Source Library 中安装的资产、Game 中 materialized 的角色、玩家已知角色和当前模型可见内容都不是同一个集合。
-
-Transcript 不是 World DB；不能通过不断扩大 Prompt 来维持长期世界。
+Transcript 不是 World DB；长期世界不能靠无限塞 Prompt 维持。
 
 ---
 
-## 12. Staged Product Proof
+## 11. Visual / Map Product Direction
 
-为了避免再次把多个复杂能力一次性压到第一次试玩，G4 必须分阶段证明：
-
-### First Playable A — World + Character
+portrait / scene / authored-map 是重要长期能力，但当前 G6 Visual Runtime re-entry 已明确：
 
 ```text
-真实 World Pack
-+ Exactly 1 Player Character Card
-+ 0..N Guaranteed NPC Character Cards
-+ Expansion = none
-→ Asset-only New Game
-→ real DeepSeek Opening
-→ continuous play
-→ Save / reopen / Continue
-→ Owner UAT
+implementation deferred until real authored first-party demand
 ```
 
-先回答：
-
-> **只凭正式 World + Character，我们能不能可靠创建一局真正想玩的游戏？**
-
-### First Playable B — Add Real Expansion
-
-A 通过后才增加：
+地图长期有价值，但：
 
 ```text
-真实 Expansion Pack
-→ exact selection/binding
-→ 至少一个真实可观察 Runtime effect
-→ persistence / reopen
-→ Owner UAT
+map image != topology / travel / current location / GIS authority
 ```
 
-先证明 `Expansion selected != database name only`。完整机制专用 UI 与外部 UI contract 后置到 G6/G8。
-
-### G4 final — Two Asset Families
-
-最终再用历史/低魔型与高魔/幻想型两组差异明显的 Primary Source 组合证明不是首个世界的特例。
+不在真实产品需求前造自动地图生成或完整空间引擎。
 
 ---
 
-## 13. Explicit Non-scope Before Core Vertical Is Proven
+## 12. Explicit Non-scope Before Proven Need
 
 默认不做：
 
-- Multiplayer / server backend / cloud account / cloud save；
+- Multiplayer / cloud account / server backend；
 - 3D 自由移动；
-- 无资产自由文本建局 / AI 空白世界 Creation Platform；
-- Creator 在 G4 提前进入产品关键路径；
-- 自动地图生成；
-- 全世界逐 NPC tick 模拟；
-- Universal ECS / 大型 Event Bus；
-- 通用巨大 Asset Schema / Protocol；
-- 第一代 Source 历史版本 chooser；
-- 第一代 Expansion feature/module 复杂勾选树；
-- 任意 Expansion 外部代码执行；
-- G4 就建设外部任意 Declarative UI 插件平台；
-- 复杂脚本沙箱 / Steam Workshop；
+- full-universe per-NPC tick simulation；
+- Universal ECS / giant EventBus；
+- giant universal Asset/UI Schema；
+- arbitrary external code execution；
+- automatic map generation without evidence；
+- Creator before real Source/UI consumers；
+- external Declarative UI before G6 internal patterns；
 - Local LLM Hosting；
-- TTS / STT；
-- 自动 Provider routing / fallback mesh / marketplace；
-- 为未来理论需求提前建设大量扩展点。
+- TTS/STT；
+- marketplace / provider routing mesh；
+- 为理论未来需求预造大量扩展点。
 
 ---
 
-## 14. Simple Baseline
+## 13. Simple Baseline
 
-当前最重要比较基线：
+核心比较基线仍是：
 
 > **The World / DSH + 同类优秀模型。**
 
-独立版可以在工程能力上逐步建设，但核心体验不能因为“架构更正确”而明显退化：
+独立版不能因为工程更复杂而在这些维度明显退化：
 
-- GM Narrative 质量；
-- 自然语言自由度；
-- 长期世界感；
-- NPC 质感；
-- 沉浸感；
-- 操作税。
+- GM Narrative；
+- natural-language freedom；
+- long-lived world feel；
+- NPC quality；
+- immersion；
+- operation tax。
 
-如果复杂系统在核心价值上明显差于简单基线，必须重开产品/架构分析，不能用测试数量或文档完整度宣布成功。
+如果复杂系统在核心体验上输给简单基线，必须重开分析，而不是用测试数量宣布成功。
 
 ---
 
-## 15. Product Success / Acceptance
+## 14. Product Success / Acceptance
 
-产品最终成功不是“所有模块都实现”，而是玩家真实感受到：
+最终成功意味着玩家真实感受到：
 
 1. AI GM 值得长期互动；
-2. 世界会自己活着，不只围绕主角刷新；
-3. 自然语言行为自由；
+2. 世界会自己活着；
+3. 自然语言行动自由；
 4. 世界变化长期可靠；
 5. Save / Restore 可信；
-6. World / Character / Expansion 组合能形成清楚、可重复的建局产品路径；
-7. 多个 Game 能独立长期存在；
-8. UI 让世界更可理解，而不是变成工程工具；
-9. 长局以后仍然保持可玩、可恢复、可理解；
-10. World Pack / Character Card / Expansion / Mod 可以扩展内容而不污染核心 Runtime。
+6. World / Character / Expansion 能形成清楚建局产品路径；
+7. 多 Game 能独立长期存在；
+8. UI 按玩家需要组织信息，而不是暴露工程结构；
+9. 长局后仍可玩、可恢复、可理解；
+10. Source / Mod 可扩展而不污染核心 Runtime。
 
-Product-facing Task 的 Engineering PASS 不能替代 Owner UAT。
+Product-facing Engineering PASS 不能替代 Owner UAT。
 
 ---
 
-## 16. Open Questions
+## 15. Current Open Questions
 
-当前继续由后续真实阶段证据回答：
+当前真正仍开放的问题：
 
-- G4 Multi-Game 的最简单物理存储形态；
-- 第一代 Primary Source contract 的最小字段集合；
-- Guaranteed NPC 在 G5 中何时进入 active working set / world evolution；
-- 第一个真实 Expansion 应采用哪条最薄但可观察的 Runtime capability；
-- G5 bounded event/priority-driven autonomous world evolution；
-- G6 Internal Declarative UI Host vocabulary；
-- G7 bounded context 与长局性能阈值；
-- G8 外部 Mod UI / authoring protocol；
-- 何种真实需求足以增加第二个正式 product-facing Provider。
+- G6 Player Host 与 World Surface 的长期信息分工；
+- `概览 / 角色 / 人物 / 行囊 / 事务 / 系统 / 地图 / 存档` 哪些应成为一级 Surface；
+- Character Sheet 与 People Surface 的第一版安全 projection 范围；
+- Inventory / Thread / Faction / Map 何时拥有足够真实 Domain 进入 UI；
+- Expansion mechanic-state consumer 的第一版；
+- Internal Declarative UI Host 何时有足够多个真实 consumers 可以抽象；
+- G7 bounded context / 长局性能；
+- G8 authoring / external Mod UI contract。
 
-这些问题不得在当前阶段无证据预建。
+这些问题必须由当前真实产品证据逐步回答，不得为了完整度提前实现。
