@@ -1,9 +1,9 @@
 ---
 title: my world｜SillyTavern 参考研究改进讨论通过清单
 status: working-approved-candidate-list
-version: 1.7
+version: 1.8
 created: 2026-09-06
-updated: 2026-09-06
+updated: 2026-09-07
 source_reference: ./SILLYTAVERN_UPSTREAM_FUNCTIONAL_REFERENCE_AUDIT_2026-09-06.md
 implementation_authorization: none
 roadmap_authorization: none
@@ -118,113 +118,107 @@ Freshness 回答“我掌握的这条信息有多久没在当前历史中更新�
 
 允许玩家同时掌握互相矛盾的 player-visible 情报，并让系统在证据不足时明确呈现“存在冲突，尚不能确认”，而不是为了 UI 干净强行选一个答案。
 
-例如：
-
-```text
-曹操是否已抵达许都？
-
-陈安：昨日已经进城。
-状态：转述
-
-守卫：今日尚未见曹军入城。
-状态：直接询问
-
-当前认识：信息存在冲突，尚不能确认。
-```
-
-核心边界：
-
-- 模型可判断“证据冲突”，但不能因必须输出单一值而偷偷选边；
-- Program 不建立“官方 > NPC > 传闻”等固定可信度表；
-- 后续证据可证实、推翻或解释此前冲突；
-- 冲突信息必须保持各自 Provenance / Epistemic Status / accepted-history currentness；
-- 不把 GM-private truth 作为玩家侧“裁判答案”泄露出来。
+核心边界：模型可判断“证据冲突”，但不能因必须输出单一值而偷偷选边；Program 不建立“官方 > NPC > 传闻”等固定可信度表；后续证据可证实、推翻或解释此前冲突；各证据必须保持 Provenance / Epistemic Status / accepted-history currentness；不把 GM-private truth 作为玩家侧裁判答案泄露。
 
 ### P-24｜Provider / Model Compatibility Preflight｜原提案 38
 **Owner verdict：通过。**
 
 模型配置不能只验证“API 能请求成功”，还应按 my-world 实际机器契约做 capability / compatibility preflight，例如 Streaming、JSON/Structured Output、context window、当前 Narrative lane、Recommendations、Curation 等协议支持情况。
 
-候选呈现：
-
-```text
-Kimi K3
-✓ Streaming
-✓ Narrative
-? Structured Output（按实际探测/声明）
-✓ Recommendations
-△ Information Curation：协议兼容，语义质量待真实验证
-```
-
-核心边界：
-
-- Compatibility 只判断协议/机器契约与已经验证的功能支持，不宣称自动测出“模型聪明程度”；
-- 不写死品牌优劣；
-- Semantic quality 仍需真实 Provider validation / Owner UAT；
-- 配置更换后应能明确知道哪些 lane 支持、哪些未经验证；
-- 与 P-03 Structured Output、P-08 模型分离和 P-18 使用可视化统一设计，避免平行 capability 系统。
+Compatibility 只判断协议/机器契约与已经验证的功能支持，不宣称自动测出模型聪明程度；不写死品牌优劣；Semantic quality 仍需真实 Provider validation / Owner UAT。与 P-03 Structured Output、P-08 模型分离和 P-18 使用可视化统一设计，避免平行 capability 系统。
 
 ### P-25｜Creator Validation / Publish UX 人话化｜原提案 39
 **Owner verdict：通过。**
 
-未来 Creator 的严格 Validator 继续保留，但发布失败/Warning 必须转换成作者能理解并能直接定位的问题，而不是只显示 schema error。
+未来 Creator 的严格 Validator 继续保留，但发布失败/Warning 必须转换成作者能理解并能直接定位的问题，而不是只显示 schema error。必须区分 Error（不能合法发布）与 Warning（可以发布，但发现体验/元数据缺口）。AI Creator 可以辅助提出修正 ChangeSet，但仍必须走 typed Draft changes → Validator → 用户确认，不能绕过 Source contract 或 Publish Gate。
 
-候选体验：
+### P-26｜势力 / 组织 player-known Surface｜原提案 41
+**Owner verdict：通过。**
+
+增加 Organization / Faction 的 player-safe 信息 Surface，回答：
+
+> **“这局游戏里，我目前知道哪些值得持续记住的组织，以及我最新了解到的是什么？”**
+
+语义延续 People：不是后台势力数据库，不因离屏 World 状态变化自动刷新，而是玩家当前对组织的 latest-known snapshot。可以记录公开身份/名称、玩家当前认识、与玩家的关系/归属、最近了解到的信息，以及 P-19/P-20/P-22/P-23 的 Provenance、Epistemic Status、回合 Freshness 与冲突证据。
+
+核心边界：
+
+- Source/World 中存在某组织 != 玩家自动知道；
+- 后台势力版图/计划/资源变化不自动泄露；
+- 不用固定好感、敌对值、势力强度数字冒充开放语义；若未来 Expansion 真正提供机制数值，则由真实 mechanic contribution 展示；
+- Program 不用名称匹配、提及次数、关键词建立 Organization；
+- Restore / Regenerate 后必须回到该历史点玩家真正掌握的组织信息。
+
+路线重构时应优先判断是否与 People / 事务 / Knowledge 的统一 Information Curator 扩展整合，而不是建立平行 Faction 语义系统。
+
+### P-27｜事实型行囊 / Inventory Surface｜原提案 42
+**Owner verdict：通过。**
+
+Mother Taxonomy 中的 `行囊` 只展示玩家当前**真正拥有**的物品，不为了 RPG 外观让模型凭散文补造 Inventory。
+
+核心语义：
 
 ```text
-暂时不能发布
+物品是否存在 / 属于谁 / 数量等 authoritative state
+→ Runtime / mechanics / accepted semantic mutation
 
-角色「张琛」
-→ 缺少公开显示名称
-
-Entry「洛阳郊外」
-→ 时间不符合当前 World 合法范围
-
-Expansion「汉末经济」
-→ 与另一个 Expansion 占用同一机制能力
-
-[前往修正]
+物品的可读描述
+→ player-safe presentation / model-authored prose（在合法边界内）
 ```
 
-必须区分：
+例如开局已冻结携带的折刀、指南针、水瓶、压缩食品可以进入事实型行囊；若 accepted history + semantic mutation 确认折刀被送出，才从行囊消失。单纯 Narrative 中偶然提到一个此前不存在的钱袋，不得据此自动创造正式物品。
 
-- Error：Source / Composition 不能合法发布；
-- Warning：可以发布，但发现体验/元数据缺口。
+未来 Expansion 可以贡献金钱、装备、数量、耐久等真实机制字段，但只有实际 mechanic owner 存在时才显示。路线重构应先冻结 Inventory ownership / mutation contract，再做背包 UI。
 
-AI Creator 可以辅助提出修正 ChangeSet，但仍必须走 typed Draft changes → Validator → 用户确认；不能因为“自动修复”而绕过 Source contract 或 Publish Gate。
+### P-28｜System Surface / Mechanics 与 Expansion 统一玩家入口｜原提案 43
+**Owner verdict：通过。**
+
+Mother Taxonomy 中的 `系统` 成为“这局启用了哪些真正影响玩法的机制、它们现在是什么状态”的统一 player-safe Surface，例如 Public d20、生存、经济、战斗、经营或其它 Expansion mechanics。
+
+核心架构边界：
+
+- Shell / System Surface 不硬编码 HP、Mana、Hunger、Money 等特定字段；
+- 每个真实 mechanics / Expansion owner 只提供有界 player-safe mechanic contribution；
+- 没有真实状态就不显示，不为完整感伪造数值；
+- UI 不能从 omniscient world_state 自己过滤；
+- Core 不因新增 Expansion 就反复加入专用 UI 逻辑；
+- 未来只有在多个真实 contribution consumer 证明稳定模式后，才重新评估 MW-013 Internal Declarative UI Host / generic bounded presentation host，继续遵守“先 consumer，后抽象”。
 
 ---
 
 ## 2. 当前讨论状态
 
-当前已通过 **25 项**：
+当前已通过 **28 项**：
 
 ```text
-P-01  生成状态 / 诊断                         ← 原提案 1
-P-02  叙事偏好                               ← 原提案 3
-P-03  结构化模型输出可靠性                   ← 原提案 6
-P-04  Source Library 作品化                   ← 原提案 7
-P-05  玩家可读冒险纪事导出                   ← 原提案 9
-P-06  Reference Library                      ← 原提案 11
-P-07  Creator Preview Sandbox                ← 原提案 12
-P-08  叙事模型 / 后台辅助模型分离配置        ← 原提案 13
-P-09  玩家收藏关键剧情节点                   ← 原提案 14
-P-10  玩家纠正 AI 派生信息                   ← 原提案 16
-P-11  玩家私人笔记                           ← 原提案 17
-P-12  作品套装 / 推荐 Composition             ← 原提案 20
-P-13  性格 × 玩家行动 × 推荐动态闭环          ← 原提案 21
-P-14  对话式 Creator                         ← 原提案 23
-P-15  事务 / 线索 / Open Threads Surface      ← 原提案 24
-P-16  长期上下文编排器                       ← 原提案 26
-P-17  OOC / 给 GM 的场外说明                 ← 原提案 27
-P-18  AI 使用情况 / 性能调用可视化           ← 原提案 28
-P-19  知识来源 / Provenance 可追溯            ← 原提案 30
-P-20  玩家认识状态 / Epistemic Status         ← 原提案 31
-P-21  人物共同经历 / Shared History           ← 原提案 32
-P-22  长期信息回合 Freshness                 ← 原提案 36
-P-23  矛盾情报显式共存                       ← 原提案 37
-P-24  Provider / Model Compatibility Preflight← 原提案 38
-P-25  Creator Validation / Publish UX         ← 原提案 39
+P-01  生成状态 / 诊断                          ← 原提案 1
+P-02  叙事偏好                                ← 原提案 3
+P-03  结构化模型输出可靠性                    ← 原提案 6
+P-04  Source Library 作品化                    ← 原提案 7
+P-05  玩家可读冒险纪事导出                    ← 原提案 9
+P-06  Reference Library                       ← 原提案 11
+P-07  Creator Preview Sandbox                 ← 原提案 12
+P-08  叙事模型 / 后台辅助模型分离配置         ← 原提案 13
+P-09  玩家收藏关键剧情节点                    ← 原提案 14
+P-10  玩家纠正 AI 派生信息                    ← 原提案 16
+P-11  玩家私人笔记                            ← 原提案 17
+P-12  作品套装 / 推荐 Composition              ← 原提案 20
+P-13  性格 × 玩家行动 × 推荐动态闭环           ← 原提案 21
+P-14  对话式 Creator                          ← 原提案 23
+P-15  事务 / 线索 / Open Threads Surface       ← 原提案 24
+P-16  长期上下文编排器                        ← 原提案 26
+P-17  OOC / 给 GM 的场外说明                  ← 原提案 27
+P-18  AI 使用情况 / 性能调用可视化            ← 原提案 28
+P-19  知识来源 / Provenance 可追溯             ← 原提案 30
+P-20  玩家认识状态 / Epistemic Status          ← 原提案 31
+P-21  人物共同经历 / Shared History            ← 原提案 32
+P-22  长期信息回合 Freshness                  ← 原提案 36
+P-23  矛盾情报显式共存                        ← 原提案 37
+P-24  Provider / Model Compatibility Preflight ← 原提案 38
+P-25  Creator Validation / Publish UX          ← 原提案 39
+P-26  势力 / 组织 player-known Surface         ← 原提案 41
+P-27  事实型行囊 / Inventory Surface           ← 原提案 42
+P-28  System / Mechanics 统一玩家入口          ← 原提案 43
 ```
 
 当前未进入通过清单（不等于永久否决）：
@@ -243,7 +237,9 @@ P-25  Creator Validation / Publish UX         ← 原提案 39
 - Source 版本差异与影响预览（原提案 33）；
 - 可分享 Source Package（原提案 34）；
 - Player Note → Persistent GM Reminder（原提案 35）；
-- Character Evolution 历史（原提案 40）。
+- Character Evolution 历史（原提案 40）；
+- Source Variant / Remix（原提案 44）；
+- Reference Library 简单资料导入（原提案 45）。
 
 除非 Owner 后续明确批准，上述内容不进入最终路线重构输入。
 
