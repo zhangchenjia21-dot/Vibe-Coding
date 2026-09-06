@@ -1,7 +1,7 @@
 ---
 title: my world｜SillyTavern 参考研究改进讨论通过清单
 status: working-approved-candidate-list
-version: 1.5
+version: 1.6
 created: 2026-09-06
 updated: 2026-09-06
 source_reference: ./SILLYTAVERN_UPSTREAM_FUNCTIONAL_REFERENCE_AUDIT_2026-09-06.md
@@ -167,8 +167,6 @@ Conversation 不直接成为 Source Truth；AI 不能静默发布、覆盖 Sourc
 
 ### P-16｜长期上下文编排器 / Context Orchestrator｜原提案 26
 
-**Owner verdict：通过。**
-
 未来 G7 建立正式 Context Orchestrator，解决长局中“这一回合 GM 真正应该看到什么、不能看到什么、哪些旧信息已经失效”的问题，而不是简单把所有记忆塞进 Prompt。
 
 候选输入层包括：
@@ -194,8 +192,6 @@ GM-private
 
 ### P-17｜OOC / 给 GM 的场外说明｜原提案 27
 
-**Owner verdict：通过。**
-
 提供与“角色行动”明确分离的 GM Guidance 通道，让玩家表达临时的创作与游玩意愿，例如“接下来普通赶路略过”“重要人物对话放慢”“不要替我的角色决定内心想法”。
 
 它与 P-02 的区别：Narrative Preference 是长期偏好，OOC Guidance 是本次/近期临时指导。
@@ -204,8 +200,6 @@ OOC 不是角色行动、不是 World mutation API，也不能绕过 mechanics /
 
 ### P-18｜AI 使用情况 / 性能与调用可视化｜原提案 28
 
-**Owner verdict：通过。**
-
 在 P-01 单次诊断之外，提供 Session / Game 级的 AI 使用概览，用于回答“这一局跑了多少调用、哪个 lane 最慢、哪个模型在消耗时间/额度”。
 
 候选指标：Narrative / semantic / curation / recommendations 等 lane 的请求次数、成功/失败、延迟；若 Provider 返回可靠 token usage，可展示 input/output tokens。
@@ -213,8 +207,6 @@ OOC 不是角色行动、不是 World mutation API，也不能绕过 mechanics /
 不得虚构 token 或价格；只有存在可靠 usage 与明确价格依据时，才可提供明确标为“估算”的成本。该能力应为 P-08 多模型分工提供实际数据，而不是为了监控而监控。
 
 ### P-19｜知识来源 / Provenance 可追溯｜原提案 30
-
-**Owner verdict：通过。**
 
 对 People / Knowledge / 事务等重要长期玩家信息保留可追溯来源，使玩家在需要时能回答：
 
@@ -232,11 +224,62 @@ OOC 不是角色行动、不是 World mutation API，也不能绕过 mechanics /
 
 Provenance 不能把 GM-private truth 暴露给玩家，也不能因“后台知道来源”而提升玩家知情。必须跟随 accepted-history / Restore / Regenerate currentness。
 
+### P-20｜玩家认识状态 / Epistemic Status｜原提案 31
+
+**Owner verdict：通过。**
+
+在 P-19 Provenance 基础上，让长期玩家知识不仅记录“知道什么、从哪里知道”，还表达玩家当前如何看待这条信息，例如：
+
+```text
+听闻 / 尚未确认
+个人怀疑
+已有较强证据
+已确认
+存在矛盾
+此前认识已被推翻
+```
+
+典型体验：同一句“曹操已经抵达许都”，从旅商转述得到时可显示为“听闻，尚未确认”；后来亲眼或从可靠证据证实后，更新为“此前传闻已被证实”。
+
+核心边界：
+
+- 不使用 83% 之类伪精确置信度；
+- epistemic status 是 Player Knowledge 的状态，不等于 World Truth；
+- 状态由模型基于 accepted player-visible evidence 判断，Program 不用关键词/来源类型硬编码可信度；
+- 可以存在玩家误信、合理怀疑和互相矛盾的来源；
+- Restore / Regenerate 后跟随当时玩家真正拥有的证据与认识；
+- 与 P-19 Provenance 一起设计时，优先形成“内容 + 当前认识状态 + 来源依据”的统一 player-safe knowledge presentation。
+
+### P-21｜人物共同经历 / Shared History｜原提案 32
+
+**Owner verdict：通过。**
+
+保持 People 主卡“当前最新认识快照”的冻结语义，同时为长期人物关系增加次级入口：**“与此人的经历”**。
+
+```text
+People 主卡
+= 他现在在我眼里是谁
+
+Shared History
+= 我和这个人是怎样走到今天的
+```
+
+候选展示可链接：初次见面、重要合作、冲突、承诺、关系转折等真正发生过的 accepted history 节点。优先依赖 exact stable NPC identity、accepted history、Important Experiences / Provenance，而不是由模型脱离历史重新编一篇人物传记。
+
+核心边界：
+
+- Shared History 不取代 People current snapshot；
+- 不包含 NPC-private / 玩家未获知事件；
+- 不因为“与此人有关”就把每个普通回合全部塞入经历列表，仍需有界、可读；
+- same-name 人物只能按 stable identity 区分，禁止 display-name 聚合；
+- Restore 到认识该人物之前时，相关 Shared History 与 People 一起消失；Restore 到较早阶段时只能看到当时已经发生的共同历史；
+- 未来若允许点击历史节点，应优先复用 Bookmark / Provenance 的“跳回原文”能力，而不是另造聊天副本。
+
 ---
 
 ## 2. 当前讨论状态
 
-当前已通过 **19 项**：
+当前已通过 **21 项**：
 
 ```text
 P-01  生成状态 / 诊断                         ← 原提案 1
@@ -258,6 +301,8 @@ P-16  长期上下文编排器                       ← 原提案 26
 P-17  OOC / 给 GM 的场外说明                 ← 原提案 27
 P-18  AI 使用情况 / 性能调用可视化           ← 原提案 28
 P-19  知识来源 / Provenance 可追溯            ← 原提案 30
+P-20  玩家认识状态 / Epistemic Status         ← 原提案 31
+P-21  人物共同经历 / Shared History           ← 原提案 32
 ```
 
 当前未进入通过清单（不等于永久否决）：
@@ -272,7 +317,10 @@ P-19  知识来源 / Provenance 可追溯            ← 原提案 30
 - 换一组推荐行动（原提案 19）；
 - 完整可迁移 Game Package（原提案 22）；
 - Player-known Map（原提案 25）；
-- 多 Entry / 多开局（原提案 29）。
+- 多 Entry / 多开局（原提案 29）；
+- Source 版本差异与影响预览（原提案 33）；
+- 可分享 Source Package（原提案 34）；
+- Player Note → Persistent GM Reminder（原提案 35）。
 
 除非 Owner 后续明确批准，上述内容不进入最终路线重构输入。
 
