@@ -1,12 +1,12 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 16.13
+version: 16.14
 created: 2026-08-26
 updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
-current_task: MW-015 R2 — Model-driven Initial Character Curation Correction
-current_owner: Codex implementation lane
+current_task: MW-015 R2 Owner UAT build handoff — Model-driven Initial Character Curation
+current_owner: Codex local UAT-build preparation lane
 parent_task: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT
 owner_uat_required: true
@@ -33,7 +33,7 @@ G6 Visual Runtime re-entry                  AUDITED — IMPLEMENTATION DEFERRED
 G6 Character + Important Experiences        SEMANTIC / IA FROZEN
 MW-014 Model-driven Information Curation    ENGINEERING PASS / INTEGRATED
 MW-015 R1 Character + Important Exp UI      ENGINEERING PASS / INTEGRATED / OWNER UAT NOT PASS
-MW-015 R2 Initial Character Curation        ARCHITECTURE GAP RESOLVED / READY FOR CODEX RESUME
+MW-015 R2 Initial Character Curation        ENGINEERING PASS / INTEGRATED / OWNER UAT PENDING
 MW-013 Internal Declarative UI Host v0.1    HOLD / NOT AUTHORIZED YET
 ```
 
@@ -110,7 +110,7 @@ Reviewed backend seam:
 
 It exposes presentation-safe current Character + Important Experiences and requires no Provider call merely to render/reopen.
 
-MW-014 established lived-turn curation but its durable owner originally represented only turn-shaped records. R2 exposed the missing pre-turn baseline representation.
+MW-014 established lived-turn curation; MW-015 R2 adds the distinct Game/T0 initial Character baseline under the same information-c​​uration owner.
 
 Formal records:
 
@@ -130,7 +130,7 @@ left Player Status Host
 → collapses/hides when no real portrait/mechanic contribution exists
 ```
 
-Owner UAT on 2026-09-06 found a material product regression in `角色`:
+Owner UAT found a material product regression in `角色`:
 
 ```text
 角色
@@ -138,98 +138,101 @@ Owner UAT on 2026-09-06 found a material product regression in `角色`:
 → previously accepted rich Character information is missing
 ```
 
-This is **NOT PASS**.
-
 The left Host collapse itself is not rejected.
 
 Formal Owner record:
 
 `my-world/docs/mw015/MW-015_OWNER_UAT_R1_RESULT.md`
 
-## 6. MW-015 R2 architecture gap — RESOLVED
+## 6. MW-015 R2 architecture — FROZEN
 
-Codex stopped correctly at evidence commit:
+Architecture gap evidence:
 
 `cbe0f12c411f046cc17318fd1be856dcd2c13e43`
-
-Gap report:
-
-`my-world/docs/mw015/r2/MW-015_R2_INITIAL_CURATION_ARCHITECTURE_GAP.md`
-
-Finding:
-
-```text
-existing information_curation owner
-→ only {schema, turns}
-→ no legal durable slot for model-curated Character before accepted history exists
-
-real accepted opening
-→ technically usable as a turn anchor
-→ but would make Character initialization depend on opening success
-```
-
-GPT architecture decision:
-
-```text
-DO NOT require opening success
-DO NOT fabricate a Conversation Turn
-
-Initial Character Curation
-→ Game/T0-scoped model-curated baseline
-→ same information_curation owner
-→ narrow backward-compatible owner/schema evolution authorized
-→ no new SQLite table
-→ no Source-current lookup
-→ model still owns semantic selection
-```
 
 Canonical decision:
 
 `architecture/ui/G6_INITIAL_CHARACTER_CURATION_BASELINE_V1_0_DECISION.md`
 
-Important semantics:
+Frozen result:
 
-- initial baseline is bound to frozen Game-local player-safe starting protagonist material, not Player/GM prefix hashes;
-- existing turn record parent/identity chain should remain independent and valid;
-- projection order is thin fallback → valid initial baseline → current lived-turn curation;
-- opening success/cancel/failure does not determine baseline eligibility;
-- static T0 biography does not create Important Experiences;
-- Regenerate does not semantically invalidate the Game/T0 baseline;
-- Restore must still remove future lived curation and may safely preserve/re-attach/re-materialize the same valid baseline when frozen T0 binding matches.
+```text
+Initial Character Curation
+→ Game/T0-scoped model-curated baseline
+→ same information_curation owner
+→ optional backward-compatible initial record
+→ no synthetic Conversation Turn
+→ no opening-success dependency
+→ no new SQLite table
+→ no Source-current lookup
+→ model owns semantic selection
+```
 
-## 7. ACTIVE — MW-015 R2
+Projection order remains:
+
+```text
+thin safe fallback
+→ valid Initial Character baseline
+→ current valid lived-turn Character curation
+```
+
+Initial baseline never creates Important Experiences from static T0 biography.
+
+## 7. MW-015 R2 — ENGINEERING PASS / INTEGRATED / OWNER UAT PENDING
 
 Task:
 
 `my-world/docs/tasks/MW-015_R2_CHARACTER_INFORMATION_PRESERVATION_TASK.md`
 
-Identity:
+Reviewed implementation candidate:
+
+`c8618ad9c802d5e0d5c2de5db62e9e88aabdb698`
+
+Independent Review:
+
+`my-world/docs/mw015/r2/MW-015_R2_INDEPENDENT_REVIEW_IR1.md`
+
+IR record commit / reviewed integration tip:
+
+`d191f24ebfd4fdf7b7f13dd16b706c060be129a3`
+
+Post-integration verification:
+
+`my-world/docs/mw015/r2/MW-015_R2_INTEGRATION_VERIFICATION.md`
+
+Integration-verification main commit:
+
+`1e6545353dd4b583a3cc5a6b3881ef18d97d0f09`
+
+Engineering result:
 
 ```text
-Work Item: MW-015
-Revision: 2
-Primary Implementer: Codex
-Reviewer: GPT
-Status: READY FOR CODEX — ARCHITECTURE GAP RESOLVED
-Branch: mw-015-r2-model-driven-initial-character-curation
-Worktree: D:/AI/Projects/.worktrees/my-world/mw-015-r2
-Return ceiling: READY FOR INDEPENDENT REVIEW
+open/activate Game
+→ Initial Character curator runs independently of GM opening
+→ input = frozen Game-local player-safe starting profile
+→ model selects/summarizes Character information
+→ successful result becomes durable Game/T0 baseline
+→ right 角色 refreshes without requiring a Player-authored Turn
+→ left Player Status Host remains hidden when empty
+
+later lived Turn
+→ existing MW-014 curator continues evolving current Character
 ```
 
-Required product correction:
+Reviewed evidence includes:
 
-```text
-open Game
-→ right 角色 becomes materially useful without requiring a new Player Turn
-→ baseline does not depend on successful GM opening
-→ selection/summarization is model-driven
-→ later lived curation evolves the same Character Surface
+- initial Runtime/SQLite lifecycle: 60 checks / 0 failures;
+- real Zhang Chen shell/UI vertical with seven Character groups and zero accepted Turns;
+- opening failure independence;
+- Restore/reopen/Regenerate currentness and displaced-future isolation;
+- old `{schema, turns}` compatibility and existing turn-chain preservation;
+- MW-014 / MW-011 / MW-012 / MW-009 / G3 / G5 / Narrative regressions;
+- Windows Desktop export;
+- real Provider smoke.
 
-left Player Status Host
-→ remains collapsed/hidden while no legitimate status content exists
-```
+Real Provider smoke recorded 3 successful rich baseline results and 1 `malformed_response`. The malformed response failed soft and performed zero baseline mutation. This remains an Owner-UAT reliability/latency risk, not an Engineering blocker; do not add Program semantic heuristics to repair model output.
 
-Codex may continue the same R2 branch/worktree after refreshing both mains and reading the new architecture decision plus revised Task Packet.
+No Product PASS is claimed until Owner accepts the real application.
 
 ## 8. Agent routing
 
@@ -242,7 +245,7 @@ GPT
 → product semantics / architecture / Task Shaping / dispatch / Independent Review
 
 Codex
-→ sole default implementation agent for new production implementation
+→ sole default implementation agent for new production implementation and local UAT-build preparation
 
 Owner
 → Product UAT / explicit product verdict
@@ -250,19 +253,24 @@ Owner
 
 KimiCode / Zcode / other implementation agents require explicit future Owner re-authorization.
 
-## 9. Owner-build handoff
+## 9. Owner-build handoff — CURRENT
 
-For every product-facing outcome after Engineering PASS + integration:
+Before Owner UAT, the canonical local playable checkout must be prepared:
 
 ```text
-sync D:/AI/Projects/my-world safely to exact integrated main
-→ validate exact local HEAD
+D:/AI/Projects/my-world
+→ inspect branch/status/worktrees
+→ safely fetch + fast-forward main to exact origin/main
+→ verify exact local HEAD
 → run run-game.ps1 -ValidateExportOnly
 → Owner Launch Ready
-→ Owner UAT
 ```
 
-Never present an unreviewed task branch as the Owner build.
+Current intended integrated GitHub main includes integration verification commit:
+
+`1e6545353dd4b583a3cc5a6b3881ef18d97d0f09`
+
+Never overwrite unknown dirty work or use reset/clean/force to hide divergence.
 
 ## 10. Visual Runtime / MW-013 disposition
 
@@ -277,17 +285,21 @@ MW-013 Internal Declarative UI Host v0.1
 ## 11. Immediate route
 
 ```text
-MW-015 R2 Codex resume implementation under frozen initial-baseline decision
-→ GPT Independent Review
-→ integrate only after Engineering PASS
-→ canonical local checkout sync + fresh export
-→ Owner UAT again
+Codex local Owner-build preparation
+→ verify local HEAD = intended integrated main
+→ fresh Windows export validation
+→ Owner Launch Ready
+→ Owner UAT MW-015 R2
 
 if Owner UAT PASS:
 → MW-015 PRODUCT PASS / CLOSED
 → choose next grounded G6 outcome
 
-if NOT PASS:
+if Owner UAT NOT PASS:
 → same MW-015 lineage if outcome remains unchanged
-→ root-cause / architecture classification
+→ GPT root-cause / architecture classification
+→ Codex correction
+→ GPT Independent Review
+→ integration + Owner-build handoff
+→ Owner UAT again
 ```
