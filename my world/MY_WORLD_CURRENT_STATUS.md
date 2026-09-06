@@ -1,12 +1,12 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 16.7
+version: 16.8
 created: 2026-08-26
 updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
-current_task: MW-014 Model-driven Character + Important Experiences Curation v0.1
-current_owner: Codex implementation lane
+current_task: G6 Character + Important Experiences UI Consumer Task Shaping
+current_owner: GPT product-architecture / dispatcher lane
 parent_task: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT
 owner_uat_required: false
@@ -31,7 +31,7 @@ MW-011 RPG Host / Player Profile outcome    PRODUCT PASS / CLOSED
 MW-012 Zhang Chen Player Character Card     ENGINEERING PASS / INTEGRATED / PRODUCT INGRESS ACCEPTED
 G6 Visual Runtime re-entry                  AUDITED — IMPLEMENTATION DEFERRED
 G6 Character + Important Experiences        SEMANTIC / IA FROZEN
-MW-014 Model-driven Information Curation    READY FOR CODEX
+MW-014 Model-driven Information Curation    ENGINEERING PASS / INTEGRATED
 MW-013 Internal Declarative UI Host v0.1    HOLD / NOT AUTHORIZED YET
 ```
 
@@ -70,7 +70,7 @@ Only grounded Surfaces proceed; no fake RPG state or empty tabs.
 
 ## 3. Character + Important Experiences — FROZEN
 
-Canonical product/architecture authority:
+Canonical authority:
 
 `architecture/ui/G6_CHARACTER_AND_IMPORTANT_EXPERIENCES_V1_0_DECISION.md`
 
@@ -91,11 +91,11 @@ Frozen split:
 → starting possessions do not belong in Character Surface
 ```
 
-Character may include current origin/background, current social identity/role, personality/values/principles, non-numeric capabilities, long-term limitations/traits and long-term goals/self-direction.
+Character includes current identity/profile material such as origin/background, current social identity/role, personality/values/principles, non-numeric capabilities, long-term limitations/traits and long-term goals/self-direction.
 
 Long-term goals belong to Character; current unresolved commitments/tasks belong to future `事务`.
 
-Character Surface completion will end the MW-011 transitional use of biography/profile in the left Player Status Host. If there is no legitimate portrait/mechanic contribution at that point, left may collapse/narrow instead of duplicating biography.
+Character Surface completion ends the MW-011 transitional use of biography/profile in the left Player Status Host. If no legitimate portrait/mechanic contribution exists then, left may collapse/narrow instead of duplicating biography.
 
 ## 4. Model-driven information curation — FROZEN
 
@@ -107,19 +107,9 @@ Frozen principle:
 
 > **Model owns semantic interpretation and curation; Program owns normalized storage, temporal integrity and presentation.**
 
-The model decides:
+The model decides semantic meaning, importance, Character evolution, milestone selection and player-facing summarization. Program must not build a parallel semantic judge through keyword/regex rules, importance scores, event-type trees, protagonist-choice evidence heuristics or mechanical long-term thresholds.
 
-- what happened semantically;
-- what is important;
-- whether current Character information changes;
-- whether an event is an Important Experience;
-- whether accepted Player/Narrative context already expresses a meaningful protagonist decision;
-- which enabled information Surface should receive a structured update;
-- how the player-facing summary should read.
-
-Program must not implement a parallel semantic judge through keyword/regex rules, importance score tables, per-event semantic branches, protagonist-choice evidence heuristics or mechanical long-term thresholds.
-
-Program responsibilities are machine-level:
+Program responsibilities remain machine-level:
 
 ```text
 current Game/current Timeline binding
@@ -136,41 +126,35 @@ player-safe serialization/projection
 
 Owner explicitly accepts an additional bounded model call when it improves semantic quality and reduces Runtime complexity.
 
-## 5. Current implementation gap
+## 5. MW-014 — ENGINEERING PASS / INTEGRATED
 
-Current Runtime already has durable accepted-turn world semantics, Knowledge provenance, stable actor materialization, Save/Restore/Timeline currentness, frozen Player Character `source_projection.player_profile`, and the MW-011 fail-closed profile projection.
-
-It does **not** yet have the required model-curated durable/current shape for:
-
-```text
-current lived Player Character information
-protagonist Important Experiences history
-```
-
-The existing MW-011 projector reads only frozen Game-local `player_profile`; it cannot satisfy an evolving Character Sheet.
-
-## 6. ACTIVE — MW-014
-
-Executable task:
+Task:
 
 `my-world/docs/tasks/MW-014_MODEL_DRIVEN_CHARACTER_AND_MILESTONE_CURATION_V0_1_TASK.md`
 
-Identity:
+Independent Review:
+
+`my-world/docs/mw014/MW-014_INDEPENDENT_REVIEW_IR1.md`
+
+Integration verification:
+
+`my-world/docs/mw014/MW-014_INTEGRATION_VERIFICATION.md`
+
+Reviewed implementation candidate:
 
 ```text
-Work Item: MW-014
-Name: Model-driven Character + Important Experiences Curation v0.1
-Primary Implementer: Codex
-Reviewer: GPT
-Revision: 1
-Review-Round: 0
-Status: READY FOR CODEX
-Branch: mw-014-model-driven-information-curator-v01
-Worktree: D:/AI/Projects/.worktrees/my-world/mw-014
-Return ceiling: READY FOR INDEPENDENT REVIEW
+8a3b64d0747ebf9c987c32af93e804672a8cbbe3
 ```
 
-Required backend vertical:
+Review-record / integrated lineage:
+
+```text
+048b2a76ff8238a7e9025da268a24ae924281856
+```
+
+Post-integration documentation advanced `my-world/main` beyond that review record without changing production implementation.
+
+Integrated backend vertical:
 
 ```text
 accepted Player input + accepted GM Narrative
@@ -189,37 +173,32 @@ current Character material
 player-safe Character + Important Experiences projections
 ```
 
-Curator is non-blocking background semantic maintenance. Curation failure must not invalidate accepted Narrative or gate the next Player action by default.
+Engineering evidence includes focused 103/0, required G3/G5/MW-009/MW-011/MW-012 regressions, Windows export PASS, and real Kimi K3 production-path semantic smoke.
 
-MW-014 does not implement the final Godot Character/Important Experiences UI.
+Non-blocking semantic observation from the real smoke: one Liu Bei-role scenario retained some strong starting wording about lacking local contacts/identity protection. Treat this as model/prompt curation quality for later UAT/iteration, not a reason to add Program semantic heuristics.
 
-## 7. After MW-014
+## 6. Current next work
 
-After Codex returns a clean pushed candidate:
+MW-014 has established the stable backend/projection seam. The next grounded consumer is the actual player-facing UI vertical:
 
 ```text
-GPT Independent Review
-→ Engineering PASS required
-→ integrate exact reviewed candidate
-→ shape/authorize KimiCode UI consumer
+right-side Character Surface
++ right-side Important Experiences Surface
++ migrate MW-011 transitional biography/profile out of left Player Status Host
++ left collapse/narrow behavior when no portrait/mechanic contribution exists
 ```
 
-Expected next UI work will implement:
+Before issuing the UI task, GPT should align stale supporting/root UI architecture prose that still says the left Player Host owns “who am I” or omits `重要经历` from the current taxonomy. Owner current decisions and frozen G6 decisions already govern, but supporting docs should no longer contradict them.
 
-- right-side Character Surface;
-- right-side Important Experiences Surface;
-- migration of transitional biography/profile out of left Player Status Host;
-- left empty/collapsed behavior when no portrait/mechanic contribution.
+Expected implementer: **KimiCode** if the task remains a bounded UI consumer over the reviewed MW-014 projection seam. If shaping discovers a new Runtime/authority requirement, split or route that mechanism to Codex rather than expanding KimiCode scope.
 
-Do not pre-authorize this UI task until MW-014 produces a stable reviewed projection seam.
-
-## 8. Visual Runtime disposition
+## 7. Visual Runtime disposition
 
 Runtime Asset Resolution / portrait / scene / authored-map implementation remains deferred until real authored first-party visual demand exists.
 
 Character portrait is a legitimate future Player Status Host consumer, but no media resolver is built merely to fill the slot.
 
-## 9. MW-013 disposition
+## 8. MW-013 disposition
 
 ```text
 MW-013 Internal Declarative UI Host v0.1
@@ -228,7 +207,7 @@ MW-013 Internal Declarative UI Host v0.1
 
 Re-evaluate only after multiple real Surfaces / mechanic consumers expose repeated component patterns.
 
-## 10. Agent routing
+## 9. Agent routing
 
 ```text
 GPT
@@ -244,13 +223,12 @@ Owner
 → Product UAT / explicit product verdict
 ```
 
-## 11. Immediate route
+## 10. Immediate route
 
 ```text
-MW-014 Codex implementation
-→ GPT Independent Review
-→ integrate only after Engineering PASS
-→ shape/authorize KimiCode Character + Important Experiences UI consumer
+align stale G6 supporting/root IA prose
+→ shape/authorize Character + Important Experiences UI consumer
+→ KimiCode implementation
 → GPT Independent Review
 → Owner UAT
 → People Surface / mechanic-state consumer / next grounded Surfaces
