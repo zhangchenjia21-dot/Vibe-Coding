@@ -170,7 +170,32 @@ Execution Envelope
 
 Product-facing Task 必须区分 Engineering Acceptance 与 Product Value Acceptance；需要真人体验时，Agent 最高状态通常是 `READY FOR OWNER UAT`，不能代替 Owner 宣布 Product PASS。
 
-### 6.1 Task Identity / Lineage
+### 6.1 Owner-facing 产品语言派工说明｜MANDATORY
+
+Owner 的跨项目 AI 协作偏好正式源：
+
+`governance/OWNER_AI_COLLABORATION_PREFERENCES_CURRENT.md`
+
+每次向执行 Agent 派发正式任务时，**必须在同一次给 Owner 的回复中，用产品呈现级别、直白、非工程术语优先的语言解释本次任务要实现什么。** Repository Task Packet 不能替代这一步。
+
+至少让 Owner 清楚：
+
+```text
+本次任务要实现什么？
+完成后我实际会看到 / 能做什么？
+这次明确不做什么？
+我之后应如何验收？
+```
+
+即使是纯后台 / 基础设施任务，也必须说明其产品后果，例如“本次不会直接改变界面，但会保证旧存档升级后仍能安全打开”。禁止只发送 Task ID、branch、packet path、schema/API/refactor 名称后让 Owner 自行推断产品结果。
+
+派工前自检：
+
+> **如果 Owner 完全不读 Task Packet，只读聊天说明，他是否仍然清楚这次做完以后产品应该变成什么样？**
+
+若答案是否，则不得完成派工说明。
+
+### 6.2 Task Identity / Lineage
 
 正式 Task 还必须遵守：
 
@@ -256,6 +281,7 @@ v1.0 → ... → v1.9 → v2.0 → v2.1
 ```text
 任务开始
 → 读取本 AGENTS.md
+→ 读取 Owner AI collaboration preferences
 → 读取项目 current + 相关 skill current + implementation HEAD
 → Freshness + Decision Propagation
 → Task Identity / Lineage 判定
