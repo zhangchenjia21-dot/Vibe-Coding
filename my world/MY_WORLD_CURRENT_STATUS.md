@@ -1,7 +1,7 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 16.1
+version: 16.2
 created: 2026-08-26
 updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
@@ -47,14 +47,14 @@ MY_WORLD_架构_CURRENT.md                v3.0 / current_phase G6
 MY_WORLD_总体规划路线图_CURRENT.md       v4.0 / current_phase G6
 AGENT_EXECUTION_ROUTING_CURRENT.md      v2.0 / Codex + KimiCode routing
 README.md                               refreshed G6 entry map
-MY_WORLD_CURRENT_STATUS.md              v16.1
+MY_WORLD_CURRENT_STATUS.md              v16.2
 ```
 
-New discussion authority:
+Current discussion authority:
 
 `architecture/ui/G6_SURFACE_INFORMATION_ARCHITECTURE_DRAFT_V0_1.md`
 
-Status of that file:
+Status:
 
 ```text
 DRAFT / FOR OWNER DISCUSSION
@@ -81,7 +81,7 @@ Formal records:
 
 Owner UAT confirmed fresh Zhang Chen `0.1.1` now displays materially useful Character information.
 
-Owner also explicitly observed that some current left-panel material may later belong in right-side secondary surfaces. Current placement remains accepted; future redistribution is G6 IA work, not an MW-011 reopening.
+Current rich left-panel content is accepted as a transitional implementation only; the G6 IA discussion now owns its eventual redistribution.
 
 ## 4. G6 corrected canonical route
 
@@ -100,23 +100,11 @@ Route correction authority:
 
 `architecture/ui/G6_ROUTE_CORRECTION_AFTER_MW011_UAT_2026-09-06.md`
 
-## 5. Current Surface / IA discussion
+## 5. Current Surface / IA discussion — Owner correction recorded
 
-Historical evidence from `zhangchenjia21-dot/the-world` is being reused as product evidence, not implementation authority.
+Historical evidence from `zhangchenjia21-dot/the-world` is reused as product evidence, not implementation authority.
 
-The old The World panel's proven player-facing mother taxonomy was:
-
-```text
-概览
-角色
-人物
-行囊
-事务
-系统
-存档
-```
-
-Current `my world` discussion draft extends the long-term candidate set to:
+Mother taxonomy under discussion:
 
 ```text
 概览
@@ -133,22 +121,38 @@ Core IA principle:
 
 > **Workspace / Domain truth is organized for maintenance; UI is organized for player decisions.**
 
-Current draft three-Host split:
+Owner explicitly corrected the long-term three-Host split on 2026-09-06:
 
 ```text
 Player Host
-→ high-frequency Player HUD
+→ role portrait / authored portrait when available
+→ live Character / mechanic status HUD only
+→ HP / MP / attributes / injuries / resources only when a real Expansion / Domain owns them
+→ does NOT own “who am I” biography/profile information
 
 Narrative Host
 → GM Narrative + Player natural-language action
 → primary visual/interaction surface
 
 World Surface Host
-→ Character / People / Journal / Inventory / Mechanics / Map / Save etc.
+→ Character identity/profile + People / Journal / Inventory / Mechanics / Map / Save etc.
 → only when real Domain + player-safe projection exist
 ```
 
-Current strongest first Surface candidate:
+Therefore:
+
+```text
+姓名 / 年龄 / 来历 / 背景 / 性格 / authored能力说明 / 局限 / 目标原则
+→ right-side 角色 / Character Sheet
+
+HP / MP / numeric stats / injury / buffs / live resources
+→ Expansion or Domain-owned mechanic state
+→ high-frequency projection may appear in Player Host HUD
+```
+
+No fake stats may be created merely to fill the left column.
+
+Current strongest first Surface candidate remains:
 
 ```text
 角色 / Character Sheet
@@ -162,9 +166,9 @@ Second candidate:
 
 No code task is authorized until Owner + GPT freeze the first Surface outcome.
 
-## 6. Surface appearance rule
+## 6. Surface / HUD appearance rule
 
-A new player-facing Surface requires:
+A new player-facing Surface or HUD contribution requires:
 
 ```text
 real player question
@@ -175,7 +179,8 @@ real player question
 
 Do not create:
 
-- fake HP / location;
+- fake HP / MP / numeric attributes / injuries;
+- fake location;
 - fake dynamic Inventory from authored starting possessions;
 - keyword-guessed Quest/Thread state;
 - omniscient NPC/relationship/faction views;
@@ -196,6 +201,8 @@ portrait / scene / authored-map implementation = DEFERRED
 ```
 
 Re-enter only when there is a real authored first-party visual consumer or product outcome blocked by visual absence.
+
+Character portrait is now recognized as a legitimate future Player Host consumer, but no resolver is built merely to fill the slot.
 
 ## 8. MW-013 disposition
 
@@ -249,12 +256,11 @@ Do not default new work back to Zcode unless Owner explicitly changes routing.
 ```text
 Owner + GPT discuss G6 Surface / IA Draft
 → freeze Player Host vs World Surface responsibilities
-→ choose first real Surface
+→ freeze first Character Surface outcome
 → shape exact executable task
 → assign Codex or KimiCode according to actual seam/risk
 → GPT Independent Review
 → Owner UAT
-→ repeat grounded Surface work
-→ mechanic-state consumer
+→ People Surface / mechanic-state consumer / next grounded surfaces
 → only then re-evaluate MW-013 Declarative UI Host
 ```
