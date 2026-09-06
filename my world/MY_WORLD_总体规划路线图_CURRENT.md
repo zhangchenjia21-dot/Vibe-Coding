@@ -1,10 +1,10 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 3.7
+version: 4.0
 created: 2026-08-25
-updated: 2026-09-04
-current_phase: G5
+updated: 2026-09-06
+current_phase: G6
 current_status_source: MY_WORLD_CURRENT_STATUS.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
@@ -17,7 +17,7 @@ implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 
 - G1–G9 阶段顺序；
 - 每阶段核心 Outcome；
-- 主要 Task DAG；
+- 当前阶段的主要能力顺序；
 - Stage Gate；
 - Deferred / Non-scope；
 - 为什么按这个顺序做。
@@ -45,9 +45,9 @@ G3 Persistent Game / Save / Timeline Foundation PASS / CLOSED
 ↓
 G4 Primary Source Assets & Local Game Creation   PASS / CLOSED
 ↓
-G5 World Semantics & GM Runtime                  ACTIVE
+G5 World Semantics & GM Runtime                  PRODUCT PASS / CLOSED
 ↓
-G6 RPG Experience & Internal Declarative UI Host
+G6 RPG Experience & Internal Declarative UI Host ACTIVE
 ↓
 G7 Long-session Context & Performance
 ↓
@@ -56,43 +56,36 @@ G8 Mod / Authoring & External Declarative UI Contract
 G9 Standalone Alpha / Release Validation
 ```
 
-第一条真正产品脊柱：
+第一条产品脊柱已经成立：
 
 ```text
-启动应用
+Launch
 → Main Menu
 → Continue / Asset-only New Game
-→ AI GM 自然语言互动
-→ 世界产生 durable change
+→ AI GM free-form Narrative
+→ Player natural-language action
+→ durable world / actor consequences
 → Save / exit / reopen
-→ Continue / Load / Restore
-→ 世界 + Context 一致恢复
-→ 世界与行动者继续产生新的当前现实
+→ Continue / Restore
+→ coherent world + context recovery
+→ world and actors continue to create history
 ```
 
 ---
 
 # G1｜Foundation & Project Bootstrap
 
-**PASS / CLOSED**。
+**PASS / CLOSED**
 
-Outcome：证明 Godot 4.7.2 / GDScript / same-process Runtime / Windows-local Host / real Provider streaming / local IO / Windows export 可行。
+Outcome：Godot 4.7.2 / GDScript / same-process Runtime / Windows-local Host / real Provider streaming / local IO / Windows export 成立。
 
 ---
 
 # G2｜AI Conversation Spine
 
-**PASS / CLOSED — G2-GATE PASS**。
+**PASS / CLOSED**
 
-Outcome：
-
-```text
-自然语言输入
-→ AI GM 真 streaming Narrative
-→ 多回合
-→ Cancel / Regenerate / Retry / correction
-→ Provider failure 后可继续
-```
+Outcome：自然语言输入、真 streaming Narrative、多回合、Cancel / Regenerate / Retry / provider-failure recovery 成立。
 
 Narrative 是主要游戏内容，不是状态摘要。
 
@@ -100,9 +93,9 @@ Narrative 是主要游戏内容，不是状态摘要。
 
 # G3｜Persistent Game / Save / Timeline Foundation
 
-**PASS / CLOSED — G3-GATE PASS**。
+**PASS / CLOSED**
 
-Outcome：建立 durable backbone：One authoritative SQLite flow、atomic world mutation、accepted Conversation durability、Timeline、named Save、Restore、future-memory isolation、backup/recovery。
+Outcome：One authoritative SQLite flow、atomic mutation、accepted Conversation durability、Timeline、Save、Restore、future-memory isolation、backup/recovery 成立。
 
 长期区分：
 
@@ -120,363 +113,61 @@ UI Preference
 
 # G4｜Primary Source Assets & Local Game Creation
 
-**PASS / CLOSED — G4-GATE PASS**。
+**PASS / CLOSED**
 
-G4 把产品升级为真正的本地多世界 AI RPG Host：
+Outcome：
 
 ```text
 Managed Source Library
-→ World Pack + Character Card + optional Expansion Pack
-→ explicit exact Composition
+→ World Pack + Character Card + Expansion Pack
+→ exact Composition
 → Atomic Final Create
 → independent Game-local Reality
+→ multiple Games
 → real AI GM play
-→ Save / reopen / Continue
-→ multiple Games without leakage
 ```
 
 核心边界：
 
 ```text
 Reusable immutable Source
-!= Selected T0 Source Projection
-!= Game-local Canonical Reality
-!= Runtime State
+!= selected T0 projection
+!= Game-local lived reality
+!= Runtime current state
 ```
 
-### G4 accepted chain
+主要闭环：Application Shell、Source v0.2-r2、Managed Library、Multi-Game、Asset-only New Game、Atomic Final Create、World+Character First Playable、Expansion vertical、Two-family reality 均已关闭。
 
-```text
-G4-01 Application Shell / Lifecycle   PASS / CLOSED
-G4-02R1 Source semantic re-audit      PASS / CLOSED
-G4-03 Managed Local Source Library    PASS / CLOSED
-G4-04 Multi-Game / Game Library       PASS / CLOSED
-G4-05 Asset-only New Game Wizard      PASS / CLOSED
-G4-06 Atomic Final Create             PASS / CLOSED
-G4-07 First Playable A                PASS / CLOSED
-G4-08 Expansion Pack v0.1             PASS / CLOSED
-G4-09 First Playable B                PASS / CLOSED
-G4-11 Two Primary Asset Families      PASS / CLOSED
-G4-11C01 Narrative Voice Soft Prompt  PASS / CLOSED
-```
-
-G4-11 Owner confirmed Han/刘备 and Afterglow/莉维娅 materially feel like different RPG worlds. Cross-world prose voice convergence remains a quality observation only; C01 added one generic Host-level soft creative instruction with no style gate.
-
-### G4 visual deferral
-
-```text
-G4-10 Runtime Asset Resolution
-DEFERRED / MOVED TO G6
-```
-
-Owner decided current portrait / scene / authored-map assets are not mature and are not part of the present core experience.
-
-Visual runtime is therefore **not** a G4-GATE or G5 prerequisite.
-
-Protected distinction:
-
-```text
-portrait / scene / map image
-!= gameplay semantic authority
-
-map image
-!= topology / travel / current location / GIS
-```
-
-Formal closeout:
-
-`my-world/docs/g4_11/G4_GATE_CLOSEOUT.md`
+Visual Runtime 曾在 G4 被正式移动到 G6，不是 G4 blocker。
 
 ---
 
 # G5｜World Semantics & GM Runtime
 
-## Outcome
+**PRODUCT PASS / CLOSED — G5-GATE PASS**
 
-让 G4 创建出的 Source-grounded Game 真正“活起来”，但不把 AI RPG 变成一个僵硬的全宇宙模拟器。
+Outcome：让 Source-grounded Game 真正“活起来”，同时避免构建全宇宙模拟器。
 
-核心原则：
+G5 已关闭能力包括：
+
+```text
+free-form Narrative → durable semantic consequences
+World Truth != actor Knowledge != human-player disclosure
+stable NPC independent agency
+runtime-created actor materialization
+event/priority World Evolution with valid hold
+meaningful choice / mechanics integration
+player-safe Runtime projection
+living-world integrated reality matrix
+```
+
+保护原则：
 
 > **Model authors the world; Runtime makes it durable; Player owns the timeline.**
-
-以及：
-
-```text
-Model Freedom First
-+
-Visible Narrative First
-+
-Canonical Commit Behind durable infrastructure boundaries
-```
-
-G5 semantics 不等待美术资源。
-
-## G5 task order
-
-```text
-G5-01 Minimum Playable T0 + World Turn / Semantic Materialization  PASS / CLOSED
-↓
-G5-02 Knowledge Provenance                                    PASS / CLOSED
-↓
-G5-03 NPC / Faction Agency                                    ENGINEERING PASS / CLOSED
-↓
-G5-04 Event / Priority-driven World Evolution                 ACTIVE — MW-002
-↓
-G5-05 Meaningful Choice / Mechanics Integration
-↓
-G5-06 Runtime → UI Projection
-↓
-G5-07 World Product Tests
-↓
-G5-GATE
-```
-
----
-
-## G5-01｜Minimum Playable T0 + World Turn / Semantic Materialization
-
-**PASS / CLOSED**。
-
-Canonical decision：
-
-`architecture/world/G5_WORLD_TURN_SEMANTIC_MATERIALIZATION_V0_1_DECISION.md`
-
-Implementation：
-
-`my-world/docs/tasks/G5-01M1_WORLD_TURN_SEMANTIC_MATERIALIZATION_TASK.md`
-
-Closeout：
-
-`my-world/docs/g5_01/G5-01_CLOSEOUT.md`
-
-### Outcome
-
-第一次让 free-form Narrative 中已经明确成立的世界变化进入 durable Game Reality：
-
-```text
-Player action
-→ free-form visible GM Narrative
-→ durable Conversation acceptance
-→ separate best-effort semantic analysis
-→ 0..N newly-established durable consequences
-→ Program-owned World Turn
-→ existing atomic world mutation / Timeline
-→ committed matching changes may re-enter later Context
-```
-
-Protected distinction：
-
-> **Narrative acceptance != semantic-analysis success.**
-
-G5-01 没有为了结构化世界语义重新把 Narrative 变成 JSON / sentinel / parser protocol。
-
-Semantic analysis 是独立 machine lane；malformed / transport / empty analysis fail-soft，不把已经接受的玩家行动判失败，也不创建 fake world mutation。
-
-World Turn v0.1 是 turn-level durable consequence ledger，不是 permanent universal ontology。
-
-Owner 在 Engineering PASS 后明确选择跳过额外的专门 G5-01 UAT：此前实际游玩已经给了“世界会记住玩家选择后果”的足够产品信心，因此直接推进。此前 dedicated real-provider vertical 因 Kimi K3 timeout 未能完成，历史证据状态不被伪造为 PASS，但不再作为额外 progression gate。
-
-`G5-01M1C02 Restore Timeline Isolation` 已取消；它针对 Restore 后相同 turn index + byte-identical GM Narrative hash 的极窄 exact-replay edge，等待未来真实 branch/result-reuse consumer 再裁定。
-
----
-
-## G5-02｜Knowledge Provenance
-
-**PASS / CLOSED**。
-
-Canonical decision：
-
-`architecture/world/G5_KNOWLEDGE_PROVENANCE_V0_1_DECISION.md`
-
-Implementation：
-
-`my-world/docs/tasks/G5-02M1_KNOWN_ACTOR_KNOWLEDGE_PROVENANCE_TASK.md`
-
-Closeout：
-
-`my-world/docs/g5_02/G5-02_CLOSEOUT.md`
-
-### Outcome
-
-正式建立：
-
-```text
-World / Game Truth
-!= Actor Knowledge
-!= Human-player disclosure
-!= Omniscient GM model Context
-```
-
-核心原则：
-
-> **GM omniscience must not become actor omniscience.**
-
-G5-02 让 post-T0 Knowledge acquisition 成为 durable provenance，并保持其与 GM world truth 分离。Knowledge parsing/validation failure 不拖累 otherwise-valid semantic changes 或 accepted Narrative。
-
-Stable actor roster 使用 exact `local_character_id`；unknown/non-roster actor 不能成为 durable knowledge authority。
-
-Explicitly deferred：
-
-- universal Entity/Knowledge Graph；
-- false belief / deception resolution；
-- confidence/reliability scoring；
-- rumor propagation；
-- Faction/shared knowledge；
-- separate Player Knowledge UI；
-- long-session retrieval platform。
-
----
-
-## G5-03｜NPC / Faction Agency
-
-**ENGINEERING PASS / CLOSED**。
-
-Current Agency authority：
-
-- `architecture/world/G5_AGENCY_SCHEDULER_V0_3_DECISION.md`
-- `architecture/world/G5_03_AGENCY_CLOSEOUT_AND_FACTION_DEFERRAL_V1_0_DECISION.md`
-
-Implementation closeout evidence lives in `my-world/docs/g5_03/`.
-
-### Outcome
-
-The first real independent-actor vertical is complete:
-
-```text
-ordinary accepted Player Narrative
-→ semantic lane terminal
-→ standalone Agency Selector on latest world
-→ 0..4 current stable NPC actors
-→ independent actor-scoped requests
-→ optional durable actor actions
-→ Player foreground always wins
-```
-
-Stable actor ingress now includes:
-
-```text
-Guaranteed Source NPC
-+ automatic Source-backed NPC
-+ creation-authored Game-local NPC without Card
-+ runtime Narrative-materialized NPC without Card
-```
-
-All use Program-owned Game-local identity. Actor requests remain scoped to that actor's own material, own Knowledge Provenance and own history.
-
-A separate Faction-agency platform is **deferred**, not claimed complete. There is no concrete consumer yet for persistent Faction identity + shared/private Faction Knowledge + Faction-local action history. Future G5-04 or UI consumers may pull only the smallest Faction capability they actually need.
-
----
-
-## G5-04｜Event / Priority-driven World Evolution
-
-**ACTIVE — current Work Item: `MW-002 Selective World Evolution Evaluator`.**
-
-Canonical decision：
-
-`architecture/world/G5_SELECTIVE_WORLD_EVOLUTION_V0_1_DECISION.md`
-
-Repository-native task：
-
-`my-world/docs/tasks/MW-002_SELECTIVE_WORLD_EVOLUTION_EVALUATOR_TASK.md`
-
-### Outcome
-
-让世界在 Player 之外选择性地产生历史，同时保留 Player Spotlight 与 Life Loop：
-
-```text
-World Independence + Player Spotlight
-Persistent != Fully Simulated
-Evaluation opportunity != event obligation
-```
-
-历史试玩同时证明：主动世界推进有价值，而连续事件轰炸会让玩家永远只能响应。G5-04 v0.1 因此把 `hold` 视为正确结果，而不是失败。
-
-### First vertical
-
-```text
-ordinary accepted Narrative
-→ semantic lane
-→ existing Agency opportunity terminal
-→ one best-effort World Evolution evaluation
-→ hold OR at most one causally-ready world event
-→ optional durable World mutation
-→ next GM Context sees the event
-→ GM decides when/how it enters the Player scene
-```
-
-Player turn 只提供安全调度窗口，不是事件因果来源。
-
-World event 首先覆盖没有单一 stable NPC intentional owner 的过程：环境、aggregate conflict/front、制度/经济/社会过程、deadline、灾害、已有后果的连锁反应等。具体 stable NPC 的主动选择继续归 G5-03 Agency。
-
-Priority judgment 保持 model-owned。v0.1 明确不建设：
-
-- numeric priority/urgency score；
-- persistent pressure queue/database；
-- fixed `every N turns` cadence；
-- Quest/Thread scheduler；
-- random-event engine；
-- universal Event/Entity/Faction ontology；
-- offline real-time simulation。
-
-Evaluator 可读取 durable frozen Game-local T0 **World-only** projection + current semantic/Agency/evolution world facts；不得读取 mutable Source current，也不得把 Actor-private Knowledge 当 world causality input。
-
-第一真实 consumer 是下一次 production GM continuation Context；event 是 omniscient GM world truth，不自动等于 Player/actor Knowledge，也不强制立即插播给玩家。
-
-### Acceptance route
-
-```text
-MW-002 implementation
-→ GPT actual-code Independent Review
-→ Owner G5-04 UAT
-→ G5-04 closeout
-```
-
-Owner UAT 必须同时验证：
-
-1. quiet/Life Loop 场景真的可以 `hold`，不会人工制造升级；
-2. 真正成熟的世界压力可以在没有 Player 直接推动时自然前进，并在后续 Narrative 中自然被使用。
-
----
-
-## G5-05｜Meaningful Choice / Mechanics Integration
-
-Outcome：把已证明的 Expansion mechanic/world semantics 接入 living-world consequences，而不重新打开 Public d20 已关闭的协议设计。
-
----
-
-## G5-06｜Runtime → UI Projection
-
-Outcome：把已成立的 Runtime truth 投影成 player-safe consumer，为 G6 RPG Experience 拉出真实 UI 需求。
-
-不在这里预造完整 G6 visual host。
-
----
-
-## G5-07｜World Product Tests
-
-至少包括：
-
-```text
-Player Absence
-Counterfactual Propagation
-Independent Actor
-Knowledge Boundary
-Save/Restore world consistency
-```
-
-Engineering evidence 不能代替 Owner 对“世界是否真的活起来”的产品判断。
-
-## G5-GATE
-
-至少要求：
-
-- free-form Narrative 能产生 durable world consequences；
-- 世界语义在 Save/Restore/Continue 后一致；
-- World Truth / actor knowledge / Player knowledge 有真实边界；
-- non-player actors 能成为独立行动者；
-- 世界可以选择性地在 Player 之外演化；
-- Expansion mechanics 能进入世界语义而不是孤立 UI 特效；
-- 没有发展成全宇宙模拟器或模型格式 gate 森林。
+>
+> **Source provides inertia; actors create history.**
+>
+> **Persistent != fully simulated.**
 
 ---
 
@@ -484,21 +175,147 @@ Engineering evidence 不能代替 Owner 对“世界是否真的活起来”的�
 
 ## Outcome
 
-把已成立的 Runtime Truth 做成真正的 RPG 产品界面，并让**真实 presentation consumer 拉出视觉资源能力**。
+把已经成立的 Runtime Truth 做成真正可读、可查询、可操作的 RPG 产品界面，并让真实 Surface / mechanic consumer 反向拉出 Host 与 visual capability。
 
-Recommended order：
+G6 不是“把所有传统 RPG 页面一次做齐”，而是：
 
-- Runtime projection → ViewModel → real UI consumer；
-- re-audit + implement Runtime Asset Resolution only for actual visual consumers；
-- portrait / scene / authored-map presentation；
-- Character / Relationship / Inventory / Faction / Map / Save 等真实 Surface；
-- Expansion mechanic state consumer；
-- Internal Declarative UI Host v0.1；
-- bounded Action Intent；
-- responsive / Theme / navigation；
-- Owner UAT / visual polish。
+> **玩家问题先于页面数量；真实 Domain 先于空 Tab；重复 consumer 先于抽象 renderer。**
 
-G6 re-entry 时重新裁定旧 Game 是否允许 presentation-only override 使用后来补充的视觉，而不改变 semantic Source ancestry。
+## G6 canonical order
+
+```text
+A. Runtime projection → ViewModel → first real UI consumer
+B. Visual Runtime re-entry audit
+C. portrait / scene / authored-map presentation when real demand exists
+D. Character / People / Inventory / Thread / Faction / Map / Save 等 grounded real Surfaces
+E. Expansion mechanic-state consumer
+F. Internal Declarative UI Host v0.1
+G. bounded Action Intent
+H. responsive / Theme / navigation / UI preference as actually justified
+I. Owner UAT / visual polish
+```
+
+### G6-A｜First real consumer
+
+**DONE — MW-011 PRODUCT PASS / CLOSED**
+
+已成立：
+
+```text
+Player-safe projection
+→ presentation-only RPG Host ViewModel
+→ Player Host + World Overview
+```
+
+张琛 `player_profile` 证明 rich Character Source 可以通过独立 fail-closed player-facing projection 进入 UI，而不泄漏 raw `semantic_sections` / GM-private material。
+
+MW-012 张琛 Character Card 已集成，当前 accepted generation 为 `0.1.1`。
+
+### G6-B / C｜Visual Runtime re-entry
+
+**AUDITED — IMPLEMENTATION DEFERRED**
+
+当前 Player / Narrative / World 三个 Host 已有潜在 portrait / scene / map placement，但仍没有成熟第一方 authored visual demand。
+
+因此：
+
+```text
+Runtime Asset Resolution implementation = DEFERRED
+portrait / scene / authored-map implementation = DEFERRED
+```
+
+Re-entry trigger：Owner 提供/批准真实第一方视觉资产，或某个 Surface 的产品 Outcome 明确依赖 visual。
+
+### G6-D｜Real Surfaces / Information Architecture
+
+**CURRENT**
+
+当前先做 product/architecture audit，不立刻 coding。
+
+历史 The World 已验证的玩家 IA 作为 evidence 母版：
+
+```text
+概览 / 角色 / 人物 / 行囊 / 事务 / 系统 / 存档
+```
+
+`my world` 当前讨论 Draft：
+
+`architecture/ui/G6_SURFACE_INFORMATION_ARCHITECTURE_DRAFT_V0_1.md`
+
+当前倾向：
+
+```text
+Player Host  → 长期收敛为高频 HUD
+Narrative    → 保持视觉与交互中心
+World Host   → 承担角色详情、人物、事务、行囊、系统、地图、存档等玩家主动查询 Surface
+```
+
+一个 Surface 只有同时满足以下条件才进入实现：
+
+```text
+real player question
++ real domain owner
++ player-safe projection
++ non-trivial product value
+```
+
+禁止为了“像 RPG”而创建 fake HP / location / inventory / faction / quest state 或空标签页。
+
+当前第一个强候选是 `角色 / Character Sheet`；第二候选是 `人物 / People`。顺序须经 Owner 讨论冻结后再派工。
+
+### G6-E｜Expansion mechanic-state consumer
+
+在真实 durable mechanic state 已存在后，让玩家能查看当前机制状态。
+
+原则继承 The World：
+
+```text
+no durable mechanic state
+→ no fake System page
+```
+
+### G6-F｜Internal Declarative UI Host v0.1
+
+`MW-013` 已完成 Task Shaping，但因路线复核被判定过早：
+
+```text
+MW-013 = HOLD / NOT AUTHORIZED YET
+```
+
+只有在多个真实 Surface / mechanic consumer 已经重复出现稳定组件模式后，才 re-authorize。
+
+Internal Host 只来自 proven internal consumers；G8 之前不接受 World/Character/Expansion 外部 UI schema。
+
+### G6-G｜Bounded Action Intent
+
+在 Host vocabulary 经过真实消费者验证后，再允许受控 UI intent，例如 open surface / prefill composer / Save navigation。
+
+不允许 arbitrary GDScript callback、NodePath execution、OS/filesystem command 或资产直接 mutation authoritative state。
+
+### G6-H / I｜Responsive / Theme / Navigation / UAT
+
+持续以 desktop 最大化为主体验，保留 normal/narrow regression；Narrative First != Narrative Only。
+
+最终 Owner UAT 必须判断：
+
+- 信息是否按玩家需求组织；
+- Narrative 是否仍是重心；
+- Side Surfaces 是否真的降低认知负担；
+- UI 是否像游戏而不是工程 inspector；
+- 没有为完整度制造假状态。
+
+## G6-GATE（draft acceptance direction）
+
+至少要求：
+
+- Player Host / Narrative / World Host 的职责清晰；
+- 至少若干真实 RPG Surface 投影真实 state，而非空壳；
+- Save/Restore player experience 保持可靠；
+- real mechanic state 有合理 consumer；
+- Internal Declarative Host 仅从 proven patterns 抽象；
+- player-safe disclosure boundary 在 UI 层保持；
+- responsive/navigation/theme 达到长期桌面游玩可接受水平；
+- Owner 明确认为 UI materially improves RPG experience。
 
 ---
 
@@ -511,11 +328,11 @@ G6 re-entry 时重新裁定旧 Game 是否允许 presentation-only override 使�
 Tasks：
 
 - bounded Context Assembly；
-- relevant subgraph / working-set selection；
-- background progression 与 model work 分离；
-- TTFT / throughput / context size / persistence latency 真实长局证据；
-- Source / Game semantics / history 增长时不线性塞满 Prompt；
-- long-session recovery/performance test。
+- relevant working-set / subgraph selection；
+- background progression 与 foreground model work 分离；
+- TTFT / throughput / context size / persistence latency 长局证据；
+- Source / Game / history 增长时不线性塞满 Prompt；
+- long-session recovery/performance reality test。
 
 > **Bounded context != starved context.**
 
@@ -525,14 +342,15 @@ Tasks：
 
 ## Outcome
 
-在内部 Runtime/UI consumer 已证明后，再建立 authoring / external extension contract。
+在内部 Source / Runtime / UI consumers 已经证明后，再建立外部 authoring / extension contract。
 
 Tasks：
 
 - Source authoring/import workflow；
-- safe external declarative UI vocabulary from proven internal Host；
+- Character / World / Expansion batch authoring tooling；
+- external safe declarative UI vocabulary derived from G6；
 - compatibility/versioning/migration；
-- bounded extension capabilities；
+- bounded extension capability；
 - real third-party-like package tests。
 
 不建设 arbitrary-code plugin platform。
@@ -543,13 +361,13 @@ Tasks：
 
 ## Outcome
 
-把完整纵向整理为可独立安装、恢复、诊断的 Alpha 产品。
+把完整纵向整理为可独立安装、恢复、诊断的 Windows Alpha 产品。
 
 Tasks：
 
-- standalone Windows packaging；
+- standalone packaging；
 - onboarding / credentials / Source setup；
-- upgrade/migration/recovery；
+- upgrade / migration / recovery；
 - long-play / corruption / reinstall reality tests；
 - release UAT / defect closure；
 - documentation / diagnostics / support boundary。
@@ -557,3 +375,21 @@ Tasks：
 ## G9-GATE
 
 独立用户能安装、建局、长期游玩、保存恢复，并在真实失败后有可理解的恢复路径。
+
+---
+
+## Deferred / Non-scope reminders
+
+继续不提前建设：
+
+- multiplayer / cloud account / server dependency；
+- 3D free-movement world；
+- full-universe per-NPC tick simulator；
+- universal ECS / giant EventBus；
+- arbitrary external code execution；
+- giant universal Source/UI schema；
+- automatic map generation before authored-map evidence；
+- Creator before real consumers；
+- external declarative UI before G6 internal patterns prove out。
+
+Current Task / Owner / PASS 始终以 `MY_WORLD_CURRENT_STATUS.md` 为准。
