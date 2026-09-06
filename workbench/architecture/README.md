@@ -10,8 +10,8 @@
 
 ## 当前 Architecture Owner
 
-- [`架构问题登记表.md`](架构问题登记表.md) — **v1.0 / OWNER-REVIEWED / G0.3 SUBMISSION / NOT ROUTE-FROZEN**
-  - 收敛 Today / Plan / Tracks 的 ownership；
+- [`架构问题登记表.md`](架构问题登记表.md) — **v1.0 / OWNER-REVIEWED / G0.3 PASS INPUT / NOT ROUTE-FROZEN**
+  - 收敛 Today / Plan / Tracks ownership；
   - Track / Plan / recurrence / Current Vector / Today acknowledgement 开放问题；
   - persistence / backup / migration；
   - Desktop host / system tray；
@@ -19,11 +19,7 @@
   - Future extension boundary；
   - Route Freeze 前高沉没成本问题。
 
-原 AI Collaboration V0 的 Architecture Questions Register 已随旧路线归档至：
-
-`Vibe-Coding/99_归档/workbench/AI协作路线_V0/架构问题登记表_未审核草案_v0.1.md`
-
-该文件只作历史证据，不是当前 Architecture Authority。
+G0.3 已由 00 判定 PASS。其含义是：该登记表与 `../current/开发路线.md` 已足够完整，可以进入 G0.4 Reference / Path Audit；**不表示其中 OPEN 技术问题已经解决，也不表示 Architecture Freeze。**
 
 ## 当前 Owner-approved Architecture Constraints
 
@@ -35,22 +31,34 @@
 - Current Vector 日期区间禁止重叠；
 - recurrence 使用 series definition + dynamic occurrence + exception；
 - recurrence edit / delete V0 只支持“仅这一次 / 整个循环”；
-- 核心数据本地可靠保存；V0 需要 backup / restore 与 migration；
+- 核心数据本地可靠保存；V0 需要 restart recovery、backup / restore 与 migration；
 - system tray 属于 V0 Required，开机启动 Deferred；
 - Plan 不采用万能事项表单强行统一不同用户语义；
 - Sources / Update Mode 不在 V0 建同步 / AI 平台；
 - Future Milestones / AI / Sync / Custom / Plugin / SDK 等继续 Deferred。
 
-仍然开放、需要 G0.4 Reference Audit / Spike 的高风险技术决策包括：
+## G0.4 必须攻击的开放高风险技术决策
 
 - Electron / Tauri / Native / Web-local host；
 - local store / database；
 - exact schema；
 - occurrence stable identity；
 - timezone / date-only semantics；
-- backup format；
+- Today acknowledgement persistence；
+- backup format / restore behavior；
 - migration mechanism；
-- packaging / update mechanism。
+- packaging / update mechanism；
+- 当前 `TA-1` 集中实现 + 首次完整 Owner UAT 的 ordering risk。
+
+这些问题应优先进入 `../research/` 的 Reference Audit / Spike evidence，不得因为 G0.3 PASS 自动升级成技术决定。
+
+## 历史路线
+
+原 AI Collaboration V0 的 Architecture Questions Register 已随旧路线归档至：
+
+`Vibe-Coding/99_归档/workbench/AI协作路线_V0/架构问题登记表_未审核草案_v0.1.md`
+
+该文件只作历史证据，不是当前 Architecture Authority。
 
 ## 写入条件
 
@@ -71,9 +79,9 @@
 
 - Product / Roadmap 当前状态由 `../current/` 拥有；
 - 未审核提案由聊天或 `../discussion/` 承载；
-- Reference evidence 由 `../research/` 拥有；
+- G0.4 Reference / Spike evidence 由 `../research/` 拥有；
 - Owner 正式项目级裁定由 `../decisions/` 拥有；
 - 代码与 runtime implementation fact 由 `zhangchenjia21-dot/Workbench` 拥有；
 - `99_归档/workbench/` 只提供历史证据，不参与 current authority。
 
-> 当前 `架构问题登记表.md` 是 G0.3 submission input，不自行宣布 G0.3 PASS；Route Freeze 前 Implementation 仍未授权。
+> 当前状态：**G0.3 PASS / G0.4 NEXT / NOT ROUTE-FROZEN / IMPLEMENTATION NOT AUTHORIZED**。
