@@ -1,7 +1,7 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 16.4
+version: 16.5
 created: 2026-08-26
 updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
@@ -46,7 +46,7 @@ Focused semantic/domain audit:
 
 `architecture/ui/G6_CHARACTER_AND_IMPORTANT_EXPERIENCES_SEMANTIC_AUDIT_DRAFT_V0_1.md`
 
-Current version: **v0.1 / DRAFT / FOR OWNER DISCUSSION**.
+Current version: **v0.2 / DRAFT / FOR OWNER DISCUSSION**.
 
 Current frozen shell direction:
 
@@ -120,27 +120,73 @@ Important Experiences
 
 Neither UI Surface becomes canonical truth owner.
 
-## 5. Character evolution boundary under discussion
+## 5. Model-driven information curation — Owner direction
+
+Owner explicitly rejected a Program-heavy significance classifier.
+
+Current principle:
+
+> **Model judges semantic importance; Program enforces authority, safety and durability.**
+
+Meaning:
+
+```text
+Model
+→ decides whether a change is semantically important
+→ decides whether it belongs in Character / Important Experiences / future information surfaces
+→ decides whether current Character material should add / replace / remove / remain unchanged
+→ writes concise player-facing summary text
+
+Program
+→ does NOT decide importance through keyword rules / regex / score tables / fixed turn thresholds
+→ validates accepted turn/hash linkage
+→ validates allowed target + payload shape/size
+→ enforces Existing Domain wins
+→ enforces Player-owned self-definition evidence
+→ enforces player-safe disclosure
+→ commits idempotently
+→ preserves Save / Restore / Regenerate currentness and persistence integrity
+```
+
+Owner explicitly accepts an additional bounded model call when that improves semantic accuracy, consistency and reduces Runtime complexity.
+
+Preferred shape under discussion:
+
+```text
+accepted Player input + accepted GM Narrative
++ current player-safe Character state
++ bounded recent milestones
++ relevant formal Domain facts / authority hints
+→ model-driven post-turn Information Curator
+→ bounded semantic proposals
+→ narrow Program validation + durable commit
+```
+
+This curator is semantic maintenance, not rendering. It must not turn Narrative delivery into a hard wait/gate; malformed/failed curation fails soft and can be retried without invalidating the accepted Narrative.
+
+## 6. Character evolution boundary under discussion
 
 Current baseline:
 
 ```text
 objective durable Character facts
-→ may be established by world causality
+→ model may identify from world causality
 
 non-voluntary long-term impacts
-→ may be durable; Existing Domain wins if one exists
+→ model may identify; Existing Domain wins if one exists
 
 major protagonist self-definition
-→ requires Player-originated / Player-authorized evidence
+→ model may propose only with Player-originated / Player-authorized evidence
 
 short-term state
-→ does not enter Character Sheet
+→ model should leave outside Character Sheet
 ```
+
+These are authority/product rules for the model and validator, not a request for a giant Program rule engine.
 
 Existing Domain wins remains protected for Inventory / Relationship / Knowledge / Injury / Faction / Timeline / Thread / Mechanic State.
 
-Focused audit now proposes Character sections around:
+Focused audit proposes Character sections around:
 
 ```text
 basic identity
@@ -152,7 +198,7 @@ long-term limitations / traits
 long-term goals / self-direction
 ```
 
-## 6. Important Experiences boundary under discussion
+## 7. Important Experiences boundary under discussion
 
 `重要经历` is not:
 
@@ -161,27 +207,20 @@ long-term goals / self-direction
 - current open tasks;
 - a second biography database.
 
-Draft milestone threshold includes only life-scale changes such as:
+Milestone examples include life-scale identity, capability, direction, trajectory and relationship changes, but examples are guidance for model semantic judgment — not Runtime keyword lists or scoring rules.
 
-- identity/social-role changes;
-- major capability gains/losses;
-- Player-authorized long-term direction changes;
-- trajectory-changing successes/failures;
-- life-scale relationship events.
-
-Ordinary battles, ordinary conversations, normal checks, small purchases, short-term injuries and routine task completion do not automatically become milestones.
-
-Long-term target:
+Current target:
 
 ```text
 authoritative lived history / Character semantic change / relevant formal Domain event
-→ protagonist milestone selection/materialization
+→ model-driven protagonist milestone curation
+→ bounded durable/current milestone material
 → player-safe Important Experiences projection
 ```
 
 Restore to before a milestone must remove both the milestone projection and any current Character change caused by that future.
 
-## 7. Current implementation audit
+## 8. Current implementation audit
 
 Current Runtime already has:
 
@@ -204,15 +243,15 @@ protagonist milestone history
 
 Current world semantic turns are bounded generic change strings, not a safe targeted Character owner. Current MW-011 profile projector intentionally reads only frozen Game-local `player_profile`; it cannot satisfy an evolving Character Sheet by itself.
 
-## 8. Likely implementation seam after Product Freeze
+## 9. Likely implementation seam after Product Freeze
 
 Current likely split:
 
 ```text
 Codex
+→ model-driven Character / milestone curator seam
 → minimal game-local Player Character semantic authority
-→ protagonist milestone authority/materialization
-→ Player-authorization boundary
+→ Player-authorization evidence validation
 → Save/Restore/Regenerate/currentness
 → player-safe Character + Important Experiences projections
 
@@ -225,13 +264,13 @@ KimiCode
 
 No implementation task is authorized yet. Product semantics must freeze first.
 
-## 9. Visual Runtime disposition
+## 10. Visual Runtime disposition
 
 Runtime Asset Resolution / portrait / scene / authored-map implementation remains deferred until a real authored first-party visual demand exists.
 
 Character portrait is a valid future Player Status Host consumer, but no media resolver is built merely to fill the slot.
 
-## 10. MW-013 disposition
+## 11. MW-013 disposition
 
 ```text
 MW-013 Internal Declarative UI Host v0.1
@@ -240,7 +279,7 @@ MW-013 Internal Declarative UI Host v0.1
 
 Re-evaluate only after multiple real Surfaces / mechanic consumers expose repeated component patterns.
 
-## 11. Agent routing — current Owner rule
+## 12. Agent routing — current Owner rule
 
 ```text
 GPT
@@ -256,14 +295,11 @@ Owner
 → Product UAT / explicit product verdict
 ```
 
-## 12. Immediate route
+## 13. Immediate route
 
 ```text
 Owner + GPT finish Character + Important Experiences semantics
-→ confirm long-term-goal vs 事务 boundary
-→ confirm milestone threshold + growth behavior
-→ decide left-column behavior after Character Surface exists
-→ decide placement of current known facts
+→ confirm model-driven Information Curator as formal architecture rule
 → freeze semantic/domain audit
 → shape executable backend/UI seam
 → Codex and/or KimiCode implementation
