@@ -6,6 +6,10 @@
 
 - [原版 SillyTavern 功能参考审计与可选方向｜2026-09-06](./SILLYTAVERN_UPSTREAM_FUNCTIONAL_REFERENCE_AUDIT_2026-09-06.md)：固定 `release@8172dcd0ee672d3cd9a5e5f7af134f91a45cd2b8`，以代表性源码和官方文档核实功能；包含八条可学经验、八类应改造或限制的机制、十五项可选产品方向及进入条件。只学功能与产品经验，不继承代码组织或宿主架构；不修改正在执行的任务。
 
+## 进行中的改进讨论
+
+- [SillyTavern 参考研究改进讨论通过清单｜2026-09-06](./SILLYTAVERN_REFERENCE_IMPROVEMENT_DISCUSSION_2026-09-06.md)：只记录 Owner 明确通过的改进提案。目前作为 working approved candidate list；讨论完成前不修改 CURRENT Roadmap、不创建实现任务。
+
 ## 历史经验与候选池
 
 - [备选开发方向候选池](./备选开发方向候选池_2026-08-28.md)：防止遗忘曾讨论的方向；其中历史“当前不做”状态不能覆盖较新的 current 决策。
