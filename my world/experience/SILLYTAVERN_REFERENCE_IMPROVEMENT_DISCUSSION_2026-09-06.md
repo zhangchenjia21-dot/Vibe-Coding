@@ -1,7 +1,7 @@
 ---
 title: my world｜SillyTavern 参考研究改进讨论通过清单
 status: working-approved-candidate-list
-version: 1.4
+version: 1.5
 created: 2026-09-06
 updated: 2026-09-06
 source_reference: ./SILLYTAVERN_UPSTREAM_FUNCTIONAL_REFERENCE_AUDIT_2026-09-06.md
@@ -13,15 +13,15 @@ roadmap_authorization: none
 
 ## 0. 用途
 
-本文件只记录 Owner 在基于原版 SillyTavern 功能参考研究进行的产品改进讨论中，**明确表示通过的提案**。
+本文件记录 Owner 在基于原版 SillyTavern 功能参考研究进行的产品改进讨论中，**明确通过的提案**。
 
 重要边界：
 
 - `通过提案` != `立即实施`；
 - 本文件不是 CURRENT Roadmap、Task DAG 或 Architecture Decision；
-- 本轮改进讨论完成前，不据此创建新的 MW Work Item；
-- 讨论结束后，由 GPT 基于全部通过提案统一做重叠、依赖、冲突、阶段与 UAT 审计，再提交 Revised Task Axis 给 Owner；
-- 只有路线重构经 Owner 批准后，才更新正式 Product / Architecture / Roadmap / Status 并进入 Task Packet。
+- 本轮讨论结束前，不据此创建新的 MW Work Item；
+- 讨论结束后，由 GPT 对全部通过项做重叠、依赖、冲突、阶段和 UAT 审计，形成 Revised Task Axis；
+- 只有 Revised Task Axis 经 Owner 批准后，才更新正式 Product / Architecture / Roadmap / Status 并进入 Task Packet。
 
 ---
 
@@ -39,7 +39,7 @@ roadmap_authorization: none
 
 > **Narrative Preference 只影响表达与镜头，不成为 World Truth、NPC 意图、结果保证或剧情状态机。**
 
-后续需冻结长期偏好与单回合临时叙事要求的 owner / 注入边界。
+后续需冻结长期偏好与单回合临时叙事要求的 ownership / 注入边界。
 
 ### P-03｜结构化模型输出可靠性｜原提案 6
 
@@ -101,152 +101,163 @@ Character / Important Experiences / People 等模型派生信息允许玩家低�
 
 > **纠正派生信息 != 修改世界事实。**
 
-例如玩家把 People 卡中的“我信任李亭”改成“我只是暂时合作”，表达的是对玩家侧派生表述的纠正，不会改写李亭真实态度；删除一条 Important Experience 也不意味着 accepted history 中该事件没有发生。
-
-后续需冻结 correction 的 durable owner、对 Curator 的优先级、Restore/Regenerate currentness，以及它与普通 Player Note 的边界。Program 不得把纠正实现成 personality/relationship keyword machine。
+纠正的是玩家侧派生表述，不直接修改 NPC 真实态度或 accepted history。后续需冻结 correction durable owner、Curator 优先级和 Timeline currentness。
 
 ### P-11｜玩家私人笔记 / Player Notes｜原提案 17
 
 提供纯 Player-owned 笔记本，用于记录怀疑、计划、线索和个人想法。
 
-Player Notes 不是 World Truth、NPC Knowledge、Character Sheet、Important Experience、Quest 或 Curator 自动产物。第一版默认**不自动喂给 GM**，避免“玩家猜测”被模型误当成世界事实；以后若需要，可另行讨论由玩家显式标记“允许 GM 参考”。
-
-未来可选择在冒险纪事导出中附带私人笔记，但默认隐私与导出范围需清楚。
+Player Notes 不是 World Truth、NPC Knowledge、Character、Important Experience、Quest 或 Curator 自动产物。第一版默认**不自动喂给 GM**，避免玩家猜测被模型误当成事实；以后若需要，再讨论由玩家显式允许 GM 参考。
 
 ### P-12｜作品套装 / 推荐 Composition｜原提案 20
 
-允许作者把多个 Source 组织成一个可理解的作品推荐组合，例如：
-
-```text
-《张琛：汉末求生》
-World            三国乱世
-Entry            189 年冬 · 洛阳以东
-Player Character 张琛
-Recommended      公共 d20 / 汉末经济系统
-Optional NPC     …
-```
-
-玩家可以“一键按推荐组合开始”，也可以进入高级设置调整可选内容。
+允许作者把多个 Source 组织成一个可理解的作品推荐组合，并让玩家“一键按推荐组合开始”或进入高级设置调整。
 
 作品套装只是 creation-time Composition Preset，不是新的 Runtime Truth；Final Create 后 Game 仍冻结各组件 exact generation。不扩张成在线商店、远程代码包或通用依赖管理器。
 
-路线重构时优先判断是否与 P-04 Source Library 作品化合并成同一产品阶段，而不是机械拆成独立 Work Item。
+路线重构时优先判断是否与 P-04 Source Library 作品化合并为同一产品阶段。
 
 ### P-13｜角色性格 ↔ 玩家行动 ↔ 推荐行动动态反馈闭环｜原提案 21
 
-**Owner verdict：通过；该提案由 Owner 主动提出。**
+**该提案由 Owner 主动提出。**
 
-未来推荐行动应参考玩家主角**当前、player-safe 的 Character / 性格投影**；玩家最终真正提交并进入 accepted history 的自由行动，又由现有 Model-driven Character Curation 判断是否构成持久人格/自我方向变化，从而反过来影响未来推荐。
-
-建议闭环：
+未来推荐行动参考主角当前 player-safe Character / 性格投影；玩家最终真正提交并进入 accepted history 的自由行动，又由 Model-driven Character Curation 判断是否构成持久人格/自我方向变化，从而反过来影响未来推荐。
 
 ```text
 当前 Character / 性格
 ↓
-Action Recommender 把它作为行动倾向参考
+Action Recommender 作为“行动倾向”参考
 ↓
-生成更符合“此刻这个人”的 5 个建议，但不限制自由输入
-↓
-玩家点击后编辑 / 或完全自由输入
+生成更符合此刻这个人的建议，但不限制自由输入
 ↓
 只有最终提交并 accepted 的玩家行动成为性格演化证据
 ↓
-Character Curator 判断长期行为是否真的改变“现在的我是谁”
-↓
-Character 当前性格自然演化
+Character Curator 判断是否发生持久变化
 ↓
 未来推荐读取新的 current Character projection
 ```
 
-关键边界：
-
-- 性格是 recommendation tendency，不是 legal-action whitelist；
-- 推荐本身不改变性格，点击未发送也不产生 Character effect；
-- 编辑后的最终提交文本才是玩家选择；
-- 单次反常行动不机械触发人格突变；
-- Program 不做“勇敢 +1 / 谨慎 -1”、关键词人格分类或固定人格数值条；
-- 推荐必须允许合理偏离、尝试和成长，避免旧性格 → 同类推荐 → 同类选择的自我锁定；
-- Recommender 只能消费 player-safe current Character projection，不读取 GM-private / omniscient World material；
-- Restore / Regenerate 后 Character currentness 与 recommendation currentness 必须一起回到对应历史点；
-- P-10 玩家纠正 Character 派生信息后，推荐应遵守纠正后的 current player-safe Character projection。
-
-该能力不是 MW-019 自动 Revision 范围；路线重构时需判断它是 Character Curation × Recommendation 的新 outcome，还是后续 G6 vertical。
+性格只是 tendency，不是 legal-action whitelist；推荐本身、点击未发送、原始推荐草稿均不得改变 Character。Program 不做人格数值条、关键词人格分类或“勇敢 +1”之类规则。推荐应允许合理偏离、尝试和成长，避免自我锁定。
 
 ### P-14｜对话式 Creator / AI-assisted Source Authoring｜原提案 23
 
 未来 Creator 允许用户通过自然语言与 AI 讨论 World / Entry / Character / Expansion Draft，并把每次 AI 建议收敛成**可见、可验证、可拒绝的 Draft ChangeSet**。
 
-候选流程：
-
 ```text
-用户与 Creator AI 讨论
-↓
-AI 提议 typed Draft changes
-↓
-界面明确展示“本次拟修改什么 / 没修改什么”
-↓
-Validator 检查
-↓
-用户接受 / 拒绝 / 继续讨论
-↓
-只修改 Draft
-↓
-显式 Save / Publish 后才进入正式 Source
+Creator Conversation
+→ typed Draft changes
+→ 明确展示本次拟修改 / 未修改项
+→ Validator
+→ 用户接受 / 拒绝 / 继续讨论
+→ 只修改 Draft
+→ 显式 Save / Publish 才进入正式 Source
 ```
 
-核心边界：Conversation 不直接成为 Source Truth；AI 不能静默发布、覆盖已发布 Source 或修改正式 Game。Creator AI 的作用是帮助形成 Draft，不绕过 Source contract、validation、版本与 publish gate。
-
-该提案与 P-07 Creator Preview Sandbox 天然组成“对话创作 → 查看 ChangeSet → Preview → 继续改 → Publish”的 G8 Creator 主循环，路线重构时优先整体设计而非重复建设。
+Conversation 不直接成为 Source Truth；AI 不能静默发布、覆盖 Source 或修改正式 Game。与 P-07 Preview Sandbox 共同组成未来 Creator 主循环。
 
 ### P-15｜事务 / 线索 / Open Threads Surface｜原提案 24
 
-增加一个模型维护的 player-safe `事务` Surface，回答：
+增加模型维护的 player-safe `事务` Surface，回答：
 
 > **“我现在还有哪些正在处理、尚未解决、值得持续记住的事情？”**
 
-可以包括：
+可包括当前问题、未核实线索、已作承诺、玩家计划与未解决风险。它不是传统 Quest List，也不是 GM 剧情脚本。
 
-- 当前问题；
-- 尚未核实的线索；
-- 已作出的承诺；
-- 玩家明确表达的计划；
-- 当前未解决的风险或 open thread。
+是否形成/更新/关闭事务由模型基于 accepted player-visible history 判断；Program 不做关键词任务识别；NPC-private / Agency / hidden Evolution 不得提前泄露；Restore/Regenerate 后必须跟随 accepted-history currentness。
 
-它不是传统预写 RPG 的 Quest List，不使用“主线/支线/完成 3/5”来反向驱动世界，也不要求所有事情都变成任务。
+### P-16｜长期上下文编排器 / Context Orchestrator｜原提案 26
 
-关键边界：
+**Owner verdict：通过。**
 
-- 是否形成/更新/关闭事务由模型根据 accepted player-visible history 判断；
-- Program 不做“调查/寻找/承诺”等关键词任务识别；
-- NPC-private / Agency / hidden Evolution 不能提前泄露到事务；
-- `事务` 是玩家当前关注事项的派生整理，不是 GM 剧情脚本或世界目标队列；
-- Restore / Regenerate 后必须跟随 accepted-history currentness；
-- 玩家自由放弃或改变计划时，模型可以更新/移除，不把旧任务永久钉死。
+未来 G7 建立正式 Context Orchestrator，解决长局中“这一回合 GM 真正应该看到什么、不能看到什么、哪些旧信息已经失效”的问题，而不是简单把所有记忆塞进 Prompt。
 
-该提案会填充既有 Mother Taxonomy 中的 `事务`，并提供一个真实的新 Information Curator consumer；路线重构时应评估它与 Character / Experiences / People 的统一 Curator 扩展方式，而不是新增独立语义规则系统。
+候选输入层包括：
+
+```text
+必须保留
+→ 当前玩家行动 / 最近完整 accepted 对话 / 必要 Game state
+
+长期当前信息
+→ current Character / 相关 People / 事务 / 机制状态
+
+按需找回
+→ 相关旧事件 / Reference material / 人物历史
+
+GM-private
+→ 当前真正需要的 World / Knowledge / Agency material
+
+↓ 权限 + currentness + budget
+最终 GM Context
+```
+
+核心边界：`相关 != 当前有效 != 当前有权使用`。被 Restore 掉的未来、过期 Game 状态、仅作为历史基线的 Reference 均不能因为相似度高就重新成为当前事实。第一版优先冻结确定性优先级与权限/currentness，再通过真实长局验证是否需要更复杂 token 策略。
+
+### P-17｜OOC / 给 GM 的场外说明｜原提案 27
+
+**Owner verdict：通过。**
+
+提供与“角色行动”明确分离的 GM Guidance 通道，让玩家表达临时的创作与游玩意愿，例如“接下来普通赶路略过”“重要人物对话放慢”“不要替我的角色决定内心想法”。
+
+它与 P-02 的区别：Narrative Preference 是长期偏好，OOC Guidance 是本次/近期临时指导。
+
+OOC 不是角色行动、不是 World mutation API，也不能绕过 mechanics / d20 或保证结果。诸如“希望剧情有机会遇见某人”只能作为创作意愿参考，不能自动宣告该人已经出现在场景中。
+
+### P-18｜AI 使用情况 / 性能与调用可视化｜原提案 28
+
+**Owner verdict：通过。**
+
+在 P-01 单次诊断之外，提供 Session / Game 级的 AI 使用概览，用于回答“这一局跑了多少调用、哪个 lane 最慢、哪个模型在消耗时间/额度”。
+
+候选指标：Narrative / semantic / curation / recommendations 等 lane 的请求次数、成功/失败、延迟；若 Provider 返回可靠 token usage，可展示 input/output tokens。
+
+不得虚构 token 或价格；只有存在可靠 usage 与明确价格依据时，才可提供明确标为“估算”的成本。该能力应为 P-08 多模型分工提供实际数据，而不是为了监控而监控。
+
+### P-19｜知识来源 / Provenance 可追溯｜原提案 30
+
+**Owner verdict：通过。**
+
+对 People / Knowledge / 事务等重要长期玩家信息保留可追溯来源，使玩家在需要时能回答：
+
+> **“我为什么会知道这件事？”**
+
+候选交互：
+
+```text
+李亭可能认识负责通行凭证的人
+来源：第 27 回合，你从李亭的谈话中了解到
+[查看原文]
+```
+
+默认界面保持干净，仅按需展开来源。来源可帮助核对 AI 整理、支持 P-10 correction，并为“传闻 / 尚未确认 / 后来被纠正”的认识提供 epistemic basis。
+
+Provenance 不能把 GM-private truth 暴露给玩家，也不能因“后台知道来源”而提升玩家知情。必须跟随 accepted-history / Restore / Regenerate currentness。
 
 ---
 
 ## 2. 当前讨论状态
 
-当前已通过 15 项：
+当前已通过 **19 项**：
 
 ```text
-P-01 生成状态 / 诊断                       ← 原提案 1
-P-02 叙事偏好                             ← 原提案 3
-P-03 结构化模型输出可靠性                 ← 原提案 6
-P-04 Source Library 作品化                 ← 原提案 7
-P-05 玩家可读冒险纪事导出                 ← 原提案 9
-P-06 Reference Library                    ← 原提案 11
-P-07 Creator Preview Sandbox              ← 原提案 12
-P-08 叙事模型 / 后台辅助模型分离配置      ← 原提案 13
-P-09 玩家收藏关键剧情节点                 ← 原提案 14
-P-10 玩家纠正 AI 派生信息                 ← 原提案 16
-P-11 玩家私人笔记                         ← 原提案 17
-P-12 作品套装 / 推荐 Composition           ← 原提案 20
-P-13 性格 × 玩家行动 × 推荐动态闭环        ← 原提案 21
-P-14 对话式 Creator                       ← 原提案 23
-P-15 事务 / 线索 / Open Threads Surface    ← 原提案 24
+P-01  生成状态 / 诊断                         ← 原提案 1
+P-02  叙事偏好                               ← 原提案 3
+P-03  结构化模型输出可靠性                   ← 原提案 6
+P-04  Source Library 作品化                   ← 原提案 7
+P-05  玩家可读冒险纪事导出                   ← 原提案 9
+P-06  Reference Library                      ← 原提案 11
+P-07  Creator Preview Sandbox                ← 原提案 12
+P-08  叙事模型 / 后台辅助模型分离配置        ← 原提案 13
+P-09  玩家收藏关键剧情节点                   ← 原提案 14
+P-10  玩家纠正 AI 派生信息                   ← 原提案 16
+P-11  玩家私人笔记                           ← 原提案 17
+P-12  作品套装 / 推荐 Composition             ← 原提案 20
+P-13  性格 × 玩家行动 × 推荐动态闭环          ← 原提案 21
+P-14  对话式 Creator                         ← 原提案 23
+P-15  事务 / 线索 / Open Threads Surface      ← 原提案 24
+P-16  长期上下文编排器                       ← 原提案 26
+P-17  OOC / 给 GM 的场外说明                 ← 原提案 27
+P-18  AI 使用情况 / 性能调用可视化           ← 原提案 28
+P-19  知识来源 / Provenance 可追溯            ← 原提案 30
 ```
 
 当前未进入通过清单（不等于永久否决）：
@@ -260,7 +271,8 @@ P-15 事务 / 线索 / Open Threads Surface    ← 原提案 24
 - 历史全文搜索（原提案 18）；
 - 换一组推荐行动（原提案 19）；
 - 完整可迁移 Game Package（原提案 22）；
-- Player-known Map（原提案 25）。
+- Player-known Map（原提案 25）；
+- 多 Entry / 多开局（原提案 29）。
 
 除非 Owner 后续明确批准，上述内容不进入最终路线重构输入。
 
