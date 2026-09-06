@@ -1,13 +1,8 @@
 # Personal Workbench｜Discussion / Pre-Approval Drafts
 
-本目录用于保存 **Owner 明确要求持久化、但尚未通过 Owner 审核与 Promotion Gate 的提案 / 草案**。
+本目录用于保存 **Owner 明确要求持久化的 pre-approval 提案、产品讨论收敛和 decision evidence**。
 
 默认规则仍然是：**先在聊天中讨论，草案不自动写 GitHub。**
-
-只有以下情况才进入本目录：
-
-1. Owner 明确要求“保存这个草案 / 写入讨论区”；
-2. 为纠正已经发生的越权写入，需要把未审核文件从 authoritative 位置降权迁入此处。
 
 ## Authority
 
@@ -16,14 +11,29 @@
 - **不是 current Owner**；
 - **不是 Architecture Authority**；
 - **不是正式 Roadmap / Task Axis**；
-- **不是 Owner Decision**；
-- **不得触发下游 implementation 或 Gate 自动推进**。
+- **不是 implementation authorization**；
+- 只有经 Owner 明确批准并 Promotion 到 `current/ / architecture/ / decisions/` 的内容才获得相应 Authority。
 
-文件中即使历史上写有 `DECIDED`，若该决定没有 Owner 明确批准，也只能按 `PROPOSED / HYPOTHESIS` 理解。
+## 当前文档
 
-## 当前状态
+### `产品方向评审.md`
 
-当前没有需要保留在 active `discussion/` 的旧 AI Collaboration 草案。
+状态：**DISCUSSION EVIDENCE — 已由 Owner 于 2026-09-06 批准核心方向并完成 Promotion**。
+
+其批准内容已经传播到：
+
+- `../current/产品定义.md`
+- `../current/项目总纲.md`
+- `../current/项目状态.md`
+- `../decisions/D-002_正式Pivot到PersonalStateCore.md`
+
+因此后续不得把 `产品方向评审.md` 当作与 current Product Definition 并行的事实源；需要当前产品事实时只读 `current/产品定义.md`。
+
+### `未来备选功能计划.md`
+
+继续是 **DISCUSSION / FUTURE / NON-CURRENT**。其中 Launch Target 等能力尚未进入 V0。
+
+## Historical AI Collaboration drafts
 
 此前 03 生成的：
 
@@ -33,8 +43,6 @@
 已随 AI Collaboration V0 整体归档到：
 
 `Vibe-Coding/99_归档/workbench/AI协作路线_V0/`
-
-新的 Personal OS / Product Pivot Discovery 草案默认继续留在聊天，除非 Owner 明确要求保存。
 
 ## Promotion
 
