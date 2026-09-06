@@ -1,7 +1,7 @@
 ---
 title: my world｜架构总览
 status: current-canonical-architecture-map
-version: 3.0
+version: 3.1
 created: 2026-08-26
 updated: 2026-09-06
 current_phase: G6
@@ -14,7 +14,7 @@ implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 
 本文件拥有 `my world` 的当前**架构地图与专题导航**。
 
-它回答：系统如何分层、核心 owner / boundary 是什么、Source 如何进入 Game、Runtime 如何拥有 lived reality、UI 如何安全投影，以及当前 G6 的产品 Host / Surface 方向。
+它回答：系统如何分层、核心 owner / boundary 是什么、Source 如何进入 Game、Runtime 如何拥有 lived reality、模型如何整理开放语义、UI 如何安全投影，以及当前 G6 的 Host / Surface 路线。
 
 其它 Authority：
 
@@ -32,11 +32,11 @@ implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ```text
 RPG Experience Layer
 Application Main Menu / New Game / Game Library
-+ Player Host / Narrative Host / World Surface Host
++ Player Status Host / Narrative Host / World Information Host
 ↓
 The World Runtime
 Game / World / Timeline / Save / Conversation /
-NPC / Knowledge / Agency / World Evolution / Mechanics / Context
+Character / NPC / Knowledge / Agency / World Evolution / Mechanics / Information Curation / Context
 ↓
 Engine Adapter
 Godot UI / IO / Network / Assets / Lifecycle / Persistence binding
@@ -118,6 +118,14 @@ Conversation
 Knowledge / Agency / Evolution
 → bounded durable living-world semantics
 
+Information Curator model
+→ interprets accepted game meaning for enabled player-information surfaces
+→ decides semantic importance / current Character summary / protagonist milestones
+
+Information Curation Runtime
+→ normalized durable model-curated information material
+→ current-turn/timeline binding / idempotence / reversible projection
+
 Timeline / Save / Recovery
 → reversible history / named restore intent / protection semantics
 
@@ -139,6 +147,8 @@ In-game UI
 > **Persisted by SQLite != owned semantically by Persistence.**
 >
 > **Canonical truth ownership != player information architecture.**
+>
+> **Model owns semantic interpretation and curation; Program owns normalized storage, temporal integrity and presentation.**
 
 Derived / Snapshot / Cache / Transcript / Prompt / ViewModel 默认不可反向成为第二 live truth。
 
@@ -164,7 +174,7 @@ T0-scoped Source Projection
 Game-local Canonical Reality
 ↓ current execution
 Runtime State
-↓ player-safe projection
+↓ model-driven curation / player-safe projection
 UI ViewModel / Surface
 ```
 
@@ -200,13 +210,9 @@ immutable package total content
 
 Character Card 是 reusable Character Source，不是玩家角色专用卡。
 
-当前 v0.2 还允许 optional presentation-only：
+当前 v0.2 允许 optional presentation-only `player_profile`。它必须通过 Game-local frozen projection 进入玩家侧，不能把 raw `semantic_sections` / `gm_reference` / `gm_private` 直接交给 Player Surface。
 
-```text
-player_profile
-```
-
-它只服务 human-player Character presentation，必须通过 Game-local frozen projection 进入 UI；不能把 raw `semantic_sections` / `gm_reference` / `gm_private` 直接交给 Player Surface。
+MW-014 之后，frozen `player_profile` 是当前 Character 的**起始材料**而不是 lived Character 的永久最终快照。当前人物信息由 Post-turn Information Curator 随 lived history 整理并通过 player-safe projection 输出。
 
 当前张琛 accepted generation：
 
@@ -248,11 +254,13 @@ Final Create 后允许出现 Source 未预见的新长期语义，但必须：
 
 - 不修改 Source；
 - 不伪造 Source ancestry；
-- 复用已有 canonical Domain owner；
+- 已有正式 canonical owner 时不制造第二份 truth；
 - durable；
 - Timeline / Save / Restore reversible。
 
 Runtime-created NPC / Place / Item / Event 可以只有 game-local identity + runtime-generated provenance。
+
+对于“什么重要、人物是否真正改变、某事件是否值得进入信息栏”等开放语义，优先交给模型判断；不要让 Runtime 通过关键词、分数、事件规则树去复刻模型理解。
 
 ---
 
@@ -317,9 +325,9 @@ Timeline Node
 = internal durable history anchor
 ```
 
-Restore 必须恢复世界与一致 Context；不能 DB 回到过去而 model context 仍含未来。
+Restore 必须恢复 World + Conversation + model-curated current information 到一致当前历史；不能 DB 回到过去而 Context / Character / Important Experiences 仍含未来。
 
-Game-local semantic evolution 同样进入 Timeline/Save/Restore。
+Game-local semantic evolution 与 Information Curation 都必须服从 Timeline / Save / Restore currentness。
 
 ---
 
@@ -374,7 +382,7 @@ System Total State
 
 > **Bounded context != starved context.**
 
-G7 才系统化长局 retrieval / performance；G6 UI 不得反向成为 Context authority。
+G7 才系统化长局 retrieval / performance；G6 UI 与 curation projection 不得反向成为 Context authority。
 
 ---
 
@@ -383,117 +391,156 @@ G7 才系统化长局 retrieval / performance；G6 UI 不得反向成为 Context
 ### 11.1 三 Host
 
 ```text
-Player Host | Narrative Host | World Surface Host
+Player Status Host | Narrative Host | World Information Host
 ```
 
 职责：
 
 ```text
-Player Host
-→ 我是谁？我现在怎么样？
-→ 长期是高频、紧凑 HUD
+Player Status Host
+→ 角色立绘 + 高频实时角色/机制状态 HUD
+→ 不承担“我是谁”的 biography/profile
+→ 没有合法 portrait / status contribution 时允许收窄、折叠或隐藏
 
 Narrative Host
 → 现在发生什么？我下一步做什么？
 → GM Narrative + natural-language composer
 → 永远是视觉/交互中心
 
-World Surface Host
-→ 我主动想查看哪些世界/角色/系统信息？
-→ secondary RPG information surfaces
+World Information Host
+→ 玩家主动查看的角色 / 世界 / 系统信息
+→ 概览 / 角色 / 重要经历 / 人物 / 事务 / 行囊 / 系统 / 地图 / 存档等 grounded Surfaces
 ```
 
-正式继承 The World 已验证原则：
+正式继承：
 
 > **Workspace is organized for truth maintenance; UI is organized for player decisions.**
 
 后台 truth owner 不直接决定玩家 Tab 结构。
 
-### 11.2 Current safe projection chain
+### 11.2 Projection / curation chain
 
-MW-011 已建立：
-
-```text
-Runtime / frozen Source
-→ player-safe domain projection
-→ presentation-only RPG Host ViewModel
-→ Player Host / World Overview
-```
-
-Character profile：
+MW-011 建立第一条 player-safe UI projection；MW-014 建立第一条 model-curated lived Character / milestone vertical：
 
 ```text
-Character player_profile
-→ selected projection
-→ Final Create frozen Game-local profile
-→ fail-closed Player Character Profile Projection
-→ ViewModel
-→ Player Host
+accepted Player + GM Narrative
++ frozen starting Character material
++ bounded current Character / recent milestones
+↓
+Post-turn Information Curator model
+↓
+bounded structured curation
+↓
+normalized durable currentness
+↓
+player-safe Character + Important Experiences projection
+↓
+World Information Host consumer
 ```
 
-禁止 leaf UI 接收 omniscient `world_state` 后再自行过滤。
+保护：
 
-### 11.3 Surface appearance rule
+- Curator 是 background semantic maintenance，不是 Narrative Finalize Gate；
+- leaf UI 不接收 omniscient `world_state` 后自行过滤；
+- UI render / reopen 不要求 Provider call；
+- Regenerate / Restore 必须使 stale curation 非 current。
 
-一个 RPG Surface 只有在以下都成立时才能进入：
+### 11.3 Frozen Character + Important Experiences
+
+Canonical：
+
+- `architecture/ui/G6_CHARACTER_AND_IMPORTANT_EXPERIENCES_V1_0_DECISION.md`
+- `architecture/ui/G6_MODEL_DRIVEN_INFORMATION_CURATION_AUTHORITY_DECISION.md`
 
 ```text
-real player question
-+ real domain owner
-+ player-safe projection
-+ non-trivial product value
+角色 / Character
+→ “现在的我是谁”
+→ evolving current Character Sheet
+→ 当前状态，不是 mutation log
+
+重要经历 / Important Experiences
+→ “我是怎样走到现在的”
+→ protagonist-centered milestone history
 ```
 
-禁止为了 UI 完整度创建：
+Character 第一代组：
 
-- fake HP / location；
-- fake Inventory；
-- fake Relationship / Faction；
-- keyword-guessed Quest；
-- empty tabs。
+```text
+基本资料
+出身 / 来历
+当前身份 / 社会角色
+性格 / 价值观 / 原则
+能力 / 专长说明
+局限 / 长期特征
+长期目标 / 自我方向
+```
 
-### 11.4 Current IA discussion
+起始/当前物品属于 `行囊 / Inventory`，不属于 Character Surface。长期目标属于 Character；当前未完成承诺/问题属于未来 `事务`。
 
-当前 Draft：
-
-`architecture/ui/G6_SURFACE_INFORMATION_ARCHITECTURE_DRAFT_V0_1.md`
-
-候选长期母版：
+### 11.4 Current Surface mother taxonomy
 
 ```text
 概览
 角色
+重要经历
 人物
-行囊
 事务
+行囊
 系统
 地图
 存档
 ```
 
-当前不冻结最终 Tab 数量/命名。
+这是一张 IA 母版，不代表九个 Tab 现在全部出现。
 
-强候选顺序：
+一个 Surface 只有在以下都成立时进入产品：
 
 ```text
-Character Sheet / 角色
-→ People / 人物
-→ next grounded Surface by evidence
-→ mechanic-state / 系统
+real player question
++ real data owner / model-curated normalized material
++ player-safe projection
++ non-trivial product value
 ```
 
-当前 MW-011 rich left panel 是 accepted transitional state；长期 Player Host 倾向收缩为 HUD，完整 Character Sheet 进入右侧 `角色`。
+禁止为了 UI 完整度创建 fake HP/location/Inventory/Relationship/Faction/Quest 或空标签页。
 
-### 11.5 Visual Runtime
+当前已 grounded：
 
-G6 re-entry audit 已完成：
+```text
+概览
+角色
+重要经历
+存档
+```
+
+其它 Surface 继续按真实 Domain / consumer evidence 拉出。
+
+### 11.5 Player Status Host transition
+
+MW-011 rich left `player_profile` 是已接受的阶段性过渡实现，不是长期 IA。
+
+当右侧 Character Surface 成立后：
+
+```text
+identity / biography / background / personality / authored capability / limitation / goals
+→ 迁入右侧 Character
+
+left Player Status Host
+→ 只保留 portrait + real live mechanic/status contributions
+```
+
+当前没有正式 portrait / mechanic contribution，因此 UI consumer 允许让左 Host collapse/narrow/hide；不得继续拿 biography、world/session metadata、recent actions 或 turn count 填空。
+
+### 11.6 Visual Runtime
+
+G6 re-entry audit：
 
 ```text
 Runtime Asset Resolution = DEFERRED
 portrait / scene / authored-map = DEFERRED
 ```
 
-当前没有成熟 first-party visual consumer。未来 re-entry 时仍保持：
+未来 re-entry 时仍保持：
 
 ```text
 authored visual presentation
@@ -503,22 +550,22 @@ map image
 != topology/current location/travel/pathfinding/GIS
 ```
 
-### 11.6 Internal Declarative UI Host
+### 11.7 Internal Declarative UI Host
 
 正确顺序：
 
 ```text
 fixed real UI
-→ stable Host slots
-→ multiple real Domain consumers
+→ multiple grounded Surface / mechanic consumers
 → repeated component patterns
 → Internal Declarative UI Host
+→ bounded Action Intent
 → G8 external contract
 ```
 
-`MW-013` 当前 HOLD / NOT AUTHORIZED YET。
+`MW-013` 当前 **HOLD / NOT AUTHORIZED YET**。
 
-不要让 internal definition 变成 query language、Runtime binding、arbitrary callback 或 external Mod schema。
+不得因为 Character / Important Experiences 需要列表/分组就提前 re-authorize MW-013；先让真实手写 consumer 证明组件重复。
 
 ---
 
@@ -534,7 +581,7 @@ G5
 mechanic/world semantics + durable state
 ↓
 G6
-real mechanic state → player-facing System consumer
+real mechanic state → player-facing System consumer + high-frequency left HUD contribution
 ↓
 G6 later
 repeated consumers → Internal Declarative UI Host
@@ -570,23 +617,23 @@ L0 公理层
 ## 14. 当前 G6 Execution / Decision Order
 
 ```text
-MW-011 Player Host / ViewModel                PRODUCT PASS / CLOSED
+MW-011 Player Host / ViewModel                 PRODUCT PASS / CLOSED
 ↓
-Visual Runtime re-entry audit                 DONE / DEFER IMPLEMENTATION
+Visual Runtime re-entry audit                  DONE / DEFER IMPLEMENTATION
 ↓
-G6 Surface / Information Architecture Audit   ACTIVE — OWNER + GPT DISCUSSION
+Character + Important Experiences semantics   FROZEN
 ↓
-freeze first grounded Surface
+MW-014 model-driven information curation       ENGINEERING PASS / INTEGRATED
 ↓
-Task Shape + assign Codex or KimiCode
+Character + Important Experiences UI consumer CURRENT NEXT
 ↓
-Independent Review
+GPT Independent Review
 ↓
 Owner UAT
 ↓
-repeat grounded consumers
+People Surface / Expansion mechanic-state consumer / next grounded Surface
 ↓
-Expansion mechanic-state consumer
+repeated patterns
 ↓
 re-evaluate MW-013 Internal Declarative UI Host
 ```
@@ -604,14 +651,17 @@ architecture/
 ├─ source/
 ├─ world/
 └─ ui/
-   ├─ 声明式UIHost设计.md
+   ├─ G6_SESSION_SHELL_INFORMATION_OWNERSHIP_DECISION.md
+   ├─ G6_CHARACTER_AND_IMPORTANT_EXPERIENCES_V1_0_DECISION.md
+   ├─ G6_MODEL_DRIVEN_INFORMATION_CURATION_AUTHORITY_DECISION.md
    ├─ G6_RPG_HOST_VIEWMODEL_V0_1_DECISION.md
    ├─ G6_PLAYER_CHARACTER_PROFILE_PROJECTION_V0_1_DECISION.md
    ├─ G6_VISUAL_RUNTIME_REENTRY_AUDIT_2026-09-06.md
    ├─ G6_ROUTE_CORRECTION_AFTER_MW011_UAT_2026-09-06.md
-   └─ G6_SURFACE_INFORMATION_ARCHITECTURE_DRAFT_V0_1.md
+   ├─ G6_SURFACE_INFORMATION_ARCHITECTURE_DRAFT_V0_1.md
+   └─ 声明式UIHost设计.md
 ```
 
-历史 `zhangchenjia21-dot/the-world` 只作为产品证据 / 参考实现，不是当前 implementation authority。
+历史 `zhangchenjia21-dot/the-world` / `sillytavern` 只作为产品证据 / 参考实现，不是当前 implementation authority。
 
 新架构事实先更新本 Map；详细 trade-off / contract / migration / evidence 写 supporting doc。历史版本依赖 Git history，不并列多个 current。
