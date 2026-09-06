@@ -1,7 +1,7 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 4.0
+version: 4.1
 created: 2026-08-25
 updated: 2026-09-06
 current_phase: G6
@@ -187,10 +187,12 @@ G6 不是“把所有传统 RPG 页面一次做齐”，而是：
 A. Runtime projection → ViewModel → first real UI consumer
 B. Visual Runtime re-entry audit
 C. portrait / scene / authored-map presentation when real demand exists
-D. Character / People / Inventory / Thread / Faction / Map / Save 等 grounded real Surfaces
+D. grounded real Surfaces + concrete Narrative interaction consumers
+   - Character / Important Experiences / People
+   - Five Recommended Actions (fixed first-party composer prefill consumer)
 E. Expansion mechanic-state consumer
 F. Internal Declarative UI Host v0.1
-G. bounded Action Intent
+G. generic bounded Action Intent only after proven consumers
 H. responsive / Theme / navigation / UI preference as actually justified
 I. Owner UAT / visual polish
 ```
@@ -226,11 +228,9 @@ portrait / scene / authored-map implementation = DEFERRED
 
 Re-entry trigger：Owner 提供/批准真实第一方视觉资产，或某个 Surface 的产品 Outcome 明确依赖 visual。
 
-### G6-D｜Real Surfaces / Information Architecture
+### G6-D｜Real Surfaces / Narrative interaction consumers
 
 **CURRENT**
-
-当前先做 product/architecture audit，不立刻 coding。
 
 历史 The World 已验证的玩家 IA 作为 evidence 母版：
 
@@ -238,16 +238,17 @@ Re-entry trigger：Owner 提供/批准真实第一方视觉资产，或某个 Su
 概览 / 角色 / 人物 / 行囊 / 事务 / 系统 / 存档
 ```
 
-`my world` 当前讨论 Draft：
-
-`architecture/ui/G6_SURFACE_INFORMATION_ARCHITECTURE_DRAFT_V0_1.md`
-
-当前倾向：
+`my world` 当前母版：
 
 ```text
-Player Host  → 长期收敛为高频 HUD
-Narrative    → 保持视觉与交互中心
-World Host   → 承担角色详情、人物、事务、行囊、系统、地图、存档等玩家主动查询 Surface
+概览 / 角色 / 重要经历 / 人物 / 事务 / 行囊 / 系统 / 地图 / 存档
+```
+
+当前已完成/集成：
+
+```text
+Character + Important Experiences
+People（Engineering PASS / Owner UAT pending）
 ```
 
 一个 Surface 只有同时满足以下条件才进入实现：
@@ -261,7 +262,39 @@ real player question
 
 禁止为了“像 RPG”而创建 fake HP / location / inventory / faction / quest state 或空标签页。
 
-当前第一个强候选是 `角色 / Character Sheet`；第二候选是 `人物 / People`。顺序须经 Owner 讨论冻结后再派工。
+#### MW-019｜Five Recommended Actions — CURRENT PRIORITY
+
+Owner 于 2026-09-06 明确要求先实现推荐行动，再与 MW-018 一起做 Owner UAT。
+
+Canonical product/architecture decision：
+
+`architecture/ui/G6_FIVE_RECOMMENDED_ACTIONS_V1_0_DECISION.md`
+
+产品目标：
+
+```text
+accepted GM Narrative
+→ dedicated player-safe background Action Recommender
+→ exactly five model-generated suggested actions
+→ recommendation click PREFILLS existing composer
+→ player may edit freely
+→ normal Send / Ctrl+Enter path remains authoritative
+```
+
+保护边界：
+
+```text
+five recommendations != five allowed actions
+free-form input always remains available
+click != auto-send
+recommendations are ephemeral derived UI, not Game truth
+no hidden Runtime/actor/private data in recommendation input
+recommendation failure never blocks play
+```
+
+MW-019 is a concrete fixed first-party consumer. It does **not** pull generic G6-G Action Intent infrastructure forward.
+
+MW-018 remains Owner UAT pending; after MW-019 Engineering PASS/integration, one fresh Owner build should be used for combined UAT of People + Recommendations.
 
 ### G6-E｜Expansion mechanic-state consumer
 
@@ -286,9 +319,11 @@ MW-013 = HOLD / NOT AUTHORIZED YET
 
 Internal Host 只来自 proven internal consumers；G8 之前不接受 World/Character/Expansion 外部 UI schema。
 
-### G6-G｜Bounded Action Intent
+### G6-G｜Generic Bounded Action Intent
 
-在 Host vocabulary 经过真实消费者验证后，再允许受控 UI intent，例如 open surface / prefill composer / Save navigation。
+在 Host vocabulary 经过多个真实消费者验证后，再考虑通用受控 UI intent，例如 open surface / prefill composer / Save navigation。
+
+MW-019 的“推荐按钮 → prefill composer”是固定第一方交互，可作为未来抽象证据，但不授权提前建设 generic intent schema / dispatcher。
 
 不允许 arbitrary GDScript callback、NodePath execution、OS/filesystem command 或资产直接 mutation authoritative state。
 
@@ -301,6 +336,7 @@ Internal Host 只来自 proven internal consumers；G8 之前不接受 World/Cha
 - 信息是否按玩家需求组织；
 - Narrative 是否仍是重心；
 - Side Surfaces 是否真的降低认知负担；
+- 推荐行动是否提供灵感而没有把自由叙事变成选项制；
 - UI 是否像游戏而不是工程 inspector；
 - 没有为完整度制造假状态。
 
@@ -311,6 +347,7 @@ Internal Host 只来自 proven internal consumers；G8 之前不接受 World/Cha
 - Player Host / Narrative / World Host 的职责清晰；
 - 至少若干真实 RPG Surface 投影真实 state，而非空壳；
 - Save/Restore player experience 保持可靠；
+- free-form player action remains primary even when recommendation guidance exists；
 - real mechanic state 有合理 consumer；
 - Internal Declarative Host 仅从 proven patterns 抽象；
 - player-safe disclosure boundary 在 UI 层保持；
