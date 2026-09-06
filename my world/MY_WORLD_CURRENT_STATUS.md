@@ -1,15 +1,15 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 16.17
+version: 16.18
 created: 2026-08-26
 updated: 2026-09-06
 phase: G6 RPG Experience & Internal Declarative UI Host
-current_task: MW-017 People Identity Bridge + Same-turn Barrier
+current_task: MW-018 People Curation + Card Surface
 current_owner: Codex implementation lane
 parent_task: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT
-owner_uat_required: false
+owner_uat_required: true
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 ---
 
@@ -33,8 +33,8 @@ MW-015 Character + Important Experiences    PRODUCT PASS / CLOSED
 G6 People Surface product semantics         FROZEN
 MW-016 People Architecture Audit            PASS / CLOSED
 G6 People identity + curation architecture  FROZEN
-MW-017 People Identity Bridge               READY FOR CODEX
-MW-018 People Curation + Card Surface        BLOCKED BY MW-017
+MW-017 People Identity Bridge               ENGINEERING PASS / INTEGRATED
+MW-018 People Curation + Card Surface        READY FOR CODEX
 MW-013 Internal Declarative UI Host          HOLD / NOT AUTHORIZED
 ```
 
@@ -53,7 +53,7 @@ World Information Host
 → grounded player information Surfaces
 ```
 
-Current implemented right-side set:
+Current implemented right-side set before MW-018:
 
 ```text
 概览 / 角色 / 重要经历 / 存档
@@ -93,7 +93,7 @@ Owner-approved product form:
 人物 / People
 → card-based presentation
 → cards collapsed by default
-→ collapsed = key identity + very brief latest-known positioning
+→ collapsed = key player-known identity + very brief latest-known positioning
 → expanded = relationship + identity + traits + latest-known details
 → each card stores only the player's current latest-known snapshot of that person
 ```
@@ -109,29 +109,7 @@ Off-screen Agency/World Evolution/private Knowledge does not update People until
 
 People is not an actor registry, biography log or numeric Relationship system.
 
-## 5. MW-016 — ARCHITECTURE AUDIT PASS / CLOSED
-
-Audit evidence:
-
-`my-world/docs/mw016/MW-016_PEOPLE_ARCHITECTURE_AUDIT.md`
-
-Audit commit:
-
-`4aeff59108bc5f3084b23237f00a34e9252d76dc`
-
-Accepted finding:
-
-```text
-existing stable actor identity + Timeline storage are reusable
-BUT
-there is no safe exact accepted-person → stable-ID bridge
-AND
-current World semantic worker / Information Curator have no real same-turn ordering barrier
-```
-
-Therefore People UI must not be implemented by dumping `stable_npcs`, using display-name matching or passing the full stable roster/raw NPC material to the curator.
-
-## 6. People identity + curation architecture — FROZEN
+## 5. People identity + curation architecture — FROZEN
 
 Canonical decision:
 
@@ -160,75 +138,187 @@ card UI
 
 Frozen decisions:
 
-- adopt MW-016 Scheme A: same-turn barrier;
-- do not intentionally delay a usable new person until the next Turn;
+- same-Turn Scheme A is required;
 - no People-specific default third Provider call;
 - no display-name/fuzzy/first-match authoritative identity binding;
 - ambiguous same-name identity remains unresolved rather than guessed;
 - identity receipt belongs to existing World / `living_world` owner;
 - People latest-known snapshots belong to `information_curation`, not NPC truth;
 - no new SQLite table;
-- old MW-014/MW-015 curation IDs/parent chain must remain valid through backward-compatible record variants;
-- People card updates are full-snapshot replacement/tombstone by exact stable local identity;
+- old MW-014/MW-015 curation IDs/parent chain remain valid through backward-compatible record variants;
+- People updates are full-snapshot replacement/tombstone by exact stable local identity;
 - leaf UI receives only safe card DTOs, never raw World/local IDs/receipt/hash;
 - Restore/Regenerate/reopen currentness follows accepted history;
-- displaced-future People must never use the MW-015 Initial Character baseline recovery exception.
+- People never uses the MW-015 Initial Character displaced-future recovery exception;
+- GM-only opening and historical People backfill remain out of v0.1.
 
-### v0.1 explicit limitations
+## 6. MW-016 — PASS / CLOSED
+
+Audit evidence:
+
+`my-world/docs/mw016/MW-016_PEOPLE_ARCHITECTURE_AUDIT.md`
+
+Audit commit:
+
+`4aeff59108bc5f3084b23237f00a34e9252d76dc`
+
+Accepted finding:
+
+```text
+stable identity + Timeline are reusable
+BUT
+People required an exact accepted-person → stable-ID bridge
+AND
+a real same-Turn semantic → curator barrier
+```
+
+Those prerequisites are now implemented by MW-017.
+
+## 7. MW-017 — ENGINEERING PASS / INTEGRATED
+
+Task:
+
+`my-world/docs/tasks/MW-017_PEOPLE_IDENTITY_BRIDGE_AND_BARRIER_TASK.md`
+
+Reviewed candidate:
+
+`dd7b56fb030085b5c74dbe221bf8b5741bef3724`
+
+Reviewed code commit:
+
+`2be0c532d89c0fa7ae1d473d408a42785a32c8d9`
+
+Independent Review:
+
+`my-world/docs/mw017/MW-017_INDEPENDENT_REVIEW_IR1.md`
+
+Review/integration tip:
+
+`27519c0e11ff995df4c584e835dc0be39ee3f4d5`
+
+Integration verification:
+
+`my-world/docs/mw017/MW-017_INTEGRATION_VERIFICATION.md`
+
+Integrated implementation main verification commit:
+
+`73004d67ef14be2fb2bb7c386e6a89a604e93f8f`
+
+Engineering result:
+
+```text
+accepted player-authored Turn
+→ World semantic model can bind accepted-person spans to request-scoped actor/candidate refs
+→ Program resolves those refs to exact stable local IDs
+→ same-Turn runtime-created actor is minted before binding
+→ actor + durable identity receipt commit atomically
+→ current-version terminal releases Information Curator
+```
+
+Reviewed protections:
+
+- no authoritative name matching;
+- full Player+GM prefix currentness;
+- Restore epoch blocks stale callbacks;
+- failure/cancel/timeout remains fail-soft and releases Character/Important Experiences curation;
+- bridge evidence contains accepted GM spans/quotes only, not raw actor profile/private Knowledge/Agency/Evolution/Source-current material;
+- old Games remain valid with no backfill;
+- no SQLite table/migration;
+- no People UI/content schema yet.
+
+Reviewed evidence includes 120 focused checks / 0 failures, G5/MW-014/MW-015 regressions, Windows export, and one bounded real configured Kimi K3 identity-binding smoke with unchanged Owner production fingerprints.
+
+MW-017 is backend-only and requires no Owner Product UAT.
+
+## 8. CURRENT — MW-018 People Curation + Card Surface
+
+Task Packet:
+
+`my-world/docs/tasks/MW-018_PEOPLE_CURATION_AND_CARD_SURFACE_TASK.md`
+
+Implementation repository task-shaping commit:
+
+`b5af70c7f956c1de062461bc2aca14a67e537787`
+
+Identity:
+
+```text
+Work Item: MW-018
+Type: G6 product-facing vertical implementation
+Primary Implementer: Codex
+Reviewer: GPT
+Product UAT: Owner
+Status: READY FOR CODEX
+Branch: mw-018-people-curation-card-surface
+Worktree: D:/AI/Projects/.worktrees/my-world/mw-018
+Return ceiling: READY FOR INDEPENDENT REVIEW
+```
+
+Required product result:
+
+```text
+right 信息 navigation
+→ 概览 | 角色 | 重要经历 | 人物 | 存档
+
+人物
+→ cards collapsed by default
+→ compact scan-level identity/headline when collapsed
+→ relationship + details only after expand
+→ one card = player's latest-known snapshot
+→ later player-visible information updates that snapshot
+→ hidden/off-screen NPC changes do not leak into the card
+```
+
+Implementation must extend the existing Information Curator one-call contract rather than adding a third People model call.
+
+People content must consume only MW-017 accepted identity evidence + current player-known snapshots; never raw stable actor material.
+
+### Product UAT requirement
+
+MW-018 is player-facing. Agent / Engineering Review may only reach:
+
+`READY FOR OWNER UAT`
+
+Owner must accept the real card experience before Product PASS.
+
+## 9. Explicit v0.1 People limitations
 
 ```text
 GM-only opening
-→ not processed for People in v0.1
+→ no People processing
 
 old Game historical backlog
-→ no silent model backfill in v0.1
-→ People starts accumulating from new player-authored accepted Turns
+→ no automatic model backfill
+→ People starts from new player-authored accepted opportunities after feature install
+
+Relationship
+→ natural-language player-known summary only
+→ no affinity/trust/hostility numeric Domain
 ```
 
-These are deliberate scope/cost/currentness choices, not claims that earlier information is unimportant.
-
-## 7. CURRENT — MW-017
-
-Outcome:
-
-> Establish the exact stable-NPC identity bridge and same-turn coordination needed by People, without implementing People content or UI yet.
-
-MW-017 is backend-only and does not require Owner product UAT.
-
-It must prove:
-
-- existing and same-turn runtime-created actors bind by exact Program identity;
-- transient candidate refs cannot drift after normalization;
-- same-name ambiguity never falls back to name matching;
-- successful/no-op identity opportunities create durable replayable receipts;
-- semantic failure/timeout remains fail-soft and does not block accepted Narrative or Character/Important Experiences;
-- Restore/Regenerate cannot publish stale receipts;
-- no hidden actor material becomes People-curator disclosure evidence;
-- no SQLite table is added;
-- G5 actor/knowledge/agency and MW-014/015 regressions remain valid.
-
-Return ceiling:
-
-`READY FOR INDEPENDENT REVIEW`
-
-## 8. Next route
+## 10. Next route
 
 ```text
-MW-017 Codex implementation
+MW-018 Codex implementation
 → GPT Independent Review
-→ if Engineering PASS: integrate
-→ shape MW-018 against proven bridge
-→ MW-018 People Curation + Card Surface
-→ GPT Independent Review
-→ Owner-build sync/export
-→ Owner UAT
-```
+→ integrate only after Engineering PASS
+→ canonical Owner checkout sync + fresh Windows export
+→ Owner UAT People card experience
 
-MW-018 is not authorized to start before MW-017 Engineering PASS.
+if Owner UAT PASS:
+→ MW-018 PRODUCT PASS / CLOSED
+→ choose next grounded G6 outcome
+
+if NOT PASS:
+→ same MW-018 lineage if outcome remains unchanged
+→ GPT root-cause / scope classification
+→ Codex correction
+→ Independent Review + Owner UAT again
+```
 
 MW-013 remains HOLD until multiple grounded Surfaces/mechanic consumers prove repeated UI patterns.
 
-## 9. Agent routing
+## 11. Agent routing
 
 ```text
 GPT
@@ -238,5 +328,5 @@ Codex
 → sole default production implementer
 
 Owner
-→ Product UAT / explicit product verdict when a player-facing outcome is ready
+→ Product UAT / explicit product verdict for player-facing outcomes
 ```
