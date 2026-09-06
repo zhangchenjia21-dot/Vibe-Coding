@@ -9,6 +9,7 @@
 - [`D-003_V0RouteFreeze与TA-1AImplementationAuthorization.md`](D-003_V0RouteFreeze与TA-1AImplementationAuthorization.md) — V0 Route Freeze PASS，并授权 TA-1A First Usable implementation。
 - [`D-004_TA-1AOwnerUATCorrectionScope.md`](D-004_TA-1AOwnerUATCorrectionScope.md) — TA-1A 首轮 Owner UAT 未通过；收敛 Month View / Current Vector 必要 correction。
 - [`D-005_TA-1AStageExit与TA-1BAuthorization.md`](D-005_TA-1AStageExit与TA-1BAuthorization.md) — TA-1A Review / Correction / focused UAT 全部通过，Stage Exit PASS；集成 implementation main 并授权 TA-1B Dispatch。
+- [`D-006_TA-1BStageExit与TA-2Authorization.md`](D-006_TA-1BStageExit与TA-2Authorization.md) — TA-1B Independent Review + Complete V0 UAT PASS，Stage Exit；集成 Complete V0 并授权 TA-2 Reliability Hardening。
 
 ## 什么应该进入这里
 
