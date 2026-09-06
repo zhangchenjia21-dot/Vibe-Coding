@@ -11,17 +11,19 @@
 1. 先读仓库根 [`AGENTS.md`](../AGENTS.md) 获取全局 Authority / Freshness / Decision Propagation 规则。
 2. 再读本目录 [`AGENTS.md`](AGENTS.md) 获取 Workbench 项目读写协议。
 3. 当前项目理解从 [`current/`](current/) 开始。
-4. 项目专属参考审计、技术研究与 Spike 证据进入 [`research/`](research/)。
-5. 已形成的长期架构约束进入 [`architecture/`](architecture/)；正式 Owner 裁定进入 [`decisions/`](decisions/)。
-6. 代码、测试、CI、runtime、正式 executable Task 与实现 Review 回到 `zhangchenjia21-dot/Workbench`。
+4. 尚未进入 Current / Roadmap 的未来产品机会统一进入 [`备选方案池.md`](备选方案池.md)，不得把 Idea Pool 条目自动提升为已批准 Scope。
+5. 项目专属参考审计、技术研究与 Spike 证据进入 [`research/`](research/)。
+6. 已形成的长期架构约束进入 [`architecture/`](architecture/)；正式 Owner 裁定进入 [`decisions/`](decisions/)。
+7. 代码、测试、CI、runtime、正式 executable Task 与实现 Review 回到 `zhangchenjia21-dot/Workbench`。
 
-不要把历史聊天、旧 Workbench 设想、DeepSeek Harness 方案或某个 Agent 偏好自动提升为 current decision。
+不要把历史聊天、旧 Workbench 设想、DeepSeek Harness 方案、Idea Pool 条目或某个 Agent 偏好自动提升为 current decision。
 
 ## Repository map
 
 | 路径 | 角色 | Authority |
 |---|---|---|
 | `current/` | 项目总纲、当前 Stage / Gate / Goal / Blocker，以及后续 Product Definition / Roadmap 路由 | **当前项目入口** |
+| `备选方案池.md` | 尚未进入正式 Scope / Roadmap 的未来产品机会与候选能力 | Idea Pool；**非 current / 非开发授权** |
 | `research/` | Reference Audit、技术研究、Build/Fork/Extend/Rewrite 证据、Spike 结果 | 证据，不自动构成决策 |
 | `architecture/` | 已批准或明确标记状态的长期架构约束与设计 | 架构 Authority（仅对已批准内容） |
 | `decisions/` | Owner 已批准的项目级正式裁定 | 决策 Authority |
@@ -32,7 +34,7 @@
 
 ```text
 Vibe-Coding/workbench
-= product / planning / architecture / decisions / status / research evidence
+= product / planning / architecture / decisions / status / research evidence / future idea pool
 
 zhangchenjia21-dot/Workbench
 = code / tests / build / runtime / repository-native executable tasks / implementation review evidence
