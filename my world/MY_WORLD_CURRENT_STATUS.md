@@ -1,18 +1,20 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 17.3
+version: 17.4
 created: 2026-08-26
 updated: 2026-09-07
 phase: G6 RPG Core Closure + UAT Observability + Internal Dynamic UI
-current_task: Package 0 UAT corrections shaping — MW-018 / MW-019 + MW-015 semantic correction
-current_owner: GPT
+current_task: MW-018 R1 Known / Off-screen People Eligibility Correction
+current_owner: Codex
 parent_task: G6 Core Closure Package 0
 semantic_owner: GPT
 owner_uat_required: true
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v4.3
 owner_uat_record: my-world/docs/uat/G6_PACKAGE0_OWNER_UAT_U1.md
+active_task_packet: my-world/docs/tasks/MW-018_R1_KNOWN_PERSON_ELIGIBILITY_TASK.md
+active_task_branch: mw-018-r1-known-person-eligibility
 ---
 
 # my world｜CURRENT STATUS
@@ -30,28 +32,103 @@ G5-GATE                                     PRODUCT PASS
 G6 RPG Core Closure + UAT Observability + Internal Dynamic UI ACTIVE
 ```
 
-Current G6 state：
+Current Package 0 state：
 
 ```text
-MW-011 RPG Host / Player Profile            PRODUCT PASS / CLOSED
-MW-014 Model-driven Information Curation    ENGINEERING PASS / INTEGRATED
 MW-015 Character + Important Experiences    HISTORICAL PRODUCT PASS / POST-PASS FINDING REOPENED
-MW-017 People Identity Bridge               ENGINEERING PASS / INTEGRATED
-MW-018 People Curation + Card Surface        ENGINEERING PASS / INTEGRATED / PRODUCT FAIL — REVISION REQUIRED
-MW-019 Five Recommended Actions             ENGINEERING PASS / INTEGRATED / PRODUCT FAIL — REVISION REQUIRED
+MW-018 People Curation + Card Surface        PRODUCT FAIL / R1 AUTHORIZED
+MW-019 Five Recommended Actions             PRODUCT FAIL / REVISION QUEUED AFTER MW-015 R1
 
-UAT Observability / Debug Mode v0.1         ROUTE AUTHORIZED — NEXT AFTER PACKAGE 0 CLOSE
-Internal Dynamic UI Host capability         ROUTE AUTHORIZED AS CORE
-old MW-013 Task Packet                      STALE / DO NOT EXECUTE AS-IS
+MW-018 R1                                   CURRENT / CODEX
+UAT Observability / Debug Mode v0.1         NEXT AFTER PACKAGE 0 CLOSE
 ```
 
 ---
 
-## 2. Owner-approved G6 order
+## 2. Owner UAT U1 — COMPLETE
+
+Formal evidence：
+
+`my-world/docs/uat/G6_PACKAGE0_OWNER_UAT_U1.md`
+
+Confirmed findings：
+
+- MW-018: meaningful player-known/off-screen person can be ineligible for People because only current receipt-bound actors are legal Curator candidates；
+- MW-019: recommendation chips need concise directions + detailed click-to-composer drafts + independent alternatives + more readable UI sizing；
+- MW-015: Important Experiences over-generates into per-turn recap and must return to sparse milestone semantics。
+
+---
+
+## 3. MW-018 R1 — CURRENT
+
+Frozen correction architecture：
+
+`architecture/ui/G6_PEOPLE_KNOWN_PERSON_ELIGIBILITY_UAT_CORRECTION_V1_0_DECISION.md`
+
+Implementation Task Packet：
+
+`my-world/docs/tasks/MW-018_R1_KNOWN_PERSON_ELIGIBILITY_TASK.md`
+
+Branch：
+
+`mw-018-r1-known-person-eligibility`
+
+Formal Code Base：
+
+`fc308e8ee4347ddb8a67e40360f8ce84222d437b`
+
+Core correction：
 
 ```text
-Package 0  MW-018 / MW-019 UAT corrections + focused re-UAT   ← CURRENT
+current accepted Player+GM pair
+→ bounded exact person references from Player and/or GM
+→ exact existing stable actor resolution or legitimate GM/world-semantic materialization
+→ People Curator candidate
+→ model decides persistent memory value
+```
+
+Protected boundaries：
+
+- current scene presence is neither necessary nor sufficient for a People card；
+- Player assertion alone does not mint World Truth；
+- no display-name/fuzzy/first-match identity authority；
+- unresolved identity = no People update, never guessed actor；
+- model remains semantic owner of card worth；
+- incidental scene NPCs are not automatically important；
+- no universal resolver / new People-specific model call / new SQLite table。
+
+Codex highest return state：`READY FOR INDEPENDENT REVIEW`.
+
+---
+
+## 4. Remaining Package 0 correction queue
+
+After MW-018 R1 Engineering PASS / integration：
+
+```text
+MW-015 R1
+→ tighten Important Experiences to sparse milestone semantics
+→ ordinary turns often no-op
+→ no Product IA change yet
 ↓
+MW-019 R1
+→ short recommendation labels
+→ click produces detailed editable PlayerInput draft
+→ five standalone alternative next actions
+→ bounded readability sizing correction
+↓
+focused Owner re-UAT
+↓
+Package 0 close
+```
+
+Do not add `简要回顾` or move `重要经历` under Character without separate explicit Owner approval.
+
+---
+
+## 5. Owner-approved G6 order after Package 0
+
+```text
 Package 1  UAT Observability / Debug Mode v0.1
 ↓
 Package 2  OOC + Character-guided Recommendations
@@ -67,128 +144,35 @@ Package 6  Internal Dynamic UI Host v0.1
 Package 7  V0 Core Closure Reality Gate
 ```
 
-Owner priority remains：
-
-> **优先保证游戏尽快完成完整游戏闭环。核心开发先做；扩展功能与体验优化后置。**
-
-Owner additionally required Debug Mode / per-turn backend change visibility immediately after Package 0 because it materially reduces subsequent Owner UAT cost.
+Debug Mode is deliberately pulled forward because it lowers Owner UAT cost across Packages 2–7.
 
 ---
 
-## 3. Package 0 Owner UAT U1 — COMPLETE
-
-Formal evidence：
-
-`my-world/docs/uat/G6_PACKAGE0_OWNER_UAT_U1.md`
-
-Tested product-code artifact：
-
-`782daf65348f484d636d46260ac2374559cf554d`
-
-Later `main` commits during UAT were governance-only until the UAT record commit; they did not alter the tested product behavior.
-
-### MW-018 verdict
-
-**PRODUCT FAIL / REVISION REQUIRED**
-
-Observed：
-
-- player had already learned about `钟繇` and explicitly submitted a later turn recalling him；
-- no People card appeared for `钟繇`；
-- two incidental soldiers in the current scene did receive cards。
-
-Root-cause audit：current MW-018 architecture makes only **current identity-receipt-bound actors** eligible for People update. The current receipt seam is centered on exact current semantic/GM-span actor bindings. Therefore an already player-known/off-screen person may never be exposed to the Curator as a legal `actor_ref`, even though frozen product semantics explicitly allow cards for people learned about without a current physical encounter.
-
-Correction must preserve exact identity / no display-name guessing while broadening the safe exact known-person eligibility seam. Player assertion alone must not mint World Truth when identity/existence is unresolved.
-
-### MW-019 verdict
-
-**PRODUCT FAIL / REVISION REQUIRED**
-
-Confirmed findings：
-
-1. recommendation chips contain long full-action prose and are crowded/hard to scan；
-2. desired interaction is `short direction → click → detailed editable draft in composer`；
-3. a five-item set can behave like one plan split into five sentences rather than five independently selectable next actions；
-4. recommendation/composer UI sizing, font and spacing are too small/cramped for comfortable play。
-
-Character-guided recommendations remain later Package 2 work; it does not replace the basic requirement that the five current suggestions be independent alternatives.
-
-### MW-015 post-PASS finding
-
-`重要经历` over-generated during extended play and behaved like a per-turn recap. Before V0 Core Closure, curation semantics must be tightened so ordinary turns very often produce no milestone update.
-
-Product IA follow-up remains **not silently authorized**：
-
-- a separate `简要回顾` could be useful；
-- whether `重要经历` remains top-level or moves under Character still requires explicit product approval before changing IA。
-
----
-
-## 4. Protected correction boundaries
-
-All Package 0 corrections must preserve：
-
-- free-form Player action remains primary；
-- recommendations never define legal actions and click never auto-sends；
-- `World Truth != actor Knowledge != human-player disclosure`；
-- exact stable identity over display-name/fuzzy guessing；
-- Player belief alone does not automatically create World Truth；
-- model owns open semantic importance / curation；Program owns structure/currentness/persistence；
-- Save / Restore / Regenerate currentness remains authoritative；
-- no generic framework / EventBus / universal resolver is pulled forward merely to fix these findings。
-
----
-
-## 5. Current correction shaping order
-
-Because MW-018 and MW-015 both touch Information Curation semantics, do not run conflicting edits in parallel without an explicit integration plan.
-
-Preferred sequence：
-
-```text
-A. MW-018 Revision — known/off-screen People eligibility + exact identity seam + People importance prompt
-↓ Independent Review
-B. MW-015 Revision — sparse milestone semantics regression correction
-↓ Independent Review
-C. MW-019 Revision — concise labels + detailed drafts + independent alternatives + readability
-↓ Independent Review
-D. fresh combined/focused Owner re-UAT
-↓
-Package 0 close
-```
-
-Implementation may be reordered only if current code evidence proves a safer lower-conflict sequence.
-
----
-
-## 6. Package 1 UAT Observability — NEXT AFTER PACKAGE 0
-
-Target v0.1：
+## 6. Package 1 UAT Observability target
 
 ```text
 Debug Mode OFF
 → normal play unchanged
 
 Debug Mode ON
-→ accepted Turn 后 compact UAT trace
-→ domain/lane terminal + changed / no-change / failed / stale / cancelled
-→ errors explain why in human-readable form
+→ per accepted Turn compact UAT trace
+→ Narrative / World semantic / actor identity / Character / Experiences / People / Recommendations / Save-Restore
+→ changed / no-change / failed / stale / cancelled
+→ human-readable error reason
 ```
 
-Initial consumers：Narrative, World semantic, actor/identity bridge, Character, Important Experiences, People, Recommendations, Save/Restore/currentness. Later Open Threads / mechanics / Inventory join the same read-only diagnostic projection.
-
-Default debug view does not expose hidden GM/NPC-private values; player-visible projections may show safe diffs. Debug Mode cannot mutate gameplay truth or alter model/mechanics/currentness.
+Default view does not expose hidden GM/NPC-private semantic values. Player-visible projections may show safe diffs. Debug Mode is read-only and cannot alter game truth, model inputs, mechanics, validation or currentness.
 
 ---
 
-## 7. Dynamic UI / V0 closure
+## 7. Protected project invariants
 
-Dynamic UI remains Core-required after Open Threads / System / Inventory provide the remaining real consumers. Old MW-013 packet cannot be executed as-is.
-
-Package 7 Reality Run exits only by explicit Owner：
-
-`V0 Core Game Loop = PRODUCT PASS`
+- free-form Player action remains primary；
+- `World Truth != actor Knowledge != human-player disclosure`；
+- exact identity over name guessing；
+- Model owns open semantic interpretation/curation；Program owns structure/currentness/persistence；
+- Save / Restore / Regenerate currentness remains authoritative；
+- no generic framework pulled forward solely for a correction。
 
 ---
 
@@ -196,11 +180,11 @@ Package 7 Reality Run exits only by explicit Owner：
 
 ```text
 GPT
-→ correction architecture / Task Shaping / dispatch / Independent Review / UAT interpretation
+→ correction architecture / Task Shaping / Independent Review / integration / UAT interpretation
 
 Codex
-→ sole default production implementer
+→ current MW-018 R1 implementer
 
 Owner
-→ focused Product re-UAT / explicit verdicts
+→ focused Product re-UAT after correction train
 ```
