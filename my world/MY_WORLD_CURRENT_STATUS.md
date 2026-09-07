@@ -1,12 +1,12 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 17.0
+version: 17.1
 created: 2026-08-26
 updated: 2026-09-07
 phase: G6 RPG Core Closure + Internal Dynamic UI
-current_task: Combined Owner UAT build handoff — MW-018 People + MW-019 Recommendations
-current_owner: Codex local UAT-build preparation lane
+current_task: Combined Owner UAT — MW-018 People + MW-019 Recommendations
+current_owner: Owner
 parent_task: G6 Core Closure Package 0
 semantic_owner: GPT
 owner_uat_required: true
@@ -38,8 +38,8 @@ MW-014 Model-driven Information Curation    ENGINEERING PASS / INTEGRATED
 MW-015 Character + Important Experiences    PRODUCT PASS / CLOSED
 MW-016 People Architecture Audit            PASS / CLOSED
 MW-017 People Identity Bridge               ENGINEERING PASS / INTEGRATED
-MW-018 People Curation + Card Surface        ENGINEERING PASS / INTEGRATED / OWNER UAT PENDING
-MW-019 Five Recommended Actions             ENGINEERING PASS / INTEGRATED / OWNER UAT PENDING
+MW-018 People Curation + Card Surface        ENGINEERING PASS / INTEGRATED / OWNER UAT ACTIVE
+MW-019 Five Recommended Actions             ENGINEERING PASS / INTEGRATED / OWNER UAT ACTIVE
 
 Internal Dynamic UI / MW-013 capability     ROUTE AUTHORIZED AS CORE
 old MW-013 Task Packet                      STALE / DO NOT EXECUTE AS-IS
@@ -131,7 +131,7 @@ Program must not add keyword/name/encounter-count/importance/relationship heuris
 
 ---
 
-## 5. MW-018 People — OWNER UAT PENDING
+## 5. MW-018 People — OWNER UAT ACTIVE
 
 Integrated behavior：
 
@@ -150,7 +150,7 @@ Owner UAT should test one known person and one newly introduced person.
 
 ---
 
-## 6. MW-019 Recommendations — OWNER UAT PENDING
+## 6. MW-019 Recommendations — OWNER UAT ACTIVE
 
 Protected product rule：
 
@@ -171,42 +171,62 @@ Retained UAT risk：one real Kimi response returned valid-looking fenced JSON an
 
 ---
 
-## 7. CURRENT — Combined Owner UAT build handoff
+## 7. CURRENT — Combined Owner UAT ACTIVE
 
 Owner canonical playable checkout：
 
 `D:/AI/Projects/my-world`
 
-Required route：
+### Launch Ready evidence accepted
+
+Owner-build preparation reported：
 
 ```text
-inspect branch/status/worktrees
-→ preserve unknown dirty/local work
-→ safely fetch + fast-forward main to intended reviewed current main
-→ verify exact local HEAD
-→ run run-game.ps1 -ValidateExportOnly
-→ Owner Launch Ready
-→ combined MW-018 + MW-019 UAT
+reviewed product-code HEAD: 782daf65348f484d636d46260ac2374559cf554d
+local HEAD == origin/main at preparation time
+unknown .gitignore change + ten untracked files preserved unchanged
+run-game.ps1 -ValidateExportOnly exit 0
+Windows export rebuilt and verified against that checkout
 ```
 
-Never reset/clean/force to hide local divergence. Never install task branch as Owner build.
+After this preparation, implementation `main` advanced by one governance-only commit：
 
-Owner verifies：
+```text
+c19ed2c965ed87b355cd5a44a0e40c9491139675
+parent: 782daf65348f484d636d46260ac2374559cf554d
+changed file: AGENTS.md only
+```
+
+This later commit changes execution/governance instructions only; it does not change game code, assets, runtime behavior or the reviewed MW-018/MW-019 product bytes. Therefore the already validated/exported `782daf6...` build remains the accepted Owner UAT artifact. **Do not require a rebuild solely for this governance-only commit.**
+
+Owner can now run：
+
+`D:/AI/Projects/my-world/run-game.cmd`
+
+and perform combined MW-018 + MW-019 UAT.
 
 ### People
 - card appears/updates after real player-authored turns；
 - collapsed state useful；
 - expanded relationship/details useful；
 - no private/omniscient/debug leak；
-- newly introduced person works when model supplies valid identity correlation。
+- test one known person and one newly introduced person；
+- later learned information updates the same stable card；
+- Save/reopen/Restore stays current。
 
 ### Recommendations
 - five useful suggestions appear when generation succeeds；
 - feel optional, not restrictive；
 - no hidden information；
-- click prefill only；
+- click prefills only and never sends；
+- text remains editable；
 - manual free-form input stays effortless；
-- no stale suggestions after next action / Regenerate / Restore。
+- next action / Regenerate / Restore does not leave stale suggestions；
+- observe whether `暂时没有推荐行动` occurs frequently enough to be a real product defect。
+
+Owner product question：
+
+> **“这些推荐让我更容易开始行动，同时我仍然觉得自己什么都能做吗？”**
 
 Separate verdict lineage remains：
 
