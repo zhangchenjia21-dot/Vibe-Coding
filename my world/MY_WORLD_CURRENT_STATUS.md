@@ -1,17 +1,17 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 17.1
+version: 17.2
 created: 2026-08-26
 updated: 2026-09-07
-phase: G6 RPG Core Closure + Internal Dynamic UI
+phase: G6 RPG Core Closure + UAT Observability + Internal Dynamic UI
 current_task: Combined Owner UAT — MW-018 People + MW-019 Recommendations
 current_owner: Owner
 parent_task: G6 Core Closure Package 0
 semantic_owner: GPT
 owner_uat_required: true
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
-current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v4.2
+current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v4.3
 ---
 
 # my world｜CURRENT STATUS
@@ -26,7 +26,7 @@ G4 Primary Source Assets & Local Game       PASS / CLOSED
 G5 World Semantics & GM Runtime             PRODUCT PASS / CLOSED
 G5-GATE                                     PRODUCT PASS
 
-G6 RPG Core Closure + Internal Dynamic UI   ACTIVE
+G6 RPG Core Closure + UAT Observability + Internal Dynamic UI ACTIVE
 ```
 
 Current G6 implementation state：
@@ -41,81 +41,94 @@ MW-017 People Identity Bridge               ENGINEERING PASS / INTEGRATED
 MW-018 People Curation + Card Surface        ENGINEERING PASS / INTEGRATED / OWNER UAT ACTIVE
 MW-019 Five Recommended Actions             ENGINEERING PASS / INTEGRATED / OWNER UAT ACTIVE
 
+UAT Observability / Debug Mode v0.1         ROUTE AUTHORIZED AS NEXT AFTER PACKAGE 0
 Internal Dynamic UI / MW-013 capability     ROUTE AUTHORIZED AS CORE
 old MW-013 Task Packet                      STALE / DO NOT EXECUTE AS-IS
-Dynamic UI execution                       NOT CURRENT — after Packages 2–4 real consumers
 ```
 
 ---
 
-## 2. Owner-approved Core-first route
+## 2. Owner-approved G6 order
 
-2026-09-07 Owner 批准新版 Task Axis，最高优先级：
+Owner priority remains：
 
 > **优先保证游戏尽快完成完整游戏闭环。核心开发先做；扩展功能与体验优化后置。**
 
-Owner 同时明确：
+Owner additionally required：
 
-> **动态 UI 很重要，Internal Dynamic UI Host v0.1 必须放在 V0 Core Closure Reality Gate 之前。**
+> **动态 UI 必须在 V0 Core Closure 前完成。**
 
-CURRENT G6 顺序：
+> **当前 MW-018/019 这一轮结束后，优先实现 Debug Mode + 每回合后台数据变化可视化，以显著降低之后每轮 UAT 成本。**
+
+CURRENT G6 order：
 
 ```text
 Package 0  MW-018 + MW-019 Combined Owner UAT      ← CURRENT
 ↓
-Package 1  OOC + Character-guided Recommendations
+Package 1  UAT Observability / Debug Mode v0.1
 ↓
-Package 2  事务 / Open Threads
+Package 2  OOC + Character-guided Recommendations
 ↓
-Package 3  System / Public d20 real consumer
+Package 3  事务 / Open Threads
 ↓
-Package 4  factual Inventory vertical
+Package 4  System / Public d20 real consumer
 ↓
-Package 5  Internal Dynamic UI Host v0.1
+Package 5  factual Inventory vertical
 ↓
-Package 6  V0 Core Closure Reality Gate
+Package 6  Internal Dynamic UI Host v0.1
+↓
+Package 7  V0 Core Closure Reality Gate
 ```
 
-在 Package 6 Product PASS 前，除真实 blocker 外，不允许 Creator / Reference / model-management / diagnostics / richer information features 插队。
+Package 1 is an explicit exception to “diagnostics usually post-closure” because it is a **UAT leverage capability** consumed by Packages 2–7.
 
 ---
 
-## 3. Current G6 Host / IA
+## 3. Package 1 UAT Observability semantics
+
+No executable MW Work ID has been minted yet; Task Shaping occurs only after Package 0 closes.
+
+Target v0.1：
 
 ```text
-Player Status Host
-→ portrait + real live mechanics/status HUD only
-→ may collapse when empty
+Debug Mode OFF
+→ normal play unchanged
 
-Narrative Host
-→ GM Narrative + Player natural-language action
-→ optional five recommendations near composer
-→ primary visual/interaction surface
-
-World Information Host
-→ grounded player information Surfaces
-→ later rendered increasingly through Internal Dynamic UI Host
+Debug Mode ON
+→ accepted Turn 后提供 compact UAT trace
+→ 每个真实 domain/lane 显示 changed / no-change / failed / stale / cancelled
+→ 出错时自动显示可理解原因
 ```
 
-Current integrated right-side set：
+Initial real consumers：
 
-```text
-概览 / 角色 / 重要经历 / 人物 / 存档
-```
+- Narrative terminal；
+- World semantic terminal + changed/no-change；
+- actor/NPC materialization / identity bridge terminal；
+- Character changed/no-change；
+- Important Experiences changed/no-change；
+- People changed/no-change；
+- Recommendations success/malformed/unavailable/stale；
+- Save / Restore / currentness 关键结果。
 
-Mother taxonomy：
+Later Packages add Open Threads / mechanics / Inventory to the same read-only diagnostic projection.
 
-```text
-概览 / 角色 / 重要经历 / 人物 / 事务 / 行囊 / 系统 / 地图 / 存档
-```
+Protected boundary：
 
-Only grounded Surfaces appear. Do not create fake RPG state or expose omniscient Runtime truth merely to fill UI.
+- default Debug view shows change existence + terminal state + Turn / Provider / Model / necessary evidence；
+- hidden GM-private / NPC-private semantic values are not shown by default, avoiding accidental UAT spoilers；
+- player-visible projections may expose safe diff；
+- Debug Mode is read-only and cannot alter gameplay truth, model input, mechanics result or currentness；
+- no API keys / credentials / unrelated local privacy；
+- no giant EventBus / universal telemetry framework。
+
+Full polished player-facing “本回合变化” remains a later product-expansion outcome; Package 1 only pulls forward the UAT/debug slice required to reduce Owner verification cost.
 
 ---
 
 ## 4. Protected information-curation authority
 
-Canonical supporting decisions：
+Canonical decisions remain：
 
 - `architecture/ui/G6_MODEL_DRIVEN_INFORMATION_CURATION_AUTHORITY_DECISION.md`
 - `architecture/ui/G6_CHARACTER_AND_IMPORTANT_EXPERIENCES_V1_0_DECISION.md`
@@ -123,11 +136,9 @@ Canonical supporting decisions：
 - `architecture/ui/G6_PEOPLE_SURFACE_V1_0_DECISION.md`
 - `architecture/ui/G6_PEOPLE_IDENTITY_AND_CURATION_V1_0_DECISION.md`
 
-Protected rule：
-
 > **Model owns semantic interpretation and curation; Program owns normalized storage, temporal integrity and presentation.**
 
-Program must not add keyword/name/encounter-count/importance/relationship heuristics to reproduce open semantics.
+Program does not add keyword/name/encounter-count/importance/relationship heuristics to reproduce open semantics.
 
 ---
 
@@ -146,17 +157,17 @@ Integrated behavior：
 
 Retained UAT risk：real new-actor identity correlation can occasionally be omitted by the model; exact bridge must continue refusing display-name guessing.
 
-Owner UAT should test one known person and one newly introduced person.
+Owner continues testing one known person and one newly introduced person.
 
 ---
 
 ## 6. MW-019 Recommendations — OWNER UAT ACTIVE
 
-Protected product rule：
+Protected rule：
 
 > **Five recommended actions != five allowed actions.**
 
-Integrated behavior：
+Current integrated behavior：
 
 ```text
 accepted GM Narrative
@@ -167,68 +178,35 @@ accepted GM Narrative
 → normal send / d20 route unchanged
 ```
 
-Retained UAT risk：one real Kimi response returned valid-looking fenced JSON and was intentionally rejected by strict parser. If normal play frequently loses recommendations, fix the real Structured Output seam within MW-019 lineage; do not add fence-stripping / hidden fallback heuristics.
+### Active UAT finding captured — not yet final verdict
+
+Owner observed that current recommendation chips place long full-action prose directly inside the recommendation area, making them crowded, incomplete-looking and visually hard to scan. Owner proposed a two-level interaction：
+
+```text
+recommendation chip
+→ short action direction / concise label only
+→ click
+→ detailed editable action draft appears in PlayerInput
+→ never auto-send
+```
+
+Owner also found the current recommendation/input UI generally too small and cramped for comfortable long-form play. Correction target should increase readable font/spacing/control size without turning this revision into final visual-polish scope.
+
+Owner is **continuing UAT now**. Do not interrupt the play session with a dispatch. Accumulate additional findings; after Owner says this round is finished, GPT will shape one bounded MW-019 Revision covering the confirmed findings.
+
+Retained technical risk remains：one real Kimi response returned fenced JSON and was intentionally rejected by strict parser. Only fix Structured Output if current real UAT proves it materially harms recommendation availability.
 
 ---
 
 ## 7. CURRENT — Combined Owner UAT ACTIVE
 
-Owner canonical playable checkout：
+Accepted UAT artifact remains product-code HEAD：
 
-`D:/AI/Projects/my-world`
+`782daf65348f484d636d46260ac2374559cf554d`
 
-### Launch Ready evidence accepted
+Later implementation `main` governance-only commit `c19ed2c...` changes `AGENTS.md` only and does not invalidate the exported product bytes.
 
-Owner-build preparation reported：
-
-```text
-reviewed product-code HEAD: 782daf65348f484d636d46260ac2374559cf554d
-local HEAD == origin/main at preparation time
-unknown .gitignore change + ten untracked files preserved unchanged
-run-game.ps1 -ValidateExportOnly exit 0
-Windows export rebuilt and verified against that checkout
-```
-
-After this preparation, implementation `main` advanced by one governance-only commit：
-
-```text
-c19ed2c965ed87b355cd5a44a0e40c9491139675
-parent: 782daf65348f484d636d46260ac2374559cf554d
-changed file: AGENTS.md only
-```
-
-This later commit changes execution/governance instructions only; it does not change game code, assets, runtime behavior or the reviewed MW-018/MW-019 product bytes. Therefore the already validated/exported `782daf6...` build remains the accepted Owner UAT artifact. **Do not require a rebuild solely for this governance-only commit.**
-
-Owner can now run：
-
-`D:/AI/Projects/my-world/run-game.cmd`
-
-and perform combined MW-018 + MW-019 UAT.
-
-### People
-- card appears/updates after real player-authored turns；
-- collapsed state useful；
-- expanded relationship/details useful；
-- no private/omniscient/debug leak；
-- test one known person and one newly introduced person；
-- later learned information updates the same stable card；
-- Save/reopen/Restore stays current。
-
-### Recommendations
-- five useful suggestions appear when generation succeeds；
-- feel optional, not restrictive；
-- no hidden information；
-- click prefills only and never sends；
-- text remains editable；
-- manual free-form input stays effortless；
-- next action / Regenerate / Restore does not leave stale suggestions；
-- observe whether `暂时没有推荐行动` occurs frequently enough to be a real product defect。
-
-Owner product question：
-
-> **“这些推荐让我更容易开始行动，同时我仍然觉得自己什么都能做吗？”**
-
-Separate verdict lineage remains：
+Owner continues normal play. Separate defect lineage remains：
 
 - People issue → MW-018 revision；
 - Recommendation issue → MW-019 revision。
@@ -237,30 +215,11 @@ No Product PASS exists until Owner explicitly accepts each outcome.
 
 ---
 
-## 8. Next core packages after current Gate
+## 8. Dynamic UI route state
 
-No new executable MW Work ID has been minted yet.
+Dynamic UI remains Core-required, now Package 6 after observability / interaction / threads / System / Inventory.
 
-After Package 0 closes：
-
-1. GPT Task Shapes Package 1 into the next bounded executable outcome；
-2. Codex remains sole default production implementer；
-3. GPT Independent Review；
-4. Owner UAT for player-facing outcome；
-5. continue Package 2 → 3 → 4；
-6. **then重新 Task Shape Internal Dynamic UI Host** using all real consumer evidence；
-7. finish Package 5；
-8. run Package 6 V0 Core Closure Reality Gate。
-
-Old MW-013 packet cannot be dispatched as-is.
-
----
-
-## 9. Package 5 Dynamic UI route state
-
-Dynamic UI is now a Core requirement, but not the current task.
-
-Expected consumer evidence before implementation：
+Expected consumer evidence before Dynamic UI implementation：
 
 - Character；
 - Important Experiences；
@@ -269,43 +228,21 @@ Expected consumer evidence before implementation：
 - System / Public d20；
 - Inventory。
 
-v0.1 remains internal only：
+Old MW-013 packet cannot be dispatched as-is. Re-Task-Shape from current consumers first.
 
-- presentation host, not gameplay owner；
-- safe typed projection/contribution only；
-- no omniscient world_state filtering at leaf UI；
-- no arbitrary callbacks / NodePath / OS command / direct authoritative mutation；
-- generic Action Intent deferred；
-- external Source/Expansion Declarative UI deferred to G8。
+v0.1 remains internal presentation only：typed player-safe projection/contribution, no omniscient local filtering, no arbitrary callbacks/NodePath/OS command/direct authoritative mutation, generic Action Intent deferred, external Source/Expansion Declarative UI deferred to G8.
 
 ---
 
-## 10. V0 Core Closure target
+## 9. V0 Core Closure target
 
-Package 6 Reality Run must prove in one continuous real Game：
-
-```text
-Launch / New Game / Continue
-→ GM opening
-→ recommendations + free-form action
-→ OOC
-→ durable World / NPC consequence
-→ Character / People / Open Threads
-→ System / d20
-→ Inventory mutation
-→ Dynamic UI presentation
-→ Save / reopen / Restore
-→ all player-visible state and Dynamic UI follow current history
-→ continue play
-```
-
-Suggested minimum evidence：20–30 turns, new NPC, one OOC, one d20, one item change, Save/reopen, Restore, one action clearly outside recommendations, and at least 3 Dynamic UI consumer types.
+Package 7 Reality Run must prove one continuous real Game across roughly 20–30 turns with new NPC, OOC, d20, item mutation, Save/reopen, Restore, free-form deviation from recommendations, at least 3 Dynamic UI consumer types, and useful Debug/UAT traces for key turns.
 
 **Exit only by Owner explicit `V0 Core Game Loop = PRODUCT PASS`.**
 
 ---
 
-## 11. Post-closure route
+## 10. Post-closure route
 
 After V0 Product PASS：
 
@@ -315,9 +252,9 @@ G7
 → Knowledge Provenance / Epistemic / Freshness / Conflicts / Correction
 
 G8
-→ Shared History / Organization / World Chronicle / Consequence Diff
-→ Narrative Preference / Bookmark / Notes / Chronicle / Manifest
-→ model split / Compatibility / Profiles / usage / Debug Mode
+→ richer information surfaces + full player-facing Consequence Diff
+→ player utility / archive
+→ model operations / richer observability
 → Source Library / Reference / Creator
 → external UI contract only from proven Internal Dynamic UI vocabulary
 
@@ -327,7 +264,7 @@ G9
 
 ---
 
-## 12. Agent routing
+## 11. Agent routing
 
 ```text
 GPT
