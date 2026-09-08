@@ -1,126 +1,97 @@
 ---
 title: my world｜G6 Package 0 Focused Owner Re-UAT U2
-status: OWNER UAT COMPLETE / ORIGINAL CORRECTIONS PRODUCT PASS / NEW UX CORRECTION REQUIRED
-version: 1.1
+status: PRODUCT PASS / PACKAGE 0 CLOSED
+version: 1.2
 created: 2026-09-08
 updated: 2026-09-08
 owner: Owner
 semantic_owner: GPT
-product_code_artifact: 5e5fd006fd17683ae811b17138df76a18b0b96aa
-launch_command: D:\AI\Projects\my-world\run-game.cmd
+final_product_code_artifact: d81f5f215360780cc50038ccd3bce7cb4163b866
 supersedes_for_current_uat:
   - my-world/docs/uat/G6_PACKAGE0_OWNER_UAT_U1.md
 ---
 
 # G6 Package 0｜Focused Owner Re-UAT U2
 
-## 1. Final U2 verdict
+## 1. Final Package-0 verdict
 
-Owner completed ordinary-play focused re-UAT on the frozen product artifact:
+Owner completed the Package-0 correction UAT and the bounded MW-021 follow-up confirmation.
 
-`5e5fd006fd17683ae811b17138df76a18b0b96aa`
-
-Owner feedback:
-
-1. main Narrative chat has no practically usable visible progress scrollbar; vertical navigation depends on mouse wheel and is cumbersome;
-2. after exiting and continuing a Game, the main Narrative chat opens at the top instead of the latest progress; Continue should default to the latest/current bottom position;
-3. other tested Package-0 correction outcomes are broadly PASS.
-
-Formal product verdicts for the original correction train:
+Final verdicts:
 
 ```text
-MW-018 R1 People                 = PRODUCT PASS
-MW-015 R1 Important Experiences = PRODUCT PASS
+MW-018 R1 People                  = PRODUCT PASS
+MW-015 R1 Important Experiences  = PRODUCT PASS
 MW-019 R1 Recommendations        = PRODUCT PASS
-MW-020 Context Budget            = ENGINEERING PASS_WITH_NOTES / no standalone Product gate / no new U2 continuity defect reported
+MW-020 Context Budget            = ENGINEERING PASS_WITH_NOTES / INTEGRATED / no standalone Product gate
+MW-021 Narrative Scroll          = PRODUCT PASS
+
+Package 0                        = PRODUCT PASS / CLOSED
 ```
 
-Package 0 does **not** close yet because U2 found two new first-party Narrative Host usability defects. These are not regressions of the three original product outcomes and do not reopen MW-018 / MW-015 / MW-019.
+Final reviewed/integrated product-code artifact at closure:
 
-## 2. New U2 findings
+`d81f5f215360780cc50038ccd3bce7cb4163b866`
 
-### U2-F01｜Main Narrative scrollbar is not practically visible/draggable
+## 2. U2 original correction results
 
-Observed product problem:
+Owner's ordinary-play U2 confirmed the three original corrections were broadly successful:
 
-- the central/main conversation can become long;
-- there is no useful visible progress scrollbar for direct position control;
-- Owner must rely on mouse-wheel scrolling, which is cumbersome in a long-running text RPG.
+- People now supports meaningful player-known/off-screen persons without reopening the earlier current-scene-only product failure;
+- Important Experiences no longer behaved like a mandatory per-turn recap during the focused run;
+- Recommendations were accepted as the corrected short-label → detailed editable draft interaction with five independent next-step directions.
 
-Required direction:
+These outcomes remain closed. Do not replay them merely because later Packages touch adjacent UI unless a new concrete regression appears.
 
-- `NarrativeScroll` must expose a visible, comfortably draggable vertical scrollbar whenever content exceeds the viewport;
-- keep this local to the Narrative Host rather than performing a global theme redesign;
-- ordinary wheel/keyboard scrolling must continue to work.
+## 3. MW-021 follow-up finding and closure
 
-This is a usability requirement, not visual polish.
+U2 found two additional Narrative Host usability defects:
 
-### U2-F02｜Continue/reopen defaults to the top instead of latest progress
+1. long main Narrative history lacked a practically visible/draggable vertical scrollbar;
+2. Continue/reopen restored history at the top instead of latest progress.
 
-Observed product problem:
-
-- exit Game/app;
-- continue the existing Game;
-- restored Narrative history appears at the top;
-- Owner must manually scroll through prior history to reach the current/latest point.
-
-Required direction:
-
-```text
-Continue / reopen existing Game
-→ rebuild current accepted Conversation projection
-→ after layout settles, default Narrative position to latest/current bottom
-```
-
-This default must not create a permanent forced-follow behavior. During an active session, if the Player deliberately scrolls upward to read history, ordinary incoming/render refreshes must continue respecting that reading position until the Player returns near the bottom or a full explicit history reconstruction requires a new current position.
-
-No durable scroll-position persistence is required for this correction.
-
-## 3. Source-level root-cause note
-
-GPT source inspection after U2 found a direct implementation explanation consistent with Owner observations:
-
-- `NarrativeScroll` uses the same theme environment in which the recommendation-area scrollbar previously required an explicit local width; the main Narrative scrollbar currently has no equivalent local width treatment;
-- `redraw_from_conversation()` explicitly sets `_follow_scroll = true` and follows to the bottom, while `_initialize_session()` renders restored entries but does not perform the same reopen-bottom step.
-
-This is sufficient for bounded Task Shaping; Codex must still confirm exact current code behavior before changing it.
-
-## 4. Correction lineage
-
-The two findings are one coherent new product outcome: **Narrative history navigation / reopen positioning**.
-
-They are not recommendation-specific and therefore must not be placed under MW-019 revision lineage.
-
-Shape a new flat Work ID:
+They were isolated as:
 
 `MW-021｜Narrative Scroll Navigation & Reopen Position`
 
-One bounded task should cover both findings because they affect the same `NarrativeScroll` presentation seam and can be accepted together.
+Engineering review/integration proved:
 
-## 5. Protected behavior
+- a local 18px main Narrative scrollbar with real mouse drag;
+- Continue/reopen/full history reconstruction settles at latest/current bottom;
+- deliberate manual upward reading disables follow-latest for ordinary incremental updates;
+- returning near bottom restores follow-latest;
+- no persistent scroll position, Conversation/World/Timeline/Save mutation, Provider call or global Theme redesign.
 
-The correction must preserve:
+Owner bounded confirmation verdict:
 
-- accepted Conversation remains canonical; UI remains projection only;
-- no new persistence/table for scroll position;
-- no change to Save/Restore/Regenerate truth/currentness;
-- no auto-scroll loop that prevents the Player from intentionally reading older history;
-- no changes to Provider calls, Narrative generation, recommendation generation, Public d20 or world semantics;
-- no global UI/theme redesign;
-- free-form Player input remains primary.
+> **PASS，继续。**
 
-## 6. Package 0 exit
+Therefore MW-021 = **PRODUCT PASS**.
 
-Package 0 may close after MW-021 Engineering PASS/integration and a bounded confirmation that:
+## 4. Package-0 closure meaning
 
-- a long main Narrative surface has a visible draggable vertical scrollbar;
-- Continue/reopen lands at the latest/current Narrative position by default;
-- deliberate manual upward reading remains possible without constant forced snap-back.
+Package 0 is now closed. It established the current usable G6 baseline for:
 
-Because MW-018 / MW-015 / MW-019 are already Product PASS from U2, MW-021 does not require replaying the entire correction UAT unless its implementation materially touches unrelated product behavior.
+- player-known People curation;
+- sparse Important Experiences;
+- five recommended actions UX;
+- corrected world-context budget accounting;
+- practical long-Narrative scrolling and reopen positioning.
 
-## 7. Next package
+Known non-blocking evidence retained:
 
-After MW-021 closes Package 0, proceed immediately to:
+- G3-03 has one pre-existing Context assertion already reproduced on the MW-021 starting baseline;
+- several older suites retain known resource-exit diagnostics;
+- these were not introduced by MW-021 and do not block Package-0 Product closure.
 
-**Package 1 — UAT Observability / Debug Mode v0.1**.
+## 5. Next authorized package
+
+Proceed immediately to:
+
+**Package 1｜UAT Observability / Debug Mode v0.1**
+
+Purpose:
+
+> reduce Owner UAT cost by making it obvious, per accepted Turn, which backend domains changed, remained unchanged, failed, became stale or were cancelled.
+
+Debug Mode remains read-only and player-safe; it must not become a second truth source, alter model input/gameplay/currentness, expose hidden GM/NPC-private semantic values, or grow into a giant telemetry framework.
