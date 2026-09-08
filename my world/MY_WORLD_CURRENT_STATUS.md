@@ -1,22 +1,21 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 17.11
+version: 17.12
 created: 2026-08-26
 updated: 2026-09-08
 phase: G6 RPG Core Closure + UAT Observability + Internal Dynamic UI
-current_task: MW-021 Narrative Scroll Navigation & Reopen Position
+current_task: MW-021 Bounded Owner Confirmation Build Prep
 current_owner: Codex
 parent_task: G6 Core Closure Package 0
 semantic_owner: GPT
-owner_uat_required: bounded confirmation after integration
+owner_uat_required: bounded confirmation only
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v4.3
 owner_uat_record: my world/docs/uat/G6_PACKAGE0_OWNER_REUAT_U2.md
-active_task_packet: my-world/docs/tasks/MW-021_NARRATIVE_SCROLL_NAVIGATION_TASK.md
-active_task_branch: mw-021-narrative-scroll-ux
-active_correction_decision: architecture/ui/G6_NARRATIVE_SCROLL_NAVIGATION_UAT_CORRECTION_V1_0_DECISION.md
-formal_product_code_base: 5e5fd006fd17683ae811b17138df76a18b0b96aa
+reviewed_implementation_main: d81f5f215360780cc50038ccd3bce7cb4163b866
+mw021_review: my-world/docs/mw021/MW-021_INDEPENDENT_REVIEW_IR1.md
+mw021_integration: my-world/docs/mw021/MW-021_INTEGRATION_VERIFICATION.md
 ---
 
 # my world｜CURRENT STATUS
@@ -33,104 +32,141 @@ G5 World Semantics & GM Runtime             PRODUCT PASS / CLOSED
 G6 RPG Core Closure + UAT Observability + Internal Dynamic UI ACTIVE
 ```
 
-Package 0 state after Owner Re-UAT U2:
+Package 0 state:
 
 ```text
 MW-018 R1 Known / Off-screen People          PRODUCT PASS
 MW-015 R1 Sparse Important Experiences       PRODUCT PASS
 MW-019 R1 Recommendation UX                  PRODUCT PASS
 MW-020 Core Context Budget Accounting        ENGINEERING PASS_WITH_NOTES / INTEGRATED
-MW-021 Narrative Scroll Navigation           CURRENT / CODEX
+MW-021 Narrative Scroll Navigation           ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION PENDING
 ↓
-bounded Owner confirmation of two scroll behaviors
+fresh bounded Owner confirmation build       CURRENT / CODEX
+↓
+Owner confirms 3 scroll behaviors
 ↓
 Package 0 close
 ```
 
 Package 1 UAT Observability / Debug Mode v0.1 remains first after Package 0 closes.
 
-## 2. U2 final verdict
+## 2. U2 product verdict retained
 
 Formal record:
 
 `my world/docs/uat/G6_PACKAGE0_OWNER_REUAT_U2.md@v1.1`
 
-Owner judged the original correction outcomes broadly PASS and reported two new Narrative Host usability findings:
+U2 granted:
 
-1. main chat lacks a practically visible/draggable vertical progress scrollbar, forcing mouse-wheel navigation;
-2. Continue/reopen rebuilds the main chat at the top instead of the latest/current progress.
+```text
+MW-018 R1 People                 = PRODUCT PASS
+MW-015 R1 Important Experiences = PRODUCT PASS
+MW-019 R1 Recommendations       = PRODUCT PASS
+```
 
-These do not reopen MW-018 / MW-015 / MW-019. They form a new bounded outcome under MW-021.
+Those outcomes are closed and must not be replayed merely to confirm MW-021.
 
-## 3. MW-021 — CURRENT
+U2 additionally found two new Narrative Host usability defects:
 
-Frozen authority:
+1. long main chat lacked a practically visible/draggable scrollbar;
+2. Continue/reopen opened restored history at the top rather than latest progress.
 
-`architecture/ui/G6_NARRATIVE_SCROLL_NAVIGATION_UAT_CORRECTION_V1_0_DECISION.md`
+These are isolated under MW-021.
 
-Task Packet:
+## 3. MW-021 — INTEGRATED / ENGINEERING PASS_WITH_NOTES
 
-`my-world/docs/tasks/MW-021_NARRATIVE_SCROLL_NAVIGATION_TASK.md`
+Reviewed identities:
 
-Task branch:
+- Formal product-code base: `5e5fd006fd17683ae811b17138df76a18b0b96aa`
+- Starting/task-packet HEAD: `9239fb10539898fd3d98d256214dd02df73696fa`
+- Implementation HEAD: `4978341809424ac1be3c12ba59974cc9c5468995`
+- Submitted candidate: `f9452e825e74e27e2cacd500723e87da5aafc592`
+- Independent Review commit: `8e2c9fa616b11c4a0e086f0cea7d1c450df4c078`
+- Integration verification / current reviewed main: `d81f5f215360780cc50038ccd3bce7cb4163b866`
 
-`mw-021-narrative-scroll-ux`
-
-Formal product-code base:
-
-`5e5fd006fd17683ae811b17138df76a18b0b96aa`
-
-Task-packet/main preparation commit is governance/task metadata only; Codex must preserve the formal product-code base and report exact Starting HEAD.
-
-Required outcome:
+Integrated behavior:
 
 ```text
 long Narrative history
-→ visible draggable vertical scrollbar
+→ visible local 18px draggable vertical scrollbar
 
-Continue / reopen existing Game
-→ restore accepted Narrative projection
-→ after layout settles, default to latest/current bottom
+Continue / reopen / full current-history reconstruction
+→ rebuild accepted Conversation projection
+→ wait for layout settlement
+→ default to current/latest bottom
+
+manual scroll upward
+→ follow-latest disabled for ordinary incremental updates
+
+return near bottom
+→ follow-latest resumes
 ```
 
-Protected behavior:
+The async follow helper re-checks both manual-follow state and bound Conversation after layout wait, so an old pending follow cannot overwrite a manual upward scroll or a newly bound Session.
 
-- deliberate manual upward reading is respected during active play;
-- returning near bottom resumes follow-latest;
-- no persistent scroll-position owner;
-- no Conversation/World/Timeline/persistence changes;
-- no Provider call;
-- no recommendation/People/Experiences/Debug/Dynamic UI scope expansion;
-- no global theme redesign.
+No persistent scroll position, Conversation/World/Timeline/Save mutation, Provider call, global Theme redesign or unrelated Package-0 work was added.
 
-Return ceiling: `READY FOR INDEPENDENT REVIEW`.
+Engineering evidence:
 
-## 4. Source-level shaping evidence
+- focused headless: 101 checks / 0 failures;
+- focused real-window: 101 checks / 0 failures;
+- real overflow, real mouse drag, reopen bottom, manual-reading preservation, follow recovery, Restore/rebind and short-history cases covered;
+- 9 directly affected regression suites exit 0;
+- G3-03 retains one pre-existing Context assertion failure reproduced identically on Starting HEAD and candidate;
+- MW-003 retains pre-existing resource-exit diagnostics;
+- final import and fresh Windows export passed.
 
-Current Narrative view already contains near-bottom follow logic:
+Engineering verdict: **PASS_WITH_NOTES**.
 
-- `_on_narrative_scroll_changed()` disables follow when Player scrolls upward;
-- `_follow_scroll_if_needed()` only moves to latest when follow is enabled;
-- `redraw_from_conversation()` explicitly resets follow and follows to bottom;
-- `_initialize_session()` renders restored entries but lacks the equivalent reopen-to-bottom step.
+## 4. CURRENT — bounded Owner confirmation build prep
 
-Main `NarrativeScroll` also lacks the local practical vertical-bar width treatment already used by the recommendation-local scrollbar.
+Build only from reviewed implementation `main`:
 
-Codex must verify current code before changing it; materially different root cause requires STOP/report.
+`d81f5f215360780cc50038ccd3bce7cb4163b866`
 
-## 5. Package 0 closure
+Required operational flow:
 
-After MW-021 Engineering PASS/integration, Owner does only a bounded confirmation:
+```text
+refresh origin/main
+→ safely update D:/AI/Projects/my-world tracked checkout
+→ preserve Owner .gitignore modification + pre-existing untracked sidecars
+→ final Godot import
+→ fresh Windows export validation
+→ Owner Launch Ready
+```
 
-1. long main chat exposes a visible/draggable vertical scrollbar;
-2. Continue/reopen lands at latest progress;
-3. manually scrolling upward does not cause constant forced snap-back.
+No production-code change is authorized in build prep.
 
-No full repeat of People / Important Experiences / Recommendations UAT is required unless MW-021 expands outside its frozen scope.
+## 5. Owner bounded confirmation after Launch Ready
 
-If these pass, Package 0 closes and GPT immediately Task-Shapes Package 1 UAT Observability / Debug Mode v0.1.
+Owner checks only:
 
-## 6. Protected project invariants
+1. a long main chat shows a visible scrollbar that can actually be dragged with the mouse;
+2. exit and Continue/reopen lands at the latest/current Narrative progress by default;
+3. manually scrolling upward remains stable during ordinary updates, and returning near bottom restores normal follow-latest.
+
+No repeat of People / Important Experiences / Recommendations UAT is required.
+
+If these pass, MW-021 = PRODUCT PASS and Package 0 closes immediately.
+
+## 6. Next after Package 0 close
+
+**Package 1 — UAT Observability / Debug Mode v0.1**
+
+Target:
+
+```text
+Debug OFF → normal player experience unchanged
+
+Debug ON → per accepted Turn compact UAT trace
+Narrative / World semantic / actor identity / Character / Experiences / People / Recommendations / Save-Restore
+→ changed / no-change / failed / stale / cancelled
+→ human-readable sanitized failure reason
+```
+
+Do not build a giant EventBus or expose hidden GM/NPC-private semantic values or credentials.
+
+## 7. Protected invariants
 
 - Model Freedom First;
 - free-form Player natural-language action remains primary;
