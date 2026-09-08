@@ -1,20 +1,21 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 17.9
+version: 17.10
 created: 2026-08-26
 updated: 2026-09-08
 phase: G6 RPG Core Closure + UAT Observability + Internal Dynamic UI
-current_task: Package 0 Fresh Owner Build Prep
-current_owner: Codex
+current_task: Package 0 Focused Owner Re-UAT U2
+current_owner: Owner
 parent_task: G6 Core Closure Package 0
 semantic_owner: GPT
 owner_uat_required: true
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v4.3
-owner_uat_record: my-world/docs/uat/G6_PACKAGE0_OWNER_UAT_U1.md
+owner_uat_record: my world/docs/uat/G6_PACKAGE0_OWNER_REUAT_U2.md
 audit_triage: architecture/reviews/DEVELOPMENT_AUDIT_2026-09-08_ADOPTION_DECISION.md
 reviewed_implementation_main: 5e5fd006fd17683ae811b17138df76a18b0b96aa
+owner_launch_ready: true
 ---
 
 # my world｜CURRENT STATUS
@@ -31,17 +32,15 @@ G5 World Semantics & GM Runtime             PRODUCT PASS / CLOSED
 G6 RPG Core Closure + UAT Observability + Internal Dynamic UI ACTIVE
 ```
 
-Package 0 correction train is now Engineering-complete:
+Package 0 correction train is Engineering-complete and Owner Launch Ready:
 
 ```text
-MW-018 R1 Known / Off-screen People          ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT RE-UAT PENDING
-MW-015 R1 Sparse Important Experiences       ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT RE-UAT PENDING
-MW-019 R1 Recommendation UX                  ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT RE-UAT PENDING
+MW-018 R1 Known / Off-screen People          ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT RE-UAT ACTIVE
+MW-015 R1 Sparse Important Experiences       ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT RE-UAT ACTIVE
+MW-019 R1 Recommendation UX                  ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT RE-UAT ACTIVE
 MW-020 Core Context Budget Accounting        ENGINEERING PASS_WITH_NOTES / INTEGRATED / NO STANDALONE PRODUCT GATE
 ↓
-Fresh Owner Build Prep                       CURRENT / CODEX
-↓
-Focused Owner re-UAT
+Focused Owner Re-UAT U2                      CURRENT / OWNER
 ↓
 Package 0 closes only on explicit Owner product verdicts
 ```
@@ -50,15 +49,33 @@ Package 1 UAT Observability / Debug Mode v0.1 remains first after Package 0 clos
 
 ---
 
-## 2. Reviewed implementation baseline for Owner build
+## 2. Frozen U2 product artifact
 
-Current reviewed implementation `main` after MW-020 integration verification:
+Implementation `main` is confirmed at:
 
 `5e5fd006fd17683ae811b17138df76a18b0b96aa`
 
-The Product re-UAT build must contain all four reviewed corrections above. Do not build from the old Owner checkout HEAD or an individual task branch.
+This is the frozen product-code artifact for U2. Do not add production code during active Owner UAT.
 
-Build preparation is operational only; it is not authorization for new production changes.
+Formal U2 handoff:
+
+`my world/docs/uat/G6_PACKAGE0_OWNER_REUAT_U2.md`
+
+Owner Launch Ready result reports:
+
+- Owner checkout HEAD == origin/main == reviewed artifact;
+- existing `.gitignore` modification + 10 pre-existing untracked sidecars preserved unchanged;
+- Godot 4.7.2 final import exit 0 with zero errors/warnings;
+- Windows export freshly rebuilt, exit 0 with zero errors/warnings;
+- new PCK freshness corresponds to current reviewed checkout;
+- EXE / PCK / SQLite DLL verified;
+- build prep did not launch game, call Provider, access real Game/Source/settings data or modify product code.
+
+Owner launch command:
+
+```powershell
+& "D:\AI\Projects\my-world\run-game.cmd"
+```
 
 ---
 
@@ -72,11 +89,15 @@ Reviewed result:
 - review commit: `97c1862f3e0c9809e8b8879130b0aade2a848681`
 - integration verification: `docs/mw018/MW-018_R1_INTEGRATION_VERIFICATION.md`
 
-Product re-UAT note:
+U2 product watch:
 
-> Natural, clearly player-known/off-screen people should be eligible for model curation without requiring physical scene presence. If identity guardrails still systematically suppress such people, reopen the seam rather than stacking more Program rules.
-
-Incidental people may legitimately remain uncarded. Exact identity remains required; no display-name/fuzzy/first-match authority.
+- meaningful player-known/off-screen people may become/update cards;
+- physical scene presence is neither necessary nor sufficient;
+- incidental actors may legitimately remain uncarded;
+- Player reference/recall may participate when exact identity is safely resolvable;
+- no private/omniscient information leak;
+- if clearly known people are still systematically suppressed, reopen the identity seam rather than stack more Program rules;
+- observe whether no-change refresh collapsing expanded cards is materially disruptive.
 
 No Product PASS yet.
 
@@ -92,7 +113,7 @@ Reviewed result:
 - review commit: `865f45c59abb8945f6dceb0dbceadc8f22e83335`
 - integration verification: `docs/mw015/MW-015_R1_INTEGRATION_VERIFICATION.md`
 
-Product re-UAT must test both sparsity and semantic freedom:
+U2 product watch:
 
 ```text
 ordinary accepted play
@@ -102,7 +123,9 @@ true life-shaping event
 → model may retain a concise milestone
 ```
 
-No Program keyword/category/score/turn-threshold classifier was added. Character mutation and milestone mutation remain independent.
+Important Experiences must remain selected protagonist life history, not rolling recap. Sparsity must remain model-semantic rather than a rigid Program classifier; quiet but genuinely life-shaping events remain possible.
+
+No U2 decision is implied yet on adding `简要回顾` or moving `重要经历` under Character.
 
 No Product PASS yet.
 
@@ -131,14 +154,13 @@ one Action Recommender call
 
 Five-independent-next-action semantics remain model-owned. Program adds no semantic diversity/ranking/category classifier.
 
-Re-UAT notes:
+U2 product watch:
 
-- judge whether labels are concise and useful;
-- judge whether five items are genuinely standalone alternatives rather than a split plan;
-- watch model grounding embellishment;
-- observe recommendation latency (reviewed real cases were roughly 10–25 seconds);
-- judge small-window scrolling/readability comfort;
-- free-form input must remain effortless and primary.
+- labels concise and scan-friendly;
+- detailed draft corresponds to label and remains editable;
+- five items are standalone alternatives, not one plan split into steps;
+- free-form input remains effortless and primary;
+- judge grounding embellishment, recommendation latency, readability and small-window scrolling by material impact on real play.
 
 No Product PASS yet.
 
@@ -165,88 +187,66 @@ Result:
 - headings/newlines/separators count exactly once;
 - Knowledge → Agency → Evolution each budget against current assembled text;
 - exact 16000 is retained; candidate 16001 is omitted under existing whole-section policy;
-- audit-equivalent durable Agency action now enters later GM context when it physically fits;
+- audit-equivalent durable Agency action enters later GM context when it physically fits;
 - Restore/currentness filtering remains intact;
 - no Context Orchestrator / semantic retrieval / Provider call / persistence change.
 
-Focused evidence: 178 checks / 0 failures. Six directly affected G5/MW regressions exit 0. Known G5-03/G5-04 resource-exit warnings remain baseline/non-blocking.
-
-MW-020 has no separate Owner Product gate.
+MW-020 has no standalone Owner Product verdict. During U2, only note obvious continuity failure if naturally observed.
 
 ---
 
-## 7. CURRENT — Fresh Owner Build Prep
+## 7. CURRENT — Focused Owner Re-UAT U2
 
-Codex now prepares the single focused re-UAT artifact from reviewed `main`.
+Owner should play naturally first. U2 is not intended to become a synthetic engineering test script.
 
-Required flow:
+Findings may be reported incrementally. GPT accumulates them and does not dispatch Codex during active UAT unless a hard blocker makes continued play impossible. When Owner explicitly says the UAT round is finished, GPT classifies findings by lineage and decides Package 0 verdict/next work.
 
-```text
-refresh remote main
-↓
-confirm reviewed main / no newer production change
-↓
-safely inspect D:/AI/Projects/my-world
-↓
-preserve unknown/local modified/untracked Owner files
-↓
-bring tracked checkout to reviewed main without reset/clean/force/data loss
-↓
-run established import / Windows export validation
-↓
-verify run-game.cmd / run-game.ps1 launch path
-↓
-return Owner Launch Ready
-```
-
-Do not:
-
-- add product changes;
-- delete or overwrite Owner's unknown files;
-- reset/clean/force the checkout;
-- modify real Game/Source/settings data;
-- consume real Provider calls merely to prepare the build;
-- grant Product PASS.
-
-If safe synchronization is blocked by an overlapping local modification, stop and report the exact conflict instead of discarding it.
-
----
-
-## 8. Focused Package-0 Owner re-UAT
-
-After Launch Ready, Owner tests one fresh build containing all reviewed corrections.
-
-Primary targets:
+Primary U2 questions:
 
 ### People
 
-- a naturally known/off-screen meaningful person can become/update a card;
-- current physical presence is neither required nor sufficient;
-- incidental NPCs may remain absent;
-- watch for architecture over-restriction;
-- observe whether no-change background refresh collapses expanded cards enough to be a real UX blocker.
+- Do meaningful known/off-screen people appear/update when they should?
+- Can incidental people legitimately remain absent?
+- Does the system still feel over-restricted by identity guardrails?
+- Does background no-change refresh collapse expanded cards enough to hurt reading?
 
 ### Important Experiences
 
-- ordinary travel/questioning/routine scene progress usually does not append a milestone;
-- genuinely life-shaping choices/events can still be recorded;
-- quiet-but-important events must not be mechanically suppressed.
+- Does ordinary play now stay sparse?
+- Do genuine life turning points still get retained?
+- Does the surface read like life history rather than per-turn recap?
 
 ### Recommendations
 
-- five concise labels are easy to scan;
-- clicking fills the corresponding detailed draft but never sends;
-- draft remains freely editable;
-- five entries are independently selectable next actions, not one plan split into steps;
-- free-form action remains primary;
-- assess arrival latency, grounding, readability and small-window scrolling.
+- Are five short labels easy to scan?
+- Does click fill the corresponding detailed editable draft without sending?
+- Are there five genuinely independent next actions?
+- Is free-form action still primary?
+- Are latency, grounding and small-window scrolling acceptable in real play?
 
-### Living World / continuity
+### Continuity
 
-- no known context-budget omission contaminates observations;
-- Save/reopen/Restore/currentness remains credible during ordinary play.
+- Does normal world/NPC continuity feel credible?
+- If Save/reopen/Restore is naturally exercised, does currentness remain credible?
 
-Product PASS remains Owner-only.
+Owner may stop when enough real-play evidence exists; there is no fixed turn quota for this focused correction UAT.
+
+---
+
+## 8. U2 verdict structure
+
+At U2 end, record separately:
+
+```text
+MW-018 R1 People                 = PASS / FAIL_WITH_FINDING
+MW-015 R1 Important Experiences = PASS / FAIL_WITH_FINDING
+MW-019 R1 Recommendations       = PASS / FAIL_WITH_FINDING
+Package 0                       = CLOSE only if required product outcomes pass
+```
+
+MW-020 requires no separate verdict unless a new product-visible continuity defect appears.
+
+Aesthetic polish that does not impair readability/playability may be deferred. Truth/disclosure, semantic usefulness, model freedom, currentness and comfortable readability remain product-gate concerns.
 
 ---
 
@@ -301,7 +301,7 @@ Canonical:
 
 - context-budget bug: repaired by MW-020;
 - failure diagnostics: Package 1;
-- People no-change collapse UX: observe in re-UAT, fix only if materially disruptive;
+- People no-change collapse UX: observe in U2, fix only if materially disruptive;
 - eight layer-boundary findings: architecture debt, opportunistic/bounded hygiene only;
 - Application Shell concentration: evolutionary extraction as real consumers arrive;
 - documentation drift: Current Status/Roadmap are authoritative; reduce duplicate fast-moving tables over time.
@@ -324,11 +324,11 @@ Canonical:
 
 ```text
 GPT
-→ product semantics / Task Shaping / Independent Review / integration / UAT interpretation
+→ UAT interpretation / finding accumulation / product verdict / next Task Shaping after U2 closes
 
 Codex
-→ Fresh Owner Build Prep from reviewed main only
+→ HOLD during active U2 unless GPT dispatches a hard-blocker correction
 
 Owner
-→ focused Package-0 Product re-UAT after Owner Launch Ready
+→ current focused Package-0 Product re-UAT
 ```
