@@ -1,22 +1,23 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 17.15
+version: 17.16
 created: 2026-08-26
 updated: 2026-09-08
 phase: G6 RPG Core Closure + UAT Observability + Internal Dynamic UI
-current_task: MW-023 Gameplay Typography Readability Baseline
+current_task: MW-024 OOC / GM Guidance + Typed Accepted Input Mode
 current_owner: Codex
-parent_task: G6 Cross-package Readability Correction before Package 2
+parent_task: G6 Package 2 Core Interaction Control
 semantic_owner: GPT
-owner_uat_required: bounded visual confirmation
+owner_uat_required: combined Package 2 UAT after MW-025
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v4.4
 package1_closure_record: my world/docs/uat/G6_PACKAGE1_DEBUG_MODE_OWNER_UAT_U1.md
-active_architecture: architecture/ui/G6_GAMEPLAY_TYPOGRAPHY_READABILITY_BASELINE_V1_0_DECISION.md
-active_task_packet: my-world/docs/tasks/MW-023_GAMEPLAY_TYPOGRAPHY_READABILITY_TASK.md
-active_task_branch: mw-023-gameplay-typography-readability
-formal_code_base: bfe108cbb1f749307c421517f5380b9eb00a9317
+mw023_closure_record: my world/docs/uat/G6_MW023_TYPOGRAPHY_OWNER_UAT_U1.md
+active_architecture: architecture/interaction/G6_CORE_INTERACTION_CONTROL_V1_0_DECISION.md
+active_task_packet: my-world/docs/tasks/MW-024_OOC_GM_GUIDANCE_TASK.md
+active_task_branch: mw-024-ooc-gm-guidance
+formal_code_base: a11af1bb922e5d0637a38bcccfdac27a819c9c1c
 ---
 
 # my world｜CURRENT STATUS
@@ -38,8 +39,11 @@ Current G6 flow:
 ```text
 Package 0  Correction Train + Owner UAT          PRODUCT PASS / CLOSED
 Package 1  UAT Observability / Debug Mode v0.1   PRODUCT PASS / CLOSED
-MW-023     Gameplay Typography Readability        CURRENT / CODEX
-Package 2  Core Interaction Control              QUEUED
+MW-023     Gameplay Typography Readability        PRODUCT PASS / CLOSED
+Package 2  Core Interaction Control              CURRENT
+  MW-024   OOC / GM Guidance                     CURRENT / CODEX
+  MW-025   Character-guided Recommendations      QUEUED
+  Owner    combined Package-2 UAT                 AFTER MW-025
 Package 3  Open Threads                          QUEUED
 Package 4  System / Public d20                   QUEUED
 Package 5  factual Inventory                     QUEUED
@@ -47,144 +51,143 @@ Package 6  Internal Dynamic UI Host v0.1         QUEUED / CORE REQUIRED
 Package 7  V0 Core Closure Reality Gate          QUEUED
 ```
 
-MW-023 is a bounded cross-package readability correction inserted before Package 2 because all later Owner UAT depends on sustained legibility. It does not alter the approved Package numbering or long-term route.
+## 2. MW-023 — PRODUCT PASS / CLOSED
 
-## 2. Package 1 — PRODUCT PASS / CLOSED
+Owner inspected the MW-023 result and stated:
 
-Owner real-play verdict on MW-022 Debug Mode v0.1:
-
-- the Debug region does reflect backend data changes;
-- the information is deliberately compact but effective enough for UAT;
-- no further Debug expansion is required before continuing core development.
+> 字体大小已经差不多了。
 
 Formal closure record:
 
-`my world/docs/uat/G6_PACKAGE1_DEBUG_MODE_OWNER_UAT_U1.md`
+`my world/docs/uat/G6_MW023_TYPOGRAPHY_OWNER_UAT_U1.md`
 
-Formal result:
+Reviewed implementation result:
+
+- formal base: `bfe108cbb1f749307c421517f5380b9eb00a9317`
+- implementation: `4ad8d2137f905edc2821d1a09eae8545df055baf`
+- candidate: `76d615ec9aa477d86281f5844a04454e611e45bb`
+- Independent Review: `ENGINEERING PASS_WITH_NOTES`
+- integration verification/current implementation main: `a11af1bb922e5d0637a38bcccfdac27a819c9c1c`
+
+Accepted readability baseline:
+
+- ordinary active-game text/control >=20px;
+- larger title hierarchy remains larger;
+- vertical scrolling is preferred over shrinking text merely for density;
+- 960×540 may be more scroll-heavy but remains a supported operable layout.
+
+No duplicate typography UAT is required.
+
+## 3. Package 2 — CURRENT｜Core Interaction Control
+
+Frozen architecture:
+
+`architecture/interaction/G6_CORE_INTERACTION_CONTROL_V1_0_DECISION.md`
+
+Package outcome:
 
 ```text
-MW-022 UAT Observability / Debug Mode v0.1 = PRODUCT PASS
-Package 1 UAT Observability                  = CLOSED
+角色行动
+→ protagonist acts in World
+→ mechanics/world consequences allowed
+→ final accepted action may become Character evidence
+
+OOC / GM 指导
+→ Player talks to GM out of character
+→ guides current/recent play
+→ not protagonist action / World mutation / mechanics bypass
+
+Recommended Actions
+→ remain optional role-action inspirations
+→ use current player-safe Character as soft tendency
+→ never become allowed-action list
 ```
 
-Integrated implementation artifact at Product PASS:
-
-`bfe108cbb1f749307c421517f5380b9eb00a9317`
-
-Debug Mode remains a bounded first-party UAT tool and later Open Threads/System/Inventory consumers may join the same observability seam when they exist.
-
-## 3. New Owner readability finding
-
-The same real-play session exposed a separate game-page typography problem:
-
-- right-side World Information text is materially smaller than the main Narrative body;
-- multiple gameplay labels/buttons/helper texts use inconsistent small font sizes;
-- Owner requested using the current main Narrative dialogue/body size as the default game-page font size.
-
-Frozen interpretation:
+Package executes as one train with one final Owner UAT:
 
 ```text
-current Narrative body reference ≈ 20px
-→ ordinary active-game text/control baseline >=20px
-→ existing larger headings remain larger
+MW-024 OOC / GM Guidance + typed accepted input mode
+→ GPT Independent Review / integrate
+→ MW-025 Character-guided Recommendations + accepted-action Character evidence
+→ GPT Independent Review / integrate
+→ one combined Owner Package-2 UAT
 ```
 
-This is a usability baseline, not optional visual polish and not a failure of Debug semantics.
+Do not stop for separate Owner UAT between MW-024 and MW-025 unless a hard blocker prevents continued implementation.
 
-## 4. CURRENT — MW-023 Gameplay Typography Readability Baseline
-
-Frozen authority:
-
-`architecture/ui/G6_GAMEPLAY_TYPOGRAPHY_READABILITY_BASELINE_V1_0_DECISION.md`
+## 4. CURRENT — MW-024
 
 Task Packet:
 
-`my-world/docs/tasks/MW-023_GAMEPLAY_TYPOGRAPHY_READABILITY_TASK.md`
+`my-world/docs/tasks/MW-024_OOC_GM_GUIDANCE_TASK.md`
 
 Task branch:
 
-`mw-023-gameplay-typography-readability`
+`mw-024-ooc-gm-guidance`
 
 Formal Code Base:
 
-`bfe108cbb1f749307c421517f5380b9eb00a9317`
+`a11af1bb922e5d0637a38bcccfdac27a819c9c1c`
 
-Product target:
+Primary result:
 
-```text
-active gameplay page ordinary text
-→ same baseline readability class as Narrative body
-→ minimum/default 20px
+- explicit `角色行动 | OOC / GM 指导` input mode;
+- Program-owned mode, never keyword/regex inferred;
+- OOC gets a durable GM OOC response and survives reopen/Save/Restore;
+- OOC bypasses d20, World semantic/identity, Agency/Evolution and lived Character/Experiences/People curation;
+- recent OOC remains structurally marked GM guidance in bounded Conversation context;
+- Recommendation may refresh after OOC but remains exact one-call 5×`{label,draft}`;
+- clicking a recommendation always prepares a role action, never OOC and never auto-send;
+- accepted mode participates in currentness while preserving legacy action history IDs/current records.
 
-larger titles/headings
-→ preserve hierarchy above baseline
-```
+MW-024 does not implement Character-guided Recommendations yet except minimum mode-aware recommendation context. That is MW-025.
 
-Primary current surfaces include TopBar controls, Narrative auxiliary text, recommendation controls, right-side World Information navigation/content, Character/Important Experiences/People, Save/Restore, and Debug rows.
+## 5. Protected Package-2 boundaries
 
-Readability over density: wrapping/scrolling/modest control growth is preferred to shrinking text below 20px.
+- Model Freedom First;
+- free-form role action remains primary;
+- OOC is not World mutation or mechanics bypass;
+- no Narrative Preference;
+- no Reality Correction;
+- no slash-command/keyword mode detection;
+- no personality score/classifier;
+- no extra recommendation Provider call or Curator→Recommender blocking barrier;
+- no Open Threads/System/Inventory/Dynamic UI scope;
+- Save/Restore/Regenerate currentness remains authoritative;
+- Debug remains read-only;
+- MW-023 >=20px gameplay typography baseline remains protected.
 
-## 5. Protected MW-023 boundaries
+## 6. Package 2 Product gate
 
-- presentation-only;
-- no Narrative/World/Curator/Recommendation/Debug semantic change;
-- no Provider/model-input change;
-- no persistence/schema/currentness change;
-- no Package 2 features;
-- no visual identity/color redesign;
-- no font-family asset work;
-- no Dynamic UI;
-- no accessibility preference/DPI-scaling framework;
-- no Application Shell general refactor.
+After MW-024 + MW-025 integrate, Owner checks once:
 
-Main Menu/New Game Wizard are not redesign targets; harmless inheritance of a shared baseline is acceptable only if layout remains valid.
+1. normal role action behaves as before;
+2. OOC can guide the GM without creating protagonist/world/mechanics consequences by itself;
+3. subsequent normal play naturally reflects recent OOC guidance;
+4. recommendations feel informed by the current protagonist while still allowing deviation/growth;
+5. only final accepted role actions may become Character evolution evidence;
+6. unaccepted recommendation drafts and OOC do not mechanically rewrite Character;
+7. Save/reopen/Restore preserve mode and currentness.
 
-## 6. MW-023 gate
+Package 2 closes only on explicit Owner Product PASS.
 
-Codex highest state:
-
-`READY FOR INDEPENDENT REVIEW`
-
-Required flow:
-
-```text
-Codex implementation
-→ GPT Independent Review
-→ reviewed integration
-→ fresh Owner build
-→ bounded Owner readability confirmation
-```
-
-Owner acceptance question:
-
-> 游戏页面是否终于能以主聊天正文同等级的字号舒服地长期阅读，而右侧信息和辅助区域不再明显偏小？
-
-## 7. Next after MW-023 Product PASS
-
-Proceed immediately to approved Package 2:
+## 7. Next after Package 2
 
 ```text
-OOC / GM Guidance
-+ Character-guided Recommendations
-+ accepted Player action as Character evolution evidence
+Package 3  事务 / Open Threads
+↓
+Package 4  System / Public d20
+↓
+Package 5  factual Inventory
+↓
+Package 6  Internal Dynamic UI Host v0.1
+↓
+Package 7  V0 Core Closure Reality Gate
 ```
-
-Then continue Package 3 Open Threads → Package 4 System/Public d20 → Package 5 Inventory → Package 6 Internal Dynamic UI → Package 7 V0 Core Closure Reality Gate.
 
 ## 8. Retained audit/debt notes
 
 - G3-03 Context assertion remains known baseline debt until relevant Context work;
 - layer-boundary findings remain bounded architecture debt;
 - Application Shell decomposition remains evolutionary;
-- long-session Context Orchestrator / Structured Output Reliability remain G7.
-
-## 9. Protected project invariants
-
-- Model Freedom First;
-- free-form Player natural-language action remains primary;
-- `World Truth != actor Knowledge != human-player disclosure`;
-- UI/Debug is projection, never second truth;
-- Save / Restore / Regenerate currentness remains authoritative;
-- tests cover legitimate change and legitimate no-change/hold;
-- readability may reduce information density; do not solve readability by shrinking text again.
+- long-session Context Orchestrator / general Structured Output Reliability remain G7.
