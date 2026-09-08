@@ -1,11 +1,11 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 17.8
+version: 17.9
 created: 2026-08-26
 updated: 2026-09-08
 phase: G6 RPG Core Closure + UAT Observability + Internal Dynamic UI
-current_task: MW-020 Core Context Budget Accounting Correction
+current_task: Package 0 Fresh Owner Build Prep
 current_owner: Codex
 parent_task: G6 Core Closure Package 0
 semantic_owner: GPT
@@ -14,7 +14,7 @@ implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v4.3
 owner_uat_record: my-world/docs/uat/G6_PACKAGE0_OWNER_UAT_U1.md
 audit_triage: architecture/reviews/DEVELOPMENT_AUDIT_2026-09-08_ADOPTION_DECISION.md
-active_correction_decision: architecture/world/G6_CORE_CONTEXT_BUDGET_ACCOUNTING_CORRECTION_V1_0_DECISION.md
+reviewed_implementation_main: 5e5fd006fd17683ae811b17138df76a18b0b96aa
 ---
 
 # my world｜CURRENT STATUS
@@ -31,44 +31,40 @@ G5 World Semantics & GM Runtime             PRODUCT PASS / CLOSED
 G6 RPG Core Closure + UAT Observability + Internal Dynamic UI ACTIVE
 ```
 
-Current Package 0 correction train：
+Package 0 correction train is now Engineering-complete:
 
 ```text
 MW-018 R1 Known / Off-screen People          ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT RE-UAT PENDING
 MW-015 R1 Sparse Important Experiences       ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT RE-UAT PENDING
 MW-019 R1 Recommendation UX                  ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT RE-UAT PENDING
-MW-020 Core Context Budget Accounting        CURRENT / CODEX
+MW-020 Core Context Budget Accounting        ENGINEERING PASS_WITH_NOTES / INTEGRATED / NO STANDALONE PRODUCT GATE
 ↓
-fresh Owner build
+Fresh Owner Build Prep                       CURRENT / CODEX
 ↓
-focused Owner re-UAT
+Focused Owner re-UAT
 ↓
-Package 0 close only if product verdicts pass
+Package 0 closes only on explicit Owner product verdicts
 ```
 
 Package 1 UAT Observability / Debug Mode v0.1 remains first after Package 0 closes.
 
 ---
 
-## 2. Package 0 Owner UAT U1 — COMPLETE
+## 2. Reviewed implementation baseline for Owner build
 
-Formal evidence：
+Current reviewed implementation `main` after MW-020 integration verification:
 
-`my-world/docs/uat/G6_PACKAGE0_OWNER_UAT_U1.md`
+`5e5fd006fd17683ae811b17138df76a18b0b96aa`
 
-Confirmed product findings and correction state：
+The Product re-UAT build must contain all four reviewed corrections above. Do not build from the old Owner checkout HEAD or an individual task branch.
 
-- MW-018 — player-known/off-screen People eligibility seam was too narrow；R1 integrated, re-UAT pending；
-- MW-015 — Important Experiences over-generated into per-turn recap；R1 integrated, re-UAT pending；
-- MW-019 — recommendation controls needed short labels, detailed click-to-composer drafts, independent alternatives and larger/readable controls；R1 integrated, re-UAT pending。
-
-Do not grant Product PASS before focused Owner re-UAT.
+Build preparation is operational only; it is not authorization for new production changes.
 
 ---
 
-## 3. MW-018 R1 — INTEGRATED / ENGINEERING PASS_WITH_NOTES
+## 3. MW-018 R1 — People known/off-screen eligibility
 
-Reviewed implementation：
+Reviewed result:
 
 - implementation HEAD: `318a0a2a79bb5f45f582605ac6b98d891a368b4c`
 - submitted candidate: `8f48f3cc96a01b1c132c2ccb583193df9c93511a`
@@ -76,13 +72,19 @@ Reviewed implementation：
 - review commit: `97c1862f3e0c9809e8b8879130b0aade2a848681`
 - integration verification: `docs/mw018/MW-018_R1_INTEGRATION_VERIFICATION.md`
 
-Re-UAT note：if natural, clearly player-known people are still systematically suppressed by identity guardrails, reopen the seam rather than stacking more Program rules.
+Product re-UAT note:
+
+> Natural, clearly player-known/off-screen people should be eligible for model curation without requiring physical scene presence. If identity guardrails still systematically suppress such people, reopen the seam rather than stacking more Program rules.
+
+Incidental people may legitimately remain uncarded. Exact identity remains required; no display-name/fuzzy/first-match authority.
+
+No Product PASS yet.
 
 ---
 
-## 4. MW-015 R1 — INTEGRATED / ENGINEERING PASS_WITH_NOTES
+## 4. MW-015 R1 — Sparse Important Experiences
 
-Reviewed implementation：
+Reviewed result:
 
 - implementation HEAD: `aca189b35f5539a190e17a32590c5ca867459df3`
 - submitted candidate: `a9cb2ba7c253e8a9c2d07cbf058a6b8d55d16338`
@@ -90,108 +92,186 @@ Reviewed implementation：
 - review commit: `865f45c59abb8945f6dceb0dbceadc8f22e83335`
 - integration verification: `docs/mw015/MW-015_R1_INTEGRATION_VERIFICATION.md`
 
-Re-UAT must test both sparsity and freedom：ordinary turns should often produce no milestone, while quiet but genuinely life-shaping events remain recordable.
+Product re-UAT must test both sparsity and semantic freedom:
+
+```text
+ordinary accepted play
+→ very often experiences=[]
+
+true life-shaping event
+→ model may retain a concise milestone
+```
+
+No Program keyword/category/score/turn-threshold classifier was added. Character mutation and milestone mutation remain independent.
+
+No Product PASS yet.
 
 ---
 
-## 5. MW-019 R1 — INTEGRATED / ENGINEERING PASS_WITH_NOTES
+## 5. MW-019 R1 — Recommendation UX
 
-Reviewed implementation：
+Reviewed result:
 
-- formal base: `5168893109ef7d22ad3ef6b392988d602304e54c`
 - implementation HEAD: `23ba847169f901497a36fabe0514704969452d9e`
 - submitted candidate: `5fbb946e4841fc24fcff463e36603443db1664a6`
 - Independent Review: `docs/mw019/MW-019_R1_INDEPENDENT_REVIEW_IR1.md`
 - review commit: `0967aceb43ff685dd08114b9c9bda83870d3ef62`
 - integration verification: `docs/mw019/MW-019_R1_INTEGRATION_VERIFICATION.md`
-- integrated main tip after verification: `f5dea508be2db5904c2d5ebc726b6f130d8c57fe`
 
-Integrated result：one Action Recommender call produces exactly five `{label,draft}` pairs; UI shows short labels; click fills the paired detailed editable draft and never auto-sends or triggers a second recommendation call. Five-independent-next-action semantics remain model-owned; Program adds no semantic diversity/ranking/category classifier. Recommendation/composer typography and controls are materially larger within bounded local scope.
-
-Re-UAT notes：watch grounding embellishment, 10–25s-class recommendation latency, five-alternative usefulness and small-window scrolling comfort. Do not respond by adding Program semantic filters unless normal play proves a real blocker.
-
----
-
-## 6. MW-020 — CURRENT｜Core Context Budget Accounting Correction
-
-Frozen authority：
-
-`architecture/world/G6_CORE_CONTEXT_BUDGET_ACCOUNTING_CORRECTION_V1_0_DECISION.md`
-
-Trigger：2026-09-08 development audit + independent source confirmation.
-
-Proven defect：`WorldTurnContextProjector` does not account for the 16,000-character GM world-context budget from the actual assembled output exactly once. Existing code can both omit headings/separators from some checks and double-count already assembled world-change material before Agency/Evolution. A durable NPC action can therefore be excluded even though it physically fits.
-
-Required result：
+Integrated behavior:
 
 ```text
-used budget
-= actual already-assembled context_text length
-+ separator that will really be inserted
-
-candidate section fits
-iff final assembled context <= 16000
+one Action Recommender call
+→ exactly five {label,draft} pairs
+→ UI shows short labels
+→ click fills paired detailed editable draft
+→ click never sends
+→ click/edit makes zero extra recommendation calls
 ```
 
-Protected boundaries：
+Five-independent-next-action semantics remain model-owned. Program adds no semantic diversity/ranking/category classifier.
 
-- keep `MAX_PROJECTED_CHARS = 16000`；
-- include headings/newlines/separators exactly once；
-- preserve section order and existing all-or-nothing section policy；
-- preserve current accepted-hash / stale-history filtering；
-- no new semantic ranking/retrieval/summarization；
-- no larger budget；
-- no G7 Context Orchestrator；
-- no new Provider call / SQLite / storage redesign。
+Re-UAT notes:
 
-Required deterministic boundaries：fits exactly, one-character overflow, audit-equivalent no-double-count case, heading/separator accounting, final `context_text.length() <= 16000`, currentness/quiet-state regressions.
+- judge whether labels are concise and useful;
+- judge whether five items are genuinely standalone alternatives rather than a split plan;
+- watch model grounding embellishment;
+- observe recommendation latency (reviewed real cases were roughly 10–25 seconds);
+- judge small-window scrolling/readability comfort;
+- free-form input must remain effortless and primary.
 
-MW-020 is a correctness repair. Engineering PASS is sufficient for integration; no separate Owner Product UAT is required, but it must be integrated before preparing the next Owner build.
+No Product PASS yet.
 
 ---
 
-## 7. Next gate after MW-020
+## 6. MW-020 — Core Context Budget Accounting
+
+Reviewed result:
+
+- formal base: `f5dea508be2db5904c2d5ebc726b6f130d8c57fe`
+- implementation HEAD: `b423a5b3c7cdecd1d836920f1b053e3675a3bb0e`
+- submitted candidate: `9677f6987312230facb351964f6d800748618cf2`
+- Independent Review: `docs/mw020/MW-020_INDEPENDENT_REVIEW_IR1.md`
+- review commit: `66c28807e5074e1c59373b9139adb64fc2989944`
+- integration verification: `docs/mw020/MW-020_INTEGRATION_VERIFICATION.md`
+- integrated main tip after verification: `5e5fd006fd17683ae811b17138df76a18b0b96aa`
+
+Engineering verdict: **PASS_WITH_NOTES**.
+
+Result:
+
+- `MAX_PROJECTED_CHARS` remains 16000;
+- actual assembled context String is the sole budget truth;
+- headings/newlines/separators count exactly once;
+- Knowledge → Agency → Evolution each budget against current assembled text;
+- exact 16000 is retained; candidate 16001 is omitted under existing whole-section policy;
+- audit-equivalent durable Agency action now enters later GM context when it physically fits;
+- Restore/currentness filtering remains intact;
+- no Context Orchestrator / semantic retrieval / Provider call / persistence change.
+
+Focused evidence: 178 checks / 0 failures. Six directly affected G5/MW regressions exit 0. Known G5-03/G5-04 resource-exit warnings remain baseline/non-blocking.
+
+MW-020 has no separate Owner Product gate.
+
+---
+
+## 7. CURRENT — Fresh Owner Build Prep
+
+Codex now prepares the single focused re-UAT artifact from reviewed `main`.
+
+Required flow:
 
 ```text
-MW-020 Independent Review / integrate
+refresh remote main
 ↓
-safely sync Owner checkout without overwriting unknown local files
+confirm reviewed main / no newer production change
 ↓
-fresh Windows export verification
+safely inspect D:/AI/Projects/my-world
 ↓
-Owner Launch Ready
+preserve unknown/local modified/untracked Owner files
 ↓
-focused Package-0 re-UAT
+bring tracked checkout to reviewed main without reset/clean/force/data loss
+↓
+run established import / Windows export validation
+↓
+verify run-game.cmd / run-game.ps1 launch path
+↓
+return Owner Launch Ready
 ```
 
-Focused re-UAT targets：
+Do not:
 
-- People：natural known/off-screen people can become cards when meaningful; incidental people may remain absent; watch over-restriction and no-change collapse UX；
-- Important Experiences：ordinary play usually remains sparse; true milestones still appear；
-- Recommendations：short useful labels, detailed editable drafts, five standalone alternatives, free-form-first, reasonable arrival timing/readability；
-- Living World：no known context-budget omission contaminates observations。
+- add product changes;
+- delete or overwrite Owner's unknown files;
+- reset/clean/force the checkout;
+- modify real Game/Source/settings data;
+- consume real Provider calls merely to prepare the build;
+- grant Product PASS.
+
+If safe synchronization is blocked by an overlapping local modification, stop and report the exact conflict instead of discarding it.
 
 ---
 
-## 8. Package 1 — UAT Observability / Debug Mode v0.1
+## 8. Focused Package-0 Owner re-UAT
 
-Owner explicitly promoted this immediately after Package 0 because it lowers all later UAT cost.
+After Launch Ready, Owner tests one fresh build containing all reviewed corrections.
 
-Target：
+Primary targets:
+
+### People
+
+- a naturally known/off-screen meaningful person can become/update a card;
+- current physical presence is neither required nor sufficient;
+- incidental NPCs may remain absent;
+- watch for architecture over-restriction;
+- observe whether no-change background refresh collapses expanded cards enough to be a real UX blocker.
+
+### Important Experiences
+
+- ordinary travel/questioning/routine scene progress usually does not append a milestone;
+- genuinely life-shaping choices/events can still be recorded;
+- quiet-but-important events must not be mechanically suppressed.
+
+### Recommendations
+
+- five concise labels are easy to scan;
+- clicking fills the corresponding detailed draft but never sends;
+- draft remains freely editable;
+- five entries are independently selectable next actions, not one plan split into steps;
+- free-form action remains primary;
+- assess arrival latency, grounding, readability and small-window scrolling.
+
+### Living World / continuity
+
+- no known context-budget omission contaminates observations;
+- Save/reopen/Restore/currentness remains credible during ordinary play.
+
+Product PASS remains Owner-only.
+
+---
+
+## 9. Package 1 — UAT Observability / Debug Mode v0.1
+
+Immediately after Package 0 closes, GPT Task-Shapes Package 1.
+
+Target:
 
 ```text
 Debug OFF → normal play unchanged
-Debug ON  → per accepted Turn compact UAT trace
+
+Debug ON → per accepted Turn compact UAT trace
 Narrative / World semantic / actor identity / Character / Experiences / People / Recommendations / Save-Restore
 → changed / no-change / failed / stale / cancelled
 → human-readable sanitized failure reason
 ```
 
-Audit finding about collapsed recommendation/curation failure reasons belongs here. No giant EventBus, credentials or hidden GM/NPC-private semantic values.
+Audit finding about collapsed recommendation/curation failure reasons belongs here.
+
+Do not build a giant EventBus, expose credentials or reveal hidden GM/NPC-private semantic values by default.
 
 ---
 
-## 9. Owner-approved core route after Package 0
+## 10. Owner-approved core route after Package 0
 
 ```text
 Package 1  UAT Observability / Debug Mode v0.1
@@ -213,40 +293,42 @@ Dynamic UI remains Core-required before V0 closure. Old MW-013 packet remains st
 
 ---
 
-## 10. Audit triage retained
+## 11. Audit triage retained
 
-Canonical：`architecture/reviews/DEVELOPMENT_AUDIT_2026-09-08_ADOPTION_DECISION.md`
+Canonical:
 
-- context-budget bug：MW-020 CURRENT；
-- failure diagnostics：Package 1；
-- People no-change collapse UX：observe in re-UAT；
-- 8 layer-boundary findings：architecture debt, opportunistic/bounded hygiene only；
-- Application Shell concentration：evolutionary extraction as real consumers arrive；
-- documentation drift：Current Status/Roadmap are authoritative; reduce duplicate fast-moving stage tables over time。
+`architecture/reviews/DEVELOPMENT_AUDIT_2026-09-08_ADOPTION_DECISION.md`
 
----
-
-## 11. Protected project invariants
-
-- Model Freedom First；
-- free-form Player natural-language action remains primary；
-- `World Truth != actor Knowledge != human-player disclosure`；
-- Program owns structure/identity/currentness/persistence, not open semantic meaning；
-- Save / Restore / Regenerate currentness remains authoritative；
-- semantic tests cover both legitimate update and legitimate no-op/hold；
-- no generic framework pulled forward solely for a correction。
+- context-budget bug: repaired by MW-020;
+- failure diagnostics: Package 1;
+- People no-change collapse UX: observe in re-UAT, fix only if materially disruptive;
+- eight layer-boundary findings: architecture debt, opportunistic/bounded hygiene only;
+- Application Shell concentration: evolutionary extraction as real consumers arrive;
+- documentation drift: Current Status/Roadmap are authoritative; reduce duplicate fast-moving tables over time.
 
 ---
 
-## 12. Agent routing
+## 12. Protected project invariants
+
+- Model Freedom First;
+- free-form Player natural-language action remains primary;
+- `World Truth != actor Knowledge != human-player disclosure`;
+- Program owns structure/identity/currentness/persistence, not open semantic meaning;
+- Save / Restore / Regenerate currentness remains authoritative;
+- semantic tests cover both legitimate update and legitimate no-op/hold;
+- no generic framework pulled forward solely for a correction.
+
+---
+
+## 13. Agent routing
 
 ```text
 GPT
 → product semantics / Task Shaping / Independent Review / integration / UAT interpretation
 
 Codex
-→ current MW-020 implementer
+→ Fresh Owner Build Prep from reviewed main only
 
 Owner
-→ focused Product re-UAT only after MW-020 is reviewed/integrated and a fresh build is prepared
+→ focused Package-0 Product re-UAT after Owner Launch Ready
 ```
