@@ -1,25 +1,27 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 17.18
+version: 17.19
 created: 2026-08-26
 updated: 2026-09-08
 phase: G6 RPG Core Closure + UAT Observability + Internal Dynamic UI
-current_task: Package 2 Fresh Owner UAT Build Prep
-current_owner: Codex
+current_task: Package 2 Combined Owner UAT U1
+current_owner: Owner
 parent_task: G6 Package 2 Core Interaction Control
 semantic_owner: GPT
-owner_uat_required: true
+owner_uat_required: active
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v4.4
 package1_closure_record: my world/docs/uat/G6_PACKAGE1_DEBUG_MODE_OWNER_UAT_U1.md
 mw023_closure_record: my world/docs/uat/G6_MW023_TYPOGRAPHY_OWNER_UAT_U1.md
 active_architecture: architecture/interaction/G6_CORE_INTERACTION_CONTROL_V1_0_DECISION.md
+active_uat_record: my world/docs/uat/G6_PACKAGE2_OWNER_UAT_U1.md
 mw024_review: my-world/docs/mw024/MW-024_INDEPENDENT_REVIEW_IR1.md
 mw024_integration: my-world/docs/mw024/MW-024_INTEGRATION_VERIFICATION.md
 mw025_review: my-world/docs/mw025/MW-025_INDEPENDENT_REVIEW_IR1.md
 mw025_integration: my-world/docs/mw025/MW-025_INTEGRATION_VERIFICATION.md
-reviewed_implementation_main: 716d8dbfadaad07d992baef531912b6ce1078e2d
+reviewed_product_code: 716d8dbfadaad07d992baef531912b6ce1078e2d
+owner_build_pck_sha256: 62ee95f113bbbc905fd29762149bb2cf4641d008d9fe0a18cc84c2ec5547d0bc
 ---
 
 # my world｜CURRENT STATUS
@@ -42,10 +44,10 @@ Current G6 flow:
 Package 0  Correction Train + Owner UAT          PRODUCT PASS / CLOSED
 Package 1  UAT Observability / Debug Mode v0.1   PRODUCT PASS / CLOSED
 MW-023     Gameplay Typography Readability        PRODUCT PASS / CLOSED
-Package 2  Core Interaction Control              ENGINEERING PASS_WITH_NOTES / INTEGRATED / OWNER UAT BUILD PREP
+Package 2  Core Interaction Control              OWNER UAT ACTIVE
   MW-024   OOC / GM Guidance                     ENGINEERING PASS_WITH_NOTES / INTEGRATED
   MW-025   Character-guided Recommendations      ENGINEERING PASS_WITH_NOTES / INTEGRATED
-  Owner    combined Package-2 UAT                 NEXT
+  Owner    combined Package-2 UAT U1              CURRENT
 Package 3  Open Threads                          QUEUED
 Package 4  System / Public d20                   QUEUED
 Package 5  factual Inventory                     QUEUED
@@ -119,7 +121,7 @@ Reviewed result:
 - Implementation: `0be20d7e39f061a390fb56598a61990d1495a353`
 - Candidate: `adb8bccab3709357ce1de69edb7af3bd345d9f1c`
 - Independent Review: `cc6a2d05b54ec35dbef47fe45a9fd5ec3ae505de`
-- Integration verification/reviewed main: `716d8dbfadaad07d992baef531912b6ce1078e2d`
+- Integration verification/reviewed product code: `716d8dbfadaad07d992baef531912b6ce1078e2d`
 
 Integrated behavior:
 
@@ -136,56 +138,51 @@ Integrated behavior:
 - OOC, clicked-but-unsent recommendations and cancelled/failed attempts are not Character evidence;
 - strict five `{label,draft}` recommendation contract remains unchanged.
 
-Engineering evidence includes focused timing/privacy/currentness tests, real-window checks, direct regressions and two bounded real Kimi recommendation samples with different safe Character snapshots.
-
 Retained Product risks:
 
 - Owner must judge Character fit versus self-locking/repetition;
 - real model occasionally extrapolated small unstated scene details;
 - long-session Character feedback quality remains Product UAT evidence, not Engineering proof.
 
-## 6. CURRENT — Fresh Owner Package-2 UAT Build Prep
+## 6. CURRENT — Package 2 Owner UAT U1
 
-Build only from reviewed implementation `main`:
+Formal UAT record:
+
+`my world/docs/uat/G6_PACKAGE2_OWNER_UAT_U1.md`
+
+Reviewed product code is frozen during UAT:
 
 `716d8dbfadaad07d992baef531912b6ce1078e2d`
 
-Operational flow only:
+Owner launch-ready build evidence:
 
-```text
-refresh origin/main
-→ safely sync D:/AI/Projects/my-world tracked checkout
-→ preserve Owner local/unknown files
-→ final Godot import
-→ fresh Windows export validation
-→ verify run-game.cmd / run-game.ps1
-→ OWNER LAUNCH READY
-```
+- local HEAD == origin/main == reviewed product code;
+- fresh PCK built `2026-09-08T13:06:13Z`;
+- PCK SHA256 `62ee95f113bbbc905fd29762149bb2cf4641d008d9fe0a18cc84c2ec5547d0bc`;
+- `.gitignore` local modification + original ten untracked sidecars preserved unchanged;
+- final Godot import / fresh Windows export / `-ValidateExportOnly` all succeeded;
+- Owner launch command: `D:/AI/Projects/my-world/run-game.cmd`.
 
-No new production-code change, Provider call or real Game/Source/settings mutation is authorized during build prep.
+During UAT, do not modify production code unless Owner reports a hard blocker preventing meaningful continuation. Owner may submit incremental findings; accumulate them until Owner explicitly ends the UAT or gives a final verdict.
 
-## 7. Combined Package-2 Owner UAT
-
-Owner should use normal real play. No synthetic engineering checklist is required.
-
-Primary observations:
+Primary Product observations:
 
 1. normal `角色行动` still behaves as before;
-2. OOC lets Owner tell the GM how to play the current/recent segment and receives a clearly OOC response;
+2. OOC feels like talking directly to GM and receives an OOC response;
 3. OOC itself creates no d20/World/Character/People consequence;
 4. subsequent normal play naturally respects recent OOC guidance;
-5. recommendations feel more like things the current protagonist might genuinely consider;
-6. recommendations still preserve meaningful deviation/growth rather than becoming personality-locked;
+5. recommendations feel informed by the current protagonist;
+6. recommendations still preserve meaningful deviation/growth rather than personality lock-in;
 7. repeated/meaningful final accepted role choices may gradually influence Character when the model judges them significant;
 8. one-off/unaccepted/OOC text does not mechanically rewrite Character;
 9. free-form role action remains fully available;
 10. Save/reopen/Restore preserve mode/currentness.
 
-Debug Mode may be used to confirm that OOC does not schedule World/Curator lanes and that ordinary role actions still do.
+Debug Mode may be used to confirm that OOC does not schedule World/Curator lanes and ordinary role actions still do.
 
 Package 2 closes only on explicit Owner Product PASS.
 
-## 8. Next after Package 2 Product PASS
+## 7. Next after Package 2 Product PASS
 
 ```text
 Package 3  事务 / Open Threads
@@ -199,7 +196,7 @@ Package 6  Internal Dynamic UI Host v0.1
 Package 7  V0 Core Closure Reality Gate
 ```
 
-## 9. Retained audit/debt notes
+## 8. Retained audit/debt notes
 
 - exact-baseline G3 Context assertions remain debt until the relevant Context task;
 - existing teardown/resource warnings remain non-blocking baseline evidence;
@@ -207,7 +204,7 @@ Package 7  V0 Core Closure Reality Gate
 - Application Shell decomposition remains evolutionary;
 - long-session Context Orchestrator / general Structured Output Reliability remain G7.
 
-## 10. Protected project invariants
+## 9. Protected project invariants
 
 - Model Freedom First;
 - free-form natural-language role action remains primary;
