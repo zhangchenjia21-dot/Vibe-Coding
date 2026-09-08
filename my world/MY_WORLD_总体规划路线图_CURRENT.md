@@ -1,28 +1,28 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 4.3
+version: 4.4
 created: 2026-08-25
-updated: 2026-09-07
+updated: 2026-09-08
 current_phase: G6
 current_status_source: MY_WORLD_CURRENT_STATUS.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
-supersedes: v4.2
+supersedes: v4.3
 ---
 
 # my world｜总体规划路线图 CURRENT
 
 ## 0. 文档职责
 
-本文件拥有 G1–G9 阶段顺序、当前 Core-first Task Axis、Stage Gate、Deferred / Non-scope 与排序原因。实时 PASS / blocker / current owner 以 `MY_WORLD_CURRENT_STATUS.md` 为准。
+本文件拥有 G1–G9 阶段顺序、当前 Core-first Package Axis、Stage Gate、Deferred / Non-scope 与排序原因。实时 PASS / blocker / current owner 以 `MY_WORLD_CURRENT_STATUS.md` 为准。
 
-Owner 于 2026-09-07 冻结以下路线原则：
+Owner 冻结路线原则：
 
 > **优先保证游戏尽快完成完整游戏闭环。核心开发先做；扩展功能、体验优化、Creator、Reference 与其它外围增强后置。**
 
 > **Internal Dynamic UI 是 V0 核心能力，必须在 V0 Core Closure Reality Gate 前完成。**
 
-> **UAT observability 直接降低后续每个核心 Package 的 Owner 验收成本，因此 Debug Mode + 回合级后台变化可视化前移到当前 UAT Gate 关闭后的第一优先级。**
+> **UAT observability 直接降低后续每个核心 Package 的 Owner 验收成本，因此 Debug Mode + 回合级后台变化可视化是 Package 0 关闭后的第一优先级。**
 
 继续遵守：Vertical before platform；Consumer before Creator；真实需求 → 最小能力 → 真实 consumer → Owner UAT → 再抽象。
 
@@ -70,7 +70,7 @@ G6 的任务是把这条技术脊柱收敛成**完整、可观察、可长期试
 
 # G1–G5｜CLOSED
 
-G1–G5 的 Foundation、Conversation、Persistence/Timeline、Source/Game Creation、Living World 均已关闭；当前不因路线重排重新开启。
+G1–G5 不因后续路线调整重新开启。
 
 ---
 
@@ -84,57 +84,83 @@ Owner 可以完成一局连续真实试玩，并确认：
 
 ## G6 Core-first Package Order
 
-### Package 0｜MW-018 + MW-019 Combined Owner UAT｜CURRENT
+### Package 0｜Correction Train + Focused Owner UAT｜PRODUCT PASS / CLOSED
 
-- MW-018 People：Engineering PASS / Integrated / Owner UAT active；
-- MW-019 Five Recommended Actions：Engineering PASS / Integrated / Owner UAT active。
+Package 0 已于 2026-09-08 关闭。
 
-Owner 继续正常试玩并累计 finding。真实 defect 留在各自 lineage；MW-019 当前已出现推荐选项文本过长/拥挤与 UI 尺寸偏小的产品 finding，最终 correction 在本轮 UAT 收束后统一 Task Shape。
+Final outcomes：
 
-**Exit：** MW-018 / MW-019 分别获得 Owner Product verdict；若需 revision，完成 bounded correction + focused re-UAT 后关闭 Package 0。
+```text
+MW-018 R1 People                  PRODUCT PASS
+MW-015 R1 Important Experiences  PRODUCT PASS
+MW-019 R1 Recommendations        PRODUCT PASS
+MW-020 Context Budget            ENGINEERING PASS_WITH_NOTES / INTEGRATED
+MW-021 Narrative Scroll          PRODUCT PASS
+```
+
+Formal closure evidence：
+
+`docs/uat/G6_PACKAGE0_OWNER_REUAT_U2.md@v1.2`
+
+当前 reviewed/integrated closure artifact：
+
+`my-world/main@d81f5f215360780cc50038ccd3bce7cb4163b866`
+
+Package 0 不因后续相邻 UI 工作自动重开；只有新的具体 regression 才进入对应 lineage。
 
 ---
 
-### Package 1｜UAT Observability / Debug Mode｜CORE UAT LEVERAGE
+### Package 1｜UAT Observability / Debug Mode v0.1｜CURRENT
 
 **目标：让后续核心开发每做一项，Owner 都能低成本判断“系统后台到底有没有真的变化”。**
 
 这是 P-34 Debug Mode 与 P-32 Consequence Diff 的一个**前置 UAT 切片**，不等于提前实现完整玩家版“本回合变化”。
 
-v0.1 至少提供：
+Current executable outcome：
+
+`MW-022｜UAT Observability / Debug Mode v0.1`
+
+Frozen architecture：
+
+`architecture/observability/G6_UAT_OBSERVABILITY_DEBUG_MODE_V0_1_DECISION.md`
+
+v0.1：
 
 ```text
 Debug Mode OFF
-→ 与普通模式体验一致
+→ 普通游戏体验不变
 
 Debug Mode ON
-→ 每个 accepted Turn 显示 bounded UAT trace
-→ domain terminal state + changed / no-change / failed / stale / cancelled
-→ 异常时自动给出人能理解的错误原因
+→ bounded read-only UAT panel
+→ recent accepted Turn trace
+→ Narrative / World / Identity / Character / Experiences / People / Recommendations / Save-Restore
+→ changed / no-change / failed / stale / cancelled 等真实终态
+→ 异常时显示人能理解的安全原因
 ```
 
-第一批应覆盖当前已经存在的真实 lane / owner，例如：
+第一批真实 consumers：
 
-- Narrative accepted / failed；
+- Narrative accepted / failed / cancelled；
 - World semantic changed / no-change / failed / stale；
-- actor/NPC materialization / identity bridge terminal；
+- actor/NPC materialization / identity bridge structural terminal；
 - Character changed / no-change；
 - Important Experiences changed / no-change；
 - People changed / no-change；
-- Recommendations success / malformed / unavailable / stale；
+- Recommendations ready / malformed / provider failure / timeout / unavailable / stale；
 - Save / Restore / currentness 关键结果。
-
-之后 Open Threads、System/mechanics、Inventory 完成时接入同一只读诊断投影，不为每个新模块再造一套日志 UI。
 
 保护：
 
-- 默认只显示“是否变化 + terminal state + Turn / Provider / Model 等必要诊断”，**不默认展开 GM-private / NPC-private 的隐藏语义内容**，避免 UAT 被剧透；
-- player-visible 结构可按需显示 safe diff；
-- Debug Mode 只读，不成为第二事实源，不改变模型输入、判定、world mutation 或 currentness；
-- 不输出 API Key / credential / 无关本机隐私；
-- 不建设 giant EventBus / universal telemetry framework；优先聚合现有 domain terminal evidence。
+- Debug UI 独立于 `概览/角色/重要经历/人物/...` 玩家信息 taxonomy；
+- 默认只显示 terminal/change/Turn/Provider/Model/安全计数，不默认展开 GM-private / NPC-private 隐藏语义；
+- player-visible 数据只允许 safe projection 范围内的 bounded evidence；
+- Debug Mode 只读，不改变模型输入、World mutation、mechanics、推荐严格性或 currentness；
+- 不输出 API Key / credential / raw provider payload / model reasoning；
+- 不建设 giant EventBus / universal telemetry platform；
+- 不持久化 Debug history/preferences；
+- Open Threads、System、Inventory 成为真实 consumer 后再接入同一 bounded observability seam。
 
-**Exit：** Owner 能在一次真实回合后快速判断关键后台域是否变化，并在异常时看到具体失败原因，而无需手工查日志/数据库。
+**Exit：** Owner 能在真实一回合后快速判断关键后台域是否变化，并在异常时看到具体安全失败原因；Debug OFF 时正常游戏不受影响。
 
 ---
 
@@ -152,7 +178,7 @@ Debug Mode ON
 
 让玩家知道当前未解决的问题、线索、承诺、计划和风险。优先扩展 Information Curator；不建设 Quest keyword/rule engine。
 
-Package 1 Debug Mode 同步显示本回合 `Open Threads changed / no-change / failed`。
+Package 1 Debug Mode 同步显示 `Open Threads changed / no-change / failed`。
 
 ---
 
@@ -166,7 +192,7 @@ real mechanic owner
 → System Surface
 ```
 
-不硬编码虚构 HP / Mana / Hunger / Money。Package 1 Debug Mode 同步接入 mechanics terminal/change evidence。
+不硬编码虚构 HP / Mana / Hunger / Money。Debug Mode 接入 mechanics terminal/change evidence。
 
 ---
 
@@ -182,7 +208,7 @@ real mechanic owner
 → Save / Restore / reopen 一致
 ```
 
-不提前建设装备槽、loot、crafting、economy、durability 或复杂 stack framework。Package 1 Debug Mode 同步显示 Inventory 是否真实变化。
+不提前建设装备槽、loot、crafting、economy、durability 或复杂 stack framework。Debug Mode 显示 Inventory 是否真实变化。
 
 ---
 
@@ -273,7 +299,7 @@ Launch / New Game / Continue
 - Player-known World Chronicle；
 - **完整玩家版** Player-visible Consequence Diff。
 
-注意：Package 1 只前移 UAT/debug 用的“域是否变化 + safe diff”切片；完整玩家体验仍在此成熟。
+Package 1 只前移 UAT/debug 用“域是否变化 + safe bounded evidence”切片；完整玩家体验仍在 G8 成熟。
 
 ### Package 11｜Player Utility / Personalization / Archive
 
@@ -291,7 +317,7 @@ Launch / New Game / Continue
 - Model Profiles；
 - richer observability dashboard。
 
-Debug Mode 核心 v0.1 已前移 Package 1；这里仅做其后续成熟，不重新造第二套诊断系统。
+Debug Mode 核心 v0.1 已前移 Package 1；这里仅成熟它，不重新造第二套诊断系统。
 
 ### Package 13｜Source Library / Reference / Creator
 
@@ -325,4 +351,4 @@ Source Library 作品化 + Composition
 
 继续不提前建设：multiplayer / cloud account / server dependency、3D free-movement、full-universe per-NPC tick simulator、universal ECS / giant EventBus、arbitrary external code execution、giant universal Source/UI schema、automatic map generation before real evidence、generic Action Intent、external Declarative UI before Internal Dynamic UI production evidence、Visual Runtime before authored first-party demand。
 
-本轮未通过的提案不进入路线，除非未来 Owner 明确重新开启。
+未通过的提案不进入路线，除非未来 Owner 明确重新开启。
