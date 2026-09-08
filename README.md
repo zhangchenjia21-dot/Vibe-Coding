@@ -16,6 +16,9 @@ skill/
 项目经验/
 → 跨项目 Lifecycle、复盘与通用开发经验
 
+建模/
+→ AI 辅助 3D / 建筑场景建模、Digital Masterplan、资产模块化、Blender Stage Gate 与 QA 经验
+
 workbench/
 → Personal Workbench 项目 Product / Architecture / Roadmap / Decisions / Current Status / Reference Audit
 
@@ -63,4 +66,4 @@ Skill 子树规则见 [`skill/AGENTS.md`](./skill/AGENTS.md)，迁移 provenance
 
 > **Root is map; subfolders are depth.**
 
-顶层保持少数稳定入口；项目深度进入各项目子目录；跨项目方法进入 `skill/`；经验进入 `项目经验/`；历史进入 `99_归档/`。
+顶层保持少数稳定入口；项目深度进入各项目子目录；跨项目方法进入 `skill/`；一般经验进入 `项目经验/`；AI 3D / 建筑建模领域经验进入 `建模/`；历史进入 `99_归档/`。
