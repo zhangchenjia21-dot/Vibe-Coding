@@ -1,9 +1,9 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 17.5
+version: 17.6
 created: 2026-08-26
-updated: 2026-09-07
+updated: 2026-09-08
 phase: G6 RPG Core Closure + UAT Observability + Internal Dynamic UI
 current_task: MW-015 R1 Sparse Important Experiences Milestone Semantics
 current_owner: Codex
@@ -15,6 +15,7 @@ current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v4.3
 owner_uat_record: my-world/docs/uat/G6_PACKAGE0_OWNER_UAT_U1.md
 active_task_packet: my-world/docs/tasks/MW-015_R1_SPARSE_IMPORTANT_EXPERIENCES_TASK.md
 active_task_branch: mw-015-r1-sparse-milestones
+audit_triage: architecture/reviews/DEVELOPMENT_AUDIT_2026-09-08_ADOPTION_DECISION.md
 ---
 
 # my world｜CURRENT STATUS
@@ -38,6 +39,7 @@ Current Package 0 correction train：
 MW-018 R1 Known / Off-screen People          ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT RE-UAT PENDING
 MW-015 R1 Sparse Important Experiences       CURRENT / CODEX
 MW-019 R1 Recommendation UX                  QUEUED NEXT
+Core Context Budget Accounting Correction    QUEUED AFTER MW-019 / BEFORE RE-UAT
 ↓
 focused Owner re-UAT
 ↓
@@ -79,7 +81,7 @@ Independent Review note to preserve in re-UAT：
 
 > If natural, clearly player-known people are still systematically suppressed by identity guardrails, treat that as architecture over-restriction and reopen the seam instead of stacking more rules.
 
-No Product PASS yet; focused Owner re-UAT happens after MW-015 R1 + MW-019 R1 are integrated.
+No Product PASS yet; focused Owner re-UAT happens after the current correction train and the proven context-budget correctness fix are integrated.
 
 ---
 
@@ -126,7 +128,7 @@ Codex highest return state：`READY FOR INDEPENDENT REVIEW`.
 
 ## 5. MW-019 R1 — QUEUED NEXT
 
-After MW-015 R1 Independent Review / integration, GPT will automatically shape and dispatch the final Package 0 correction：
+After MW-015 R1 Independent Review / integration, GPT will automatically shape and dispatch the final user-facing Package 0 correction：
 
 ```text
 short recommendation direction labels
@@ -140,7 +142,30 @@ Character-guided recommendation personalization remains later Package 2 work; it
 
 ---
 
-## 6. Owner-approved route after Package 0
+## 6. 2026-09-08 Development Audit triage
+
+Canonical adoption record：
+
+`architecture/reviews/DEVELOPMENT_AUDIT_2026-09-08_ADOPTION_DECISION.md`
+
+### Proven correctness fix inserted before re-UAT
+
+Independent inspection confirms the current WorldTurnContextProjector can double-count already assembled world-change text when budgeting later Agency / Evolution material. This can omit durable NPC/world actions that still fit the configured budget.
+
+Therefore, after MW-019 R1 and before focused Owner re-UAT, GPT will shape one bounded **Core Context Budget Accounting Correction**. It must fix accounting and boundary tests only; it does not pull forward the G7 Context Orchestrator or enlarge the total budget to hide the bug.
+
+### Other audit findings
+
+- backend failure-reason preservation is merged into Package 1 Debug Mode acceptance；
+- eight reported layer-boundary violations are tracked as architecture debt, repaired when touched or in a bounded hygiene pass around Dynamic UI, not allowed to preempt the Core loop merely because the audit skill labels them P0；
+- People card re-collapse on no-change refresh is tracked as a real UX defect, but does not expand the current train unless focused re-UAT shows material disruption；
+- Application Shell decomposition is evolutionary: extract real consumers as they appear, then let Dynamic UI abstract repeated patterns；
+- README/AGENTS/architecture propagation lag is governance hygiene and should be corrected at a safe integration boundary rather than moving implementation `main` during an active task；
+- formal Provider structured-output capability remains later reliability work unless MW-019 re-UAT proves a current recommendation-availability blocker。
+
+---
+
+## 7. Owner-approved route after Package 0
 
 ```text
 Package 1  UAT Observability / Debug Mode v0.1
@@ -162,17 +187,18 @@ Debug Mode is deliberately first because it lowers Owner UAT cost across every l
 
 ---
 
-## 7. Protected project invariants
+## 8. Protected project invariants
 
 - free-form Player action remains primary；
 - `World Truth != actor Knowledge != human-player disclosure`；
 - Model Freedom First：Program only owns structural/integrity boundaries, not open semantic meaning；
 - Save / Restore / Regenerate currentness remains authoritative；
+- every semantic capability should test both legitimate update and legitimate no-op behavior；
 - no generic framework pulled forward solely for a correction。
 
 ---
 
-## 8. Agent routing
+## 9. Agent routing
 
 ```text
 GPT
@@ -182,5 +208,5 @@ Codex
 → current MW-015 R1 implementer
 
 Owner
-→ one focused Product re-UAT after the correction train is complete
+→ one focused Product re-UAT after the correction train + context-budget correctness fix are complete
 ```
