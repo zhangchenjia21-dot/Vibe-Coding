@@ -3,7 +3,7 @@ name: minecraft-builder
 description: Guide Codex when designing, revising, planning, or constructing Minecraft buildings, settlements, terrain-integrated environments, historical architecture, fantasy architecture, landscapes, gardens, and mixed architectural-landscape worlds. Use when architectural quality, spatial logic, terrain fit, vertical composition, circulation, landscape structure, vegetation massing, style coherence, or settlement form matter. Prioritize one major target at a time, research or world-rule grounding, causal design logic, plan-section-sequence thinking, terrain and landscape integration, functional validity, coherent asset use, staged construction, and bounded rebuilds. Do not use for Minecraft infrastructure setup, protocol/MCP debugging, or unrelated coding tasks.
 ---
 
-# minecraft-builder v1.1
+# minecraft-builder v1.2
 
 > [!abstract] 定位
 > 用于 Minecraft 建筑、建筑群、聚落、园林、景观与环境改造的通用空间设计原则。它约束“怎样思考、设计、施工和检查”，不绑定具体施工工具、Mod、版本或某个项目状态。
@@ -167,6 +167,37 @@ description: Guide Codex when designing, revising, planning, or constructing Min
 
 花、草、小灌木、荷叶、藤蔓、地被、小型点景植物等可在后期 Micro 阶段补充。
 
+但“后期补充”不等于“可有可无”。对于本来应具有丰富近地层植物的园林、林地、乡野、河岸、庭院等环境，应主动检查目标 Minecraft 运行时可用的原版 / 已安装植物 palette，而不是只使用树叶方块模拟所有林下层。
+
+适合题材时，可以主动使用例如：
+
+- 短草 / 高草；
+- 蕨类；
+- 苔藓与贴地植物；
+- 蒲公英、罂粟；
+- 郁金香；
+- 矢车菊；
+- 滨菊；
+- 其它与当地生态、季节、园艺或文化语境相符的小型植物。
+
+这些只是可用语言示例，不是要求每个场景都使用，也不得为了“丰富”而把不同颜色花朵随机撒满地面。
+
+### Ground Plane｜地表本身也必须被设计
+
+在经过主动设计的场地中，`grass_block` 不能自动被视为“已经完成的地面”。应根据空间职责判断这里究竟是：
+
+- 有意识保留的草坪 / 草坡；
+- 林下地表；
+- 苔藓地；
+- 裸土 / 粗土；
+- 碎石 / 砾石；
+- 铺装；
+- 农田 / 花圃；
+- 水岸过渡；
+- 或其它符合题材的地表。
+
+大面积纯草地完全可以成立，但必须是有明确尺度、功能、生态或构图理由的**设计结果**，不能只是因为超平坦或地形生成默认留下了草方块。
+
 ## 10. 自然式植被必须是“受约束的不规则”，不是网格，也不是纯随机
 
 自然式园林、森林、河岸、山地植被默认禁止无理由的：
@@ -295,6 +326,7 @@ player scale
 - 活板门；
 - 花草；
 - 小灌木；
+- 地被与 Ground Plane 的细化；
 - 铺地变化；
 - 小型点景。
 
@@ -307,6 +339,35 @@ player scale
 不要把不同作者、不同体系下只因为都标为“medieval”“fantasy”“tree”或“garden”的资产机械混用。
 
 也不要连续复制同一建筑或同一树蓝图。优先使用真实 variant，并通过朝向、地形关系、组合方式和上下文产生变化。不得依赖简单重复制造规模感。
+
+### Reusable Generator ≠ Repeated Morphology
+
+代码复用、参数化函数、模板和蓝图是实现手段，不是设计理由。
+
+如果两个对象的功能、等级、地形关系或空间职责明显不同，不应只通过“同一个 generator 改长宽高 / 换材料”制造差异。应检查它们是否需要不同的：
+
+- 体量组合；
+- 屋顶 / 顶部轮廓；
+- 开口节奏；
+- 结构方式；
+- 入口关系；
+- 与地形、道路和庭院的接口；
+- skyline 权重。
+
+回廊、柱列、军营、行列住宅等原型本来依赖重复时，可以有意识地重复；禁止的是**无意识的参数化复制感**。
+
+### Controlled Material Language｜受控材料语言
+
+“材质丰富”不等于随机混很多方块。设计应先形成清楚的材料层级，例如：
+
+- primary material / 主体材料；
+- secondary material / 次要材料；
+- structural accent / 构造强调；
+- transition / weathering / 边界、风化或地形过渡材料。
+
+大面积墙面、屋面、岩壁、铺地或地表如果长期只有单一纹理，应检查这是不是题材和构造的真实结果，而不是生成方便造成的平板化表面。
+
+目标运行时若提供合适的 stairs / slabs / walls / fences / trapdoors 或其它形状、状态与材料变体，可用于改善屋顶坡面、檐口、墙脚、开口、边缘、岩体和铺地的几何层次；但不得为了“细节”无意义堆零件。
 
 ## 15. 小修补与整体重构采用不同策略
 
@@ -340,6 +401,24 @@ player scale
 
 不得只用顶视图判断三维景观是否成功。
 
+### Construction Integrity Sweep｜施工完整性检查
+
+阶段完成和最终交付前，应主动检查是否存在**非设计意图**造成的：
+
+- floating / 悬空残片；
+- isolated / disconnected 小型几何；
+- 石块、岩体、挡墙、台地边缘或建筑构件与主体意外断开；
+- 浮空植被或施工残留；
+- 地形 / 建筑交界处明显缺少应有支承或接口。
+
+这不是要求模拟现实物理，也不是要求每个 Minecraft 方块都直接接触下方方块。桥、拱、梁、挑檐、悬挑平台，以及题材明确允许的魔法悬浮都可以成立。
+
+检查目标是区分：
+
+> **intentional cantilever / suspension** 与 **unintended orphan geometry**。
+
+如果工具允许，应结合连通分量、局部支承关系、目标对象包围盒、剖面 / 透视和玩家视点检查；不要只检查建筑楼板，也应覆盖岩石、挡墙、地形构件、植被和其它明显重型几何。
+
 ## 17. Final Spatial Review｜最终必须检查玩家实际体验
 
 大型 / 复杂 / Landscape / Mixed 项目在交付前至少检查以下问题：
@@ -363,6 +442,24 @@ player scale
 - 大型植被是否真的形成围合、遮挡、框景、背景或 skyline？
 - 是否主要依赖尺度明显不足的原生小树？
 - 是否有疏密、层级、林缘和树冠变化？
+
+### Ground Plane & Detail Vegetation
+
+- 设计范围内的大面积 `grass_block` 是否真的是有意识的草坪 / 草坡，而不是未完成的默认基底？
+- 题材本应具有近地植物层时，是否真实使用了合适的草、蕨、苔藓、花卉、地被或其它小型植物？
+- 花草是否按 cluster / edge / gradient / ecological or cultural logic 组织，而不是彩色随机撒点？
+
+### Material & Morphology
+
+- 大面积墙、屋顶、山体和铺地是否因单一材料而显得未完成？
+- 材料变化是否受构造、风化、功能和题材控制，而不是随机噪声？
+- 不同功能或等级的主要建筑 / 构筑物是否只是同一 generator 的尺寸变体？
+- 允许重复的原型是否具有明确的功能、结构或礼仪理由？
+
+### Construction Integrity
+
+- 是否存在非设计意图的浮空、孤立、断裂或缺少接口的几何？
+- 自动支承 / 连通检查若只覆盖少数对象，是否还需要透视或玩家视点补查其它岩石、墙体、台地和植被？
 
 ### Scale
 
@@ -391,10 +488,10 @@ player scale
 → 形成 Plan + Section + Sequence
 → 建立 Terrain / Water / Structural Vegetation / Architecture 的 Macro 骨架
 → 校准 player / building / landscape 尺度
-→ 处理 Meso 空间、道路、植被群落与建筑关系
+→ 处理 Meso 空间、道路、植被群落、建筑关系与材料 / 形态语言
 → 分阶段施工，并在每阶段自检
-→ 处理 Micro 细节
-→ Top + Section + Perspective / Route 综合验收
+→ 处理 Micro、Ground Plane 与 Detail Vegetation
+→ Top + Section + Perspective / Route + Construction Integrity 综合验收
 → 必要时有边界重构
 → 完成存档任务
 → 输出推荐入库资产候选清单
