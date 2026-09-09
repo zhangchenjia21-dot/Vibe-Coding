@@ -1,13 +1,13 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 4.6
+version: 4.7
 created: 2026-08-25
 updated: 2026-09-09
 current_phase: G6
 current_status_source: MY_WORLD_CURRENT_STATUS.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
-supersedes: v4.5
+supersedes: v4.6
 ---
 
 # my world｜总体规划路线图 CURRENT
@@ -228,7 +228,7 @@ existing Post-turn Information Curator
 
 ---
 
-### Package 4｜Core Mechanics Visibility｜System / Public d20｜CURRENT
+### Package 4｜Core Mechanics Visibility｜System / Public d20｜ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
 
 **目标：把已经真实发生、已经公开给玩家的 Program-owned Public d20 判定，从 Narrative 的即时骰点卡扩展成一个可持续回看的 `系统` 信息 Surface。**
 
@@ -236,17 +236,24 @@ Frozen architecture：
 
 `architecture/ui/G6_SYSTEM_PUBLIC_MECHANICS_SURFACE_V1_0_DECISION.md@v1.0`
 
-当前 executable outcome：
+Reviewed implementation：
 
 `MW-028｜System / Public d20 Surface`
 
-核心 vertical：
+- Independent Review：**ENGINEERING PASS_WITH_NOTES**；
+- reviewed/integrated implementation main：`my-world/main@f6aae06f6be3be4b7fd24762a10e524b6eb9b683`；
+- focused / real-window each 377 checks / 0 failures；
+- 40 relevant regressions pass；2 exact-baseline G3 Context failures remain retained debt；
+- Owner Product confirmation deferred under the concentrated-UAT instruction。
+
+已成立 vertical：
 
 ```text
 existing Public d20 durable owner
 → shared current accepted mechanics selection
 → bounded player-safe structural projection
 → 系统 Surface
+→ immediate refresh after accepted adjudication terminal
 → Debug mechanics terminal evidence
 → Save / reopen / Restore currentness
 ```
@@ -261,26 +268,42 @@ v1.0 保护：
 - 不重做 d20 balance/DC/modifier/stance/RNG/no-reroll 规则；
 - 不硬编码虚构 HP / Mana / Hunger / Money / Level / Buff 等状态；
 - 保留 Narrative inline dice card；
-- World Information Host 导航变为 `概览 | 角色 | 重要经历 | 人物 | 事务 | 系统 | 存档`；
+- World Information Host 导航为 `概览 | 角色 | 重要经历 | 人物 | 事务 | 系统 | 存档`；
 - 不为历史骰点重新打开 Player Status Host；
-- Debug Mode 接入 `mechanics` terminal/change evidence；
+- Debug Mode 已接入 `mechanics` terminal/change evidence；
 - >=20px typography、Save/Restore/currentness 与 privacy boundary 继续成立。
 
 ---
 
-### Package 5｜Core Inventory Vertical｜事实型行囊
+### Package 5｜Core Inventory Vertical｜事实型行囊｜CURRENT
 
-先冻结最小 Inventory owner / mutation contract，再证明：
+**目标：让“玩家现在真正带着什么”成为可持续、可使用、可失去、可回滚的 Game-local factual truth，而不是 Narrative 里说过一次以后只能靠模型记忆。**
+
+Frozen architecture：
+
+`architecture/ui/G6_FACTUAL_INVENTORY_VERTICAL_V1_0_DECISION.md@v1.0`
+
+当前 executable outcome：
+
+`MW-029｜Factual Inventory Vertical`
+
+核心 vertical：
 
 ```text
-初始真实物品
-→ 一次使用 / 转交 / 失去
-→ durable state
-→ Inventory Surface
-→ Save / Restore / reopen 一致
+accepted Narrative 明确建立当前 possession
+→ existing World semantic lane，同一次调用
+→ Program-owned stable item identity + durable version-bound Inventory events
+→ current player-safe Inventory projection
+→ 行囊 Surface
+→ subsequent GM / d20 receives bounded current Inventory grounding
+→ later UPDATE / REMOVE through exact opaque item refs
+→ Debug inventory terminal evidence
+→ Save / reopen / Restore / Regenerate currentness
 ```
 
-不提前建设装备槽、loot、crafting、economy、durability 或复杂 stack framework。Debug Mode 显示 Inventory 是否真实变化。
+关键路线收敛：当前 Character Source v0.2 没有独立 factual initial-inventory contract，因此 Package 5 **不从角色 prose 猜起始装备，也不硬塞默认物品**。无 authoritative Inventory event 时结构化行囊为空；第一件真实物品由正常 accepted Narrative 明确建立后进入 Inventory。Source-authored initial inventory 留到未来真实 Source/Creator contract work，而不是在本 Package 伪造。
+
+v1.0 只允许最小 `ADD / UPDATE / REMOVE` possession mutation；不提前建设装备槽、loot、crafting、economy、numeric durability、NPC inventory 或复杂 stack framework。Debug Mode 显示 Inventory 是否真实变化。
 
 ---
 
@@ -312,14 +335,16 @@ Owner 使用真实 build 连续试玩，至少覆盖：
 - 1 个新出现 NPC；
 - 1 次 OOC Guidance；
 - 1 次 Public d20；
-- 1 次真实 Inventory mutation；
+- 1 次真实 Inventory ADD + 后续 UPDATE/REMOVE；
 - 1 次 Save / reopen；
 - 1 次 Restore；
 - 1 次明显偏离推荐项的自由输入；
 - 至少 3 类 Dynamic UI Host 承载的真实 Surface / contribution；
 - Debug Mode 对关键回合变化/异常提供足够 UAT 证据；
 - Package 2 延期的 OOC/Public-d20/Recommendation Product confirmation 可在这里一并覆盖；
-- Package 3 延期的 Open Threads 模型语义质量可在连续试玩中一并覆盖。
+- Package 3 延期的 Open Threads 模型语义质量可在连续试玩中一并覆盖；
+- Package 4 延期的 System history 可用性/与 inline dice 的整体体验可在这里一并覆盖；
+- Package 5 的真实模型 factual Inventory extraction / gameplay usefulness 可在这里一并覆盖。
 
 闭环必须表现为：
 
