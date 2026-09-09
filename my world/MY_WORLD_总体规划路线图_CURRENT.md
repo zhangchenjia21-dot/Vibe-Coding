@@ -1,30 +1,28 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 4.8
+version: 4.9
 created: 2026-08-25
 updated: 2026-09-09
 current_phase: G6
 current_status_source: MY_WORLD_CURRENT_STATUS.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
-supersedes: v4.7
+supersedes: v4.8
 ---
 
 # my world｜总体规划路线图 CURRENT
 
-## 0. 文档职责
+## 0. 路线原则
 
-本文件拥有 G1–G9 阶段顺序、当前 Core-first Package Axis、Stage Gate、Deferred / Non-scope 与排序原因。实时 PASS / blocker / current owner 以 `MY_WORLD_CURRENT_STATUS.md` 为准。
+本文件拥有 G1–G9 阶段顺序、当前 Core-first Package Axis、Stage Gate 与 Deferred/Non-scope。实时 owner / current task / build/UAT 状态以 `MY_WORLD_CURRENT_STATUS.md` 为准。
 
-Owner 冻结路线原则：
+Owner 已冻结：
 
 > **优先保证游戏尽快完成完整游戏闭环。核心开发先做；扩展功能、体验优化、Creator、Reference 与其它外围增强后置。**
 
 > **Internal Dynamic UI 是 V0 核心能力，必须在 V0 Core Closure Reality Gate 前完成。**
 
-> **UAT observability 直接降低后续每个核心 Package 的 Owner 验收成本，因此 Debug Mode + 回合级后台变化可视化是 Package 0 关闭后的第一优先级。**
-
-继续遵守：Vertical before platform；Consumer before Creator；真实需求 → 最小能力 → 真实 consumer → Owner UAT → 再抽象。
+通用顺序：Vertical before platform；Consumer before Creator；真实需求 → 最小能力 → 真实 consumer → Engineering Review → Owner Product evidence。
 
 ---
 
@@ -32,63 +30,42 @@ Owner 冻结路线原则：
 
 ```text
 G1 Foundation & Project Bootstrap                PASS / CLOSED
-↓
 G2 AI Conversation Spine                         PASS / CLOSED
-↓
 G3 Persistent Game / Save / Timeline Foundation PASS / CLOSED
-↓
 G4 Primary Source Assets & Local Game Creation   PASS / CLOSED
-↓
 G5 World Semantics & GM Runtime                  PRODUCT PASS / CLOSED
-↓
-G6 RPG Core Closure + UAT Observability + Internal Dynamic UI ACTIVE
-↓
-G7 Long-session Context & Knowledge Hardening
-↓
-G8 Product Expansion / Authoring / External Contract
-↓
-G9 Standalone Alpha / Release Validation
+G6 RPG Core Closure + UAT Observability + Internal Dynamic UI ACTIVE / REALITY GATE
+G7 Long-session Context & Knowledge Hardening    QUEUED
+G8 Product Expansion / Authoring / External Contract QUEUED
+G9 Standalone Alpha / Release Validation         QUEUED
 ```
 
-已成立技术脊柱：
+当前技术/产品脊柱：
 
 ```text
-Launch
-→ Main Menu
+Launch / Main Menu
 → Continue / New Game
-→ AI GM free-form Narrative
-→ Player natural-language action
-→ durable world / actor consequences
-→ Save / exit / reopen
-→ Continue / Restore
-→ coherent world + context recovery
+→ AI GM Narrative
+→ Player free-form natural-language action
+→ OOC / Recommendations
+→ durable World / actor consequence
+→ Character / Important Experiences / People / Open Threads
+→ Public d20 / System
+→ factual Inventory
+→ Internal Dynamic UI presentation
+→ Save / exit / reopen / Restore
+→ continue play
 ```
 
-G6 的任务是把这条技术脊柱收敛成**完整、可观察、可长期试玩验证的 V0 RPG 产品闭环**。
+G6 当前不再增加计划内核心能力；进入完整 V0 Core Reality Gate。
 
 ---
 
-# G1–G5｜CLOSED
+# G6｜Core-first Package Axis
 
-G1–G5 不因后续路线调整重新开启。
+## Package 0｜Correction Train + Focused Owner UAT｜PRODUCT PASS / CLOSED
 
----
-
-# G6｜RPG Core Closure + UAT Observability + Internal Dynamic UI
-
-## Outcome
-
-Owner 可以完成一局连续真实试玩，并确认：
-
-> **自然语言自由、AI GM、Living World、人物/角色/事务/行囊/mechanics、动态 UI、Save/Restore 共同组成一个完整可靠的 V0 RPG 闭环；同时 Debug Mode 能明确告诉 Owner 每回合后台哪些域真的发生了变化、哪些没有、哪些失败。**
-
-## G6 Core-first Package Order
-
-### Package 0｜Correction Train + Focused Owner UAT｜PRODUCT PASS / CLOSED
-
-Package 0 已于 2026-09-08 关闭。
-
-Final outcomes：
+Closed outcomes:
 
 ```text
 MW-018 R1 People                  PRODUCT PASS
@@ -98,308 +75,121 @@ MW-020 Context Budget            ENGINEERING PASS_WITH_NOTES / INTEGRATED
 MW-021 Narrative Scroll          PRODUCT PASS
 ```
 
-Formal closure evidence：
+Package 0 不因后续工作自动重开；只有具体 regression 才进入对应 lineage。
 
-`docs/uat/G6_PACKAGE0_OWNER_REUAT_U2.md@v1.2`
+## Package 1｜UAT Observability / Debug Mode v0.1｜PRODUCT PASS / CLOSED
 
-Reviewed/integrated closure artifact：
+`MW-022` 提供 bounded read-only Debug Mode；`MW-023` 已确认 ordinary gameplay typography/readability。
 
-`my-world/main@d81f5f215360780cc50038ccd3bce7cb4163b866`
+Debug 当前覆盖 Narrative / World / Identity / Character / Experiences / People / Threads / Mechanics / Inventory / Recommendations / Save-Restore 等真实终态，不拥有第二份事实。
 
-Package 0 不因后续相邻 UI 工作自动重开；只有新的具体 regression 才进入对应 lineage。
+## Package 2｜Core Interaction Control｜ENGINEERING COMPLETE / CORE OUTCOME ACCEPTED / PRODUCT CONFIRMATION DEFERRED
 
----
+Integrated:
 
-### Package 1｜UAT Observability / Debug Mode v0.1｜PRODUCT PASS / CLOSED
+- MW-024 OOC / GM Guidance;
+- MW-025 Character-guided Recommendations + accepted-action Character evidence;
+- MW-026 Package-2 bounded cleanup.
 
-**目标：让后续核心开发每做一项，Owner 都能低成本判断“系统后台到底有没有真的变化”。**
+核心保护：free-form action primary；recommendations != allowed-action list；OOC != protagonist action / World mutation / d20 opportunity。
 
-这是 P-34 Debug Mode 与 P-32 Consequence Diff 的一个**前置 UAT 切片**，不等于提前实现完整玩家版“本回合变化”。
+Owner 已接受核心方向，但最终集中体验确认被明确延期到 Package 7；不得虚标 Product PASS。
 
-Executable outcome：
+## Package 3｜Open Threads / 事务｜ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
 
-`MW-022｜UAT Observability / Debug Mode v0.1`
+`MW-027` 已集成。现有 Information Curator 同一次调用维护 model-owned unresolved-matters snapshot；Program 不建设 Quest keyword/rule engine。
 
-Frozen architecture：
+真实模型是否能稳定选择/保持安静/移除已解决事务，留给 Package 7 Product evidence。
 
-`architecture/observability/G6_UAT_OBSERVABILITY_DEBUG_MODE_V0_1_DECISION.md`
+## Package 4｜System / Public d20｜ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
 
-v0.1：
+`MW-028` 已集成。Program-owned Public d20 truth 通过共享 currentness seam 投影为 `系统` history；NO_CHECK 保留为 mechanics truth/Debug/continuity，但不刷满玩家列表。
 
-```text
-Debug Mode OFF
-→ 普通游戏体验不变
+不引入第二 mechanics owner 或虚构 HP/Mana/Level 等状态。
 
-Debug Mode ON
-→ bounded read-only UAT panel
-→ recent accepted Turn trace
-→ Narrative / World / Identity / Character / Experiences / People / Recommendations / Save-Restore
-→ changed / no-change / failed / stale / cancelled 等真实终态
-→ 异常时显示人能理解的安全原因
-```
+## Package 5｜factual Inventory / 行囊｜ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
 
-保护：
-
-- Debug UI 独立于 `概览/角色/重要经历/人物/...` 玩家信息 taxonomy；
-- 默认只显示 terminal/change/Turn/Provider/Model/安全计数，不默认展开 GM-private / NPC-private 隐藏语义；
-- player-visible 数据只允许 safe projection 范围内的 bounded evidence；
-- Debug Mode 只读，不改变模型输入、World mutation、mechanics、推荐严格性或 currentness；
-- 不输出 API Key / credential / raw provider payload / model reasoning；
-- 不建设 giant EventBus / universal telemetry platform；
-- 不持久化 Debug history/preferences；
-- Open Threads、System、Inventory 成为真实 consumer 后接入同一 bounded observability seam。
-
-MW-023 Gameplay Typography Readability 亦已 `PRODUCT PASS / CLOSED`，作为后续核心 Surface 的可读性基线保留。
-
----
-
-### Package 2｜Core Interaction Control｜ENGINEERING COMPLETE / CORE OUTCOME ACCEPTED / PRODUCT CONFIRMATION DEFERRED
-
-已完成并集成：
+`MW-029` 已集成。当前行囊是 exact accepted Narrative 支持的 factual possession state：
 
 ```text
-MW-024  OOC / GM Guidance
-MW-025  Character-guided Recommendations + accepted-action Character evidence
-MW-026  bounded Package-2 UAT cleanup
+World semantic same call
+→ ADD / UPDATE / REMOVE
+→ Program-owned item identity + version-bound events
+→ current fold
+→ 行囊 Surface + foreground grounding
 ```
 
-保护：Five recommendations != allowed-action list；OOC != character action；OOC != World mutation；free-form action always primary。
+无 authoritative Inventory event 时结构化行囊为空；不从 Character prose 猜起始装备，不硬塞默认物品。
 
-Owner 已完成探索性 UAT并接受 Package-2 核心方向；MW-026 的三项小修亦已独立审核并集成。Owner 于 2026-09-09 明确决定：
+真实模型 possession extraction / GM natural use 留给 Package 7。
 
-> **“UAT就以后再UAT吧，这次先跳过了”**
+## Package 6｜Internal Dynamic UI Host v0.1｜ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED TO PACKAGE 7
 
-因此当前正式状态为：
+Reviewed/integrated implementation main:
 
-> **Package 2 = ENGINEERING COMPLETE / CORE OUTCOME ACCEPTED / PRODUCT CONFIRMATION DEFERRED**
+`my-world/main@69ac2030b90f4165deb2ecb5302e3743422af585`
 
-含义：
-
-- 不把未做的最终 spot confirmation 伪装成 Product PASS；
-- 也不让这次延期阻塞 Core-first 路线；
-- 不再为 Package 2 单独准备当前确认 build；
-- 剩余体验确认可并入后续集中 UAT / Package 7 Reality Gate，除非 Owner 更早要求；
-- 立即进入后续核心 Package。
-
-Formal UAT record：
-
-`docs/uat/G6_PACKAGE2_OWNER_UAT_U1.md@v1.6`
-
----
-
-### Package 3｜Core Information Continuity｜事务 / Open Threads｜ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
-
-**目标：让玩家知道当前有哪些还没有真正结束、但值得继续记住和跟进的事情。**
-
-Frozen architecture：
-
-`architecture/ui/G6_OPEN_THREADS_SURFACE_V1_0_DECISION.md@v1.0`
-
-Reviewed implementation：
-
-`MW-027｜Open Threads / 事务`
-
-- Independent Review：**ENGINEERING PASS_WITH_NOTES**；
-- reviewed/integrated implementation main：`my-world/main@5a336d0a993fd7e91b05b98f9b0cc14d2bb47b21`；
-- real Provider semantic sample：0，因此真实模型是否能稳定挑出“值得继续记住的未完事项”仍属于 Product evidence；
-- Owner 当前已决定集中 UAT，故 standalone Product confirmation deferred，不阻塞路线。
-
-已成立 vertical：
-
-```text
-existing Post-turn Information Curator
-→ model decides add / update / keep / remove
-→ existing information_curation durable owner
-→ player-safe current Open Threads projection
-→ 事务 Surface
-→ Debug threads changed / no-change / failed
-→ Save / reopen / Restore / Regenerate currentness
-```
-
-保护：
-
-- Model owns semantic interpretation；Program 不建设 Quest keyword/rule engine；
-- `事务` 是当前未完事项快照，不是任务历史；
-- 普通回合可以 no-change；已解决/失效/不再重要的事项可以从当前快照移除；
-- 不新增独立 Open Threads Provider call；
-- 不读取 raw World / NPC private truth 来“补全任务”；
-- 不新建 SQLite table / 第二事实源；
-- v1.0 不做 checkbox、手动完成/编辑、搜索筛选、优先级、Quest 奖励或 generic Action Intent。
-
----
-
-### Package 4｜Core Mechanics Visibility｜System / Public d20｜ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
-
-**目标：把已经真实发生、已经公开给玩家的 Program-owned Public d20 判定，从 Narrative 的即时骰点卡扩展成一个可持续回看的 `系统` 信息 Surface。**
-
-Frozen architecture：
-
-`architecture/ui/G6_SYSTEM_PUBLIC_MECHANICS_SURFACE_V1_0_DECISION.md@v1.0`
-
-Reviewed implementation：
-
-`MW-028｜System / Public d20 Surface`
-
-- Independent Review：**ENGINEERING PASS_WITH_NOTES**；
-- reviewed/integrated implementation main：`my-world/main@f6aae06f6be3be4b7fd24762a10e524b6eb9b683`；
-- focused / real-window each 377 checks / 0 failures；
-- 40 relevant regressions pass；2 exact-baseline G3 Context failures remain retained debt；
-- Owner Product confirmation deferred under the concentrated-UAT instruction。
-
-已成立 vertical：
-
-```text
-existing Public d20 durable owner
-→ shared current accepted mechanics selection
-→ bounded player-safe structural projection
-→ 系统 Surface
-→ immediate refresh after accepted adjudication terminal
-→ Debug mechanics terminal evidence
-→ Save / reopen / Restore currentness
-```
-
-v1.0 保护：
-
-- `系统` 只投影真实 mechanics truth，不创建第二事实源；
-- 玩家 Surface 只列最近 accepted/current 的真实 `CHECK`，最多 12 条；
-- 普通 `NO_CHECK` 不长期堆入玩家列表，但仍保留为 durable mechanics truth、GM continuity 与 Debug terminal evidence；
-- 不通过 Information Curator，不增加 Provider call；
-- 不新建 SQLite owner；
-- 不重做 d20 balance/DC/modifier/stance/RNG/no-reroll 规则；
-- 不硬编码虚构 HP / Mana / Hunger / Money / Level / Buff 等状态；
-- 保留 Narrative inline dice card；
-- World Information Host 导航为 `概览 | 角色 | 重要经历 | 人物 | 事务 | 系统 | 存档`；
-- 不为历史骰点重新打开 Player Status Host；
-- Debug Mode 已接入 `mechanics` terminal/change evidence；
-- >=20px typography、Save/Restore/currentness 与 privacy boundary 继续成立。
-
----
-
-### Package 5｜Core Inventory Vertical｜事实型行囊｜ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
-
-**目标：让“玩家现在真正带着什么”成为可持续、可使用、可失去、可回滚的 Game-local factual truth，而不是 Narrative 里说过一次以后只能靠模型记忆。**
-
-Frozen architecture：
-
-`architecture/ui/G6_FACTUAL_INVENTORY_VERTICAL_V1_0_DECISION.md@v1.0`
-
-Reviewed implementation：
-
-`MW-029｜Factual Inventory Vertical`
-
-- Independent Review：**ENGINEERING PASS_WITH_NOTES**；
-- reviewed/integrated implementation main：`my-world/main@396bfcc0c91cdff6e6816795826b95fa0c0d358c`；
-- focused / real-window each 174 checks / 0 failures；
-- 41 relevant regression suites pass；2 exact-baseline G3 Context failures remain retained debt；
-- Godot import + fresh Windows export / ValidateExportOnly pass；
-- real Provider calls: 0；真实模型 possession extraction / natural GM use remains Product evidence；
-- Owner Product confirmation deferred under the concentrated-UAT instruction。
-
-已成立 vertical：
-
-```text
-accepted Narrative 明确建立当前 possession
-→ existing World semantic lane，同一次调用
-→ Program-owned stable item identity + durable version-bound Inventory events
-→ current player-safe Inventory projection
-→ 行囊 Surface
-→ subsequent GM / OOC / d20 receives bounded current Inventory grounding
-→ later UPDATE / REMOVE through exact opaque item refs
-→ Debug inventory terminal evidence
-→ Save / reopen / Restore / Regenerate currentness
-```
-
-关键路线收敛：当前 Character Source v0.2 没有独立 factual initial-inventory contract，因此 Package 5 **不从角色 prose 猜起始装备，也不硬塞默认物品**。无 authoritative Inventory event 时结构化行囊为空；第一件真实物品由正常 accepted Narrative 明确建立后进入 Inventory。
-
-v1.0 只允许最小 `ADD / UPDATE / REMOVE` possession mutation；不提前建设装备槽、loot、crafting、economy、numeric durability、NPC inventory 或复杂 stack framework。
-
----
-
-### Package 6｜Internal Dynamic UI Host v0.1｜CURRENT / CORE REQUIRED
-
-**目标：把已经由多个真实 Domain 证明过的右侧信息呈现模式收敛为一个安全、有限的 Internal Dynamic UI Host，同时落实 Owner 已批准的“模型保留语义判断、玩家拥有展示隐藏权”。**
-
-Frozen architecture：
-
-`architecture/ui/G6_INTERNAL_DYNAMIC_UI_HOST_V0_1_DECISION.md@v1.0`
-
-Current executable outcome：
+Work Item:
 
 `MW-030｜Internal Dynamic UI Host v0.1 + Model-curated Visibility Preference`
 
-当前有足够真实 consumers：
+已成立：
 
 ```text
-Character
-Important Experiences
-People
-Open Threads
-Inventory
-System / Public d20
-```
-
-目标流：
-
-```text
-domain-owned player-safe projection
-→ first-party presentation adapter
-→ bounded internal definition
-→ shared Internal Dynamic UI Host
+Character / Important Experiences / People / Threads / Inventory / System
+→ domain-owned player-safe DTO
+→ first-party bounded definition
+→ one shared Internal Dynamic UI Host
 → Godot Controls
 ```
 
-v0.1 只抽象真实重复需求：section / text / fact-list / field-list / card / existing collapsible presentation 等有限 vocabulary；定义是 disposable presentation material，不是 Gameplay/Timeline truth，也不是查询语言。
+Internal vocabulary 仅覆盖真实重复需求：`section / text / fact_list / field_list / card`。Definition 是 disposable presentation material，不是 gameplay/Timeline truth、查询语言或 external Mod UI protocol。
 
 保护：
 
-- renderer 不接收 omniscient `world_state` 后本地过滤；
-- 不改变 Character / Experiences / People / Threads / Inventory / System 的既有语义；
-- Restore / Regenerate 仍由各 domain player-safe projection 决定 currentness；
-- 不允许 arbitrary GDScript callback / NodePath / expression / OS command / arbitrary authoritative mutation；
+- renderer 不拿 raw/omniscient `world_state` 本地过滤；
+- no arbitrary callback / NodePath / expression / SQL / OS command / Provider call / authoritative mutation from definition data;
+- Narrative/composer、Save、Debug、inline d20 保持 imperative；
 - generic Action Intent 继续 Deferred；
-- external Source / Expansion / Mod UI declaration 继续后置 G8；
-- Narrative / Composer / Save / Debug / inline d20 等 action-bearing or special UI 继续 imperative；
-- 旧 `MW-013` Task Packet 已由当前多-consumer架构正式 supersede，不可执行。
+- external Source/Expansion/Mod UI declaration 后置 G8；
+- 旧 MW-013 / pre-consumer declarative UI 决策已 superseded，不可执行。
 
-Package 6 同时激活跨 Surface 展示隐藏权的第一版：
+Owner-approved visibility right 第一版已实现：
 
 ```text
 People + Important Experiences
-→ stable opaque presentation key
+→ legitimate opaque presentation key
 → 隐藏 / 已隐藏(N) / 恢复显示
-→ Game-local presentation preference outside Timeline
+→ Game-local preference outside Timeline
 ```
 
-隐藏只影响 ordinary UI，不删除/修改 underlying semantic information，不反馈给模型，不触发 Provider。它 survive reopen；Restore 不 rewind；hidden material 可继续更新且不会自动 unhide。
+隐藏不删除语义、不反馈给模型、不触发 Provider；survive reopen；Restore 不 rewind；hidden People 可更新且不会自动 unhide。Open Threads 当前无合法 stable item identity，因此不按标题/文本/位置强造 hide identity；System/Inventory 也不 generic-hide。
 
-本轮明确不为 Open Threads 强造 stable identity，因此 Thread v0.1 **不做逐条隐藏**；也不允许 System / factual Inventory 被 generic hide。
+## Package 7｜V0 CORE CLOSURE REALITY GATE｜CURRENT
 
-**Exit：** 多类真实 Surface 由同一 Internal Dynamic UI Host 正确呈现；People/Important Experiences 的隐藏/恢复遵守 presentation-only 语义；无第二事实源、泄密、currentness 或 Narrative 主体验回归。
+Active UAT record:
 
----
+`docs/uat/G6_V0_CORE_CLOSURE_REALITY_GATE_U1.md@v1.0`
 
-### Package 7｜V0 CORE CLOSURE REALITY GATE
+当前先执行 bounded build prep，随后由 Owner 对 exact reviewed build 做集中真实试玩。
 
-Owner 使用真实 build 连续试玩，至少覆盖：
+建议自然覆盖：
 
 - 20–30 个正常回合；
-- 1 个新出现 NPC；
+- 1 个新出现并持续相关的 NPC；
 - 1 次 OOC Guidance；
-- 1 次 Public d20；
-- 1 次真实 Inventory ADD + 后续 UPDATE/REMOVE；
-- 1 次 Save / reopen；
+- 1 次 Public d20 CHECK；
+- 1 次 factual Inventory ADD + 后续 UPDATE/REMOVE；
+- 1 次 Save + exit/reopen；
 - 1 次 Restore；
 - 1 次明显偏离推荐项的自由输入；
-- 至少 3 类 Dynamic UI Host 承载的真实 Surface / contribution；
-- 1 次 People/Important Experience hide + recover，并确认隐藏不改变模型语义；
-- Debug Mode 对关键回合变化/异常提供足够 UAT 证据；
-- Package 2 延期的 OOC/Public-d20/Recommendation Product confirmation 可在这里一并覆盖；
-- Package 3 延期的 Open Threads 模型语义质量可在连续试玩中一并覆盖；
-- Package 4 延期的 System history 可用性/与 inline dice 的整体体验可在这里一并覆盖；
-- Package 5 的真实模型 factual Inventory extraction / gameplay usefulness 可在这里一并覆盖；
-- Package 6 的 shared Host 一致性、信息可读性与 visibility preference 可在这里一并覆盖。
+- 多类 Dynamic UI Surface；
+- 1 次 People/Important Experience hide + recover；
+- 必要时使用 Debug 解释后台 changed/no-change/failed。
 
-闭环必须表现为：
+本轮集中吸收 Package 2–6 延期 Product evidence。
+
+真实闭环必须表现为：
 
 ```text
 Launch / New Game / Continue
@@ -410,75 +200,73 @@ Launch / New Game / Continue
 → Character / People / Open Threads
 → System / d20
 → Inventory mutation
-→ Internal Dynamic UI presentation + bounded player visibility control
+→ Internal Dynamic UI + player visibility control
 → Save / exit / reopen / Restore
 → world + information + mechanics + UI currentness 一致
 → continue play
 ```
 
-**G6 Exit：Owner 明确认定 `V0 Core Game Loop = PRODUCT PASS`。**
+**G6 Exit：只有 Owner 可明确宣布 `V0 Core Game Loop = PRODUCT PASS`。**
+
+若 UAT 只发现 bounded defects，优先一次 correction train 后复验，不重新扩产品范围。
 
 ---
 
 # G7｜Long-session Context & Knowledge Hardening
 
-### Package 8｜Long-session Core
+## Package 8｜Long-session Core
 
-- Context Orchestrator；
-- Structured Output Reliability（只收敛真实需要的 machine-schema lanes）；
-- working-set / currentness / latency / long-session reality test。
+- Context Orchestrator;
+- Structured Output Reliability（只针对真实 machine-schema lanes）；
+- working-set/currentness/latency/long-session reality test。
 
 原则：`相关 != 当前有效 != 当前有权使用`；`Bounded context != starved context`。
 
-### Package 9｜Knowledge Integrity & Correction Foundation
+## Package 9｜Knowledge Integrity & Correction Foundation
 
-合并 Provenance、Epistemic Status、Turn Freshness（只显示第几个回合 / accepted-history node）、Conflicting Evidence、玩家纠正 AI 派生信息。
+- Provenance;
+- Epistemic Status;
+- Turn Freshness;
+- Conflicting Evidence;
+- 玩家纠正 AI 派生信息。
 
-随后做 Reality Correction Mode Architecture Audit；只有 World / Inventory / NPC / Knowledge / Mechanics / Timeline authority、atomicity、currentness 冻结后才允许实现：
-
-```text
-角色行动 | OOC | 世界纠错
-```
+Reality Correction Mode 只有在 World / Inventory / NPC / Knowledge / Mechanics / Timeline authority 与 atomicity/currentness 足够稳定后再审计/实现。
 
 ---
 
 # G8｜Product Expansion / Authoring / External Contract
 
-### Package 10｜Information Surface Expansion
+## Package 10｜Information Surface Expansion
 
-- People Shared History；
-- Organization / Faction player-known Surface；
-- Player-known World Chronicle；
-- **完整玩家版** Player-visible Consequence Diff。
+- People Shared History;
+- Organization / Faction player-known Surface;
+- Player-known World Chronicle;
+- 完整玩家版 Consequence Diff。
 
-Package 1 只前移 UAT/debug 用“域是否变化 + safe bounded evidence”切片；完整玩家体验仍在 G8 成熟。
+## Package 11｜Player Utility / Personalization / Archive
 
-### Package 11｜Player Utility / Personalization / Archive
-
-- Narrative Preference；
-- Bookmark；
-- Player Notes；
-- readable Adventure Chronicle export；
+- Narrative Preference;
+- Bookmark;
+- Player Notes;
+- readable Adventure Chronicle export;
 - Game-local Frozen Manifest。
 
-### Package 12｜Provider / Model Operations
+## Package 12｜Provider / Model Operations
 
-- Narrative / Background model separation；
-- AI usage / latency / token visibility；
-- Compatibility Preflight；
-- Model Profiles；
+- Narrative / Background model separation;
+- AI usage / latency / token visibility;
+- Compatibility Preflight;
+- Model Profiles;
 - richer observability dashboard。
 
-Debug Mode 核心 v0.1 已前移 Package 1；这里仅成熟它，不重新造第二套诊断系统。
-
-### Package 13｜Source Library / Reference / Creator
+## Package 13｜Source Library / Reference / Creator
 
 ```text
 Source Library 作品化 + Composition
 → Reference Library
 → 对话式 Creator
 → Creator Preview Sandbox
-→ 人话化 Validation / Publish UX
+→ human-readable Validation / Publish UX
 → only then consider external Declarative UI contract
 ```
 
@@ -486,21 +274,26 @@ Source Library 作品化 + Composition
 
 # G9｜Standalone Alpha / Release Validation
 
-### Package 14｜Standalone Alpha
+## Package 14｜Standalone Alpha
 
-- Windows standalone packaging；
-- onboarding / credentials / Source setup；
-- upgrade / migration / recovery reality tests；
-- long-play / corruption / reinstall validation；
-- release UAT / defect closure；
+- Windows standalone packaging;
+- onboarding / credentials / Source setup;
+- upgrade / migration / recovery reality tests;
+- long-play / corruption / reinstall validation;
+- release UAT / defect closure;
 - documentation / diagnostics / support boundary。
 
-**G9 Exit：** 独立用户能安装、建局、持续游玩、保存恢复，并在真实失败后得到可理解路径。
+**G9 Exit：** independent user can install, create a game, play continuously, save/recover and understand real failures.
 
 ---
 
 ## Deferred / Non-scope
 
-继续不提前建设：multiplayer / cloud account / server dependency、3D free-movement、full-universe per-NPC tick simulator、universal ECS / giant EventBus、arbitrary external code execution、giant universal Source/UI schema、automatic map generation before real evidence、generic Action Intent、external Declarative UI before Internal Dynamic UI production evidence、Visual Runtime before authored first-party demand。
+继续不提前建设：multiplayer/cloud account/server dependency、3D free-movement、full-universe per-NPC tick simulator、universal ECS/giant EventBus、arbitrary external code execution、giant universal Source/UI schema、automatic map generation before real evidence、generic Action Intent、external Declarative UI before internal Host + Reality Gate evidence、Visual Runtime before authored first-party demand。
 
-未通过的提案不进入路线，除非未来 Owner 明确重新开启。
+Current retained engineering debt that does not block Package 7 by itself:
+
+- two exact-baseline G3 Context assertions;
+- known bounded teardown/resource warnings;
+- layer-boundary/Shell decomposition debt;
+- long-session Context Orchestrator and general Structured Output reliability work reserved for G7.
