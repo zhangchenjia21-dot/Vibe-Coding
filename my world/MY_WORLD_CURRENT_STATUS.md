@@ -1,25 +1,22 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 17.20
+version: 17.21
 created: 2026-08-26
 updated: 2026-09-09
 phase: G6 RPG Core Closure + UAT Observability + Internal Dynamic UI
-current_task: MW-026 Package 2 UAT Cleanup
+current_task: Package 2 Bounded Spot Confirmation Build Prep
 current_owner: Codex
 parent_task: G6 Package 2 Core Interaction Control
 semantic_owner: GPT
-owner_uat_required: bounded spot confirmation after MW-026 reviewed integration
+owner_uat_required: bounded spot confirmation only
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v4.4
-active_architecture: architecture/interaction/G6_PACKAGE2_UAT_CLEANUP_V1_0_DECISION.md
-active_uat_record: my world/docs/uat/G6_PACKAGE2_OWNER_UAT_U1.md@v1.4
-active_task_packet: my-world/docs/tasks/MW-026_PACKAGE2_UAT_CLEANUP_TASK.md
-active_task_branch: mw-026-package2-uat-cleanup
-formal_code_base: b8b5c54eeda95b321c2c8492f3801f30991f89be
-tested_package2_product_code: 716d8dbfadaad07d992baef531912b6ce1078e2d
-mw024_review: my-world/docs/mw024/MW-024_INDEPENDENT_REVIEW_IR1.md
-mw025_review: my-world/docs/mw025/MW-025_INDEPENDENT_REVIEW_IR1.md
+active_uat_record: my world/docs/uat/G6_PACKAGE2_OWNER_UAT_U1.md@v1.5
+mw026_review: my-world/docs/mw026/MW-026_INDEPENDENT_REVIEW_IR1.md
+mw026_integration: my-world/docs/mw026/MW-026_INTEGRATION_VERIFICATION.md
+reviewed_implementation_main: 5820c20b1150cd998b626e56fce79c023004b5ec
+reviewed_product_implementation: fa3452fc15d8f727239f83550098829d770e3d2f
 ---
 
 # my world｜CURRENT STATUS
@@ -42,11 +39,11 @@ Current G6 flow:
 Package 0  Correction Train + Owner UAT          PRODUCT PASS / CLOSED
 Package 1  UAT Observability / Debug Mode v0.1   PRODUCT PASS / CLOSED
 MW-023     Gameplay Typography Readability        PRODUCT PASS / CLOSED
-Package 2  Core Interaction Control              UAT COMPLETE / CORE OUTCOME ACCEPTED / CLEANUP CURRENT
+Package 2  Core Interaction Control              CORE OUTCOME ACCEPTED / CLEANUP REVIEWED+INTEGRATED / SPOT CONFIRMATION NEXT
   MW-024   OOC / GM Guidance                     ENGINEERING PASS_WITH_NOTES / INTEGRATED
   MW-025   Character-guided Recommendations      ENGINEERING PASS_WITH_NOTES / INTEGRATED
-  MW-026   Package-2 UAT Cleanup                  CURRENT / CODEX
-  Owner    bounded spot confirmation              AFTER MW-026 REVIEW + INTEGRATION
+  MW-026   Package-2 UAT Cleanup                  ENGINEERING PASS_WITH_NOTES / INTEGRATED
+  Owner    bounded spot confirmation              NEXT
 Package 3  Open Threads                          NEXT IMMEDIATELY AFTER PACKAGE 2 CLOSURE
 Package 4  System / Public d20                   QUEUED
 Package 5  factual Inventory                     QUEUED
@@ -54,115 +51,114 @@ Package 6  Internal Dynamic UI Host v0.1         QUEUED / CORE REQUIRED
 Package 7  V0 Core Closure Reality Gate          QUEUED
 ```
 
-## 2. Owner Package-2 UAT final direction
+## 2. Owner route instruction
 
-Owner ended exploratory Package-2 UAT and explicitly stated that the reported remaining problems are small, should be solved once, and the project should return to the main route quickly.
+Owner ended exploratory Package-2 UAT, judged the remaining findings small, requested they be solved once, and explicitly asked the project to return to the main route quickly.
 
-Canonical UAT record:
+Therefore:
 
-`docs/uat/G6_PACKAGE2_OWNER_UAT_U1.md@v1.4`
+- no second full Package-2 UAT;
+- no new peripheral cleanup after MW-026;
+- only one fresh build + bounded spot confirmation;
+- if those corrected behaviors are acceptable, Package 2 closes immediately;
+- then move directly to Package 3 `事务 / Open Threads`.
 
-Operational interpretation:
+## 3. MW-026 — REVIEWED / INTEGRATED
 
-- Package-2 core product direction is accepted;
-- no broad OOC / Character-guided Recommendation redesign;
-- no second full exploratory Package-2 UAT;
-- exactly one bounded cleanup task (MW-026);
-- after reviewed integration, at most a small spot confirmation of the corrected behaviors;
-- then close Package 2 and proceed immediately to Package 3 Open Threads;
-- do not insert discretionary polish/debt/refactor work between MW-026 and Package 3.
-
-## 3. CURRENT — MW-026 Package 2 UAT Cleanup
-
-Frozen correction decision:
-
-`architecture/interaction/G6_PACKAGE2_UAT_CLEANUP_V1_0_DECISION.md`
-
-Task Packet:
-
-`my-world/docs/tasks/MW-026_PACKAGE2_UAT_CLEANUP_TASK.md`
-
-Task Branch:
-
-`mw-026-package2-uat-cleanup`
-
-Task Packet branch HEAD at dispatch:
-
-`19ac57da2834d62833236458bf239c5232220bf5`
-
-Formal Code Base:
+Formal Base:
 
 `b8b5c54eeda95b321c2c8492f3801f30991f89be`
 
-Note:
+Lineage:
 
-`716d8dbfadaad07d992baef531912b6ce1078e2d -> b8b5c54e...` contains four documentation-only temporary-add/remove commits with **zero changed files** in the final compare; product tree remains the tested Package-2 product tree.
+- Task Starting: `19ac57da2834d62833236458bf239c5232220bf5`
+- Implementation: `fa3452fc15d8f727239f83550098829d770e3d2f`
+- Candidate: `e42ea9c284d8407943f5b3c698e6fd9e45ce461c`
+- Independent Review: `b785a81105d53ea7f2a2bf1d27b8d8c0bc9893b9`
+- Integration verification/current implementation main: `5820c20b1150cd998b626e56fce79c023004b5ec`
 
-MW-026 owns exactly three corrections:
+Verdict:
 
-### A. Public d20 truth / consequence continuity
+**ENGINEERING PASS_WITH_NOTES / INTEGRATED**.
 
-- accepted player-visible CHECK/NO_CHECK Program truth becomes bounded player-safe context for later Narrative/OOC;
-- GM must not deny a disclosed check occurred or silently forget accepted outcome/stakes;
-- later recovery remains possible, but as a development after the accepted result;
-- no new consequence engine, Provider call, table, full System surface or generic mechanics platform.
+Integrated corrections:
 
-### B. OOC request-marker leak
+### A. Public mechanics continuity
 
-- keep Program-owned typed `action/ooc` semantics;
-- stop introducing internal-looking `[GM OOC response | input_mode=ooc]` request wrappers that can leak into visible prose;
-- raw durable accepted text remains unchanged;
-- no broad regex/output rewriting.
+- current accepted Public d20 / NO_CHECK truth has a bounded mechanics-owned player-safe projection;
+- later ordinary continuation and OOC/GM context receive disclosed Program facts such as branch, DC/roll/total/outcome and failure stakes;
+- currentness remains paired to existing durable mechanics + accepted Conversation / Timeline state;
+- displaced future, replaced/OOC/unaccepted/ambiguous mechanics do not become current context;
+- no IDs/control payload/private World/NPC material, new Provider call, new storage owner or consequence engine.
 
-### C. Compact recommendation layout
+### B. OOC marker leakage
 
-- short labels must render as genuinely compact content-width/wrapping choices;
-- ordinary five labels should usually occupy ~1–2 compact rows on desktop widths;
-- region height follows actual rows instead of reserving old long-copy footprint;
-- preserve >=20px readability, exact draft prefill, no-send, free-form input and strict recommendation contract.
+- internal `[GM OOC response | input_mode=ooc]` request wrapper is no longer generated;
+- active/historical OOC remains structurally distinguishable through safe derived guidance;
+- accepted Player/GM raw bytes and typed-mode persistence/currentness remain intact;
+- no output regex rewrite was added.
 
-## 4. Explicitly deferred / not MW-026
+### C. Compact recommendations
 
-Owner-approved presentation hide rights remain deferred:
+- recommendation layout now uses content-width wrapping flow controls instead of full-width two-column bars;
+- same five normal labels measured 1 row at 1280×720 and 1920×1080, 2 scrollable rows at 960×540;
+- recommendation region 192→72px and Narrative +120px at both 720p and 1080p;
+- 960×540 remains bounded/scrollable with +8px Narrative;
+- >=20px text, exact detailed-draft prefill, no-send and free-form input remain protected.
+
+Independent Review notes:
+
+- no real Provider was used in MW-026, so one Owner spot check remains for actual GM acknowledgement of a visible d20 fact and absence of OOC implementation-marker leakage;
+- 960×540 remains intentionally scroll-heavy but operable;
+- mechanics continuity is factual context, not a new consequence engine.
+
+## 4. CURRENT — bounded confirmation build prep
+
+Build only from reviewed implementation main:
+
+`5820c20b1150cd998b626e56fce79c023004b5ec`
+
+Operational work only:
+
+```text
+fetch origin/main
+→ safely sync D:/AI/Projects/my-world tracked checkout
+→ preserve Owner local/unknown files
+→ final Godot import
+→ fresh Windows export / ValidateExportOnly
+→ OWNER LAUNCH READY
+```
+
+No production code change, Provider call or real Game/Source/settings mutation is authorized during build prep.
+
+## 5. Bounded Owner confirmation only
+
+Do not replay Package 2.
+
+Owner checks only:
+
+1. after a visible accepted d20 result, ask OOC/GM about it and confirm GM does not deny the check occurred / can see the accepted result and stakes;
+2. confirm ordinary OOC prose does not show an internal `[GM OOC response | input_mode=ooc]`-style implementation marker;
+3. confirm the five recommendation choices are materially compact and give Narrative visibly more room.
+
+If acceptable:
+
+`Package 2 = PRODUCT PASS / CLOSED`
+
+and immediately:
+
+`Package 3 = CURRENT / 事务 / Open Threads`.
+
+Do not insert typography, hide-preference, shell-refactor, G3 debt or other discretionary work before Package 3.
+
+## 6. Deferred but approved
+
+Player-side presentation hiding remains approved but deferred to Package 6 surface convergence:
 
 - People-specific: `architecture/ui/G6_PEOPLE_CARD_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md`
 - cross-surface: `architecture/ui/G6_MODEL_CURATED_SURFACE_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md`
 
-Preferred implementation remains Package 6 Internal Dynamic UI / surface convergence.
-
-Also not MW-026:
-
-- Open Threads (Package 3 next);
-- full System Surface;
-- Inventory;
-- Dynamic UI;
-- Context Orchestrator;
-- G3 Context debt;
-- layer-boundary cleanup;
-- general shell/UI refactor;
-- d20 rebalance/new consequence engine.
-
-## 5. Package-2 closure after MW-026
-
-After MW-026:
-
-```text
-Codex candidate
-→ GPT Independent Review
-→ reviewed integration
-→ fresh Owner build
-→ bounded spot confirmation only:
-   1. OOC knows an already-visible d20 result rather than denying it
-   2. internal OOC implementation marker is absent
-   3. recommendation surface is materially compact
-→ Owner confirmation
-→ Package 2 PRODUCT PASS / CLOSED
-→ immediately Package 3 Open Threads
-```
-
-No repeat full Package-2 UAT.
-
-## 6. Retained audit/debt notes
+## 7. Retained debt notes
 
 - exact-baseline G3 Context assertions remain debt until relevant Context work;
 - existing teardown/resource warnings remain non-blocking baseline evidence;
@@ -170,7 +166,7 @@ No repeat full Package-2 UAT.
 - Application Shell decomposition remains evolutionary;
 - long-session Context Orchestrator / general Structured Output Reliability remain G7.
 
-## 7. Protected project invariants
+## 8. Protected invariants
 
 - Model Freedom First;
 - free-form natural-language role action remains primary;
