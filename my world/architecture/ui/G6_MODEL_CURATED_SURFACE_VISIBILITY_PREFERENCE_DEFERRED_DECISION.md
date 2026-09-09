@@ -1,15 +1,16 @@
 ---
 title: my world｜Model-curated Surface Visibility Preference
-status: OWNER-APPROVED / DEFERRED
-version: 1.0
+status: OWNER-APPROVED / ACTIVE VIA PACKAGE 6
+version: 1.1
 created: 2026-09-09
 updated: 2026-09-09
-phase: G6 future information surfaces / Internal Dynamic UI convergence
+phase: G6 Package 6 Internal Dynamic UI convergence
 owner: Owner + GPT
 parent:
   - architecture/ui/G6_MODEL_DRIVEN_INFORMATION_CURATION_AUTHORITY_DECISION.md
+  - architecture/ui/G6_INTERNAL_DYNAMIC_UI_HOST_V0_1_DECISION.md
   - architecture/ui/G6_PEOPLE_CARD_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md
-implementation_authorization: deferred
+implementation_authorization: MW-030 bounded v0.1 implementation
 ---
 
 # Model-curated Surface Visibility Preference｜玩家展示隐藏权
@@ -52,22 +53,29 @@ This is a pressure-release valve for presentation preference, not permission for
 
 ## 3. Applicable surface class
 
-This capability applies by default to **model-curated, player-facing information units** that are retained beyond the immediate Narrative and shown in information surfaces.
+This capability applies by default to **model-curated, player-facing information units** that are retained beyond the immediate Narrative and shown in information surfaces, when a legitimate stable presentation identity exists.
 
-Examples include, where a stable renderable unit exists:
+Examples include:
 
 - People cards;
 - Important Experience / milestone entries;
-- future Open Threads / affairs entries;
+- Open Threads / affairs entries **only after** that domain has a stable Thread identity;
 - future Organization / Faction cards;
 - future World Chronicle entries;
 - other future model-curated cards/items using the same retention-and-presentation pattern.
 
-Character may participate only at a sensible stable presentation granularity once the UI host has a real item/group identity model. Do not invent fragile text-based hide identity merely to force this feature into the current Character snapshot.
+Character may participate only at a sensible stable presentation granularity once the UI/domain has a real item/group identity model. Do not invent fragile text-based hide identity merely to force the feature into the current Character snapshot.
 
-This decision does **not automatically apply** to authoritative live mechanics or factual operational state whose visibility is necessary for understanding play, such as Public d20 result cards, mandatory System state, factual Inventory state, blocking errors, or Debug diagnostics. Those require separate product decisions if hideability is ever desired.
+This decision does **not automatically apply** to authoritative live mechanics or factual operational state whose visibility is necessary for understanding play, such as Public d20/System, factual Inventory, blocking errors, or Debug diagnostics. Recommendations are also not part of this retained-information preference.
 
-Ephemeral recommendations are also not part of this retained-information visibility preference.
+### Package 6 v0.1 eligible set
+
+The first active implementation is deliberately bounded to:
+
+- People cards;
+- Important Experience entries.
+
+Open Threads remain non-hideable in v0.1 because their current snapshot contract has no legitimate stable item identity. System and Inventory remain non-hideable because they are authoritative/factual state, not model-curated retention surfaces.
 
 ## 4. Hide semantics
 
@@ -115,31 +123,29 @@ Visibility preference is a **Game-local presentation preference**:
 
 - survives normal reopen / Continue;
 - is not ordinary Timeline truth;
-- should not rewind merely because the Player Restores an older Save;
-- should not become displaced-future semantic state;
+- does not rewind merely because the Player Restores an older Save;
+- does not become displaced-future semantic state;
 - remains independent from Regenerate/correction unless the underlying semantic item itself ceases to exist in current history.
 
-If an underlying current item disappears because Timeline currentness removes it, no card is rendered regardless of hide state. If the same stable semantic item later becomes current again, the Player's visibility preference should remain associated with that stable item where a legitimate stable presentation identity exists.
+If an underlying current item disappears because Timeline currentness removes it, no card is rendered regardless of hide state. If the same stable semantic item later becomes current again, the Player's visibility preference remains associated with that stable item where a legitimate stable presentation identity exists.
 
 Do not bind hide state to mutable display text or content hashes such that a normal model update accidentally creates a visibly "new" item and bypasses the Player's choice.
+
+Package 6 uses a small presentation-preference owner outside Timeline gameplay truth; it must store only bounded opaque presentation keys/metadata, not copied semantic card content.
 
 ## 7. Recoverability
 
 Every surface that supports hiding must also provide a clear bounded recovery path, such as:
 
-- `已隐藏`;
-- `显示已隐藏`;
-- a surface-level hidden-items drawer/filter.
-
-Exact UI is surface-specific and deferred, but hiding must never make an item permanently unreachable through the interface.
-
-A useful default pattern is:
-
 ```text
 visible card/item → 隐藏
-surface header/menu → 已隐藏 (N)
-hidden item → 恢复显示
+surface → 已隐藏 (N)
+hidden current item → 恢复显示
 ```
+
+Hiding must never make an item permanently unreachable through the interface.
+
+Recovery displays the **then-current semantic projection**, not a stale copy frozen when the item was hidden.
 
 ## 8. Stable presentation identity
 
@@ -147,27 +153,36 @@ Hide preference requires a stable Program-owned presentation key tied to an exis
 
 Examples:
 
-- People → stable Game-local actor identity;
-- Open Thread → stable thread identity when that domain exists;
-- other cards → their legitimate Program/domain identity.
+- People → derive an opaque presentation key from stable Game-local actor identity;
+- Important Experiences → derive an opaque presentation key from validated curation record identity + event ordinal;
+- future Open Thread → only after the Thread domain has a stable semantic identity.
 
-Do not use display-name equality or full rendered text as authoritative hide identity.
+Raw domain IDs do not need to reach the renderer/preference file. An opaque derived presentation key is sufficient.
+
+Do not use:
+
+- display-name equality;
+- title equality;
+- full rendered text/content hashes;
+- array position alone;
+
+as authoritative hide identity.
 
 If a future model-curated surface has no stable item identity yet, solve that surface's real identity/currentness design first or implement hide at a coarser stable granularity. Do not create a parallel semantic truth system solely for visibility preferences.
 
-## 9. Implementation placement
+## 9. Package 6 implementation placement
 
-Do not interrupt active Package 2 Owner UAT or current core-closure work for this capability.
+This capability is now actively authorized only as part of **Package 6 Internal Dynamic UI Host v0.1 / MW-030**, where it can be implemented once as a bounded Host-level presentation primitive instead of duplicated across bespoke renderers.
 
-Preferred implementation timing: **Package 6 Internal Dynamic UI Host / information-surface convergence**, because this is naturally a cross-surface presentation primitive and should be implemented once rather than independently in each bespoke renderer.
+Package 6 current authority:
 
-At that stage, prefer one small presentation-preference owner used by eligible model-curated surfaces, without becoming a generic semantic EventBus, new curation engine, or universal UI platform beyond proven consumers.
+`architecture/ui/G6_INTERNAL_DYNAMIC_UI_HOST_V0_1_DECISION.md@v1.0`
 
-An earlier bounded implementation is authorized only if real UAT shows information clutter itself is blocking core play.
+The implementation must remain small and first-party-only. It is not authorization for a generic preferences framework, Action Intent, external Mod UI protocol or model-feedback loop.
 
 ## 10. Product acceptance direction
 
-Future Owner acceptance should prove across at least two distinct model-curated surfaces:
+Future Owner acceptance should prove across at least People and Important Experiences:
 
 - a visible item can be hidden;
 - hide removes only presentation, not underlying semantic information;
@@ -177,10 +192,10 @@ Future Owner acceptance should prove across at least two distinct model-curated 
 - hidden items are recoverable;
 - restoring visibility shows the then-current information, not a stale copy frozen at hide time;
 - hide state never changes model curation behavior or causes extra Provider calls;
-- authoritative mechanics / blocking state are not accidentally hidden by this generic mechanism.
+- authoritative mechanics / factual Inventory / blocking state are not accidentally hidden by this generic mechanism.
 
 ## 11. Relationship to People-specific decision
 
 `G6_PEOPLE_CARD_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md` remains the People-specific specialization and first concrete example.
 
-Where that file expresses generic visibility semantics, this cross-surface decision is now the broader authority. People-specific actor identity and People UI details remain governed by the People decision.
+Where that file expresses generic visibility semantics, this cross-surface decision is the broader authority. People-specific actor identity and People UI details remain governed by the People decision and the Package 6 current architecture.
