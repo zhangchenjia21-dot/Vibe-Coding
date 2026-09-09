@@ -1,13 +1,13 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 4.4
+version: 4.5
 created: 2026-08-25
-updated: 2026-09-08
+updated: 2026-09-09
 current_phase: G6
 current_status_source: MY_WORLD_CURRENT_STATUS.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
-supersedes: v4.3
+supersedes: v4.4
 ---
 
 # my world｜总体规划路线图 CURRENT
@@ -102,7 +102,7 @@ Formal closure evidence：
 
 `docs/uat/G6_PACKAGE0_OWNER_REUAT_U2.md@v1.2`
 
-当前 reviewed/integrated closure artifact：
+Reviewed/integrated closure artifact：
 
 `my-world/main@d81f5f215360780cc50038ccd3bce7cb4163b866`
 
@@ -110,13 +110,13 @@ Package 0 不因后续相邻 UI 工作自动重开；只有新的具体 regressi
 
 ---
 
-### Package 1｜UAT Observability / Debug Mode v0.1｜CURRENT
+### Package 1｜UAT Observability / Debug Mode v0.1｜PRODUCT PASS / CLOSED
 
 **目标：让后续核心开发每做一项，Owner 都能低成本判断“系统后台到底有没有真的变化”。**
 
 这是 P-34 Debug Mode 与 P-32 Consequence Diff 的一个**前置 UAT 切片**，不等于提前实现完整玩家版“本回合变化”。
 
-Current executable outcome：
+Executable outcome：
 
 `MW-022｜UAT Observability / Debug Mode v0.1`
 
@@ -138,17 +138,6 @@ Debug Mode ON
 → 异常时显示人能理解的安全原因
 ```
 
-第一批真实 consumers：
-
-- Narrative accepted / failed / cancelled；
-- World semantic changed / no-change / failed / stale；
-- actor/NPC materialization / identity bridge structural terminal；
-- Character changed / no-change；
-- Important Experiences changed / no-change；
-- People changed / no-change；
-- Recommendations ready / malformed / provider failure / timeout / unavailable / stale；
-- Save / Restore / currentness 关键结果。
-
 保护：
 
 - Debug UI 独立于 `概览/角色/重要经历/人物/...` 玩家信息 taxonomy；
@@ -158,27 +147,83 @@ Debug Mode ON
 - 不输出 API Key / credential / raw provider payload / model reasoning；
 - 不建设 giant EventBus / universal telemetry platform；
 - 不持久化 Debug history/preferences；
-- Open Threads、System、Inventory 成为真实 consumer 后再接入同一 bounded observability seam。
+- Open Threads、System、Inventory 成为真实 consumer 后接入同一 bounded observability seam。
 
-**Exit：** Owner 能在真实一回合后快速判断关键后台域是否变化，并在异常时看到具体安全失败原因；Debug OFF 时正常游戏不受影响。
+MW-023 Gameplay Typography Readability 亦已 `PRODUCT PASS / CLOSED`，作为后续核心 Surface 的可读性基线保留。
 
 ---
 
-### Package 2｜Core Interaction Control
+### Package 2｜Core Interaction Control｜ENGINEERING COMPLETE / CORE OUTCOME ACCEPTED / PRODUCT CONFIRMATION DEFERRED
 
-- OOC / GM Guidance；
-- Character-guided Recommendations；
-- Player 最终 accepted action 反过来作为 Character evolution evidence。
+已完成并集成：
+
+```text
+MW-024  OOC / GM Guidance
+MW-025  Character-guided Recommendations + accepted-action Character evidence
+MW-026  bounded Package-2 UAT cleanup
+```
 
 保护：Five recommendations != allowed-action list；OOC != character action；OOC != World mutation；free-form action always primary。
 
+Owner 已完成探索性 UAT并接受 Package-2 核心方向；MW-026 的三项小修亦已独立审核并集成。Owner 于 2026-09-09 明确决定：
+
+> **“UAT就以后再UAT吧，这次先跳过了”**
+
+因此当前正式状态为：
+
+> **Package 2 = ENGINEERING COMPLETE / CORE OUTCOME ACCEPTED / PRODUCT CONFIRMATION DEFERRED**
+
+含义：
+
+- 不把未做的最终 spot confirmation 伪装成 Product PASS；
+- 也不让这次延期阻塞 Core-first 路线；
+- 不再为 Package 2 单独准备当前确认 build；
+- 剩余体验确认可并入后续集中 UAT / Package 7 Reality Gate，除非 Owner 更早要求；
+- 立即进入 Package 3。
+
+Formal UAT record：
+
+`docs/uat/G6_PACKAGE2_OWNER_UAT_U1.md@v1.6`
+
 ---
 
-### Package 3｜Core Information Continuity｜事务 / Open Threads
+### Package 3｜Core Information Continuity｜事务 / Open Threads｜CURRENT
 
-让玩家知道当前未解决的问题、线索、承诺、计划和风险。优先扩展 Information Curator；不建设 Quest keyword/rule engine。
+**目标：让玩家知道当前有哪些还没有真正结束、但值得继续记住和跟进的事情。**
 
-Package 1 Debug Mode 同步显示 `Open Threads changed / no-change / failed`。
+它回答：
+
+> **“最近有哪些还没有真正结束、但值得我继续记住和跟进的事情？”**
+
+可能包括正在推进的计划、尚未兑现的承诺、等待结果、未解决的冲突/风险、重要线索与开放问题；这些只是例子，不构成固定分类。
+
+Frozen architecture：
+
+`architecture/ui/G6_OPEN_THREADS_SURFACE_V1_0_DECISION.md`
+
+核心边界：
+
+```text
+existing Post-turn Information Curator
+→ model decides add / update / keep / remove
+→ existing information_curation durable owner
+→ player-safe current Open Threads projection
+→ 事务 Surface
+→ Debug threads changed / no-change / failed
+```
+
+保护：
+
+- Model owns semantic interpretation；Program 不建设 Quest keyword/rule engine；
+- `事务` 是当前未完事项快照，不是任务历史；
+- 普通回合可以 no-change；已解决/失效/不再重要的事项可以从当前快照移除；
+- 不新增独立 Open Threads Provider call；
+- 不读取 raw World / NPC private truth 来“补全任务”；
+- 不新建 SQLite table / 第二事实源；
+- Save / reopen / Restore / Regenerate 服从 Timeline currentness；
+- World Information Host 导航扩展为 `概览 | 角色 | 重要经历 | 人物 | 事务 | 存档`；
+- v1.0 不做 checkbox、手动完成/编辑、搜索筛选、优先级、Quest 奖励或 generic Action Intent；
+- Package 1 Debug Mode 同步接入 `threads changed / no-change / failed`。
 
 ---
 
@@ -245,7 +290,8 @@ Owner 使用真实 build 连续试玩，至少覆盖：
 - 1 次 Restore；
 - 1 次明显偏离推荐项的自由输入；
 - 至少 3 类 Dynamic UI Host 承载的真实 Surface / contribution；
-- Debug Mode 对关键回合变化/异常提供足够 UAT 证据。
+- Debug Mode 对关键回合变化/异常提供足够 UAT 证据；
+- Package 2 延期的 OOC/Public-d20/Recommendation Product confirmation 可在这里一并覆盖。
 
 闭环必须表现为：
 
