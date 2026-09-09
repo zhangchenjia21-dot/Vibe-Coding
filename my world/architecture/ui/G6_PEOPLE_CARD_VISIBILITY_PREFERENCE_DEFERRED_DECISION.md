@@ -1,22 +1,23 @@
 ---
 title: my world｜People Card Visibility Preference
-status: OWNER-APPROVED / DEFERRED
-version: 1.0
+status: OWNER-APPROVED / ACTIVE VIA PACKAGE 6
+version: 1.1
 created: 2026-09-09
 updated: 2026-09-09
-phase: G6 future People / Dynamic UI convergence
+phase: G6 Package 6 Internal Dynamic UI convergence
 owner: Owner + GPT
 parent:
   - architecture/ui/G6_PEOPLE_SURFACE_V1_0_DECISION.md
   - architecture/ui/G6_MODEL_DRIVEN_INFORMATION_CURATION_AUTHORITY_DECISION.md
-implementation_authorization: deferred
+  - architecture/ui/G6_MODEL_CURATED_SURFACE_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md
+implementation_authorization: MW-030 bounded v0.1 implementation
 ---
 
 # People Card Visibility Preference｜玩家隐藏权
 
 ## 1. Product decision
 
-Owner wants every People card to eventually expose a **隐藏** action.
+Owner wants every People card to expose a **隐藏** action once Package 6's shared presentation Host is active.
 
 Frozen product principle:
 
@@ -43,39 +44,49 @@ Hide MUST NOT:
 - be interpreted as the Player forgetting the person in-world;
 - become negative evidence for later model curation.
 
-## 3. Restore visibility
+## 3. Stable presentation identity
 
-A future UI must give the Player a clear way to recover hidden cards, for example a bounded `已隐藏` / `显示已隐藏人物` entry.
+People hide state must derive from the existing exact stable Game-local actor identity but does not need to expose that raw identity to the UI.
 
-The exact visual treatment is deferred, but hidden cards must never become permanently unreachable through the interface.
+Package 6 may derive an opaque presentation key for the safe presentation DTO/preference owner.
 
-## 4. Persistence semantics
+Display name is never authoritative hide identity. Same-name people must remain independently hideable.
 
-Visibility preference should be Game-local presentation preference and survive ordinary reopen/Continue.
+## 4. Restore visibility
 
-It is **not Timeline truth** and should not normally rewind simply because the Player Restores an older world/history Save. Restore controls Game/Conversation/World currentness; Player-chosen UI visibility is a separate presentation preference.
+Package 6 must give the Player a clear bounded recovery path, for example a surface-level `已隐藏 (N)` drawer and `恢复显示` action.
+
+Hidden cards must never become permanently unreachable through the interface.
+
+Restoring visibility shows the current People snapshot at that moment, not a stale copy stored when hidden.
+
+## 5. Persistence semantics
+
+Visibility preference is Game-local presentation preference and survives ordinary reopen/Continue.
+
+It is **not Timeline truth** and must not rewind because the Player Restores an older world/history Save. Restore controls Game/Conversation/World currentness; Player-chosen UI visibility is a separate presentation preference.
 
 A hidden card remains hidden when the model later updates its player-known snapshot, until the Player explicitly restores visibility. The system must not automatically unhide a card because the model later considers the person more important.
 
-## 5. Model / Program authority
+## 6. Model / Program / Player authority
 
 This decision preserves the existing authority split:
 
 - Model owns: who merits a People card and what the latest player-known snapshot means;
-- Program owns: normalized storage/currentness and presentation;
+- Program owns: normalized storage/currentness and presentation plumbing;
 - Player owns: optional visibility of cards in their personal interface.
 
 Program must not use hide state as a semantic classifier, importance score, curation hint, prompt instruction or actor deletion trigger.
 
-## 6. Deferred implementation placement
+## 7. Active implementation placement
 
-Do not interrupt active Package 2 Owner UAT or the core closure route for this feature.
+This feature is now authorized only inside **Package 6 / MW-030 Internal Dynamic UI Host v0.1**, so People visibility is implemented once against the shared card Host rather than as a bespoke People-only patch.
 
-Preferred implementation timing: when People presentation is next touched for the later Internal Dynamic UI / People Surface convergence, so visibility preference is implemented once against the mature card host instead of duplicated in the current bespoke renderer and then rebuilt.
+Current Package 6 authority:
 
-A separate bounded task may be pulled earlier only if real play proves visible-card clutter is itself blocking meaningful UAT or core gameplay.
+`architecture/ui/G6_INTERNAL_DYNAMIC_UI_HOST_V0_1_DECISION.md@v1.0`
 
-## 7. Product acceptance direction
+## 8. Product acceptance direction
 
 Future Owner acceptance should prove:
 
@@ -86,4 +97,5 @@ Future Owner acceptance should prove:
 - reopen preserves hidden state;
 - Restore does not incorrectly treat hide state as Timeline truth;
 - Player can find hidden cards and restore them to visible state;
-- no actor/People snapshot deletion occurs merely from hiding.
+- no actor/People snapshot deletion occurs merely from hiding;
+- no display-name identity is used.
