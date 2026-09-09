@@ -25,6 +25,8 @@ skill/
 │  ├─ tavern-asset/
 │  ├─ tavern-creator-import-draft/
 │  └─ 长上下文交接/
+├─ codex/
+│  └─ minecraft-builder/
 └─ dsh/
    ├─ lifecycle-dev-process/
    ├─ lifecycle-templates/
@@ -54,6 +56,8 @@ Skill 是**跨项目默认方法**，不是项目事实源。
 `gpt/lifecycle-templates`：Product Definition、Ownership、Migration、UAT 等治理模板。
 
 `gpt/长上下文交接`：长线程、新线程与角色切换的项目现场交接。
+
+`codex/minecraft-builder`：Minecraft 建筑、聚落与环境改造的设计原则，强调题材原型/世界规则、因果逻辑、地形适配、功能有效性、风格一致和整体重构纪律。
 
 `dsh/`：DeepSeek Harness 运行环境适配版本。
 
