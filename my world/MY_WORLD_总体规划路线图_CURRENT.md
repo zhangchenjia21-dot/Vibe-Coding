@@ -1,13 +1,13 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 4.7
+version: 4.8
 created: 2026-08-25
 updated: 2026-09-09
 current_phase: G6
 current_status_source: MY_WORLD_CURRENT_STATUS.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
-supersedes: v4.6
+supersedes: v4.7
 ---
 
 # my world｜总体规划路线图 CURRENT
@@ -275,7 +275,7 @@ v1.0 保护：
 
 ---
 
-### Package 5｜Core Inventory Vertical｜事实型行囊｜CURRENT
+### Package 5｜Core Inventory Vertical｜事实型行囊｜ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
 
 **目标：让“玩家现在真正带着什么”成为可持续、可使用、可失去、可回滚的 Game-local factual truth，而不是 Narrative 里说过一次以后只能靠模型记忆。**
 
@@ -283,11 +283,19 @@ Frozen architecture：
 
 `architecture/ui/G6_FACTUAL_INVENTORY_VERTICAL_V1_0_DECISION.md@v1.0`
 
-当前 executable outcome：
+Reviewed implementation：
 
 `MW-029｜Factual Inventory Vertical`
 
-核心 vertical：
+- Independent Review：**ENGINEERING PASS_WITH_NOTES**；
+- reviewed/integrated implementation main：`my-world/main@396bfcc0c91cdff6e6816795826b95fa0c0d358c`；
+- focused / real-window each 174 checks / 0 failures；
+- 41 relevant regression suites pass；2 exact-baseline G3 Context failures remain retained debt；
+- Godot import + fresh Windows export / ValidateExportOnly pass；
+- real Provider calls: 0；真实模型 possession extraction / natural GM use remains Product evidence；
+- Owner Product confirmation deferred under the concentrated-UAT instruction。
+
+已成立 vertical：
 
 ```text
 accepted Narrative 明确建立当前 possession
@@ -295,35 +303,78 @@ accepted Narrative 明确建立当前 possession
 → Program-owned stable item identity + durable version-bound Inventory events
 → current player-safe Inventory projection
 → 行囊 Surface
-→ subsequent GM / d20 receives bounded current Inventory grounding
+→ subsequent GM / OOC / d20 receives bounded current Inventory grounding
 → later UPDATE / REMOVE through exact opaque item refs
 → Debug inventory terminal evidence
 → Save / reopen / Restore / Regenerate currentness
 ```
 
-关键路线收敛：当前 Character Source v0.2 没有独立 factual initial-inventory contract，因此 Package 5 **不从角色 prose 猜起始装备，也不硬塞默认物品**。无 authoritative Inventory event 时结构化行囊为空；第一件真实物品由正常 accepted Narrative 明确建立后进入 Inventory。Source-authored initial inventory 留到未来真实 Source/Creator contract work，而不是在本 Package 伪造。
+关键路线收敛：当前 Character Source v0.2 没有独立 factual initial-inventory contract，因此 Package 5 **不从角色 prose 猜起始装备，也不硬塞默认物品**。无 authoritative Inventory event 时结构化行囊为空；第一件真实物品由正常 accepted Narrative 明确建立后进入 Inventory。
 
-v1.0 只允许最小 `ADD / UPDATE / REMOVE` possession mutation；不提前建设装备槽、loot、crafting、economy、numeric durability、NPC inventory 或复杂 stack framework。Debug Mode 显示 Inventory 是否真实变化。
+v1.0 只允许最小 `ADD / UPDATE / REMOVE` possession mutation；不提前建设装备槽、loot、crafting、economy、numeric durability、NPC inventory 或复杂 stack framework。
 
 ---
 
-### Package 6｜Internal Dynamic UI Host v0.1｜CORE REQUIRED
+### Package 6｜Internal Dynamic UI Host v0.1｜CURRENT / CORE REQUIRED
 
-进入时已有多个真实 consumer：Character、Important Experiences、People、Open Threads、System/Public d20、Inventory。
+**目标：把已经由多个真实 Domain 证明过的右侧信息呈现模式收敛为一个安全、有限的 Internal Dynamic UI Host，同时落实 Owner 已批准的“模型保留语义判断、玩家拥有展示隐藏权”。**
 
-从 production consumer 中抽象有限 internal UI vocabulary，例如 section/group、field、card/list、collapsed region、status/mechanic contribution 与已证明的 safe navigation。
+Frozen architecture：
+
+`architecture/ui/G6_INTERNAL_DYNAMIC_UI_HOST_V0_1_DECISION.md@v1.0`
+
+Current executable outcome：
+
+`MW-030｜Internal Dynamic UI Host v0.1 + Model-curated Visibility Preference`
+
+当前有足够真实 consumers：
+
+```text
+Character
+Important Experiences
+People
+Open Threads
+Inventory
+System / Public d20
+```
+
+目标流：
+
+```text
+domain-owned player-safe projection
+→ first-party presentation adapter
+→ bounded internal definition
+→ shared Internal Dynamic UI Host
+→ Godot Controls
+```
+
+v0.1 只抽象真实重复需求：section / text / fact-list / field-list / card / existing collapsible presentation 等有限 vocabulary；定义是 disposable presentation material，不是 Gameplay/Timeline truth，也不是查询语言。
 
 保护：
 
-- Dynamic UI 只负责 presentation，不拥有 gameplay truth；
-- renderer 不接收 omniscient world_state 后本地过滤；
-- Restore / Regenerate 后随 player-safe projection currentness 回退；
-- 不允许 arbitrary GDScript callback / NodePath / OS command / 任意 authoritative mutation；
+- renderer 不接收 omniscient `world_state` 后本地过滤；
+- 不改变 Character / Experiences / People / Threads / Inventory / System 的既有语义；
+- Restore / Regenerate 仍由各 domain player-safe projection 决定 currentness；
+- 不允许 arbitrary GDScript callback / NodePath / expression / OS command / arbitrary authoritative mutation；
 - generic Action Intent 继续 Deferred；
-- external Source / Expansion UI declaration 继续后置 G8；
-- 旧 `MW-013` Task Packet 不可直接执行，必须基于新增真实 consumers 重新 Task Shape。
+- external Source / Expansion / Mod UI declaration 继续后置 G8；
+- Narrative / Composer / Save / Debug / inline d20 等 action-bearing or special UI 继续 imperative；
+- 旧 `MW-013` Task Packet 已由当前多-consumer架构正式 supersede，不可执行。
 
-**Exit：** 多个真实 Surface / mechanic contribution 由同一 Internal Dynamic UI Host 正确呈现，且无第二事实源、泄密或 currentness 回归。
+Package 6 同时激活跨 Surface 展示隐藏权的第一版：
+
+```text
+People + Important Experiences
+→ stable opaque presentation key
+→ 隐藏 / 已隐藏(N) / 恢复显示
+→ Game-local presentation preference outside Timeline
+```
+
+隐藏只影响 ordinary UI，不删除/修改 underlying semantic information，不反馈给模型，不触发 Provider。它 survive reopen；Restore 不 rewind；hidden material 可继续更新且不会自动 unhide。
+
+本轮明确不为 Open Threads 强造 stable identity，因此 Thread v0.1 **不做逐条隐藏**；也不允许 System / factual Inventory 被 generic hide。
+
+**Exit：** 多类真实 Surface 由同一 Internal Dynamic UI Host 正确呈现；People/Important Experiences 的隐藏/恢复遵守 presentation-only 语义；无第二事实源、泄密、currentness 或 Narrative 主体验回归。
 
 ---
 
@@ -340,11 +391,13 @@ Owner 使用真实 build 连续试玩，至少覆盖：
 - 1 次 Restore；
 - 1 次明显偏离推荐项的自由输入；
 - 至少 3 类 Dynamic UI Host 承载的真实 Surface / contribution；
+- 1 次 People/Important Experience hide + recover，并确认隐藏不改变模型语义；
 - Debug Mode 对关键回合变化/异常提供足够 UAT 证据；
 - Package 2 延期的 OOC/Public-d20/Recommendation Product confirmation 可在这里一并覆盖；
 - Package 3 延期的 Open Threads 模型语义质量可在连续试玩中一并覆盖；
 - Package 4 延期的 System history 可用性/与 inline dice 的整体体验可在这里一并覆盖；
-- Package 5 的真实模型 factual Inventory extraction / gameplay usefulness 可在这里一并覆盖。
+- Package 5 的真实模型 factual Inventory extraction / gameplay usefulness 可在这里一并覆盖；
+- Package 6 的 shared Host 一致性、信息可读性与 visibility preference 可在这里一并覆盖。
 
 闭环必须表现为：
 
@@ -357,7 +410,7 @@ Launch / New Game / Continue
 → Character / People / Open Threads
 → System / d20
 → Inventory mutation
-→ Internal Dynamic UI presentation
+→ Internal Dynamic UI presentation + bounded player visibility control
 → Save / exit / reopen / Restore
 → world + information + mechanics + UI currentness 一致
 → continue play
