@@ -1,27 +1,27 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 17.23
+version: 17.24
 created: 2026-08-26
 updated: 2026-09-09
 phase: G6 RPG Core Closure + UAT Observability + Internal Dynamic UI
-current_task: MW-028 System / Public d20 Surface
+current_task: MW-029 Factual Inventory Vertical
 current_owner: Codex
 current_dispatch_state: AUTHORIZED / TASK SHAPED / NO IMPLEMENTATION RETURN YET
-parent_task: G6 Package 4 Core Mechanics Visibility
+parent_task: G6 Package 5 Core Inventory Vertical
 semantic_owner: GPT
 owner_uat_required: deferred / later concentrated Product confirmation
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
-current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v4.6
+current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v4.7
 active_uat_record: my world/docs/uat/G6_PACKAGE2_OWNER_UAT_U1.md@v1.6
-active_architecture: my world/architecture/ui/G6_SYSTEM_PUBLIC_MECHANICS_SURFACE_V1_0_DECISION.md@v1.0
-active_task_packet: my-world/docs/tasks/MW-028_SYSTEM_PUBLIC_D20_SURFACE_TASK.md
-active_task_branch: mw-028-system-public-d20
-formal_code_base: 5a336d0a993fd7e91b05b98f9b0cc14d2bb47b21
-task_packet_commit: bf640238bedfbea50aba9362a6068e70366b3852
-reviewed_implementation_main: 5a336d0a993fd7e91b05b98f9b0cc14d2bb47b21
-mw027_review: my-world/docs/mw027/MW-027_INDEPENDENT_REVIEW_IR1.md
-mw027_integration: my-world/docs/mw027/MW-027_INTEGRATION_VERIFICATION.md
+active_architecture: my world/architecture/ui/G6_FACTUAL_INVENTORY_VERTICAL_V1_0_DECISION.md@v1.0
+active_task_packet: my-world/docs/tasks/MW-029_FACTUAL_INVENTORY_VERTICAL_TASK.md
+active_task_branch: mw-029-factual-inventory
+formal_code_base: f6aae06f6be3be4b7fd24762a10e524b6eb9b683
+task_packet_commit: 574f6ecff87c401d35a8d9e5b95f9edbfecc4fd6
+reviewed_implementation_main: f6aae06f6be3be4b7fd24762a10e524b6eb9b683
+mw028_review: my-world/docs/mw028/MW-028_INDEPENDENT_REVIEW_IR1.md
+mw028_integration: my-world/docs/mw028/MW-028_INTEGRATION_VERIFICATION.md
 ---
 
 # my world｜CURRENT STATUS
@@ -50,197 +50,220 @@ Package 2  Core Interaction Control              ENGINEERING COMPLETE / CORE OUT
   MW-026   Package-2 UAT Cleanup                  ENGINEERING PASS_WITH_NOTES / INTEGRATED
 Package 3  Open Threads / 事务                    ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
   MW-027   Open Threads / 事务                    ENGINEERING PASS_WITH_NOTES / INTEGRATED
-Package 4  System / Public d20                   CURRENT / MW-028 TASK SHAPED + AUTHORIZED
-Package 5  factual Inventory                     QUEUED
+Package 4  System / Public d20                   ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
+  MW-028   System / Public d20 Surface            ENGINEERING PASS_WITH_NOTES / INTEGRATED
+Package 5  factual Inventory / 行囊               CURRENT / MW-029 TASK SHAPED + AUTHORIZED
 Package 6  Internal Dynamic UI Host v0.1         QUEUED / CORE REQUIRED
 Package 7  V0 Core Closure Reality Gate          QUEUED
 ```
 
-## 2. Owner route instruction — concentrated UAT
+## 2. Owner route instruction — concentrated UAT remains active
 
 Owner explicitly instructed on 2026-09-09:
 
 > **“UAT就以后再UAT吧，这次先跳过了”**
 
-Formal interpretation remains:
+Formal interpretation:
 
-- do not stop the Core-first train for a standalone Package-2 or Package-3 product confirmation;
-- do not fake Product PASS where real experiential evidence is still deferred;
-- keep engineering/review evidence authoritative;
-- fold deferred Product evidence into a later concentrated UAT / Package 7 Reality Gate unless Owner asks sooner;
-- continue directly through the remaining core packages.
+- do not stop the Core-first train for standalone Package-2/3/4 Product confirmation;
+- do not fake Product PASS where experiential evidence is deferred;
+- keep Engineering Review evidence authoritative;
+- fold deferred Product evidence into later concentrated UAT / Package 7 Reality Gate unless Owner asks sooner;
+- continue directly through Package 5 and Package 6.
 
-Package 2 therefore remains:
+Therefore Package 2 / 3 / 4 Product confirmation is **deferred, not waived**.
 
-**ENGINEERING COMPLETE / CORE OUTCOME ACCEPTED / PRODUCT CONFIRMATION DEFERRED**.
-
-Package 3 remains:
-
-**ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED**.
-
-## 3. MW-027 — REVIEWED / INTEGRATED
-
-Formal Base:
-
-`5820c20b1150cd998b626e56fce79c023004b5ec`
+## 3. MW-028 — REVIEWED / INTEGRATED
 
 Lineage:
 
-- Task Packet / Starting: `b687cfc29f65637424e8b05bbba6c50e332e0999`
-- Production Implementation: `bc12dbd318b3375110dc4d867cfd118d55b92477`
-- Submitted Final Candidate: `ef6d09583bef15edfba41dfd53412002c96e001f`
-- Independent Review: `8b0955c43ca5e07750f85339ca4538afd061145c`
-- reviewed integration/current implementation main: `5a336d0a993fd7e91b05b98f9b0cc14d2bb47b21`
+- Formal Base: `5a336d0a993fd7e91b05b98f9b0cc14d2bb47b21`
+- Task Packet / Starting: `bf640238bedfbea50aba9362a6068e70366b3852`
+- Production Implementation: `b62554f7d2bb623ce213328a48bb3b01fe191d15`
+- Submitted Final Candidate: `6f7fa9096215a59a35c61a2bcf59ca52f7f4056d`
+- Independent Review: `ce236d9880647597d33bbbe248e2b7b4925d2125`
+- reviewed/integrated current implementation main: `f6aae06f6be3be4b7fd24762a10e524b6eb9b683`
 
 Verdict:
 
-**ENGINEERING PASS_WITH_NOTES / INTEGRATED**.
+**ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED**.
 
-Integrated result:
+Independent Review found no blocker and verified:
 
 ```text
-accepted current role-action turn
-→ existing Information Curator, same semantic call
-→ model decides Open Threads current snapshot
-→ existing information_curation owner
-→ player-safe Threads projection
-→ 事务 Surface
-→ Debug threads lane
-→ Save / reopen / Restore / Regenerate currentness
+existing Program-owned Public d20 truth
+→ one shared accepted/current mechanics selector
+→ GM continuity + player structural System projection
+→ 系统 Surface
+→ immediate post-adjudication refresh
+→ Debug mechanics lane
+→ Save / reopen / Restore currentness
 ```
 
-Independent Review found no blocking defect and no semantic-authority rollback. Old curation v0.2 history remains readable while v0.3 carries Threads.
+Evidence:
 
-Remaining Product evidence:
+- focused: 377 checks / 0 failures;
+- real-window: 377 checks / 0 failures at 960×540 / 1280×720 / 1920×1080;
+- 40 relevant regression suites pass;
+- 2 G3 Context failures reproduced on the exact Formal Base and remain known debt;
+- Godot 4.7.2 import + fresh Windows export + `ValidateExportOnly` pass;
+- real Provider calls: 0, appropriate for deterministic System projection.
 
-- MW-027 used zero real Provider semantic samples;
-- actual model quality for selecting useful unresolved matters, remaining quiet on ordinary turns and removing resolved matters remains deferred Product evidence;
-- this does not block Package 4 under Owner's current UAT instruction.
+Product evidence still deferred: whether System history is useful/readable in continuous real play and coherent with inline dice feedback.
 
-## 4. Package 4 architecture — FROZEN / CURRENT
+## 4. Package 5 architecture — FROZEN / CURRENT
 
 Frozen decision:
 
-`architecture/ui/G6_SYSTEM_PUBLIC_MECHANICS_SURFACE_V1_0_DECISION.md@v1.0`
+`architecture/ui/G6_FACTUAL_INVENTORY_VERTICAL_V1_0_DECISION.md@v1.0`
 
-Governance decision commit:
+Governance architecture commit:
 
-`9b039598be16a52185ead4a281af44150b86890d`
+`34635743f451ca3f158671c7aab2ba615bec47e1`
 
 Product question:
 
-> **“本局最近真正发生、并已经公开给我的机制判定是什么？程序到底掷出了什么、怎么算、结果是什么？”**
+> **“我现在真正随身拥有、可以在接下来的行动里使用或失去的东西是什么？”**
 
-Frozen semantics / boundaries:
+Core ownership:
 
-- existing Public d20 durable owner remains the only mechanics truth source;
-- System does not infer checks from Narrative or create a second mechanics state;
-- one mechanics-owned current/player-safe selection must serve both existing GM continuity and new structural System projection;
-- player `系统` lists only actual accepted/current CHECK records, recent max 12;
-- player-safe CHECK fields may include turn, intent, DC, modifier/reason, stance/situation, raw rolls, selected roll, total, outcome, success intent and failure stakes;
-- internal IDs, control payload, hashes, raw World/private material never reach leaf UI;
-- routine NO_CHECK remains valid durable mechanics truth and Debug evidence but does not flood the persistent player System list;
-- existing inline Narrative dice card remains;
-- no Information Curator / extra Provider call / new SQLite owner;
-- no fake HP/Mana/Hunger/Money/Level/Buff state;
-- World Information navigation becomes `概览 | 角色 | 重要经历 | 人物 | 事务 | 系统 | 存档`;
-- Player Status Host remains collapsed unless a future real live-status contribution exists;
-- Debug Mode adds a bounded `mechanics` lane;
-- System refresh must occur after adjudication terminal/acceptance-marker commit so the newest CHECK does not lag one turn.
+```text
+accepted Narrative factual possession consequence
+→ existing World semantic lane, same one Provider call
+→ Program-owned stable item identity
+→ version-bound durable Inventory event record in existing World/Timeline owner
+→ current Inventory fold against current accepted Conversation
+→ player-safe 行囊 projection
+→ later GM / d20 current Inventory grounding
+→ ADD / UPDATE / REMOVE through exact opaque item refs
+```
 
-## 5. CURRENT — MW-028 System / Public d20 Surface
+Critical decisions:
+
+- Inventory is factual gameplay truth, not Information Curator prose curation;
+- no second Provider call or SQLite owner;
+- no Program keyword/regex item semantics;
+- model decides whether accepted Narrative actually established possession/state change;
+- Program owns stable item identity, event shape, exact refs, persistence and currentness;
+- existing item UPDATE/REMOVE uses request-only opaque `item_ref`; display name is never identity;
+- current Inventory is event-folded against exact accepted turn/hash so Regenerate/Restore cannot leak stale items;
+- player UI sees only `name + summary` detached safe material;
+- later ordinary/OOC and Public d20 requests receive bounded current Inventory grounding;
+- World-only Evolution does not gain Player-private Inventory authority;
+- Debug adds safe `inventory` changed/no-change/failure evidence.
+
+### No invented initial inventory
+
+Current first-party Character Source `character_card.v0.2` has no explicit factual initial-inventory contract. Therefore Package 5 does **not**:
+
+- infer starting gear from Character/T0 prose;
+- fabricate default clothes/money/weapons/food;
+- expand the Source external contract early.
+
+No authoritative Inventory event means structured Inventory is empty. The first real item enters when accepted Narrative explicitly establishes current player possession and the existing semantic lane materializes it.
+
+This intentionally replaces the earlier shorthand “初始真实物品” with the stricter truthful vertical:
+
+```text
+empty factual baseline
+→ first real possession established in accepted play
+→ durable Inventory
+→ later use/update/transfer/loss
+```
+
+## 5. CURRENT — MW-029 Factual Inventory Vertical
 
 Formal Code Base:
 
-`my-world/main@5a336d0a993fd7e91b05b98f9b0cc14d2bb47b21`
+`my-world/main@f6aae06f6be3be4b7fd24762a10e524b6eb9b683`
 
 Governance Base at Task Shape:
 
-`Vibe-Coding/main@f57ed356eeff55b1c2fdae589f8aea912f2a1666`
+`Vibe-Coding/main@502c1aff35a8cf87778228d2087348c0170ddd94`
 
 Task branch:
 
-`mw-028-system-public-d20`
+`mw-029-factual-inventory`
 
 Task packet:
 
-`docs/tasks/MW-028_SYSTEM_PUBLIC_D20_SURFACE_TASK.md`
+`docs/tasks/MW-029_FACTUAL_INVENTORY_VERTICAL_TASK.md`
 
 Task packet commit:
 
-`bf640238bedfbea50aba9362a6068e70366b3852`
+`574f6ecff87c401d35a8d9e5b95f9edbfecc4fd6`
 
 Required worktree:
 
-`D:/AI/Projects/.worktrees/my-world/mw-028-system-public-d20`
+`D:/AI/Projects/.worktrees/my-world/mw-029-factual-inventory`
 
 Current dispatch meaning:
 
 > **AUTHORIZED / TASK SHAPED / NO IMPLEMENTATION RETURN YET**
 
-`current_owner: Codex` is authorization and responsibility, not evidence that a Codex process is actively running.
+`current_owner: Codex` means Codex is the authorized production implementer. It does not assert that a Codex process is currently running.
 
 Implementer return ceiling:
 
 **READY FOR INDEPENDENT REVIEW**.
 
-## 6. MW-028 required product result
+## 6. MW-029 required product result
 
 ```text
-existing Public d20 durable owner
-→ shared accepted/current mechanics selection
-→ player-safe structural CHECK projection
-→ 系统 Surface
-→ immediate refresh after accepted adjudication terminal
-→ Debug mechanics terminal evidence
-→ Save / reopen / Restore currentness
+no factual Inventory event
+→ 行囊 empty
+
+accepted role action + accepted GM Narrative explicitly establish possession
+→ existing World semantic call returns bounded ADD
+→ same atomic World commit
+→ 行囊 shows item
+→ subsequent GM/OOC/d20 request sees current safe Inventory
+
+later accepted play
+→ UPDATE / REMOVE / no-change via exact opaque item_ref
+→ 行囊 updates after semantic durable terminal
+→ Save / reopen / Restore / Regenerate remain current
 ```
 
-Player-facing navigation after implementation:
+Player-facing navigation after MW-029:
 
 ```text
-概览 | 角色 | 重要经历 | 人物 | 事务 | 系统 | 存档
+概览 | 角色 | 重要经历 | 人物 | 事务 | 行囊 | 系统 | 存档
 ```
 
-Player System v1.0:
+v1.0 does not add item buttons or equipment management. Player continues to use/give/drop items through free-form natural-language role actions.
 
-- section `近期公开判定`;
-- exact real CHECK facts;
-- newest easy to find;
-- max recent 12;
-- empty state when none;
-- no routine NO_CHECK spam;
-- no fabricated RPG stats.
+## 7. MW-029 Independent Review gates
 
-## 7. MW-028 review gates
+GPT review must verify at minimum:
 
-Independent Review must verify:
+- no fake/default initial items;
+- same existing World semantic Provider opportunity, no Inventory-specific call;
+- optional Inventory field fails soft relative to existing world/knowledge/identity outputs;
+- stable item identity is Program-owned and replay-safe;
+- existing item targeting uses opaque refs, not display-name equality;
+- durable event records are exact accepted-version bound and fold correctly after Regenerate/Restore;
+- Inventory enters ordinary/OOC/Public-d20 context through safe projection only;
+- World-only evolution excludes Player Inventory;
+- UI receives no Runtime/raw World/event IDs;
+- Debug contains no item prose/IDs/refs/private payload;
+- Save/reopen/Restore/displaced-future behavior;
+- eight-tab navigation, >=20px typography, narrow-window scrolling/operability;
+- no new Source contract, equipment/loot/crafting/economy/stack framework;
+- adjacent Character/People/Threads/System/d20/Narrative behavior remains intact.
 
-- exact Program-owned CHECK facts, not Narrative inference;
-- one shared mechanics currentness selector for System + existing GM mechanics continuity;
-- unsafe IDs/control/private material excluded;
-- NO_CHECK excluded from player list but retained in continuity/Debug;
-- after CHECK acceptance marker commit, System refreshes immediately rather than one turn late;
-- Save/reopen/Restore/displaced-future currentness;
-- no new Provider call / storage owner / mechanics engine;
-- existing inline dice card and d20 no-reroll semantics remain intact;
-- Debug mechanics lane truthfully reflects CHECK / NO_CHECK / replay / degraded / failure / cancellation using safe bounded evidence;
-- 960×540 / 1280×720 / 1920×1080 remain >=20px and operable;
-- Package 2/3 adjacent surfaces/navigation remain intact.
+Engineering PASS still requires GPT Independent Review after Codex return. Product confirmation remains Owner-owned and may be deferred/combined.
 
-Engineering PASS still requires GPT Independent Review after Codex returns. Product confirmation remains Owner-owned and may be deferred/combined.
-
-## 8. Next route after MW-028
-
-Normal route after reviewed MW-028 integration:
+## 8. Next route after reviewed MW-029 integration
 
 ```text
-Package 5  factual Inventory
-→ Package 6  Internal Dynamic UI Host v0.1
+Package 6  Internal Dynamic UI Host v0.1
 → Package 7  V0 Core Closure Reality Gate
 ```
 
-Do not insert discretionary typography, hide-preference, Shell refactor, G3 debt, Context Orchestrator or other peripheral work unless a real blocker emerges or Owner explicitly changes route.
+Package 6 is a **core requirement**, not optional polish. It must be reshaped from the now-proven real consumers; the old MW-013 packet must not be executed unchanged.
+
+Do not insert discretionary typography, hide-preference, Shell refactor, G3 debt, Context Orchestrator, Creator/Source authoring or other peripheral work unless a real blocker emerges or Owner explicitly changes route.
 
 ## 9. Deferred but approved
 
@@ -249,7 +272,7 @@ Player-side presentation hiding remains approved but deferred to Package 6 surfa
 - People-specific: `architecture/ui/G6_PEOPLE_CARD_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md`
 - cross-surface: `architecture/ui/G6_MODEL_CURATED_SURFACE_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md`
 
-Package-2 and Package-3 Product confirmation remain deferred, not waived.
+Package-2 / Package-3 / Package-4 Product confirmation remains deferred, not waived. Package-5 Product evidence may likewise be concentrated into Package 7 if Engineering passes and Owner does not request earlier UAT.
 
 ## 10. Retained debt notes
 
@@ -267,7 +290,9 @@ Package-2 and Package-3 Product confirmation remain deferred, not waived.
 - World Truth != actor Knowledge != human-player disclosure;
 - UI/Debug is projection, never second truth;
 - Save / Restore / Regenerate currentness remains authoritative;
-- OOC is guidance, not mutation and does not trigger d20;
+- OOC is guidance, not mutation and does not trigger d20/Inventory semantic opportunity independently;
 - Public d20 Program RNG/no-reroll/durable result remains authoritative;
-- Player Status Host is for real live status, not historical mechanics;
-- no fake mechanics/state is introduced merely to fill UI.
+- Inventory is factual current possession, not Character/Threads curation;
+- display name never substitutes for stable identity;
+- no fake mechanics/items/state merely to fill UI;
+- Player Status Host remains reserved for real live-status contribution, not history or inventory lists.
