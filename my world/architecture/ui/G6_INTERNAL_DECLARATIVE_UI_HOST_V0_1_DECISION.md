@@ -1,14 +1,18 @@
 ---
 title: my world｜G6 Internal Declarative UI Host v0.1 Decision
-status: FROZEN / CURRENT
+status: SUPERSEDED
 version: 0.1
 created: 2026-09-06
+updated: 2026-09-09
 phase: G6 RPG Experience & Internal Declarative UI Host
 semantic_owner: GPT
 trigger: MW-011 R3 Owner UI UAT PASS + G6 visual re-entry audit
+superseded_by: G6_INTERNAL_DYNAMIC_UI_HOST_V0_1_DECISION.md@v1.0
 ---
 
 # G6 Internal Declarative UI Host v0.1 Decision
+
+> **SUPERSEDED.** This decision was shaped before People / Open Threads / System / Inventory became real production consumers. It remains historical architecture evidence only. Package 6 current authority is `G6_INTERNAL_DYNAMIC_UI_HOST_V0_1_DECISION.md@v1.0`; the old MW-013 Task Packet must not be executed.
 
 ## 1. Why now
 
