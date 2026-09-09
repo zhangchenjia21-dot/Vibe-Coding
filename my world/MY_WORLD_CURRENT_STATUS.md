@@ -1,25 +1,27 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 17.22
+version: 17.23
 created: 2026-08-26
 updated: 2026-09-09
 phase: G6 RPG Core Closure + UAT Observability + Internal Dynamic UI
-current_task: MW-027 Open Threads / 事务
+current_task: MW-028 System / Public d20 Surface
 current_owner: Codex
 current_dispatch_state: AUTHORIZED / TASK SHAPED / NO IMPLEMENTATION RETURN YET
-parent_task: G6 Package 3 Core Information Continuity
+parent_task: G6 Package 4 Core Mechanics Visibility
 semantic_owner: GPT
 owner_uat_required: deferred / later concentrated Product confirmation
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
-current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v4.5
+current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v4.6
 active_uat_record: my world/docs/uat/G6_PACKAGE2_OWNER_UAT_U1.md@v1.6
-active_architecture: my world/architecture/ui/G6_OPEN_THREADS_SURFACE_V1_0_DECISION.md@v1.0
-active_task_packet: my-world/docs/tasks/MW-027_OPEN_THREADS_TASK.md
-active_task_branch: mw-027-open-threads
-formal_code_base: 5820c20b1150cd998b626e56fce79c023004b5ec
-task_packet_commit: b687cfc29f65637424e8b05bbba6c50e332e0999
-reviewed_implementation_main: 5820c20b1150cd998b626e56fce79c023004b5ec
+active_architecture: my world/architecture/ui/G6_SYSTEM_PUBLIC_MECHANICS_SURFACE_V1_0_DECISION.md@v1.0
+active_task_packet: my-world/docs/tasks/MW-028_SYSTEM_PUBLIC_D20_SURFACE_TASK.md
+active_task_branch: mw-028-system-public-d20
+formal_code_base: 5a336d0a993fd7e91b05b98f9b0cc14d2bb47b21
+task_packet_commit: bf640238bedfbea50aba9362a6068e70366b3852
+reviewed_implementation_main: 5a336d0a993fd7e91b05b98f9b0cc14d2bb47b21
+mw027_review: my-world/docs/mw027/MW-027_INDEPENDENT_REVIEW_IR1.md
+mw027_integration: my-world/docs/mw027/MW-027_INTEGRATION_VERIFICATION.md
 ---
 
 # my world｜CURRENT STATUS
@@ -46,174 +48,210 @@ Package 2  Core Interaction Control              ENGINEERING COMPLETE / CORE OUT
   MW-024   OOC / GM Guidance                     ENGINEERING PASS_WITH_NOTES / INTEGRATED
   MW-025   Character-guided Recommendations      ENGINEERING PASS_WITH_NOTES / INTEGRATED
   MW-026   Package-2 UAT Cleanup                  ENGINEERING PASS_WITH_NOTES / INTEGRATED
-Package 3  Open Threads / 事务                    CURRENT / MW-027 TASK SHAPED + AUTHORIZED
-Package 4  System / Public d20                   QUEUED
+Package 3  Open Threads / 事务                    ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
+  MW-027   Open Threads / 事务                    ENGINEERING PASS_WITH_NOTES / INTEGRATED
+Package 4  System / Public d20                   CURRENT / MW-028 TASK SHAPED + AUTHORIZED
 Package 5  factual Inventory                     QUEUED
 Package 6  Internal Dynamic UI Host v0.1         QUEUED / CORE REQUIRED
 Package 7  V0 Core Closure Reality Gate          QUEUED
 ```
 
-## 2. Owner route instruction — Package 2 confirmation deferred
+## 2. Owner route instruction — concentrated UAT
 
 Owner explicitly instructed on 2026-09-09:
 
 > **“UAT就以后再UAT吧，这次先跳过了”**
 
-Formal interpretation:
+Formal interpretation remains:
 
-- do not prepare the bounded Package-2 confirmation build now;
-- do not mark Package 2 Product PASS without the missing experiential confirmation;
-- retain all MW-024 / MW-025 / MW-026 engineering and prior exploratory-UAT evidence;
-- use exact status:
-  **`ENGINEERING COMPLETE / CORE OUTCOME ACCEPTED / PRODUCT CONFIRMATION DEFERRED`**;
-- deferred OOC/Public-d20/recommendation spot evidence may be covered by a later concentrated UAT / Package 7 Reality Gate unless Owner asks sooner;
-- the deferral is not a blocker for core development;
-- proceed directly to Package 3.
+- do not stop the Core-first train for a standalone Package-2 or Package-3 product confirmation;
+- do not fake Product PASS where real experiential evidence is still deferred;
+- keep engineering/review evidence authoritative;
+- fold deferred Product evidence into a later concentrated UAT / Package 7 Reality Gate unless Owner asks sooner;
+- continue directly through the remaining core packages.
 
-Formal record:
+Package 2 therefore remains:
 
-`docs/uat/G6_PACKAGE2_OWNER_UAT_U1.md@v1.6`
+**ENGINEERING COMPLETE / CORE OUTCOME ACCEPTED / PRODUCT CONFIRMATION DEFERRED**.
 
-## 3. Package 3 architecture — FROZEN / CURRENT
+Package 3 remains:
+
+**ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED**.
+
+## 3. MW-027 — REVIEWED / INTEGRATED
+
+Formal Base:
+
+`5820c20b1150cd998b626e56fce79c023004b5ec`
+
+Lineage:
+
+- Task Packet / Starting: `b687cfc29f65637424e8b05bbba6c50e332e0999`
+- Production Implementation: `bc12dbd318b3375110dc4d867cfd118d55b92477`
+- Submitted Final Candidate: `ef6d09583bef15edfba41dfd53412002c96e001f`
+- Independent Review: `8b0955c43ca5e07750f85339ca4538afd061145c`
+- reviewed integration/current implementation main: `5a336d0a993fd7e91b05b98f9b0cc14d2bb47b21`
+
+Verdict:
+
+**ENGINEERING PASS_WITH_NOTES / INTEGRATED**.
+
+Integrated result:
+
+```text
+accepted current role-action turn
+→ existing Information Curator, same semantic call
+→ model decides Open Threads current snapshot
+→ existing information_curation owner
+→ player-safe Threads projection
+→ 事务 Surface
+→ Debug threads lane
+→ Save / reopen / Restore / Regenerate currentness
+```
+
+Independent Review found no blocking defect and no semantic-authority rollback. Old curation v0.2 history remains readable while v0.3 carries Threads.
+
+Remaining Product evidence:
+
+- MW-027 used zero real Provider semantic samples;
+- actual model quality for selecting useful unresolved matters, remaining quiet on ordinary turns and removing resolved matters remains deferred Product evidence;
+- this does not block Package 4 under Owner's current UAT instruction.
+
+## 4. Package 4 architecture — FROZEN / CURRENT
 
 Frozen decision:
 
-`architecture/ui/G6_OPEN_THREADS_SURFACE_V1_0_DECISION.md@v1.0`
+`architecture/ui/G6_SYSTEM_PUBLIC_MECHANICS_SURFACE_V1_0_DECISION.md@v1.0`
 
 Governance decision commit:
 
-`c0ed3056130386cbc2f9d1e1d484c04002f0d1a1`
+`9b039598be16a52185ead4a281af44150b86890d`
 
 Product question:
 
-> **“最近有哪些还没有真正结束、但值得我继续记住和跟进的事情？”**
+> **“本局最近真正发生、并已经公开给我的机制判定是什么？程序到底掷出了什么、怎么算、结果是什么？”**
 
-Frozen semantics:
+Frozen semantics / boundaries:
 
-- `事务 / Open Threads` is a player-current unresolved-matters surface, not a Quest engine or task manager;
-- the model decides whether a matter is worth remembering, whether it changes, and when it is resolved/expired/no longer relevant;
-- ordinary turns may produce no Thread change;
-- current-scene presence is neither necessary nor sufficient;
-- current snapshot, not task history;
-- full current replacement semantics: `open_threads=null` keeps, Array replaces, `[]` clears;
-- no keyword/regex classifier, importance score, priority rule, event-type forest or turn threshold;
-- one existing Information Curator call maintains Character + Important Experiences + People + Open Threads;
-- no extra Provider call, new SQLite table, hidden World objective view or historical backfill;
-- World Information Host adds `事务` between `人物` and `存档`;
-- Debug Mode adds a read-only `threads` lane from player-safe before/after projection.
+- existing Public d20 durable owner remains the only mechanics truth source;
+- System does not infer checks from Narrative or create a second mechanics state;
+- one mechanics-owned current/player-safe selection must serve both existing GM continuity and new structural System projection;
+- player `系统` lists only actual accepted/current CHECK records, recent max 12;
+- player-safe CHECK fields may include turn, intent, DC, modifier/reason, stance/situation, raw rolls, selected roll, total, outcome, success intent and failure stakes;
+- internal IDs, control payload, hashes, raw World/private material never reach leaf UI;
+- routine NO_CHECK remains valid durable mechanics truth and Debug evidence but does not flood the persistent player System list;
+- existing inline Narrative dice card remains;
+- no Information Curator / extra Provider call / new SQLite owner;
+- no fake HP/Mana/Hunger/Money/Level/Buff state;
+- World Information navigation becomes `概览 | 角色 | 重要经历 | 人物 | 事务 | 系统 | 存档`;
+- Player Status Host remains collapsed unless a future real live-status contribution exists;
+- Debug Mode adds a bounded `mechanics` lane;
+- System refresh must occur after adjudication terminal/acceptance-marker commit so the newest CHECK does not lag one turn.
 
-## 4. CURRENT — MW-027 Open Threads
+## 5. CURRENT — MW-028 System / Public d20 Surface
 
 Formal Code Base:
 
-`my-world/main@5820c20b1150cd998b626e56fce79c023004b5ec`
+`my-world/main@5a336d0a993fd7e91b05b98f9b0cc14d2bb47b21`
 
 Governance Base at Task Shape:
 
-`Vibe-Coding/main@dbc83f67d0bacbf973c00d278fa760089f3152b3`
+`Vibe-Coding/main@f57ed356eeff55b1c2fdae589f8aea912f2a1666`
 
 Task branch:
 
-`mw-027-open-threads`
+`mw-028-system-public-d20`
 
 Task packet:
 
-`docs/tasks/MW-027_OPEN_THREADS_TASK.md`
+`docs/tasks/MW-028_SYSTEM_PUBLIC_D20_SURFACE_TASK.md`
 
 Task packet commit:
 
-`b687cfc29f65637424e8b05bbba6c50e332e0999`
+`bf640238bedfbea50aba9362a6068e70366b3852`
 
 Required worktree:
 
-`D:/AI/Projects/.worktrees/my-world/mw-027-open-threads`
+`D:/AI/Projects/.worktrees/my-world/mw-028-system-public-d20`
 
 Current dispatch meaning:
 
 > **AUTHORIZED / TASK SHAPED / NO IMPLEMENTATION RETURN YET**
 
-`current_owner: Codex` means Codex is the authorized production implementer for this Work Item. It is **not evidence that an agent process is currently running**.
+`current_owner: Codex` is authorization and responsibility, not evidence that a Codex process is actively running.
 
 Implementer return ceiling:
 
 **READY FOR INDEPENDENT REVIEW**.
 
-## 5. MW-027 required product result
-
-The implementation should prove this vertical:
+## 6. MW-028 required product result
 
 ```text
-accepted current role-action turn
-→ existing Information Curator, same one semantic call
-→ model decides Open Threads current snapshot change/no-change
-→ existing information_curation durable owner
-→ player-safe current Threads projection
-→ 事务 Surface
-→ Debug threads changed/no-change/failed
-→ Save/reopen/Restore/Regenerate currentness
+existing Public d20 durable owner
+→ shared accepted/current mechanics selection
+→ player-safe structural CHECK projection
+→ 系统 Surface
+→ immediate refresh after accepted adjudication terminal
+→ Debug mechanics terminal evidence
+→ Save / reopen / Restore currentness
 ```
 
-Expected player-facing navigation:
+Player-facing navigation after implementation:
 
 ```text
-概览 | 角色 | 重要经历 | 人物 | 事务 | 存档
+概览 | 角色 | 重要经历 | 人物 | 事务 | 系统 | 存档
 ```
 
-v1.0 `事务` shows title + current summary + bounded details / empty state only.
+Player System v1.0:
 
-Not in MW-027:
+- section `近期公开判定`;
+- exact real CHECK facts;
+- newest easy to find;
+- max recent 12;
+- empty state when none;
+- no routine NO_CHECK spam;
+- no fabricated RPG stats.
 
-- Quest rewards/types/status engine;
-- checkbox/manual completion/editing;
-- search/filter/sort/priority controls;
-- separate Threads model call;
-- System / Inventory / Dynamic UI;
-- generic Action Intent;
-- player hide/edit preference;
-- historical backfill;
-- unrelated cleanup/refactor.
+## 7. MW-028 review gates
 
-## 6. Review gates for MW-027
+Independent Review must verify:
 
-Independent Review must verify both engineering correctness and architecture fidelity.
+- exact Program-owned CHECK facts, not Narrative inference;
+- one shared mechanics currentness selector for System + existing GM mechanics continuity;
+- unsafe IDs/control/private material excluded;
+- NO_CHECK excluded from player list but retained in continuity/Debug;
+- after CHECK acceptance marker commit, System refreshes immediately rather than one turn late;
+- Save/reopen/Restore/displaced-future currentness;
+- no new Provider call / storage owner / mechanics engine;
+- existing inline dice card and d20 no-reroll semantics remain intact;
+- Debug mechanics lane truthfully reflects CHECK / NO_CHECK / replay / degraded / failure / cancellation using safe bounded evidence;
+- 960×540 / 1280×720 / 1920×1080 remain >=20px and operable;
+- Package 2/3 adjacent surfaces/navigation remain intact.
 
-Critical gates:
+Engineering PASS still requires GPT Independent Review after Codex returns. Product confirmation remains Owner-owned and may be deferred/combined.
 
-- old information-curation lived history remains readable with version-correct ID/currentness validation;
-- new Thread writes follow accepted-prefix + parent-chain currentness;
-- Restore/displaced future/stale callbacks cannot leak future Threads into current Timeline;
-- no new SQLite owner or extra Provider call;
-- no OOC lived curation;
-- leaf UI consumes only L3 player-safe Threads projection;
-- Debug compares safe before/after projection only;
-- Character / Important Experiences / People remain intact;
-- no Program semantic task rules are introduced.
+## 8. Next route after MW-028
 
-Engineering PASS still requires GPT Independent Review after Codex returns. Owner Product UAT may remain deferred/combined and is not part of Codex's completion authority.
-
-## 7. Next route after MW-027
-
-Normal route after reviewed MW-027 integration:
+Normal route after reviewed MW-028 integration:
 
 ```text
-Package 4  System / Public d20
-→ Package 5  factual Inventory
+Package 5  factual Inventory
 → Package 6  Internal Dynamic UI Host v0.1
 → Package 7  V0 Core Closure Reality Gate
 ```
 
-Do not insert discretionary typography, hide-preference, shell refactor, G3 debt, Context Orchestrator or other peripheral work unless a real blocker emerges or Owner explicitly changes route.
+Do not insert discretionary typography, hide-preference, Shell refactor, G3 debt, Context Orchestrator or other peripheral work unless a real blocker emerges or Owner explicitly changes route.
 
-## 8. Deferred but approved
+## 9. Deferred but approved
 
 Player-side presentation hiding remains approved but deferred to Package 6 surface convergence:
 
 - People-specific: `architecture/ui/G6_PEOPLE_CARD_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md`
 - cross-surface: `architecture/ui/G6_MODEL_CURATED_SURFACE_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md`
 
-Package-2 Product confirmation remains deferred, not waived.
+Package-2 and Package-3 Product confirmation remain deferred, not waived.
 
-## 9. Retained debt notes
+## 10. Retained debt notes
 
 - exact-baseline G3 Context assertions remain debt until relevant Context work;
 - existing teardown/resource warnings remain non-blocking baseline evidence;
@@ -221,7 +259,7 @@ Package-2 Product confirmation remains deferred, not waived.
 - Application Shell decomposition remains evolutionary;
 - long-session Context Orchestrator / general Structured Output Reliability remain G7.
 
-## 10. Protected invariants
+## 11. Protected invariants
 
 - Model Freedom First;
 - Reversibility over prevention;
@@ -229,6 +267,7 @@ Package-2 Product confirmation remains deferred, not waived.
 - World Truth != actor Knowledge != human-player disclosure;
 - UI/Debug is projection, never second truth;
 - Save / Restore / Regenerate currentness remains authoritative;
-- OOC is guidance, not mutation;
-- Character is evidence/model interpretation, not Program-enforced personality rules;
-- Information Curator remains background / non-blocking and owns open semantic curation through the model, not Program heuristics.
+- OOC is guidance, not mutation and does not trigger d20;
+- Public d20 Program RNG/no-reroll/durable result remains authoritative;
+- Player Status Host is for real live status, not historical mechanics;
+- no fake mechanics/state is introduced merely to fill UI.
