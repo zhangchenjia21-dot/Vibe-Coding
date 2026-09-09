@@ -1,7 +1,7 @@
 ---
 title: my world｜G6 Package 2 Owner UAT U1
 status: OWNER UAT ACTIVE
-version: 1.2
+version: 1.3
 created: 2026-09-08
 updated: 2026-09-09
 package: G6 Package 2 Core Interaction Control
@@ -119,6 +119,36 @@ Canonical cross-surface deferred decision:
 The generic capability applies to eligible model-curated persistent units such as People cards, Important Experience entries and future Open Threads / Organization / World Chronicle items. It does not automatically apply to authoritative mechanics, factual Inventory, blocking errors, Debug diagnostics or other state whose visibility requires separate product judgment.
 
 F04/F05 are **non-blocking for Package 2** and should not interrupt the current UAT/core route. Preferred implementation timing is Package 6 Internal Dynamic UI / information-surface convergence, unless real information clutter becomes a core-play blocker.
+
+### U1-F06｜Recommendation labels became shorter but layout still wastes Narrative space
+
+Owner confirms the earlier product reason for short recommendation labels was to reduce the amount of screen space occupied by the recommendation surface. In the current build, the labels are shorter but the recommendation controls still stretch into long full-width bars, so the product-space benefit was not realized. Together with the composer, the bottom interaction region occupies roughly one third of the main Narrative host in the observed desktop layout.
+
+Current implementation evidence matches the symptom:
+
+- recommendation buttons use `SIZE_EXPAND_FILL` and therefore stretch to fill their grid cells even when the model-authored label is short;
+- every recommendation button has a fixed `48px` minimum height;
+- the recommendation grid is a two-column full-width layout at ordinary Narrative widths;
+- the recommendation scroll area may reserve up to `168px` height on normal-height windows;
+- the Player composer independently keeps a minimum height of `132px`.
+
+Product interpretation:
+
+> Short labels should produce a genuinely compact recommendation surface, not merely short text inside oversized bars.
+
+Likely correction direction after UAT:
+
+- make recommendation controls content-width / compact rather than full-cell stretch;
+- use a horizontal flow / wrapping compact-choice layout (or equivalent) so five short labels usually consume about one or two compact rows instead of three large grid rows;
+- recommendation area height should follow the actual compact rows rather than reserve the old long-copy height;
+- keep current >=20px readability and direct click target usability;
+- clicking still prefills the detailed draft and never sends;
+- do not shorten model labels further merely to compensate for layout waste;
+- do not reduce Narrative font size to recover space.
+
+The composer itself is not yet declared defective by this finding; first reclaim the recommendation-space waste that the short-label design was specifically intended to solve. If the combined interaction region remains too dominant afterward, reassess composer sizing separately based on Owner UAT.
+
+Treat F06 as a real UX/product finding to correct after the current UAT unless Owner later deems it non-blocking. Do not patch during active UAT.
 
 ## 5. Product PASS rule
 
