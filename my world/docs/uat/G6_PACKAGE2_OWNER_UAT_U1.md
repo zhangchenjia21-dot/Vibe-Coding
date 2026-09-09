@@ -1,157 +1,156 @@
 ---
 title: my world｜G6 Package 2 Owner UAT U1
-status: OWNER UAT ACTIVE
-version: 1.3
+status: OWNER UAT COMPLETE / CORE OUTCOME ACCEPTED / BOUNDED CLEANUP REQUIRED
+version: 1.4
 created: 2026-09-08
 updated: 2026-09-09
 package: G6 Package 2 Core Interaction Control
 reviewed_product_code: 716d8dbfadaad07d992baef531912b6ce1078e2d
 owner_build_pck_sha256: 62ee95f113bbbc905fd29762149bb2cf4641d008d9fe0a18cc84c2ec5547d0bc
 owner_build_pck_utc: 2026-09-08T13:06:13Z
-owner_verdict: pending
+owner_verdict: core outcome accepted; bounded cleanup requested before formal Package 2 closure
 ---
 
 # G6 Package 2｜Owner UAT U1
 
-## 1. Gate state
+## 1. Final UAT state
 
-**OWNER UAT ACTIVE**.
+**OWNER UAT COMPLETE.**
 
-Engineering train is complete and integrated:
+Owner ended the UAT and judged the remaining findings to be small issues that should be solved once, then the project should return to the main core route as quickly as possible.
+
+Interpretation:
+
+- Package 2 core product direction is accepted;
+- do not reopen broad OOC / Character-guided Recommendation product design;
+- do not run another full Package-2 exploratory UAT;
+- perform one bounded cleanup containing only the confirmed small findings below;
+- after Engineering Review/integration, require at most a very small spot confirmation of the corrected behaviors, then close Package 2 and proceed immediately to Package 3 Open Threads.
+
+Engineering train already integrated:
 
 - MW-024 OOC / GM Guidance = ENGINEERING PASS_WITH_NOTES / INTEGRATED;
 - MW-025 Character-guided Recommendations + Accepted-Action Character Evidence = ENGINEERING PASS_WITH_NOTES / INTEGRATED.
 
-Owner build preparation returned `OWNER LAUNCH READY` against exact reviewed product code:
+Tested Owner build product code:
 
 `716d8dbfadaad07d992baef531912b6ce1078e2d`
 
-Fresh Windows PCK:
+Fresh Windows PCK used in UAT:
 
 - Built UTC: `2026-09-08T13:06:13Z`
 - SHA256: `62ee95f113bbbc905fd29762149bb2cf4641d008d9fe0a18cc84c2ec5547d0bc`
 
-Owner canonical checkout tracked HEAD == origin/main at the reviewed product code. Existing `.gitignore` local modification and ten untracked sidecars were preserved unchanged.
+## 2. Accepted Package-2 core outcome
 
-## 2. Product question
+Owner's play confirms the Package-2 direction is useful enough to keep:
 
-Does Package 2 make interaction control feel natural without reducing roleplay freedom?
+- `角色行动` remains the ordinary protagonist-action path;
+- `OOC / GM 指导` works as a direct channel to the GM and returns an OOC response;
+- Owner wants more long-run experience with guidance strength, but does not treat this as a redesign blocker;
+- Character-guided recommendations remain part of the accepted direction;
+- free-form input remains primary;
+- remaining findings are treated by Owner as small cleanup items rather than reasons to reopen the package architecture.
 
-Specifically:
+Formal Product PASS remains pending until the bounded cleanup is integrated; however, no second full Package-2 UAT is required.
 
-- role actions remain ordinary protagonist actions;
-- OOC / GM Guidance feels like speaking directly to the GM rather than acting in-world;
-- OOC itself does not create World/mechanics/Character/People consequences;
-- subsequent roleplay naturally respects recent OOC guidance;
-- recommendations feel informed by the current protagonist;
-- recommendations still permit deviation, experiment and growth rather than personality lock-in;
-- final accepted role choices may gradually influence Character when genuinely meaningful;
-- unsent recommendation drafts, OOC and failed/cancelled attempts do not mechanically rewrite Character;
-- free-form action remains primary;
-- Save/reopen/Restore preserve typed mode/currentness.
+## 3. Bounded cleanup findings
 
-## 3. UAT method
+### U1-F02｜Public d20 truth / consequence continuity
 
-Owner may play naturally rather than execute a synthetic engineering checklist. Debug Mode may be used when useful to verify that OOC does not schedule World/Curator lanes while normal role action still does.
+Observed:
 
-During this UAT, reviewed product code is frozen. Do not modify production code unless Owner reports a hard blocker that prevents meaningful continuation.
+- UI showed a real Program-owned Public d20 check with DC, roll, total, failure outcome and failure stakes;
+- a later OOC question received a GM answer claiming that no dice-check node had been triggered;
+- Owner also felt the failure had little visible downstream effect.
 
-Owner may submit observations incrementally. Findings should be accumulated until Owner explicitly states the UAT is complete or gives a final Product verdict.
+Confirmed product problem:
 
-## 4. Accumulated Owner observations
+> A Program-owned mechanics result already disclosed to the Player must remain available as player-safe GM context, so later Narrative/OOC cannot contradict it and declared stakes can remain causally legible.
 
-### U1-F01｜OOC basic interaction — positive, strength still under observation
+Correction direction:
 
-Owner tried `OOC / GM 指导` and reported that it appears useful and does provide direct GM feedback. Owner wants more play time before judging how strongly and naturally later play follows the guidance.
-
-Current state: **positive / continue observing**.
-
-### U1-F02｜Public d20 truth vs later OOC contradiction
-
-Owner observed a visible Program-owned Public d20 failure card with DC / roll / total / failure outcome and failure stakes. A later OOC question about that event received an answer claiming that no dice-check node had been triggered.
-
-This is a real consistency finding, not Owner misunderstanding.
-
-Working interpretation to verify after UAT:
-
-- Program/UI knows the durable Public d20 result;
-- later OOC/Narrative model context may not receive the relevant player-safe Program-owned mechanics truth;
-- therefore GM can contradict a mechanics event already shown to the Player.
-
-Also observe whether the declared failure stakes materially constrain subsequent Narrative, rather than becoming a visually isolated card with little causal effect.
-
-Do not patch during active UAT unless this becomes a hard blocker.
+- expose a bounded player-safe projection of current accepted Public d20 / NO_CHECK truth to the Narrative/OOC continuation context;
+- use only Program-owned facts already disclosed to the Player;
+- preserve accepted/current Timeline matching and Restore behavior;
+- do not expose hidden mechanics control payload, model control reasoning, actor-private material or raw world state;
+- do not add a new Provider call;
+- do not build the future full `系统 / System Surface` or generic mechanics platform here;
+- a failure stake does not need to make recovery impossible, but subsequent Narrative must treat the accepted failure/outcome/stakes as real prior context rather than silently forgetting them.
 
 ### U1-F03｜OOC request-only marker leakage
 
-Owner screenshot showed `[GM OOC response | input_mode=ooc]` in player-visible GM output. This is an internal/request structural marker and should not become ordinary presentation text.
+Observed player-visible text included:
 
-Treat as a low-severity presentation leak to correct after UAT if still reproducible; do not use this as reason to remove structural typed-mode semantics.
+`[GM OOC response | input_mode=ooc]`
 
-### U1-F04｜Future People-card hide right — Owner-approved, deferred
+This is an internal/request-only structural wrapper and should not appear as ordinary GM prose.
 
-Owner wants every People card to eventually have a `隐藏` action while preserving model curation authority.
+Correction direction:
 
-Frozen distinction:
+- keep Program-owned typed `action/ooc` semantics;
+- keep durable accepted Player/GM raw prose unchanged;
+- replace internal-looking request wrappers with a presentation-safe request representation and/or bounded instruction that does not leak implementation syntax into visible prose;
+- do not remove structural mode information;
+- do not add output regex cleanup that could accidentally rewrite legitimate GM prose.
 
-> Model decides which people are semantically worth remembering; Player decides which remembered People cards are visible in their own interface.
+### U1-F06｜Recommendation compact layout did not realize short-label space savings
 
-Hiding is presentation-only. It must not delete/tombstone the People snapshot, stable actor identity, curation state or later updates. Hidden cards remain part of the information model and may continue to update; they stay hidden until the Player restores visibility.
+Observed:
 
-People-specific deferred decision:
+- recommendation labels are now short as intended;
+- controls still stretch across large grid cells and reserve the old long-copy layout height;
+- recommendation area + composer consumes roughly one third of the Narrative host in the observed desktop layout.
 
-`architecture/ui/G6_PEOPLE_CARD_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md`
+Current implementation evidence:
 
-### U1-F05｜Generalize hide right across model-curated information surfaces — Owner-approved, deferred
+- recommendation buttons use horizontal expand/fill;
+- each button has 48px minimum height;
+- ordinary layout is a two-column full-width grid;
+- recommendation scroll may reserve up to 168px height;
+- composer independently has a 132px minimum height.
 
-Owner explicitly broadened the People-card idea: other current information surfaces, and future surfaces that use the same model-curated retention-and-presentation pattern, should support the same Player-side hide capability where a stable renderable unit exists.
+Correction direction:
 
-Frozen cross-surface principle:
+- short model-authored labels should produce genuinely compact content-width controls;
+- prefer compact horizontal/wrapping choice chips/buttons (or equivalent) instead of long full-cell bars;
+- five ordinary short labels should normally consume about one or two compact rows on desktop widths;
+- recommendation region height follows actual compact rows rather than reserving old long-copy space;
+- preserve >=20px readability and practical click targets;
+- clicking still prefills the paired detailed draft and never sends;
+- do not further shorten model labels merely to compensate for layout waste;
+- do not shrink Narrative text;
+- composer sizing is not part of this cleanup unless implementation evidence shows the recommendation-only correction cannot produce a usable layout.
 
-> **Model decides what information is semantically worth retaining and presenting; Player has final control over which retained information units are actually visible in their own interface.**
+## 4. Deferred observations — do not pull into cleanup
 
-This is intended to reduce pressure to over-tune the model merely to match the Player's preferred sidebar density. The Player can suppress presentation without turning that choice into semantic feedback, negative importance evidence, deletion, or a prompt-training signal.
+### U1-F04 / U1-F05｜Player hide rights for model-curated information
 
-Canonical cross-surface deferred decision:
+Owner approved a People-specific hide right and then generalized it across eligible model-curated persistent information surfaces.
 
-`architecture/ui/G6_MODEL_CURATED_SURFACE_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md`
+Canonical deferred decisions:
 
-The generic capability applies to eligible model-curated persistent units such as People cards, Important Experience entries and future Open Threads / Organization / World Chronicle items. It does not automatically apply to authoritative mechanics, factual Inventory, blocking errors, Debug diagnostics or other state whose visibility requires separate product judgment.
+- `architecture/ui/G6_PEOPLE_CARD_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md`
+- `architecture/ui/G6_MODEL_CURATED_SURFACE_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md`
 
-F04/F05 are **non-blocking for Package 2** and should not interrupt the current UAT/core route. Preferred implementation timing is Package 6 Internal Dynamic UI / information-surface convergence, unless real information clutter becomes a core-play blocker.
+These remain **deferred to Package 6 Internal Dynamic UI / surface convergence** unless information clutter becomes a true core-play blocker.
 
-### U1-F06｜Recommendation labels became shorter but layout still wastes Narrative space
+Do not implement them in the Package-2 cleanup.
 
-Owner confirms the earlier product reason for short recommendation labels was to reduce the amount of screen space occupied by the recommendation surface. In the current build, the labels are shorter but the recommendation controls still stretch into long full-width bars, so the product-space benefit was not realized. Together with the composer, the bottom interaction region occupies roughly one third of the main Narrative host in the observed desktop layout.
+## 5. Cleanup / closure rule
 
-Current implementation evidence matches the symptom:
+Create exactly one bounded cleanup work item for F02 + F03 + F06.
 
-- recommendation buttons use `SIZE_EXPAND_FILL` and therefore stretch to fill their grid cells even when the model-authored label is short;
-- every recommendation button has a fixed `48px` minimum height;
-- the recommendation grid is a two-column full-width layout at ordinary Narrative widths;
-- the recommendation scroll area may reserve up to `168px` height on normal-height windows;
-- the Player composer independently keeps a minimum height of `132px`.
+After implementation:
 
-Product interpretation:
+1. GPT Independent Review;
+2. integrate reviewed main;
+3. fresh Owner build;
+4. only a minimal spot confirmation if needed:
+   - OOC knows an already-visible d20 result instead of denying it;
+   - internal OOC wrapper is not visible;
+   - recommendation choices are genuinely compact and return Narrative space;
+5. no repeat full Package-2 UAT;
+6. close Package 2 on Owner confirmation and proceed directly to Package 3 Open Threads.
 
-> Short labels should produce a genuinely compact recommendation surface, not merely short text inside oversized bars.
-
-Likely correction direction after UAT:
-
-- make recommendation controls content-width / compact rather than full-cell stretch;
-- use a horizontal flow / wrapping compact-choice layout (or equivalent) so five short labels usually consume about one or two compact rows instead of three large grid rows;
-- recommendation area height should follow the actual compact rows rather than reserve the old long-copy height;
-- keep current >=20px readability and direct click target usability;
-- clicking still prefills the detailed draft and never sends;
-- do not shorten model labels further merely to compensate for layout waste;
-- do not reduce Narrative font size to recover space.
-
-The composer itself is not yet declared defective by this finding; first reclaim the recommendation-space waste that the short-label design was specifically intended to solve. If the combined interaction region remains too dominant afterward, reassess composer sizing separately based on Owner UAT.
-
-Treat F06 as a real UX/product finding to correct after the current UAT unless Owner later deems it non-blocking. Do not patch during active UAT.
-
-## 5. Product PASS rule
-
-Package 2 closes only on explicit Owner Product PASS.
-
-Engineering tests, real-provider samples, build readiness or absence of crashes do not substitute for this verdict.
+Do not insert further discretionary polish or architecture work between this cleanup and Package 3.
