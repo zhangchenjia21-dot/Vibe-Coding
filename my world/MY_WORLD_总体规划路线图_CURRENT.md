@@ -1,13 +1,13 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 4.5
+version: 4.6
 created: 2026-08-25
 updated: 2026-09-09
 current_phase: G6
 current_status_source: MY_WORLD_CURRENT_STATUS.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
-supersedes: v4.4
+supersedes: v4.5
 ---
 
 # my world｜总体规划路线图 CURRENT
@@ -179,7 +179,7 @@ Owner 已完成探索性 UAT并接受 Package-2 核心方向；MW-026 的三项�
 - 也不让这次延期阻塞 Core-first 路线；
 - 不再为 Package 2 单独准备当前确认 build；
 - 剩余体验确认可并入后续集中 UAT / Package 7 Reality Gate，除非 Owner 更早要求；
-- 立即进入 Package 3。
+- 立即进入后续核心 Package。
 
 Formal UAT record：
 
@@ -187,21 +187,24 @@ Formal UAT record：
 
 ---
 
-### Package 3｜Core Information Continuity｜事务 / Open Threads｜CURRENT
+### Package 3｜Core Information Continuity｜事务 / Open Threads｜ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
 
 **目标：让玩家知道当前有哪些还没有真正结束、但值得继续记住和跟进的事情。**
 
-它回答：
-
-> **“最近有哪些还没有真正结束、但值得我继续记住和跟进的事情？”**
-
-可能包括正在推进的计划、尚未兑现的承诺、等待结果、未解决的冲突/风险、重要线索与开放问题；这些只是例子，不构成固定分类。
-
 Frozen architecture：
 
-`architecture/ui/G6_OPEN_THREADS_SURFACE_V1_0_DECISION.md`
+`architecture/ui/G6_OPEN_THREADS_SURFACE_V1_0_DECISION.md@v1.0`
 
-核心边界：
+Reviewed implementation：
+
+`MW-027｜Open Threads / 事务`
+
+- Independent Review：**ENGINEERING PASS_WITH_NOTES**；
+- reviewed/integrated implementation main：`my-world/main@5a336d0a993fd7e91b05b98f9b0cc14d2bb47b21`；
+- real Provider semantic sample：0，因此真实模型是否能稳定挑出“值得继续记住的未完事项”仍属于 Product evidence；
+- Owner 当前已决定集中 UAT，故 standalone Product confirmation deferred，不阻塞路线。
+
+已成立 vertical：
 
 ```text
 existing Post-turn Information Curator
@@ -210,6 +213,7 @@ existing Post-turn Information Curator
 → player-safe current Open Threads projection
 → 事务 Surface
 → Debug threads changed / no-change / failed
+→ Save / reopen / Restore / Regenerate currentness
 ```
 
 保护：
@@ -220,24 +224,47 @@ existing Post-turn Information Curator
 - 不新增独立 Open Threads Provider call；
 - 不读取 raw World / NPC private truth 来“补全任务”；
 - 不新建 SQLite table / 第二事实源；
-- Save / reopen / Restore / Regenerate 服从 Timeline currentness；
-- World Information Host 导航扩展为 `概览 | 角色 | 重要经历 | 人物 | 事务 | 存档`；
-- v1.0 不做 checkbox、手动完成/编辑、搜索筛选、优先级、Quest 奖励或 generic Action Intent；
-- Package 1 Debug Mode 同步接入 `threads changed / no-change / failed`。
+- v1.0 不做 checkbox、手动完成/编辑、搜索筛选、优先级、Quest 奖励或 generic Action Intent。
 
 ---
 
-### Package 4｜Core Mechanics Visibility｜System Surface
+### Package 4｜Core Mechanics Visibility｜System / Public d20｜CURRENT
 
-以现有 Public d20 为第一真实 mechanics consumer：
+**目标：把已经真实发生、已经公开给玩家的 Program-owned Public d20 判定，从 Narrative 的即时骰点卡扩展成一个可持续回看的 `系统` 信息 Surface。**
+
+Frozen architecture：
+
+`architecture/ui/G6_SYSTEM_PUBLIC_MECHANICS_SURFACE_V1_0_DECISION.md@v1.0`
+
+当前 executable outcome：
+
+`MW-028｜System / Public d20 Surface`
+
+核心 vertical：
 
 ```text
-real mechanic owner
-→ bounded player-safe contribution
-→ System Surface
+existing Public d20 durable owner
+→ shared current accepted mechanics selection
+→ bounded player-safe structural projection
+→ 系统 Surface
+→ Debug mechanics terminal evidence
+→ Save / reopen / Restore currentness
 ```
 
-不硬编码虚构 HP / Mana / Hunger / Money。Debug Mode 接入 mechanics terminal/change evidence。
+v1.0 保护：
+
+- `系统` 只投影真实 mechanics truth，不创建第二事实源；
+- 玩家 Surface 只列最近 accepted/current 的真实 `CHECK`，最多 12 条；
+- 普通 `NO_CHECK` 不长期堆入玩家列表，但仍保留为 durable mechanics truth、GM continuity 与 Debug terminal evidence；
+- 不通过 Information Curator，不增加 Provider call；
+- 不新建 SQLite owner；
+- 不重做 d20 balance/DC/modifier/stance/RNG/no-reroll 规则；
+- 不硬编码虚构 HP / Mana / Hunger / Money / Level / Buff 等状态；
+- 保留 Narrative inline dice card；
+- World Information Host 导航变为 `概览 | 角色 | 重要经历 | 人物 | 事务 | 系统 | 存档`；
+- 不为历史骰点重新打开 Player Status Host；
+- Debug Mode 接入 `mechanics` terminal/change evidence；
+- >=20px typography、Save/Restore/currentness 与 privacy boundary 继续成立。
 
 ---
 
@@ -291,7 +318,8 @@ Owner 使用真实 build 连续试玩，至少覆盖：
 - 1 次明显偏离推荐项的自由输入；
 - 至少 3 类 Dynamic UI Host 承载的真实 Surface / contribution；
 - Debug Mode 对关键回合变化/异常提供足够 UAT 证据；
-- Package 2 延期的 OOC/Public-d20/Recommendation Product confirmation 可在这里一并覆盖。
+- Package 2 延期的 OOC/Public-d20/Recommendation Product confirmation 可在这里一并覆盖；
+- Package 3 延期的 Open Threads 模型语义质量可在连续试玩中一并覆盖。
 
 闭环必须表现为：
 
