@@ -1,28 +1,27 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 17.25
+version: 17.26
 created: 2026-08-26
 updated: 2026-09-09
-phase: G6 RPG Core Closure + UAT Observability + Internal Dynamic UI
-current_task: MW-030 Internal Dynamic UI Host v0.1 + Model-curated Visibility Preference
+phase: G6 RPG Core Closure — V0 Core Closure Reality Gate
+current_task: MW-031 V0 Core Reality Gate Build Prep
 current_owner: Codex
-current_dispatch_state: AUTHORIZED / TASK SHAPED / NO IMPLEMENTATION RETURN YET
-parent_task: G6 Package 6 Internal Dynamic UI Host v0.1
+current_dispatch_state: AUTHORIZED / UAT-SUPPORT TASK SHAPED / OWNER BUILD NOT YET INSTALLED
+parent_task: G6 Package 7 V0 Core Closure Reality Gate
 semantic_owner: GPT
-owner_uat_required: deferred / Package 7 concentrated Reality Gate
+owner_uat_required: active after build prep
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
-current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v4.8
-active_uat_record: my world/docs/uat/G6_PACKAGE2_OWNER_UAT_U1.md@v1.6
+current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v4.9
+active_uat_record: my world/docs/uat/G6_V0_CORE_CLOSURE_REALITY_GATE_U1.md@v1.0
 active_architecture: my world/architecture/ui/G6_INTERNAL_DYNAMIC_UI_HOST_V0_1_DECISION.md@v1.0
-active_task_packet: my-world/docs/tasks/MW-030_INTERNAL_DYNAMIC_UI_HOST_TASK.md
-active_task_branch: mw-030-internal-dynamic-ui-host
-formal_code_base: 396bfcc0c91cdff6e6816795826b95fa0c0d358c
-governance_base_at_task_shape: 88c8581cbd02823e53e72e7fb2d28f089b4da5fb
-task_packet_commit: bd4f2a49f3a44df7aa148d5437e51e90dc18f483
-reviewed_implementation_main: 396bfcc0c91cdff6e6816795826b95fa0c0d358c
-mw029_review: my-world/docs/mw029/MW-029_INDEPENDENT_REVIEW_IR1.md
-mw029_integration: my-world/docs/mw029/MW-029_INTEGRATION_VERIFICATION.md
+active_task_packet: my-world/docs/tasks/MW-031_V0_CORE_REALITY_GATE_BUILD_PREP_TASK.md
+active_task_branch: mw-031-v0-core-reality-gate-prep
+formal_code_base: 69ac2030b90f4165deb2ecb5302e3743422af585
+task_packet_commit: aa62d4cfebfed2789efccd230616b76a9dc9f28b
+reviewed_implementation_main: 69ac2030b90f4165deb2ecb5302e3743422af585
+mw030_review: my-world/docs/mw030/MW-030_INDEPENDENT_REVIEW_IR1.md
+mw030_integration: my-world/docs/mw030/MW-030_INTEGRATION_VERIFICATION.md
 ---
 
 # my world｜CURRENT STATUS
@@ -35,266 +34,199 @@ G2 AI Conversation Spine                    PASS / CLOSED
 G3 Persistence / Save / Timeline            PASS / CLOSED
 G4 Primary Source Assets & Local Game       PASS / CLOSED
 G5 World Semantics & GM Runtime             PRODUCT PASS / CLOSED
-
-G6 RPG Core Closure + UAT Observability + Internal Dynamic UI ACTIVE
+G6 RPG Core Closure                         ACTIVE / PACKAGE 7 REALITY GATE
+G7 Long-session Context & Knowledge         QUEUED
+G8 Product Expansion / Authoring            QUEUED
+G9 Standalone Alpha                         QUEUED
 ```
 
 Current G6 flow:
 
 ```text
-Package 0  Correction Train + Owner UAT          PRODUCT PASS / CLOSED
-Package 1  UAT Observability / Debug Mode v0.1   PRODUCT PASS / CLOSED
-MW-023     Gameplay Typography Readability        PRODUCT PASS / CLOSED
-Package 2  Core Interaction Control              ENGINEERING COMPLETE / CORE OUTCOME ACCEPTED / PRODUCT CONFIRMATION DEFERRED
-  MW-024   OOC / GM Guidance                     ENGINEERING PASS_WITH_NOTES / INTEGRATED
-  MW-025   Character-guided Recommendations      ENGINEERING PASS_WITH_NOTES / INTEGRATED
-  MW-026   Package-2 UAT Cleanup                  ENGINEERING PASS_WITH_NOTES / INTEGRATED
-Package 3  Open Threads / 事务                    ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
-  MW-027   Open Threads / 事务                    ENGINEERING PASS_WITH_NOTES / INTEGRATED
-Package 4  System / Public d20                   ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
-  MW-028   System / Public d20 Surface            ENGINEERING PASS_WITH_NOTES / INTEGRATED
-Package 5  factual Inventory / 行囊               ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
-  MW-029   Factual Inventory Vertical             ENGINEERING PASS_WITH_NOTES / INTEGRATED
-Package 6  Internal Dynamic UI Host v0.1         CURRENT / MW-030 TASK SHAPED + AUTHORIZED / CORE REQUIRED
-Package 7  V0 Core Closure Reality Gate          QUEUED
+Package 0  Correction Train + Owner UAT         PRODUCT PASS / CLOSED
+Package 1  Debug Mode / UAT Observability       PRODUCT PASS / CLOSED
+MW-023     Typography Readability                PRODUCT PASS / CLOSED
+Package 2  Core Interaction Control             ENGINEERING COMPLETE / CORE OUTCOME ACCEPTED / PRODUCT CONFIRMATION DEFERRED
+Package 3  Open Threads / 事务                   ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
+Package 4  System / Public d20                  ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
+Package 5  factual Inventory / 行囊              ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED
+Package 6  Internal Dynamic UI Host v0.1        ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED TO PACKAGE 7
+Package 7  V0 Core Closure Reality Gate         CURRENT / BUILD PREP
 ```
 
-## 2. Owner route instruction — concentrated UAT remains active
+## 2. Owner route instruction
 
-Owner explicitly instructed:
+Owner previously instructed that standalone Package-level UAT should be deferred so the project could return to the main route.
 
-> **“UAT就以后再UAT吧，这次先跳过了”**
+That instruction has now reached its intended convergence point:
 
-Formal interpretation:
+> **Packages 2–6 are engineering-integrated; their deferred Product evidence is combined in Package 7 rather than waived.**
 
-- do not stop the Core-first train for standalone Package-2/3/4/5 Product confirmation;
-- do not fake Product PASS where experiential evidence is deferred;
-- Engineering Review/integration evidence remains authoritative;
-- deferred Product evidence moves into the Package-7 concentrated Reality Gate unless Owner asks sooner;
-- Package 6 is implemented before returning to Owner for the full V0 Core Reality Gate.
+No more planned G6 core capability implementation is queued before this Reality Gate.
 
-Product confirmation is **deferred, not waived**.
-
-## 3. MW-029 — REVIEWED / INTEGRATED
+## 3. MW-030 — REVIEWED / INTEGRATED
 
 Lineage:
 
-- Formal Base: `f6aae06f6be3be4b7fd24762a10e524b6eb9b683`
-- Task Packet / Starting: `574f6ecff87c401d35a8d9e5b95f9edbfecc4fd6`
-- Production Implementation: `5ea0ed9e8826aa51f4900e8e96b10e8cf0c67f0e`
-- Submitted Final Candidate: `4c2529ab845db056ef291843a31314e77813ac91`
-- Independent Review: `1ba4b2a80e72114ba2ace3917bf1679bfa0b0b48`
-- reviewed/integrated current implementation main: `396bfcc0c91cdff6e6816795826b95fa0c0d358c`
+- Formal Base: `396bfcc0c91cdff6e6816795826b95fa0c0d358c`
+- Task Packet / Starting: `bd4f2a49f3a44df7aa148d5437e51e90dc18f483`
+- Production Implementation: `2d27860ae2123092d83684523df6a4e0b680c635`
+- Submitted Final Candidate: `b1dd4ee9884aaabb0bcd5a702206bde93643f406`
+- Independent Review: `bdb838cb37719b89feea25c145f37f732cf25ec7`
+- reviewed/integrated current implementation main: `69ac2030b90f4165deb2ecb5302e3743422af585`
 
 Verdict:
 
-**ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED**.
+**ENGINEERING PASS_WITH_NOTES / INTEGRATED / PRODUCT CONFIRMATION DEFERRED TO PACKAGE 7**.
 
 Independent Review verified:
 
 ```text
-accepted Narrative factual possession
-→ existing World semantic call
-→ bounded ADD / UPDATE / REMOVE
-→ Program-owned item identity + request-only refs
-→ version-bound Inventory events in existing World/Timeline owner
-→ current factual Inventory fold
-→ 行囊 Surface
-→ current Inventory grounding in ordinary/OOC/Public-d20 foreground
-→ Debug inventory lane
-→ Save / reopen / Restore / Regenerate currentness
-```
-
-Evidence:
-
-- focused: 174 checks / 0 failures;
-- real-window: 174 checks / 0 failures at 960×540 / 1280×720 / 1920×1080;
-- 41 directly relevant regression suites pass;
-- exact-baseline G3-03 / G3-05 Context failures reproduced and remain retained debt;
-- Godot 4.7.2 import + fresh Windows export + `ValidateExportOnly` pass;
-- real Provider calls: 0.
-
-Remaining Product evidence: real-model possession extraction judgment and natural GM use during long play.
-
-## 4. Package 6 architecture — FROZEN / CURRENT
-
-Current decision:
-
-`architecture/ui/G6_INTERNAL_DYNAMIC_UI_HOST_V0_1_DECISION.md@v1.0`
-
-This **supersedes** the pre-consumer:
-
-`G6_INTERNAL_DECLARATIVE_UI_HOST_V0_1_DECISION.md@0.1`.
-
-The old `MW-013` Task Packet remains historical / held and **must not be executed**.
-
-Product outcome:
-
-```text
-Character / Important Experiences / People / Open Threads / Inventory / System
-→ domain-owned player-safe DTOs
-→ first-party bounded presentation adapters
+Character / Important Experiences / People / Threads / Inventory / System
+→ domain-owned safe DTO
+→ first-party bounded definitions
 → one shared Internal Dynamic UI Host
 → Godot Controls
 ```
 
-Current internal vocabulary is intentionally bounded to proven needs such as:
+and:
 
 ```text
-section
-text
-fact_list
-field_list
-card
-existing collapsible presentation
+People + Important Experiences
+→ legitimate opaque presentation identity
+→ hide / hidden drawer / recover
+→ Game-local presentation preference outside Timeline
 ```
 
-Definitions are disposable internal presentation material. They are not Gameplay/Timeline truth, a Runtime query language, or an external Mod UI contract.
+Engineering evidence:
 
-Protected boundaries:
+- focused: 422 checks / 0 failures;
+- real-window: 422 checks / 0 failures at 960×540 / 1280×720 / 1920×1080;
+- direct regressions: 42/44 pass;
+- two G3 Context failures reproduced on exact Formal Base and retained as known debt;
+- Godot 4.7.2 final import + fresh Windows export + ValidateExportOnly pass;
+- real Provider calls: 0.
 
-- renderer never receives omniscient `world_state` to locally decide disclosure;
-- no arbitrary GDScript callback / method name / NodePath / expression / SQL / OS command / Provider call / arbitrary resource path;
-- no new semantic domain or Provider call;
-- Character / Experiences / People / Threads / Inventory / System semantics remain owned by existing domains;
-- Narrative/composer, Save, Debug and inline d20 remain imperative;
-- external Source/Expansion/Mod UI declaration remains G8;
-- generic Action Intent remains Deferred.
+No blocker was found in shared renderer reuse, player-safe boundaries, visibility identity, sidecar persistence, Restore/reopen behavior or affected surface semantics.
 
-## 5. Owner-approved visibility preference — ACTIVE IN MW-030
+## 4. Reviewed V0 Core implementation baseline
 
-Broader authority:
+Exact implementation main for the Package-7 Owner build:
 
-`architecture/ui/G6_MODEL_CURATED_SURFACE_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md@v1.1`
+`my-world/main@69ac2030b90f4165deb2ecb5302e3743422af585`
 
-People specialization:
+This includes reviewed Packages 2–6 through MW-030.
 
-`architecture/ui/G6_PEOPLE_CARD_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md@v1.1`
+The current Product build must come from this exact main unless GPT performs a new review/decision propagation after a later main advance.
 
-Frozen principle:
+## 5. Package 7 UAT record
 
-> **Model decides what is semantically worth retaining; Player has final control over which retained model-curated units are visible in their own interface.**
+Active record:
 
-MW-030 v0.1 implements this only where legitimate stable identity already exists:
+`docs/uat/G6_V0_CORE_CLOSURE_REALITY_GATE_U1.md@v1.0`
 
-```text
-People
-Important Experiences
-→ opaque presentation key
-→ 隐藏 / 已隐藏(N) / 恢复显示
-```
+Current state:
 
-Hide semantics:
+**OWNER UAT PREP / BUILD NOT YET INSTALLED**.
 
-- presentation only;
-- never deletes semantic information;
-- never becomes model importance feedback;
-- hidden information may continue updating;
-- model update does not auto-unhide;
-- survives reopen;
-- Restore does not rewind visibility preference;
-- preference storage is Game-local but outside Timeline gameplay truth;
-- no Provider calls or gameplay mutation from hide/recover.
+The UAT combines deferred Product evidence for:
 
-Deliberately non-hideable in v0.1:
+- OOC / GM Guidance;
+- Character-guided Recommendations and free-form freedom;
+- Open Threads semantic usefulness;
+- Public d20 + System continuity/usefulness;
+- factual Inventory extraction and GM use;
+- Internal Dynamic UI consistency;
+- People/Important Experience hide/recover behavior;
+- Save/reopen/Restore currentness across the complete loop.
 
-- Open Threads: no stable Thread item identity yet; no title/text/index identity hacks;
-- Character: no stable group/item presentation identity yet;
-- System/Public d20: authoritative mechanics;
-- Inventory: factual gameplay state;
-- Debug/errors/Recommendations.
+Only Owner may give the final G6 Product verdict.
 
-## 6. CURRENT — MW-030
+## 6. CURRENT — MW-031 build prep
 
-Formal Code Base:
+Type:
 
-`my-world/main@396bfcc0c91cdff6e6816795826b95fa0c0d358c`
-
-Governance Base at Task Shape:
-
-`Vibe-Coding/main@88c8581cbd02823e53e72e7fb2d28f089b4da5fb`
+**UAT-support / build-prep only**.
 
 Task branch:
 
-`mw-030-internal-dynamic-ui-host`
-
-Required worktree:
-
-`D:/AI/Projects/.worktrees/my-world/mw-030-internal-dynamic-ui-host`
+`mw-031-v0-core-reality-gate-prep`
 
 Task packet:
 
-`docs/tasks/MW-030_INTERNAL_DYNAMIC_UI_HOST_TASK.md`
+`docs/tasks/MW-031_V0_CORE_REALITY_GATE_BUILD_PREP_TASK.md`
 
 Task packet commit:
 
-`bd4f2a49f3a44df7aa148d5437e51e90dc18f483`
+`aa62d4cfebfed2789efccd230616b76a9dc9f28b`
 
-Current dispatch meaning:
+Owner canonical checkout:
 
-> **AUTHORIZED / TASK SHAPED / NO IMPLEMENTATION RETURN YET**
+`D:/AI/Projects/my-world`
 
-`current_owner: Codex` is authorization/responsibility, not evidence that a Codex process is currently running.
-
-Implementer return ceiling:
-
-**READY FOR INDEPENDENT REVIEW**.
-
-## 7. MW-030 critical review gates
-
-Independent Review must verify:
-
-- one actual shared production Host, not merely duplicated dictionary conventions;
-- real production migration of multiple existing surfaces, with semantic/display equivalence;
-- safe L3 DTO → adapter → definition → Host boundary; no raw Runtime/world in leaf renderer;
-- closed vocabulary validation/fail-soft behavior;
-- People default-collapse and current right-nav behavior preserved;
-- System exact d20 facts, Inventory factual possessions and Threads model semantics preserved;
-- People/Experience stable **opaque** presentation identity, never display-name/text/index identity;
-- hide/recover affects presentation only and underlying safe projection remains intact;
-- hidden semantic updates do not auto-unhide;
-- visibility survives reopen and does not rewind on Restore;
-- recovery shows current content;
-- System/Inventory/Threads/Character do not accidentally gain generic hide controls;
-- hide/recover causes zero Provider calls and zero gameplay durable mutations;
-- 960×540 / 1280×720 / 1920×1080 >=20px and operable;
-- no external UI schema, Action Intent or new gameplay persistence owner;
-- Package 0–5 adjacent regressions remain intact except exact-baseline retained debt.
-
-## 8. Next route after MW-030
-
-After reviewed MW-030 integration:
+Required result:
 
 ```text
-Package 7  V0 Core Closure Reality Gate
-→ Owner concentrated 20–30 turn real play
-→ close deferred Package 2–6 Product evidence together
-→ G6 Exit only on explicit Owner V0 Core Game Loop PRODUCT PASS
+reviewed main exact
+→ safely fast-forward Owner checkout without overwriting local/unknown files
+→ Godot final import
+→ fresh Windows export
+→ ValidateExportOnly
+→ exact PCK hash/freshness
+→ OWNER LAUNCH READY
 ```
 
-Do not insert G3 debt cleanup, Visual Runtime, external UI protocol, Creator, Context Orchestrator or discretionary polish unless a real Package-6 blocker emerges or Owner explicitly changes route.
+Strict non-scope:
 
-## 9. Retained debt / deferred notes
+- no product code edits;
+- no test/debt fixes;
+- no Provider calls;
+- no Owner game launch;
+- no real Game/Source/settings/presentation-preference mutation;
+- no Product PASS claim.
 
-- G3-03 / G3-05 Context assertions remain exact-baseline retained debt for relevant later Context work;
-- existing teardown/resource warnings remain non-blocking baseline evidence;
-- Application Shell decomposition remains evolutionary; Package 6 may extract presentation components but must not become a Shell rewrite;
-- long-session Context Orchestrator / general Structured Output Reliability remain G7;
-- Source-authored initial Inventory remains future explicit Source-contract work;
-- Thread hide waits for legitimate stable Thread identity;
-- Character per-item hide waits for legitimate stable presentation identity;
-- Visual Runtime waits for real first-party authored visual demand.
+## 7. After OWNER LAUNCH READY
 
-## 10. Protected invariants
+GPT will:
+
+1. verify returned SHA / local-file preservation / export evidence;
+2. record exact Owner PCK SHA in the UAT record;
+3. change UAT state to `OWNER UAT ACTIVE`;
+4. return control to Owner for one concentrated natural-play session.
+
+Owner launches via:
+
+`D:\AI\Projects\my-world\run-game.cmd`
+
+The Reality Gate should naturally cover approximately 20–30 turns plus the core events listed in the UAT record. Owner may send findings incrementally; GPT should accumulate rather than dispatch a fix for every minor issue.
+
+G6 closes only when Owner explicitly judges:
+
+> **V0 Core Game Loop = PRODUCT PASS**
+
+## 8. Retained non-blocking debt
+
+Do not interrupt Package 7 merely for:
+
+- exact-baseline G3 Context assertions;
+- known bounded teardown/resource warnings;
+- layer-boundary / Application Shell decomposition debt;
+- G7 Context Orchestrator / Structured Output Reliability work;
+- later external UI/Creator/Visual Runtime/product-expansion work.
+
+A retained debt becomes a Package-7 blocker only if it manifests as a real failure that prevents meaningful V0 Core play.
+
+## 9. Protected invariants
 
 - Model Freedom First;
 - Reversibility over prevention;
-- free-form natural-language role action remains primary;
+- free-form natural-language action remains primary;
 - World Truth != actor Knowledge != human-player disclosure;
-- UI/Debug is projection, never second truth;
+- UI/Debug projects truth and does not own it;
 - Save / Restore / Regenerate currentness remains authoritative;
-- OOC is guidance, not mutation;
-- Public d20 Program RNG/no-reroll truth remains authoritative;
-- factual Inventory is explicit possession truth, not Program prose inference;
-- visibility preference never becomes semantic curation feedback;
+- OOC is guidance, not protagonist mutation;
+- Public d20 Program result/no-reroll truth remains authoritative;
+- factual Inventory is event/currentness grounded, not Narrative keyword guessing;
+- Dynamic UI is internal presentation only;
+- visibility preference is presentation-only and outside Timeline;
 - no fake state is introduced merely to fill UI.
