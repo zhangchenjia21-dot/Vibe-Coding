@@ -1,9 +1,9 @@
 ---
 title: my world｜G6 Package 2 Owner UAT U1
 status: OWNER UAT ACTIVE
-version: 1.0
+version: 1.1
 created: 2026-09-08
-updated: 2026-09-08
+updated: 2026-09-09
 package: G6 Package 2 Core Interaction Control
 reviewed_product_code: 716d8dbfadaad07d992baef531912b6ce1078e2d
 owner_build_pck_sha256: 62ee95f113bbbc905fd29762149bb2cf4641d008d9fe0a18cc84c2ec5547d0bc
@@ -58,7 +58,53 @@ During this UAT, reviewed product code is frozen. Do not modify production code 
 
 Owner may submit observations incrementally. Findings should be accumulated until Owner explicitly states the UAT is complete or gives a final Product verdict.
 
-## 4. Product PASS rule
+## 4. Accumulated Owner observations
+
+### U1-F01｜OOC basic interaction — positive, strength still under observation
+
+Owner tried `OOC / GM 指导` and reported that it appears useful and does provide direct GM feedback. Owner wants more play time before judging how strongly and naturally later play follows the guidance.
+
+Current state: **positive / continue observing**.
+
+### U1-F02｜Public d20 truth vs later OOC contradiction
+
+Owner observed a visible Program-owned Public d20 failure card with DC / roll / total / failure outcome and failure stakes. A later OOC question about that event received an answer claiming that no dice-check node had been triggered.
+
+This is a real consistency finding, not Owner misunderstanding.
+
+Working interpretation to verify after UAT:
+
+- Program/UI knows the durable Public d20 result;
+- later OOC/Narrative model context may not receive the relevant player-safe Program-owned mechanics truth;
+- therefore GM can contradict a mechanics event already shown to the Player.
+
+Also observe whether the declared failure stakes materially constrain subsequent Narrative, rather than becoming a visually isolated card with little causal effect.
+
+Do not patch during active UAT unless this becomes a hard blocker.
+
+### U1-F03｜OOC request-only marker leakage
+
+Owner screenshot showed `[GM OOC response | input_mode=ooc]` in player-visible GM output. This is an internal/request structural marker and should not become ordinary presentation text.
+
+Treat as a low-severity presentation leak to correct after UAT if still reproducible; do not use this as reason to remove structural typed-mode semantics.
+
+### U1-F04｜Future People-card hide right — Owner-approved, deferred
+
+Owner wants every People card to eventually have a `隐藏` action while preserving model curation authority.
+
+Frozen distinction:
+
+> Model decides which people are semantically worth remembering; Player decides which remembered People cards are visible in their own interface.
+
+Hiding is presentation-only. It must not delete/tombstone the People snapshot, stable actor identity, curation state or later updates. Hidden cards remain part of the information model and may continue to update; they stay hidden until the Player restores visibility.
+
+Canonical deferred decision:
+
+`architecture/ui/G6_PEOPLE_CARD_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md`
+
+This is **non-blocking for Package 2** and should not interrupt the current UAT/core route. Preferred implementation timing is later People / Internal Dynamic UI convergence, unless real card clutter becomes a core-play blocker.
+
+## 5. Product PASS rule
 
 Package 2 closes only on explicit Owner Product PASS.
 
