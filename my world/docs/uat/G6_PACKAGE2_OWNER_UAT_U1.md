@@ -1,7 +1,7 @@
 ---
 title: my world｜G6 Package 2 Owner UAT U1
 status: OWNER UAT ACTIVE
-version: 1.1
+version: 1.2
 created: 2026-09-08
 updated: 2026-09-09
 package: G6 Package 2 Core Interaction Control
@@ -98,11 +98,27 @@ Frozen distinction:
 
 Hiding is presentation-only. It must not delete/tombstone the People snapshot, stable actor identity, curation state or later updates. Hidden cards remain part of the information model and may continue to update; they stay hidden until the Player restores visibility.
 
-Canonical deferred decision:
+People-specific deferred decision:
 
 `architecture/ui/G6_PEOPLE_CARD_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md`
 
-This is **non-blocking for Package 2** and should not interrupt the current UAT/core route. Preferred implementation timing is later People / Internal Dynamic UI convergence, unless real card clutter becomes a core-play blocker.
+### U1-F05｜Generalize hide right across model-curated information surfaces — Owner-approved, deferred
+
+Owner explicitly broadened the People-card idea: other current information surfaces, and future surfaces that use the same model-curated retention-and-presentation pattern, should support the same Player-side hide capability where a stable renderable unit exists.
+
+Frozen cross-surface principle:
+
+> **Model decides what information is semantically worth retaining and presenting; Player has final control over which retained information units are actually visible in their own interface.**
+
+This is intended to reduce pressure to over-tune the model merely to match the Player's preferred sidebar density. The Player can suppress presentation without turning that choice into semantic feedback, negative importance evidence, deletion, or a prompt-training signal.
+
+Canonical cross-surface deferred decision:
+
+`architecture/ui/G6_MODEL_CURATED_SURFACE_VISIBILITY_PREFERENCE_DEFERRED_DECISION.md`
+
+The generic capability applies to eligible model-curated persistent units such as People cards, Important Experience entries and future Open Threads / Organization / World Chronicle items. It does not automatically apply to authoritative mechanics, factual Inventory, blocking errors, Debug diagnostics or other state whose visibility requires separate product judgment.
+
+F04/F05 are **non-blocking for Package 2** and should not interrupt the current UAT/core route. Preferred implementation timing is Package 6 Internal Dynamic UI / information-surface convergence, unless real information clutter becomes a core-play blocker.
 
 ## 5. Product PASS rule
 
