@@ -179,7 +179,7 @@ Independent Review must verify both engineering correctness and architecture fid
 
 Critical gates:
 
-- old information-c우ration lived history remains readable with version-correct ID/currentness validation;
+- old information-curation lived history remains readable with version-correct ID/currentness validation;
 - new Thread writes follow accepted-prefix + parent-chain currentness;
 - Restore/displaced future/stale callbacks cannot leak future Threads into current Timeline;
 - no new SQLite owner or extra Provider call;
