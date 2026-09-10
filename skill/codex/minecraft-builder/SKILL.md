@@ -1,4 +1,4 @@
-# minecraft-builder v1.3
+# minecraft-builder v1.4
 
 ## 1. 核心目标：先设计完整空间，再分阶段建造
 
@@ -89,6 +89,41 @@ Anti-Flatness 不意味着必须人为抬高每个建筑，也不意味着把场
 
 局部找平、基座、挡土墙、台阶和填挖方可以成立，但必须有具体理由，尺度应与功能匹配，并与周围坡面形成可信过渡。不要先任意指定建筑标高，再用巨大石台或整块填方强迫地形服从建筑。
 
+### Terrain-Conforming Circulation｜室外交通优先顺应地形
+
+山路、坡道、台阶和其它主要用于克服自然高差的室外 circulation，默认应顺应、切入或依托地形，而不是作为独立高架构筑物悬在坡面之外。
+
+优先考虑：
+
+- 沿等高线或缓坡绕行；
+- switchback / 折返；
+- 局部 cut / fill；
+- 短距离挡土墙；
+- 贴坡台阶；
+- 利用天然鞍部、沟谷、坡肩和台地作为路线节点。
+
+不要先指定一条理想化的三维路径，再为了达到目标标高从地面向上填成连续高墙、长石台或巨型实体坡道。
+
+桥梁、城防墙梯、栈道、架空连廊、码头等如果确有明确工程或空间理由，可以脱离自然坡面，但应让其结构身份、起讫接口和支承逻辑清楚。
+
+### Natural Terrain Morphology｜自然地形不能只是连续等高台阶
+
+主动造地形时，不要把“有高差”简单实现为一层层连续、平行、长距离延伸的 contour terrace / 蛋糕式台阶。
+
+自然山体、河谷和坡面应通过有因果的地貌特征形成变化，例如：
+
+- ridge / 凸脊；
+- swale / 凹谷；
+- gully / 沟槽与冲蚀；
+- shoulder / 坡肩；
+- cliff / 局部陡坎；
+- talus / 坡脚碎石或堆积；
+- rock exposure / 裸岩带；
+- soil pocket / 植被与土壤口袋；
+- 局部缓坡与陡坡转换。
+
+目标不是给高度场加入随机噪声，而是让地形读起来像由地貌过程形成，而不是数学函数的可视化等高线。
+
 现有随机植被可以为新的整体设计清理后重植；不要因为“原本就在这里”而保留破坏空间结构的随机树草。
 
 ## 7. 复杂设计至少同时考虑 Plan + Section + Sequence
@@ -100,7 +135,7 @@ Anti-Flatness 不意味着必须人为抬高每个建筑，也不意味着把场
 确定：
 
 - 主要空间和次要空间；
-- 建筑 / 山水 /道路 / 植被体块；
+- 建筑 / 山水 / 道路 / 植被体块；
 - 开放空间；
 - 视线；
 - 功能关系。
@@ -207,6 +242,21 @@ Anti-Flatness 不意味着必须人为抬高每个建筑，也不意味着把场
 - farmland、果园、花圃与道路周围受人工管理逻辑控制。
 
 **Flowers are accents, not the vegetation system.**
+
+### Flowering Community｜花卉应形成符合环境的群落，而不是象征性单点
+
+当题材、生态、季节和人为管理条件允许野花或观赏花卉出现时，不要只放极少量单一花种作为“已经有花”的象征。
+
+应从目标 Minecraft 运行时可用 palette 中选择少数彼此相容的 species / colors，并根据环境形成：
+
+- 小型 patch / 花丛；
+- 林缘或草甸中的疏密变化；
+- 道路、田埂、水边或庭院边缘带；
+- 与草本、蕨类、地被共同出现的混合层。
+
+花卉密度和种类必须服从环境逻辑。城防净空、重度踩踏 / 放牧区、荒漠、严寒高地、裸岩等场景完全可以很少甚至没有花。
+
+不要平均撒点，不要为了“颜色丰富”机械集齐所有花种，也不要让花朵取代整体植被结构。
 
 ## 10. Ground Plane｜地表本身也必须被设计
 
@@ -395,6 +445,39 @@ player scale
 
 目标运行时若提供合适的 stairs / slabs / walls / fences / trapdoors 或其它形状、状态与材料变体，可用于改善屋顶坡面、檐口、墙脚、开口、边缘、岩体和铺地的几何层次；但不得为了“细节”无意义堆零件。
 
+### Material Placement Logic｜材料变化必须跟随构造与环境原因
+
+建立了 palette 不等于已经完成材料设计。不同材料应尽量对应真实的构造、使用、年代或环境关系，例如：
+
+- foundation / wall base：承重、潮湿、接地或易磨损位置；
+- corner / opening surround：转角、门窗框、拱券等需要更整齐或更坚固的构造位置；
+- primary wall field：主体墙面；
+- repair / weathering / damp zone：修补、风化、受水、苔生或年代差异；
+- roof ridge / eave / edge：屋脊、檐口、收边；
+- paving transition：道路、院落和门口的边界变化。
+
+不要把一种材料整面铺满只因为生成方便，也不要用均匀概率噪声把第二、第三种材料随机撒进墙面来伪造“丰富度”。
+
+材料变化应让玩家能读出结构、使用和时间，而不是只看到颜色噪声。
+
+### Facade & Surface Articulation｜大型表面必须有可信的几何层次
+
+大型建筑完成主次体量后，应在玩家近中距离检查墙面、屋面和主要构件是否只剩下“巨大平面 + 方洞”。
+
+必要时根据题材和构造逻辑，通过以下方式形成适度 depth / shadow / rhythm：
+
+- base / plinth / 墙脚；
+- corner treatment / 转角；
+- door / window surround / 门窗框与拱券；
+- buttress / pilaster / 梁柱；
+- floor line / 腰线或楼层结构；
+- recess / projection / 局部退进与突出；
+- eave / cornice / 檐口；
+- roof ridge / 屋脊与收边；
+- parapet / battlement / 栏墙等与题材相符的顶部构造。
+
+不是每面墙都必须复杂，也不是要求平均添加装饰。防御性素墙、仓库、极简建筑都可以克制；关键是大型表面应体现其构造与比例，而不是仅靠更换材质掩盖平板几何。
+
 ## 16. 小修补与整体重构采用不同策略
 
 门窗、材料、局部屋顶、单株植物等小修改可以原地修补。
@@ -475,6 +558,13 @@ player scale
 - 原型要求的山、水、高差和树冠层次是否真实存在？
 - 是否反过来为了“有高差”而制造无因果的巨大平台或强制抬高？
 
+### Terrain Morphology & Circulation
+
+- 自然地形是否出现长距离连续、平行的等高台阶或其它明显“数学高度场”痕迹？
+- 是否存在可读的 ridge / valley / gully / shoulder / cliff / talus 等地貌组织？
+- 室外山路、坡道、台阶是否优先依托坡面，还是被做成与地形脱节的高架实体？
+- 如存在桥梁、栈道、城防墙梯等脱离地形的结构，其工程理由和接口是否明确？
+
 ### Anti-Grid
 
 - 道路、地块或自然式植被是否出现无理由的方正、等距、对称和机械重复？
@@ -489,6 +579,7 @@ player scale
 - Structural Vegetation 是否真的参与空间组织？
 - 自然环境是否形成合理的 canopy / understory / herbaceous / groundcover 层次与疏密变化？
 - 是否只是孤立大树 + 少数花草散点？
+- 允许花卉出现的环境里，是否只有极少量单一花种作为象征性点缀，而没有形成合理 patch / edge / mixed herb layer？
 
 ### Scale
 
@@ -497,6 +588,13 @@ player scale
 ### Sequence
 
 - 玩家移动中是否有转折、开合、遮挡、释放、框景、回望或层次变化？
+
+### Architectural Surface Quality
+
+- 大型墙面是否只有单一材料平面和方洞？
+- material palette 是否真正通过构造、环境和风化逻辑落到表面，而不是只存在于代码 / palette 列表？
+- 近中距离是否存在与题材相符的墙脚、转角、门窗、梁柱、扶壁、退进、檐口、屋脊等几何层次？
+- 是否反过来为了细节而无意义堆砌构件或随机混材？
 
 ### Building Envelope Integrity
 
@@ -543,16 +641,17 @@ player scale
 5. 找出不可缺少的空间系统；
 6. 做 Plan + Section + Sequence；
 7. 先解决 Macro Terrain / Water / Structural Vegetation / Architecture；
-8. 检查高差是否由真实空间因果驱动，避免 Forced Elevation；
+8. 检查高差是否由真实空间因果驱动，并检查 Terrain Morphology 与 Terrain-Conforming Circulation，避免 Forced Elevation / 高架式假山路；
 9. 检查尺度；
 10. 进入 Meso；
 11. 分阶段施工并做与阶段目标对应的自检；
 12. 每个后续阶段复核 System Interface Integrity，避免破坏前序系统；
-13. Micro 完成 Ground Plane、Detail Vegetation、材料与构造细节；
+13. Micro 完成 Ground Plane、Layered / Flowering Vegetation、材料 placement、立面 / 表面构造和其它细节；
 14. 做 Top + Section + Perspective / Route 审核；
 15. 做 Construction Integrity + Building Envelope + System Interface Sweep；
-16. 对 Macro / Meso 缺陷做有界重建，而不是装饰掩盖；
-17. 完成世界；
-18. 输出推荐入库资产候选清单；
-19. 等待 Owner 实机检查；
-20. 只有 Owner 明确批准的候选才能正式提取入库。
+16. 做 Terrain / Circulation + Vegetation + Architectural Surface 最终质量复核；
+17. 对 Macro / Meso 缺陷做有界重建，而不是装饰掩盖；
+18. 完成世界；
+19. 输出推荐入库资产候选清单；
+20. 等待 Owner 实机检查；
+21. 只有 Owner 明确批准的候选才能正式提取入库。
