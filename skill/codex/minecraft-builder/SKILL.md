@@ -1,4 +1,4 @@
-# minecraft-builder v1.4
+# minecraft-builder v1.5
 
 ## 1. 核心目标：先设计完整空间，再分阶段建造
 
@@ -124,6 +124,40 @@ Anti-Flatness 不意味着必须人为抬高每个建筑，也不意味着把场
 
 目标不是给高度场加入随机噪声，而是让地形读起来像由地貌过程形成，而不是数学函数的可视化等高线。
 
+### Minecraft Water / Fluid Semantics & Stability｜水体必须符合实际游戏流体规则
+
+Minecraft 中的水不是静态蓝色体素。只要使用真实 `water` 方块，就必须把 Vanilla fluid behavior 作为设计约束，而不能只保证视觉几何或六邻接连通。
+
+设计河流、溪流、水池、渠道、瀑布、跌水和人工水景时，应同时考虑：
+
+- channel bed / 河床或池底是否连续；
+- bank / 岸壁是否能约束目标水位；
+- source water 与 flowing water 的实际行为；
+- lateral spill / 水是否会从侧边开放位置向外蔓延；
+- downstream drop / 降水位处是否存在可信跌水、瀑布或收水结构；
+- inlet / outlet / overflow 是否有明确去向；
+- 水面相邻方块更新后是否仍保持预期形态；
+- 桥墩、岸脚、建筑、水轮等与水体交界是否会意外堵流或制造小水袋。
+
+禁止把多层 `water[level=0]` 静态写成阶梯水带，然后只因为它们彼此连通就认为“河道成立”。如果水侧边没有河岸、槽壁、地形或其它合理约束，正常 fluid update 后会横向扩散，就必须重新设计河道截面。
+
+对于自然河溪，默认优先让河床与岸线塑造出稳定水体，再放置水；不要先画一条理想化水带，再让周围地形去迁就它。
+
+如果工具允许，应在水体施工后执行真实客户端 / 服务端 fluid updates、邻接更新或等价模拟，并在更新后重新读回检查。若当前工具无法安全触发流体更新，则应：
+
+1. 采用保守、明显有岸壁 / 河床约束的水体几何；
+2. 单独标记 `fluid stability unverified`；
+3. 不得以 `water connected components = 1`、写入成功或静态截图代替 Vanilla 流体稳定性验证。
+
+水体 QA 至少区分：
+
+- `geometry connectivity`；
+- `water-level logic`；
+- `bank / bed containment`；
+- `fluid-update stability`。
+
+### 现有环境处理
+
 现有随机植被可以为新的整体设计清理后重植；不要因为“原本就在这里”而保留破坏空间结构的随机树草。
 
 ## 7. 复杂设计至少同时考虑 Plan + Section + Sequence
@@ -215,6 +249,7 @@ Anti-Flatness 不意味着必须人为抬高每个建筑，也不意味着把场
 - 郁金香；
 - 矢车菊；
 - 滨菊；
+- 铃兰、绒球葱、兰花；
 - 其它与当地生态、季节、园艺或文化语境相符的小型植物。
 
 这些只是可用语言示例，不是要求每个场景都使用，也不得为了“丰富”而把不同颜色花朵随机撒满地面。
@@ -229,7 +264,7 @@ Anti-Flatness 不意味着必须人为抬高每个建筑，也不意味着把场
 - understory / small tree or shrub layer；
 - herbaceous layer；
 - groundcover layer；
-- seasonal / flowering accents。
+- seasonal / flowering layer。
 
 不要求所有场景同时具备全部层级，但自然环境通常不应只是大片裸露 `grass_block` 加少数孤立乔木或零星花朵。
 
@@ -241,22 +276,43 @@ Anti-Flatness 不意味着必须人为抬高每个建筑，也不意味着把场
 - settlement core 可因踩踏、放牧和高频使用而明显稀疏；
 - farmland、果园、花圃与道路周围受人工管理逻辑控制。
 
-**Flowers are accents, not the vegetation system.**
-
-### Flowering Community｜花卉应形成符合环境的群落，而不是象征性单点
+### Flowering Community｜花卉应形成符合环境的可见群落
 
 当题材、生态、季节和人为管理条件允许野花或观赏花卉出现时，不要只放极少量单一花种作为“已经有花”的象征。
 
 应从目标 Minecraft 运行时可用 palette 中选择少数彼此相容的 species / colors，并根据环境形成：
 
-- 小型 patch / 花丛；
-- 林缘或草甸中的疏密变化；
-- 道路、田埂、水边或庭院边缘带；
+- substantial patch / 明显花丛；
+- ribbon / 带状花群；
+- clearing carpet / 林间开口中的成片花层；
+- 林缘、草甸、道路、田埂、水边或庭院边缘的群落；
 - 与草本、蕨类、地被共同出现的混合层。
 
-花卉密度和种类必须服从环境逻辑。城防净空、重度踩踏 / 放牧区、荒漠、严寒高地、裸岩等场景完全可以很少甚至没有花。
+### Flower Abundance Bias｜繁茂题材默认采用更强的花卉正向偏置
 
-不要平均撒点，不要为了“颜色丰富”机械集齐所有花种，也不要让花朵取代整体植被结构。
+对于以下类型或具有类似视觉语义的场景：
+
+- lush forest / 繁茂森林；
+- enchanted forest / 魔法森林；
+- sacred grove / 圣林、森林圣所；
+- ornamental garden / 观赏园林；
+- spring / summer meadow；
+- 明确强调生命力、繁盛、花季、仙境感的环境；
+
+如果生态 / 世界规则没有反对理由，**花卉层应在玩家尺度上明显可见，而不是只在俯视图或统计里“存在”。**
+
+默认应有多个视觉上有分量的花群区域，而不是只有少数几处很小的 patch。允许先做较强的正向矫正：宁可让第一版花层明显丰富，再通过玩家透视检查局部削减，也不要长期维持“象征性几朵花”的保守下限。
+
+这里的“更多”仍然不等于：
+
+- 全图均匀撒花；
+- 每种颜色都必须出现；
+- 花覆盖所有道路、建筑边缘和林下空间；
+- 用花取代草、蕨、灌丛、苔藓和 Ground Plane。
+
+应通过 **dense patch + sparse transition + open gap** 形成层次。主要花群可以高密度，向外逐渐稀疏，并保留无花的林下、草地和通行空间作为对比。
+
+只有城防净空、重度踩踏 / 放牧区、荒漠、严寒高地、裸岩、深暗闭合林下等具有明确抑制因素的场景，才默认保持低花量。
 
 ## 10. Ground Plane｜地表本身也必须被设计
 
@@ -337,8 +393,8 @@ player scale
 1. 先查询已有蓝图库 / 参考库；
 2. 有合适资产时选择合适 variant，而不是高频复制同一对象；
 3. 没有合适资产时，可以为当前任务自行设计新的候选资产；
-4. 候选资产可保存在本任务临时 / candidate 产物中用于当前场景验证；
-5. 不得因为模型自行设计完成，就自动写入正式资产库。
+4. 候选资产可保存在**本任务临时 / candidate 产物**中用于当前场景验证；
+5. **不得因为模型自行设计完成，就自动写入正式资产库。**
 
 ### Owner Approval Gate｜资产入库必须真人批准
 
@@ -430,7 +486,7 @@ player scale
 - 与地形、道路和庭院的接口；
 - skyline 权重。
 
-回廊、柱列、军营、行列住宅等原型本来依赖重复时，可以有意识地重复；禁止的是无意识的参数化复制感。
+回廊、柱列、军营、行列住宅等原型本来依赖重复时，可以有意识地重复；禁止的是**无意识的参数化复制感**。
 
 ### Controlled Material Language｜受控材料语言
 
@@ -512,7 +568,7 @@ player scale
 
 ### Construction Integrity Sweep｜施工完整性检查
 
-阶段完成和最终交付前，应主动检查是否存在非设计意图造成的：
+阶段完成和最终交付前，应主动检查是否存在**非设计意图**造成的：
 
 - floating / 悬空残片；
 - isolated / disconnected 小型几何；
@@ -565,6 +621,16 @@ player scale
 - 室外山路、坡道、台阶是否优先依托坡面，还是被做成与地形脱节的高架实体？
 - 如存在桥梁、栈道、城防墙梯等脱离地形的结构，其工程理由和接口是否明确？
 
+### Water / Fluid Stability
+
+- 水体几何是否不仅连通，而且符合目标 Minecraft 版本的真实流体规则？
+- 河床、岸壁和池岸是否约束了目标水位？
+- 是否存在 source water 侧边开放、正常更新后会无意外溢的静态水带？
+- 多级水位之间是否有真实跌水 / 瀑布 / 溢流接口，而不是悬空的水平水片？
+- inlet / outlet / overflow 是否有去向？
+- 如果工具能执行 fluid update，更新后世界是否仍保持设计形态？
+- 如果不能验证，是否明确标记未验证，而不是用连通分量代替？
+
 ### Anti-Grid
 
 - 道路、地块或自然式植被是否出现无理由的方正、等距、对称和机械重复？
@@ -579,7 +645,8 @@ player scale
 - Structural Vegetation 是否真的参与空间组织？
 - 自然环境是否形成合理的 canopy / understory / herbaceous / groundcover 层次与疏密变化？
 - 是否只是孤立大树 + 少数花草散点？
-- 允许花卉出现的环境里，是否只有极少量单一花种作为象征性点缀，而没有形成合理 patch / edge / mixed herb layer？
+- 允许花卉出现的环境里，是否只有极少量单一花种作为象征性点缀？
+- 对 lush / enchanted / sacred / ornamental 等题材，花层是否在玩家尺度上具有足够视觉存在感，并形成多个 substantial patch / ribbon / clearing community？
 
 ### Scale
 
@@ -642,16 +709,17 @@ player scale
 6. 做 Plan + Section + Sequence；
 7. 先解决 Macro Terrain / Water / Structural Vegetation / Architecture；
 8. 检查高差是否由真实空间因果驱动，并检查 Terrain Morphology 与 Terrain-Conforming Circulation，避免 Forced Elevation / 高架式假山路；
-9. 检查尺度；
-10. 进入 Meso；
-11. 分阶段施工并做与阶段目标对应的自检；
-12. 每个后续阶段复核 System Interface Integrity，避免破坏前序系统；
-13. Micro 完成 Ground Plane、Layered / Flowering Vegetation、材料 placement、立面 / 表面构造和其它细节；
-14. 做 Top + Section + Perspective / Route 审核；
-15. 做 Construction Integrity + Building Envelope + System Interface Sweep；
-16. 做 Terrain / Circulation + Vegetation + Architectural Surface 最终质量复核；
-17. 对 Macro / Meso 缺陷做有界重建，而不是装饰掩盖；
-18. 完成世界；
-19. 输出推荐入库资产候选清单；
-20. 等待 Owner 实机检查；
-21. 只有 Owner 明确批准的候选才能正式提取入库。
+9. 如果存在真实水体，先检查河床 / 岸壁 / 水位 / 跌水 / inlet-outlet，再检查 Minecraft fluid-update stability；几何连通不能替代流体有效性；
+10. 检查尺度；
+11. 进入 Meso；
+12. 分阶段施工并做与阶段目标对应的自检；
+13. 每个后续阶段复核 System Interface Integrity，避免破坏前序系统；
+14. Micro 完成 Ground Plane、Layered / Flowering Vegetation、材料 placement、立面 / 表面构造和其它细节；对 lush / enchanted / sacred / ornamental 场景采用明显的 Flower Abundance Bias；
+15. 做 Top + Section + Perspective / Route 审核；
+16. 做 Construction Integrity + Building Envelope + System Interface Sweep；
+17. 做 Water / Fluid + Terrain / Circulation + Vegetation + Architectural Surface 最终质量复核；
+18. 对 Macro / Meso 缺陷做有界重建，而不是装饰掩盖；
+19. 完成世界；
+20. 输出推荐入库资产候选清单；
+21. 等待 Owner 实机检查；
+22. 只有 Owner 明确批准的候选才能正式提取入库。
