@@ -1,14 +1,16 @@
 ---
 title: my world｜G6 V0 Core Closure Reality Gate U1
-status: OWNER UAT PREP / BUILD NOT YET INSTALLED
-version: 1.0
+status: OWNER UAT ACTIVE
+version: 1.1
 created: 2026-09-09
-updated: 2026-09-09
+updated: 2026-09-10
 phase: G6 Package 7 V0 Core Closure Reality Gate
 owner: Owner
 reviewer: GPT
 reviewed_implementation_main: 69ac2030b90f4165deb2ecb5302e3743422af585
-owner_build_pck_sha256: pending
+owner_build_pck_sha256: 16a3aeb252eba841fedbf8a4f38d7643912764316e561d5b417b88e89085f8c4
+owner_build_pck_utc: 2026-09-10T01:01:55.9760972Z
+owner_build_product_input_sha256: 3a3960053e838fd8e7ae9054639bffc6aabd0f6edecc29b2ac52534971d99cbc
 owner_verdict: pending
 ---
 
@@ -30,23 +32,50 @@ G6 closes only if Owner explicitly judges:
 
 Engineering PASS from earlier packages does not substitute for this verdict.
 
-## 2. Frozen build lineage for prep
+## 2. Frozen Owner build identity — VERIFIED
 
-Reviewed/integrated implementation main before Owner build preparation:
+Reviewed/integrated implementation main and Owner checkout:
 
 `my-world/main@69ac2030b90f4165deb2ecb5302e3743422af585`
 
-This main includes reviewed MW-030 lineage:
+MW-031 Build Prep was completed without product-code edits. Verified Owner build identity:
 
-- Formal Base: `396bfcc0c91cdff6e6816795826b95fa0c0d358c`
-- MW-030 Production Implementation: `2d27860ae2123092d83684523df6a4e0b680c635`
-- MW-030 Submitted Candidate: `b1dd4ee9884aaabb0bcd5a702206bde93643f406`
-- MW-030 Independent Review: `bdb838cb37719b89feea25c145f37f732cf25ec7`
-- MW-030 Integration Verification / current main: `69ac2030b90f4165deb2ecb5302e3743422af585`
+- Owner checkout before sync: `5820c20b1150cd998b626e56fce79c023004b5ec`;
+- Owner checkout after normal `ff-only` sync: `69ac2030b90f4165deb2ecb5302e3743422af585`;
+- canonical `origin/main`: `69ac2030b90f4165deb2ecb5302e3743422af585`;
+- pre-existing modified `.gitignore` + ten untracked sidecars remained byte-identical before/after sync and import/export;
+- Godot 4.7.2 final import: PASS;
+- fresh Windows export: PASS;
+- `run-game.ps1 -ValidateExportOnly`: PASS;
+- Provider calls during build prep: 0;
+- no real Game / Source / settings / presentation-preference mutation.
 
-Owner build PCK hash remains pending until bounded build prep completes.
+Exact build:
 
-No Product verdict is allowed before the exact Owner build is recorded here.
+```text
+Product input SHA256:
+3a3960053e838fd8e7ae9054639bffc6aabd0f6edecc29b2ac52534971d99cbc
+
+PCK UTC:
+2026-09-10T01:01:55.9760972Z
+
+PCK SHA256:
+16a3aeb252eba841fedbf8a4f38d7643912764316e561d5b417b88e89085f8c4
+
+EXE bytes: 103035904
+PCK bytes: 2619664
+SQLite DLL bytes: 3163136
+```
+
+Build evidence:
+
+`my-world/mw-031-v0-core-reality-gate-prep/docs/mw031/MW-031_BUILD_PREP_RETURN.md`
+
+Owner launch path:
+
+`D:\AI\Projects\my-world\run-game.cmd`
+
+This exact build is the U1 Product artifact. If implementation main or installed product bytes change, GPT must explicitly re-establish the UAT build identity before using later evidence for this U1 verdict.
 
 ## 3. What this UAT combines
 
@@ -177,11 +206,10 @@ No automated test or GPT review may announce PRODUCT PASS on Owner's behalf.
 
 ## 9. Current state
 
-**OWNER UAT PREP / BUILD NOT YET INSTALLED**
+**OWNER UAT ACTIVE**
 
-Next step:
+Owner now launches the exact verified build via:
 
-1. bounded Owner build prep from exact reviewed `my-world/main`;
-2. record exact Owner checkout SHA + PCK hash here;
-3. change state to `OWNER UAT ACTIVE`;
-4. Owner launches via the existing `D:\AI\Projects\my-world\run-game.cmd` path and plays normally.
+`D:\AI\Projects\my-world\run-game.cmd`
+
+and plays naturally. Findings may be sent incrementally; GPT accumulates them without interrupting play for minor fixes. Owner explicitly ends the session or gives the final verdict when ready.
