@@ -1,4 +1,4 @@
-# minecraft-builder v1.5
+# minecraft-builder v1.6
 
 ## 1. 核心目标：先设计完整空间，再分阶段建造
 
@@ -435,8 +435,29 @@ player scale
 - 主次空间；
 - 总体高度关系；
 - 大型 Structural Vegetation；
-- 建筑主次体量；
+- 建筑主次体量与总体 silhouette；
 - 主要视觉焦点。
+
+建筑类任务在 Macro 阶段就应建立建筑的主次体量、入口权重、竖向层级与主要 roofline；不要把建筑先压成几个简单 box，再把“建筑设计”全部推迟到立面阶段。
+
+### Massing Gate｜进入 Meso 前先验证建筑体量
+
+对于包含重要建筑的任务，进入立面、材料和 Micro 之前，应先完成一次 Massing Gate。
+
+默认设计顺序：
+
+> **Function / Typology → Massing → Section / Roofline → Facade → Material → Detail**
+
+至少检查：
+
+- primary / secondary mass 是否清楚；
+- 主要入口是否通过体量关系成立，而不只是墙上开洞；
+- 不同功能是否需要不同的高低、进退、庭院、侧翼、塔体、廊道或附属体量；
+- section 与 roofline 是否响应内部层高、结构和功能；
+- 建筑与地形、街道、庭院、水体之间的体量接口是否合理；
+- 从远 / 中距离看，轮廓是否已经具有可读身份。
+
+如果这个阶段失败，应先重做体量；不得指望窗户、材料、柱子、屋檐或其它 facade detail 在后期救一个失败的主轮廓。
 
 ### Meso
 
@@ -462,7 +483,7 @@ player scale
 - 铺地变化；
 - 小型点景。
 
-不得在 Macro / Meso 尚未成立时，用大量 Micro 装饰掩盖平板、空旷、网格化或比例失衡等问题。
+不得在 Macro / Meso 尚未成立时，用大量 Micro 装饰掩盖平板、空旷、网格化、比例失衡或建筑体量失败等问题。
 
 ## 15. 统一设计语言，同时避免复制感
 
@@ -487,6 +508,26 @@ player scale
 - skyline 权重。
 
 回廊、柱列、军营、行列住宅等原型本来依赖重复时，可以有意识地重复；禁止的是**无意识的参数化复制感**。
+
+### Architectural Massing & Silhouette｜建筑不能只靠盒体加立面细节完成
+
+建筑可以是矩形、方正、封闭或高度正交；仓库、堡垒、商队驿站、传统院落、现代建筑等题材本来就可能如此。问题不是“方”，而是把所有功能都压缩成相似 box，再只靠开窗、换材料、加柱子和表面装饰制造差异。
+
+在进入 Facade / Material / Micro 之前，应先从 Macro / Meso 层建立符合题材、功能、结构与环境的三维体量。应主动判断是否需要：
+
+- primary / secondary mass / 主体量与次级体量；
+- entrance mass / 门楼、门廊、凹入入口、前室或其它入口体量；
+- vertical hierarchy / 高低层级；
+- recess / projection / 庭院、侧翼、廊道、塔体、后勤体量等进退关系；
+- roofline / skyline / 坡顶、穹顶、拱顶、塔、女儿墙、露台等与原型相符的顶部轮廓；
+- section logic / 外部轮廓与内部层高、跨度和结构的对应；
+- terrain / street / courtyard / water interface / 与地形、街道、庭院和水体的体量接口。
+
+建筑体量应由功能与构造产生，而不是为了“看起来不方”无理由制造奇形怪状。
+
+一个实用检查是：**暂时忽略材质、门窗和小构件，只看主要实体轮廓。** 如果不同建筑在这个层级仍只是几个尺寸不同的长方体，或主要建筑的入口、主次、顶部轮廓与空间等级都无法读出，就说明 massing 尚未完成。
+
+Facade articulation 用于解决近中距离的墙面深度；Massing / Silhouette 负责更早、更大的远中距离体量。两者不能互相替代。
 
 ### Controlled Material Language｜受控材料语言
 
@@ -656,6 +697,16 @@ player scale
 
 - 玩家移动中是否有转折、开合、遮挡、释放、框景、回望或层次变化？
 
+### Architectural Massing & Silhouette
+
+- 暂时忽略材质、窗户和小构件时，主要建筑是否仍有清楚的三维身份？
+- primary / secondary mass 是否可读，还是只剩几个尺寸不同的 box？
+- 主要入口是否通过门楼、凹入、前室、廊道、体量突出或其它题材合理方式被强调，而不只是墙上开洞？
+- 不同功能建筑是否真的拥有不同 volume composition，而不仅是尺寸和材料不同？
+- roofline / skyline 是否与建筑类型、内部 section 和空间等级对应？
+- 是否存在有理由的高低、进退、庭院、侧翼、塔体、拱顶、穹顶、露台或女儿墙等层级；又是否反过来为了“反方盒”无理由制造复杂轮廓？
+- 从远 / 中距离看，建筑主次与整体 silhouette 是否已经成立，还是必须依赖 facade detail 才能被识别？
+
 ### Architectural Surface Quality
 
 - 大型墙面是否只有单一材料平面和方洞？
@@ -707,19 +758,20 @@ player scale
 4. 读取场地 / 当前世界；
 5. 找出不可缺少的空间系统；
 6. 做 Plan + Section + Sequence；
-7. 先解决 Macro Terrain / Water / Structural Vegetation / Architecture；
-8. 检查高差是否由真实空间因果驱动，并检查 Terrain Morphology 与 Terrain-Conforming Circulation，避免 Forced Elevation / 高架式假山路；
-9. 如果存在真实水体，先检查河床 / 岸壁 / 水位 / 跌水 / inlet-outlet，再检查 Minecraft fluid-update stability；几何连通不能替代流体有效性；
-10. 检查尺度；
-11. 进入 Meso；
-12. 分阶段施工并做与阶段目标对应的自检；
-13. 每个后续阶段复核 System Interface Integrity，避免破坏前序系统；
-14. Micro 完成 Ground Plane、Layered / Flowering Vegetation、材料 placement、立面 / 表面构造和其它细节；对 lush / enchanted / sacred / ornamental 场景采用明显的 Flower Abundance Bias；
-15. 做 Top + Section + Perspective / Route 审核；
-16. 做 Construction Integrity + Building Envelope + System Interface Sweep；
-17. 做 Water / Fluid + Terrain / Circulation + Vegetation + Architectural Surface 最终质量复核；
-18. 对 Macro / Meso 缺陷做有界重建，而不是装饰掩盖；
-19. 完成世界；
-20. 输出推荐入库资产候选清单；
-21. 等待 Owner 实机检查；
-22. 只有 Owner 明确批准的候选才能正式提取入库。
+7. 先解决 Macro Terrain / Water / Structural Vegetation / Architecture，并建立建筑主次体量与 silhouette；
+8. 对重要建筑执行 Massing Gate：Function / Typology → Massing → Section / Roofline；体量失败时先返工，不进入 facade / material；
+9. 检查高差是否由真实空间因果驱动，并检查 Terrain Morphology 与 Terrain-Conforming Circulation，避免 Forced Elevation / 高架式假山路；
+10. 如果存在真实水体，先检查河床 / 岸壁 / 水位 / 跌水 / inlet-outlet，再检查 Minecraft fluid-update stability；几何连通不能替代流体有效性；
+11. 检查尺度；
+12. 进入 Meso，完成建筑之间关系、roofline / facade / structure 与其它中尺度关系；
+13. 分阶段施工并做与阶段目标对应的自检；
+14. 每个后续阶段复核 System Interface Integrity，避免破坏前序系统；
+15. Micro 完成 Ground Plane、Layered / Flowering Vegetation、材料 placement、立面 / 表面构造和其它细节；对 lush / enchanted / sacred / ornamental 场景采用明显的 Flower Abundance Bias；
+16. 做 Top + Section + Perspective / Route 审核；
+17. 做 Construction Integrity + Building Envelope + System Interface Sweep；
+18. 做 Water / Fluid + Terrain / Circulation + Vegetation + Architectural Massing / Silhouette + Architectural Surface 最终质量复核；
+19. 对 Macro / Meso 缺陷做有界重建，而不是装饰掩盖；
+20. 完成世界；
+21. 输出推荐入库资产候选清单；
+22. 等待 Owner 实机检查；
+23. 只有 Owner 明确批准的候选才能正式提取入库。
