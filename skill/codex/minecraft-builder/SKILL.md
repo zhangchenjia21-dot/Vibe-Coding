@@ -1,14 +1,26 @@
-# minecraft-builder v1.6
+# minecraft-builder v1.7
 
-## 1. 核心目标：先设计完整空间，再分阶段建造
+## 0. 定位：先形成设计，再施工，最后验证
 
 Minecraft 建造任务的目标不是“尽快把方块写进去”，而是形成一个在玩家视角下成立、可以进入和使用、空间关系清楚、题材逻辑一致的三维环境。
 
-大型 / 复杂任务只保留一个主要设计目标；先形成整体方案，再分阶段施工。不要边想到什么边往世界里堆什么。
+本 Skill 采用三层结构：
 
-## 2. 先判断任务类型
+1. **Thinking｜先想清楚为什么这样设计**；
+2. **Design & Construction｜把设计翻译成 Minecraft 空间并分阶段建造**；
+3. **Verification & Repair｜检查实际结果是否兑现设计，并对缺陷做有界修订**。
 
-施工前先把任务归入最接近的一类：
+不要把 QA 当成设计本身。一个作品即使“可达、无孤立方块、与蓝图一致”，仍可能是糟糕的建筑或景观。反过来，设计意图写得漂亮，也不能代替最终世界中的真实结果。
+
+`minecraft-builder` 的职责是完成空间骨架、建筑/景观系统、主要 Micro 与必要收口，使作品达到**空间上成立、工程上完整、题材上可信**的状态。展示级家具、杂物、雕塑、极细装饰、全面室内陈设等不作为默认无限扩张目标；这类工作可交给后续独立 finishing/detail 阶段。
+
+大型 / 复杂任务只保留一个主要设计目标。不要边想到什么边往世界里堆什么。
+
+---
+
+## 1. 先判断任务类型与证据要求
+
+施工前先归入最接近的一类：
 
 - `BUILDING`：单体或少量建筑为主；
 - `SETTLEMENT`：村庄、街区、城镇、聚落系统；
@@ -16,6 +28,217 @@ Minecraft 建造任务的目标不是“尽快把方块写进去”，而是形�
 - `MIXED_ENVIRONMENT`：建筑与地形、水体、道路、植被共同构成主体。
 
 `LANDSCAPE` 与 `MIXED_ENVIRONMENT` 中，Terrain、Water、Rock、Structural Vegetation、Circulation、Architecture 都应作为一等系统，而不是最后补装饰。
+
+### 现实 / 历史题材
+
+先参考可靠的历史、考古、建筑、园林、聚落、地理或景观资料。研究不是为了复制照片，而是提取会改变空间设计的事实，例如：
+
+- 选址与朝向；
+- 使用者与功能；
+- 空间关系；
+- 交通与礼仪；
+- 平面、剖面和建筑类型；
+- 地形与水文；
+- 材料、结构与建造技术；
+- 植被、农业、防御、生产或宗教逻辑。
+
+对重要 `BUILDING` 任务，不要只依赖“这种建筑有什么特征”的文字描述。条件允许时，至少取得一项可信的 **plan / section / elevation / measured typology** 参考，用于约束比例、跨间、层高、屋顶与结构关系。
+
+### 幻想题材
+
+至少先定义：
+
+- 使用者 / 文明；
+- 环境；
+- 社会真正需要的空间系统；
+- 材料与建造技术；
+- 必要时的魔法规则；
+- 哪些现实规律仍成立，哪些被世界规则改变。
+
+不必写长篇世界观，但不能无规则拼贴。
+
+---
+
+# Layer A｜Architectural & Spatial Thinking
+
+## 2. Architectural Thinking Kernel｜重要建筑先建立因果模型
+
+对 `BUILDING`、`SETTLEMENT` 中的重要建筑、以及 `MIXED_ENVIRONMENT` 中承担主要空间作用的建筑，放置第一个建筑方块前先经过以下思维链。
+
+### 2.1 Purpose & Users｜为什么建、给谁用
+
+先回答：
+
+- 为什么需要这座建筑？
+- 谁建它、谁使用它？
+- 使用者的身份、数量和主要活动是什么？
+- 它在聚落、组织或文明中承担什么角色？
+- 最重要的现实需求、礼仪需求或象征需求是什么？
+
+建筑首先解决人的需求，不是先得到一个外观再往里塞功能。
+
+### 2.2 Site & Context｜为什么建在这里
+
+建筑必须属于它所在的地方。主动读取并利用：
+
+- 地形、坡向、山脊、谷地、河流、水源；
+- 道路、街道、港口、城墙、田地；
+- 周边建筑、公共空间和聚落结构；
+- 视线、景观、防御与礼仪关系；
+- 日照、风雨、湿度、排水等环境条件。
+
+优先 **fit architecture to context**。不要把建筑当成可以任意平移的独立模型，再靠场地去迁就它。
+
+### 2.3 Program & Spatial Relationships｜先有活动与空间，再有墙
+
+先识别实际活动，再形成空间：
+
+- 核心空间；
+- 次要空间；
+- 服务 / 后勤空间；
+- 公共 / 私密；
+- 礼仪 / 日常；
+- 生产 / 储藏；
+- 洁净 / 污染；
+- 安静 / 嘈杂；
+- 人流 / 货流 / 防御流线。
+
+然后明确：
+
+- 哪些必须相邻；
+- 哪些应隔离；
+- 谁从哪里进入；
+- 一个活动结束后去哪里；
+- 哪些空间共享庭院、廊道、楼梯、门厅或服务核心。
+
+建筑的设计单位应优先理解为 **space / room / hall / courtyard / circulation / service zone**，而不是先调用 `box()` 再掏空。
+
+复杂建筑建议先形成轻量 **Space Graph**：节点是重要空间，边是必须成立的连接关系。
+
+### 2.4 Hierarchy & Sequence｜主次关系与人的体验顺序
+
+判断：
+
+- 什么是建筑核心；
+- 哪些空间等级最高；
+- 主要入口在哪里；
+- 哪些空间服务于主空间；
+- 玩家 / 使用者应该如何逐步接近核心。
+
+可通过尺度、高度、位置、光线、开敞度、体量、轴线、门厅、前室、庭院和转折表达等级。
+
+同时设计真实体验序列：
+
+> approach → threshold → entry → transition → main space → secondary space → continuation / exit
+
+“最终可达”只证明能走到；Sequence 解决为什么这样走、经过什么、何时压缩或释放。
+
+### 2.5 Plan + Section + Environmental Logic｜水平与垂直同时设计
+
+不要先画二维 footprint 再统一拉墙高。
+
+从早期同时考虑：
+
+- 空间需要多高、多宽；
+- 不同功能为何高度不同；
+- 楼层如何叠放；
+- 楼梯和坡道如何穿越不同层；
+- 屋顶覆盖什么跨度；
+- 窗在什么高度才服务采光、视线、通风或防御；
+- 地坪怎样与外部地面连接；
+- 雨水、遮阳、排水、坡度和地形如何影响剖面。
+
+复杂项目至少同时建立：
+
+- **Plan**：水平关系；
+- **Section**：垂直关系；
+- **Sequence**：人的时间性体验。
+
+### 2.6 Structure, Material & Technology｜先理解怎么建得出来
+
+先判断题材合理的基本建造体系，例如：
+
+- 承重墙；
+- 木柱梁；
+- 石柱与拱券；
+- 肋拱；
+- 穹顶；
+- 框架；
+- 扶壁；
+- 木屋架；
+- 其它与时代 / 文明相符的体系。
+
+材料与技术不是换色皮肤。它们应反过来约束：
+
+- 跨度；
+- 墙厚；
+- 柱距；
+- 开口尺寸；
+- 楼层高度；
+- 屋顶形式；
+- 建筑能建多高；
+- 构件如何连接。
+
+核心原则：
+
+> **Structure generates architecture.**  
+> **Material changes geometry.**
+
+对于依赖结构体系的建筑，不得先完成通用 shell，再把尖拱、扶壁、梁柱、穹顶等风格构件覆盖上去。
+
+### 2.7 Form as Consequence｜形态是因果链的结果
+
+建筑的 Massing、Silhouette、入口、屋顶、开口与立面，应由以下条件共同产生：
+
+> Purpose + Site + Program + Hierarchy + Section + Structure + Material + Culture
+
+塔、侧翼、门楼、庭院、退台、穹顶、巨大窗、素墙、高低变化都需要设计理由。
+
+**Form is consequence, not decoration.**
+
+不要为了“反方盒”无理由制造复杂轮廓，也不要把所有不同功能都压缩成相似 box，再只靠门窗、材料和表面构件区分。
+
+### 2.8 Minecraft Translation｜最后才把建筑转译成方块
+
+Minecraft 不是现实建筑的低清晰度导出格式，而是需要重新设计的媒介。
+
+优先保留：
+
+- 比例关系；
+- 空间等级；
+- 结构可读性；
+- 主要轮廓；
+- 玩家视角下的体验；
+- 重要构造关系。
+
+主动判断：
+
+- 哪些现实细节在方块分辨率下必须适当放大；
+- 哪些现实距离过长需要压缩；
+- stairs / slabs / walls / fences / trapdoors 等如何服务几何表达；
+- 玩家眼高、移动速度、FOV 和视距下空间是否成立；
+- 近景 / 中景 / 远景分别应该读出什么。
+
+不要机械 1:1 复制现实绝对尺度。
+
+### Architectural Intent｜重要建筑的轻量设计摘要
+
+重要建筑正式施工前，简短记录以下八项，每项一两句话即可：
+
+- Purpose；
+- Users / Activities；
+- Site / Context；
+- Program / Space Graph；
+- Hierarchy / Sequence；
+- Plan + Section；
+- Structure / Material / Technology；
+- Form + Minecraft Translation。
+
+目的是强迫设计因果显式化，不是制造长篇文档。普通小建筑可简化，不必过度工程化。
+
+---
+
+# Layer B｜Design & Construction
 
 ## 3. 每个重要设计决定都要有因果逻辑
 
@@ -30,29 +253,7 @@ Minecraft 建造任务的目标不是“尽快把方块写进去”，而是形�
 
 开放空间和留白可以很大，但必须有尺度、功能、生态、视线或构图原因。禁止为了“丰富”把每块空地都填满，也禁止把大面积无意义空白当作完成。
 
-## 4. 现实 / 历史题材先做必要研究；幻想题材先定义世界规则
-
-对于现实、历史、写实题材，先参考可靠的历史、考古、建筑、园林、聚落、地理或景观资料。研究不是为了复制照片，而是提取会改变空间设计的事实：
-
-- 选址；
-- 功能关系；
-- 交通；
-- 地形与水文；
-- 建筑类型；
-- 材料和结构；
-- 植被 / 农业 / 防御 / 礼仪逻辑。
-
-对于幻想题材，至少先定义：
-
-- 使用者 / 文明；
-- 环境；
-- 材料与建造技术；
-- 必要时的魔法规则；
-- 这个社会真正需要的空间系统。
-
-不必写长篇世界观，但不能无规则拼贴。
-
-## 5. 避免无意识的现代规划
+## 4. 避免无意识的现代规划
 
 除非题材明确需要，否则不要默认使用：
 
@@ -66,165 +267,107 @@ Minecraft 建造任务的目标不是“尽快把方块写进去”，而是形�
 
 规则性本身不是错误。礼仪轴线、果园、行道树、军营、正式庭院、防风林等本来就可以规则。禁止的是没有历史、功能或空间理由的规则性。
 
-## 6. 尊重自然地形；测试平地也必须主动造地形
+## 5. Terrain｜尊重自然地形；测试平地也必须主动造地形
 
-真实地形存在时，优先读取并利用现有山脊、坡面、谷地、河流、洼地、台地与视线。
+真实地形存在时，优先读取和利用现有山脊、坡面、谷地、河流、洼地、台地与视线。
 
-在超平坦 / 测试画布中，如果原型依赖地形、水体、山体、台地、洼地或明显高差，必须主动创建这些条件。
+在超平坦 / 测试画布中，如果原型依赖地形、水体、山体、台地、洼地或明显高差，必须主动创建这些条件。“尊重地形”不等于保持平坦。
 
-“尊重地形”不等于保持平坦。
+### Anti-Forced-Elevation
 
-### Anti-Forced-Elevation｜禁止为了高差而制造高差
+Anti-Flatness 不意味着必须人为抬高每个建筑，也不意味着把场地切成一系列独立规则平台。
 
-Anti-Flatness 不意味着必须人为抬高每个建筑，也不意味着把场地切成一系列互相独立的规则平台。
+高差应优先来自：
 
-高差首先应来自：
-
-- 原有或主动塑造的连续地形；
-- 河谷、山脊、坡地、台地、洼地等自然地貌；
+- 连续地形；
+- 河谷、山脊、坡地、台地、洼地；
 - 防洪、排水、防御、视线、等级、生产或交通功能；
 - 建筑与地形真实的适应关系。
 
 建筑应优先 **fit building to terrain before forcing terrain to building**。
 
-局部找平、基座、挡土墙、台阶和填挖方可以成立，但必须有具体理由，尺度应与功能匹配，并与周围坡面形成可信过渡。不要先任意指定建筑标高，再用巨大石台或整块填方强迫地形服从建筑。
+局部找平、基座、挡土墙、台阶和填挖方可以成立，但必须有具体理由并与周围坡面形成可信过渡。不要先任意指定建筑标高，再用巨大石台或整块填方强迫地形服从。
 
-### Terrain-Conforming Circulation｜室外交通优先顺应地形
+### Terrain-Conforming Circulation
 
-山路、坡道、台阶和其它主要用于克服自然高差的室外 circulation，默认应顺应、切入或依托地形，而不是作为独立高架构筑物悬在坡面之外。
+山路、坡道、台阶和其它主要用于克服自然高差的室外 circulation，默认应顺应、切入或依托地形。
 
 优先考虑：
 
 - 沿等高线或缓坡绕行；
-- switchback / 折返；
+- switchback；
 - 局部 cut / fill；
 - 短距离挡土墙；
 - 贴坡台阶；
-- 利用天然鞍部、沟谷、坡肩和台地作为路线节点。
+- 利用鞍部、沟谷、坡肩和台地。
 
-不要先指定一条理想化的三维路径，再为了达到目标标高从地面向上填成连续高墙、长石台或巨型实体坡道。
+不要先定义理想三维路径，再从地面向上填成长墙、长石台或实体坡道。
 
-桥梁、城防墙梯、栈道、架空连廊、码头等如果确有明确工程或空间理由，可以脱离自然坡面，但应让其结构身份、起讫接口和支承逻辑清楚。
+桥梁、城防墙梯、栈道、架空连廊、码头等有明确工程理由时可例外，但结构身份、起讫接口和支承逻辑必须清楚。
 
-### Natural Terrain Morphology｜自然地形不能只是连续等高台阶
+### Natural Terrain Morphology
 
-主动造地形时，不要把“有高差”简单实现为一层层连续、平行、长距离延伸的 contour terrace / 蛋糕式台阶。
+自然地形不能只是连续平行的 contour terrace / 蛋糕式台阶。
 
-自然山体、河谷和坡面应通过有因果的地貌特征形成变化，例如：
+主动造地形时，应通过有因果的地貌特征形成变化，例如：
 
-- ridge / 凸脊；
-- swale / 凹谷；
-- gully / 沟槽与冲蚀；
-- shoulder / 坡肩；
-- cliff / 局部陡坎；
-- talus / 坡脚碎石或堆积；
-- rock exposure / 裸岩带；
-- soil pocket / 植被与土壤口袋；
+- ridge；
+- swale；
+- gully / erosion；
+- shoulder；
+- cliff；
+- talus；
+- rock exposure；
+- soil / vegetation pocket；
 - 局部缓坡与陡坡转换。
 
-目标不是给高度场加入随机噪声，而是让地形读起来像由地貌过程形成，而不是数学函数的可视化等高线。
-
-### Minecraft Water / Fluid Semantics & Stability｜水体必须符合实际游戏流体规则
-
-Minecraft 中的水不是静态蓝色体素。只要使用真实 `water` 方块，就必须把 Vanilla fluid behavior 作为设计约束，而不能只保证视觉几何或六邻接连通。
-
-设计河流、溪流、水池、渠道、瀑布、跌水和人工水景时，应同时考虑：
-
-- channel bed / 河床或池底是否连续；
-- bank / 岸壁是否能约束目标水位；
-- source water 与 flowing water 的实际行为；
-- lateral spill / 水是否会从侧边开放位置向外蔓延；
-- downstream drop / 降水位处是否存在可信跌水、瀑布或收水结构；
-- inlet / outlet / overflow 是否有明确去向；
-- 水面相邻方块更新后是否仍保持预期形态；
-- 桥墩、岸脚、建筑、水轮等与水体交界是否会意外堵流或制造小水袋。
-
-禁止把多层 `water[level=0]` 静态写成阶梯水带，然后只因为它们彼此连通就认为“河道成立”。如果水侧边没有河岸、槽壁、地形或其它合理约束，正常 fluid update 后会横向扩散，就必须重新设计河道截面。
-
-对于自然河溪，默认优先让河床与岸线塑造出稳定水体，再放置水；不要先画一条理想化水带，再让周围地形去迁就它。
-
-如果工具允许，应在水体施工后执行真实客户端 / 服务端 fluid updates、邻接更新或等价模拟，并在更新后重新读回检查。若当前工具无法安全触发流体更新，则应：
-
-1. 采用保守、明显有岸壁 / 河床约束的水体几何；
-2. 单独标记 `fluid stability unverified`；
-3. 不得以 `water connected components = 1`、写入成功或静态截图代替 Vanilla 流体稳定性验证。
-
-水体 QA 至少区分：
-
-- `geometry connectivity`；
-- `water-level logic`；
-- `bank / bed containment`；
-- `fluid-update stability`。
+目标不是给高度场加入随机噪声，而是让地形读起来像由地貌过程形成。
 
 ### 现有环境处理
 
-现有随机植被可以为新的整体设计清理后重植；不要因为“原本就在这里”而保留破坏空间结构的随机树草。
+现有随机植被可为新的整体设计清理后重植；不要因为“原本就在这里”而保留破坏空间结构的随机树草。
 
-## 7. 复杂设计至少同时考虑 Plan + Section + Sequence
+## 6. Water｜真实水体必须符合 Minecraft 流体语义
 
-只做平面图不够。
+Minecraft 水不是静态蓝色体素。只要使用真实 `water` 方块，就必须把 Vanilla fluid behavior 作为设计约束。
 
-### Plan
+同时考虑：
 
-确定：
+- channel bed / pool bottom；
+- bank / wall containment；
+- source 与 flowing water；
+- lateral spill；
+- downstream drop；
+- inlet / outlet / overflow；
+- 桥墩、岸脚、建筑和水轮等接口；
+- 邻接更新后是否保持预期形态。
 
-- 主要空间和次要空间；
-- 建筑 / 山水 / 道路 / 植被体块；
-- 开放空间；
-- 视线；
-- 功能关系。
+禁止把多层 `water[level=0]` 静态写成阶梯水带，然后因为几何连通就认为河道成立。
 
-### Section
+自然河溪默认先塑造稳定河床与岸线，再放水。
 
-主动检查垂直关系：
+如果工具允许，应触发真实 fluid update / 邻接更新并重新读回；如果工具不允许：
 
-- 水面；
-- 地面与坡度；
-- 建筑基座 / 楼层；
-- 屋顶；
-- 山峰 / 岩壁；
-- 树冠；
-- skyline。
+1. 使用保守、明显有床岸约束的几何；
+2. 标记 `fluid stability unverified`；
+3. 不得用 connected component、写入成功或静态截图代替流体稳定性。
 
-### Sequence
+水体 QA 必须区分：
 
-玩家体验需要有顺序：
+- geometry connectivity；
+- water-level logic；
+- bank / bed containment；
+- fluid-update stability。
 
-- 到达；
-- 转折；
-- 遮挡；
-- 释放；
-- 进入；
-- 登高 / 下行；
-- 框景 / 回望；
-- 主空间与次空间转换。
+## 7. Vegetation & Ground｜植被和地表是空间系统
 
-复杂园林、聚落、山地建筑尤其不能只靠顶视图“看起来合理”。
+### Structural Vegetation
 
-## 8. 可达性和功能优先于表面装饰
+大型乔木、树群、林带、竹林、树林、绿篱等可承担：
 
-必须避免：
-
-- 楼梯尽头是墙；
-- 门被堵住；
-- 楼层无法到达；
-- 道路无意义断头；
-- 建筑相互穿插；
-- 景观点无法进入；
-- 主路线在关键位置失去净空。
-
-建筑内部不是重点时也必须保证基本入口、楼层接口和核心交通成立。
-
-## 9. Structural Vegetation 与 Detail Vegetation 必须分开设计
-
-### Structural Vegetation｜结构性植被
-
-大型乔木、树群、林带、竹林、树林、绿篱等可以承担：
-
-- 空间围合；
+- 围合；
 - 遮挡；
 - 框景；
-- 借景关系；
 - 背景 / 前景；
 - 路径引导；
 - 水岸软化；
@@ -232,154 +375,230 @@ Minecraft 中的水不是静态蓝色体素。只要使用真实 `water` 方块�
 - canopy / skyline；
 - 视觉焦点。
 
-因此 Structural Vegetation 属于 Macro / Meso 阶段，应与山体、水体和建筑共同规划。
+因此 Structural Vegetation 属于 Macro / Meso，应与地形、水体、建筑共同规划。
 
-### Detail Vegetation｜细节植被
+### Detail Vegetation
 
-花、草、小灌木、荷叶、藤蔓、地被、小型点景植物等可在后期 Micro 阶段补充。
+花、草、小灌木、荷叶、藤蔓、地被等属于 Micro，但不是可有可无。
 
-但“后期补充”不等于“可有可无”。对于本来应具有丰富近地层植物的园林、林地、乡野、河岸、庭院等环境，应主动检查目标 Minecraft 运行时可用的原版 / 已安装植物 palette，而不是只使用树叶方块模拟所有林下层。
+适合题材时主动检查目标运行时可用的植物 palette，如短草 / 高草、蕨、苔藓、蒲公英、罂粟、郁金香、矢车菊、滨菊、铃兰、绒球葱、兰花等。它们只是语言示例，不要求每个场景都使用。
 
-适合题材时，可以主动使用例如：
+### Layered Vegetation
 
-- 短草 / 高草；
-- 蕨类；
-- 苔藓与贴地植物；
-- 蒲公英、罂粟；
-- 郁金香；
-- 矢车菊；
-- 滨菊；
-- 铃兰、绒球葱、兰花；
-- 其它与当地生态、季节、园艺或文化语境相符的小型植物。
+乡野、森林、湿地、河岸、园林等自然环境应按语境形成适当层级：
 
-这些只是可用语言示例，不是要求每个场景都使用，也不得为了“丰富”而把不同颜色花朵随机撒满地面。
+- canopy；
+- understory；
+- herbaceous；
+- groundcover；
+- seasonal / flowering。
 
-### Layered Vegetation｜植被应形成层级，而不只是植物散点
+不要求全部同时存在，但自然环境通常不应只是大片 `grass_block` + 少量孤立乔木或零星花。
 
-在乡野、森林、湿地、河岸、园林等自然环境中，植被质量不能只通过“有没有树、草、花”判断。
+密度随职责变化：
 
-应根据场景建立适当的垂直与平面层级，例如：
+- forest edge 较密且不规则；
+- riverbank 连续但有开口；
+- meadow 以草本和地被为主；
+- settlement core 可因踩踏、放牧而稀疏；
+- farmland / orchard / flowerbed 受人工管理。
 
-- canopy / upper tree layer；
-- understory / small tree or shrub layer；
-- herbaceous layer；
-- groundcover layer；
-- seasonal / flowering layer。
+### Flowering Community
 
-不要求所有场景同时具备全部层级，但自然环境通常不应只是大片裸露 `grass_block` 加少数孤立乔木或零星花朵。
+允许花卉出现时，不要只放极少量单一花种象征“有花”。
 
-植被密度与覆盖应随环境职责变化，而不是全图采用同一稀疏度：
+选择少数相容 species / colors，形成：
 
-- forest edge 可形成较密且不规则的林缘；
-- riverbank 可形成连续但有开口的带状植被；
-- meadow 应以草本和地被覆盖为主；
-- settlement core 可因踩踏、放牧和高频使用而明显稀疏；
-- farmland、果园、花圃与道路周围受人工管理逻辑控制。
+- substantial patch；
+- ribbon；
+- clearing carpet；
+- 林缘 / 草甸 / 道路 / 田埂 / 水边 / 庭院边缘群落；
+- 与草本、蕨、地被共同出现的混合层。
 
-### Flowering Community｜花卉应形成符合环境的可见群落
+### Flower Abundance Bias
 
-当题材、生态、季节和人为管理条件允许野花或观赏花卉出现时，不要只放极少量单一花种作为“已经有花”的象征。
+对 lush forest / enchanted forest / sacred grove / ornamental garden / spring-summer meadow 等强调繁盛、花季、仙境感的题材，如果生态 / 世界规则没有反对理由，花层应在玩家尺度上明显可见。
 
-应从目标 Minecraft 运行时可用 palette 中选择少数彼此相容的 species / colors，并根据环境形成：
+默认允许多个有视觉分量的花群区域，宁可第一版明显丰富再局部削减，也不要长期停留在象征性下限。
 
-- substantial patch / 明显花丛；
-- ribbon / 带状花群；
-- clearing carpet / 林间开口中的成片花层；
-- 林缘、草甸、道路、田埂、水边或庭院边缘的群落；
-- 与草本、蕨类、地被共同出现的混合层。
-
-### Flower Abundance Bias｜繁茂题材默认采用更强的花卉正向偏置
-
-对于以下类型或具有类似视觉语义的场景：
-
-- lush forest / 繁茂森林；
-- enchanted forest / 魔法森林；
-- sacred grove / 圣林、森林圣所；
-- ornamental garden / 观赏园林；
-- spring / summer meadow；
-- 明确强调生命力、繁盛、花季、仙境感的环境；
-
-如果生态 / 世界规则没有反对理由，**花卉层应在玩家尺度上明显可见，而不是只在俯视图或统计里“存在”。**
-
-默认应有多个视觉上有分量的花群区域，而不是只有少数几处很小的 patch。允许先做较强的正向矫正：宁可让第一版花层明显丰富，再通过玩家透视检查局部削减，也不要长期维持“象征性几朵花”的保守下限。
-
-这里的“更多”仍然不等于：
+“更多”仍不等于：
 
 - 全图均匀撒花；
-- 每种颜色都必须出现；
-- 花覆盖所有道路、建筑边缘和林下空间；
-- 用花取代草、蕨、灌丛、苔藓和 Ground Plane。
+- 集齐所有颜色；
+- 覆盖全部道路和林下；
+- 用花替代草、蕨、灌丛、苔藓和 Ground Plane。
 
-应通过 **dense patch + sparse transition + open gap** 形成层次。主要花群可以高密度，向外逐渐稀疏，并保留无花的林下、草地和通行空间作为对比。
+采用 **dense patch + sparse transition + open gap**。
 
-只有城防净空、重度踩踏 / 放牧区、荒漠、严寒高地、裸岩、深暗闭合林下等具有明确抑制因素的场景，才默认保持低花量。
+荒漠、严寒高地、裸岩、深暗闭合林下、重度踩踏 / 放牧、城防净空等可保持低花量。
 
-## 10. Ground Plane｜地表本身也必须被设计
+### Ground Plane
 
-在经过主动设计的场地中，`grass_block` 不能自动被视为“已经完成的地面”。应根据空间职责判断这里究竟是：
+`grass_block` 不能自动被视为完成地面。
 
-- 有意识保留的草坪 / 草坡；
+根据空间职责判断这里是：
+
+- 草坪 / 草坡；
 - 林下地表；
-- 苔藓地；
+- 苔藓；
 - 裸土 / 粗土；
 - 碎石 / 砾石；
 - 铺装；
 - 农田 / 花圃；
 - 水岸过渡；
-- 或其它符合题材的地表。
+- 其它题材合理地表。
 
-大面积纯草地完全可以成立，但必须是有明确尺度、功能、生态或构图理由的设计结果，不能只是因为超平坦或地形生成默认留下了草方块。
+大面积纯草地可以成立，但必须是有尺度、功能、生态或构图理由的设计结果。
 
-## 11. 自然式植被必须是“受约束的不规则”，不是网格，也不是纯随机
+### 自然式植被 = 受约束的不规则
 
-自然式园林、森林、河岸、山地植被默认禁止无理由的：
+自然式环境默认禁止无理由的等间距、网格、镜像、统一株高 / 冠幅、同一树型高频复制、直线切林缘。
 
-- 等间距种植；
-- 行列网格；
-- 对称复制；
-- 统一株高；
-- 统一冠幅；
-- 同一树型高频重复；
-- 直线切割式林缘。
+但纯随机撒点同样不合格。
 
-但“随机撒点”同样不是合格设计。
+优先通过：
 
-自然式植被应优先通过以下关系形成：
+- cluster；
+- density gradient；
+- irregular edge；
+- opening；
+- hierarchy；
+- overlap；
+- asymmetry；
+- terrain response；
+- sightline response。
 
-- cluster / 丛聚；
-- density gradient / 疏密渐变；
-- irregular edge / 不规则林缘；
-- opening / 局部开口；
-- hierarchy / 主树、副树、林下层级；
-- overlap / 树冠叠合；
-- asymmetry / 偏心与不对称；
-- terrain response / 顺应坡地、水岸和建筑；
-- sightline response / 为遮挡、框景或留出视线服务。
+果园、行道树、宫殿礼仪轴线、规则庭院等有明确人工秩序时可规则排列。
 
-只有果园、行道树、宫殿礼仪轴线、规则庭院等题材有明确人工秩序时，才主动使用规则排列。
-
-## 12. 景观植被的尺度必须与空间职责匹配
+### 植被尺度
 
 Minecraft 原生小树不是默认景观树答案。
 
-如果一棵树承担遮挡、背景、框景、树冠天际线或空间围合作用，应根据周边建筑和地形主动确定需要的高度、冠幅、主干、分枝、倾斜和树冠不对称程度。
+承担遮挡、背景、框景、canopy 或 skyline 的乔木应根据建筑和地形主动决定高度、冠幅、主干、分枝、倾斜和不对称程度。
 
-对于重要景观场景，优先使用或设计足够大的 custom vegetation asset；原生树仅在其尺度和形态确实合适时使用。
-
-尺度检查至少考虑：
+尺度至少检查：
 
 ```text
-player scale
-→ building scale
-→ terrain / landscape scale
-→ canopy / skyline scale
+player → building → terrain / landscape → canopy / skyline
 ```
 
-不得因为“Minecraft 默认树长这样”就接受明显失衡的景观比例。
+## 8. Architecture｜空间与构造系统先于外壳
 
-## 13. 植被与其它高价值资产优先复用蓝图库；不足时先生成候选，不自动入库
+### Space Graph → Section / Structure → Envelope
 
-可以积极复用 Litematica、Blueprint 或已有资产库，但“能放进去”不等于“应该放进去”。资产必须满足当前项目的：
+复杂建筑优先按以下顺序生成：
+
+> Program / Space Graph  
+> → Plan + Section  
+> → Structural / Tectonic System  
+> → Circulation  
+> → Massing / Roofline  
+> → Envelope / Openings  
+> → Facade / Material  
+> → Detail
+
+不要把“完整矩形 shell → 掏空 → 后贴风格构件”作为重要建筑的默认生成策略。
+
+矩形体、盒体和参数化函数可以作为实现原语，但必须服务于已经成立的空间、剖面与结构逻辑，不能反过来决定建筑。
+
+### Massing & Silhouette
+
+建筑可以矩形、方正、封闭或高度正交。问题不是“方”，而是不同功能全部退化为相似 box，再靠表面装饰制造差异。
+
+体量应由功能、结构、剖面、场地与等级产生。
+
+主动判断：
+
+- primary / secondary mass；
+- entrance mass；
+- vertical hierarchy；
+- recess / projection；
+- courtyard / wing / tower / service mass；
+- roofline / skyline；
+- section logic；
+- terrain / street / courtyard / water interface。
+
+### Massing Gate｜进入 Meso 前验证的不只是“看得出来”
+
+对于重要建筑，Macro 后进入 Meso 前执行 Massing Gate。
+
+Gate 不能仅以“能辨认中殿、侧翼、塔”等 typological legibility 作为通过依据。至少检查：
+
+- proportion / 比例是否成熟；
+- volumetric composition / 主次体量组合是否成立；
+- structure / section 是否真正驱动外形；
+- major mass junctions 是否解决；
+- roof transition 是否合理；
+- entrance hierarchy 是否清楚；
+- negative space / courtyard / gap 是否有意；
+- secondary masses 是否也具有与功能相符的质量；
+- 暂时忽略材质与小构件后，整体 silhouette 是否仍成立。
+
+如果失败，先重做体量 / 剖面 / 构造，不进入 facade / material。
+
+### Reusable Generator ≠ Repeated Morphology
+
+代码复用、模板和蓝图是实现手段，不是设计理由。
+
+功能、等级、地形关系或空间职责明显不同的对象，不应只通过同一 generator 改长宽高 / 换材料制造差异。应检查：
+
+- 体量组合；
+- roofline；
+- 开口节奏；
+- 结构方式；
+- 入口关系；
+- 地形 / 道路 / 庭院接口；
+- skyline 权重。
+
+回廊、柱列、军营、行列住宅等原型本来依赖重复时可有意识重复。
+
+### Controlled Material Language
+
+“材质丰富”不等于随机混很多方块。
+
+形成清楚的材料层级：
+
+- primary material；
+- secondary material；
+- structural accent；
+- transition / weathering。
+
+目标运行时提供合适 stairs / slabs / walls / fences / trapdoors 等时，可服务屋顶、檐口、墙脚、开口、岩体和铺地的几何层次，但不要无意义堆零件。
+
+### Material Placement Logic
+
+材料变化应尽量对应构造、使用、年代或环境：
+
+- foundation / wall base；
+- corner / opening surround；
+- primary wall field；
+- repair / weathering / damp zone；
+- roof ridge / eave / edge；
+- paving transition。
+
+不要因为生成方便把一种材料整面铺满，也不要用均匀概率 noise 随机混材伪造丰富度。
+
+### Facade & Surface Articulation
+
+大型建筑完成主次体量后，在玩家近中距离检查是否只剩“巨大平面 + 方洞”。
+
+根据题材和构造逻辑形成适度 depth / shadow / rhythm，例如：
+
+- base / plinth；
+- corner treatment；
+- door / window surround；
+- buttress / pilaster / beams；
+- floor line；
+- recess / projection；
+- eave / cornice；
+- roof ridge；
+- parapet / battlement。
+
+不是每面墙都必须复杂。防御素墙、仓库、极简建筑都可克制；关键是几何层次有构造与比例理由。
+
+## 9. Assets｜优先复用，但候选不得自动入库
+
+可以积极复用 Litematica、Blueprint 或已有资产库，但资产必须满足：
 
 - 功能；
 - 尺度；
@@ -388,43 +607,23 @@ player scale
 - 空间职责；
 - 视觉权重。
 
-对于大型乔木、古树、竹丛、林带、林缘组合等高价值景观资产：
+大型乔木、古树、竹丛、林带、假山、小型构筑物等高价值资产：
 
-1. 先查询已有蓝图库 / 参考库；
-2. 有合适资产时选择合适 variant，而不是高频复制同一对象；
-3. 没有合适资产时，可以为当前任务自行设计新的候选资产；
-4. 候选资产可保存在**本任务临时 / candidate 产物**中用于当前场景验证；
-5. **不得因为模型自行设计完成，就自动写入正式资产库。**
+1. 先查已有蓝图库；
+2. 有合适 variant 时优先复用；
+3. 没有时可为当前任务设计 candidate；
+4. candidate 可用于当前场景验证；
+5. 不得自动写入正式资产库。
 
-### Owner Approval Gate｜资产入库必须真人批准
-
-完成存档编辑任务后，最终输出中应增加：
+最终输出可增加：
 
 > **推荐入库资产候选清单**
 
-仅列出本轮确实具有重复使用价值的候选，例如：
+至少说明临时名称 / ID、类型、尺寸、用途、当前位置 / 预览、推荐理由、类似现有资产、建议类别。
 
-- 大型景观树；
-- 古树；
-- 特殊竹林 / 林带组合；
-- 假山模块；
-- 亭 / 桥 / 小型构筑物；
-- 其它高质量可复用资产。
+只有 Owner 明确批准后，才能进入正式提取 / 转换 / 注册任务。
 
-候选至少说明：
-
-- 临时名称 / ID；
-- 类型；
-- 尺寸；
-- spatial role / 用途；
-- 当前世界位置或预览；
-- 推荐复用理由；
-- 类似现有资产（若已知）；
-- 建议资产类别。
-
-只有 Owner 明确批准后，才能进入独立的正式提取、转换和注册任务。
-
-## 14. Macro → Meso → Micro
+## 10. Macro → Gate → Meso → Micro
 
 ### Macro
 
@@ -435,29 +634,16 @@ player scale
 - 主次空间；
 - 总体高度关系；
 - 大型 Structural Vegetation；
-- 建筑主次体量与总体 silhouette；
+- 重要建筑的 Program / Space Graph；
+- 建筑 Plan + Section + Structural System；
+- 主次体量与主要 roofline；
 - 主要视觉焦点。
 
-建筑类任务在 Macro 阶段就应建立建筑的主次体量、入口权重、竖向层级与主要 roofline；不要把建筑先压成几个简单 box，再把“建筑设计”全部推迟到立面阶段。
+### Gate
 
-### Massing Gate｜进入 Meso 前先验证建筑体量
+重要建筑执行 Massing / Section / Tectonic Gate。景观项目执行与阶段目标相应的 Terrain / Water / Vegetation 检查。
 
-对于包含重要建筑的任务，进入立面、材料和 Micro 之前，应先完成一次 Massing Gate。
-
-默认设计顺序：
-
-> **Function / Typology → Massing → Section / Roofline → Facade → Material → Detail**
-
-至少检查：
-
-- primary / secondary mass 是否清楚；
-- 主要入口是否通过体量关系成立，而不只是墙上开洞；
-- 不同功能是否需要不同的高低、进退、庭院、侧翼、塔体、廊道或附属体量；
-- section 与 roofline 是否响应内部层高、结构和功能；
-- 建筑与地形、街道、庭院、水体之间的体量接口是否合理；
-- 从远 / 中距离看，轮廓是否已经具有可读身份。
-
-如果这个阶段失败，应先重做体量；不得指望窗户、材料、柱子、屋檐或其它 facade detail 在后期救一个失败的主轮廓。
+失败就先返工，不得靠后续细节掩盖。
 
 ### Meso
 
@@ -467,167 +653,141 @@ player scale
 - 次级山水；
 - 建筑之间关系；
 - 林带、竹林、树群；
-- 屋顶 / 立面 / 梁柱；
+- 建筑 bay / support / roof junction；
+- 入口、主要门洞和垂直交通；
+- 立面 / 梁柱；
 - 视线与空间开合。
 
 ### Micro
 
 最后处理：
 
-- 门窗细节；
+- 门窗收边；
 - 栏杆；
 - 活板门；
 - 花草；
 - 小灌木；
-- 地被与 Ground Plane 的细化；
+- 地被与 Ground Plane 细化；
+- 材料 placement；
 - 铺地变化；
-- 小型点景。
+- 小型点景；
+- 基础陈设与照明。
 
-不得在 Macro / Meso 尚未成立时，用大量 Micro 装饰掩盖平板、空旷、网格化、比例失衡或建筑体量失败等问题。
+不得在 Macro / Meso 尚未成立时，用 Micro 掩盖平板、空旷、网格化、比例失衡、体量失败或构造问题。
 
-## 15. 统一设计语言，同时避免复制感
-
-同一项目中的建筑、景观和资产应有家族相似性：共享时代 / 文化、材料、结构、比例与环境逻辑；不同用途和等级再产生合理差异。
-
-不要把不同作者、不同体系下只因为都标为“medieval”“fantasy”“tree”或“garden”的资产机械混用。
-
-也不要连续复制同一建筑或同一树蓝图。优先使用真实 variant，并通过朝向、地形关系、组合方式和上下文产生变化。不得依赖简单重复制造规模感。
-
-### Reusable Generator ≠ Repeated Morphology
-
-代码复用、参数化函数、模板和蓝图是实现手段，不是设计理由。
-
-如果两个对象的功能、等级、地形关系或空间职责明显不同，不应只通过“同一个 generator 改长宽高 / 换材料”制造差异。应检查它们是否需要不同的：
-
-- 体量组合；
-- 屋顶 / 顶部轮廓；
-- 开口节奏；
-- 结构方式；
-- 入口关系；
-- 与地形、道路和庭院的接口；
-- skyline 权重。
-
-回廊、柱列、军营、行列住宅等原型本来依赖重复时，可以有意识地重复；禁止的是**无意识的参数化复制感**。
-
-### Architectural Massing & Silhouette｜建筑不能只靠盒体加立面细节完成
-
-建筑可以是矩形、方正、封闭或高度正交；仓库、堡垒、商队驿站、传统院落、现代建筑等题材本来就可能如此。问题不是“方”，而是把所有功能都压缩成相似 box，再只靠开窗、换材料、加柱子和表面装饰制造差异。
-
-在进入 Facade / Material / Micro 之前，应先从 Macro / Meso 层建立符合题材、功能、结构与环境的三维体量。应主动判断是否需要：
-
-- primary / secondary mass / 主体量与次级体量；
-- entrance mass / 门楼、门廊、凹入入口、前室或其它入口体量；
-- vertical hierarchy / 高低层级；
-- recess / projection / 庭院、侧翼、廊道、塔体、后勤体量等进退关系；
-- roofline / skyline / 坡顶、穹顶、拱顶、塔、女儿墙、露台等与原型相符的顶部轮廓；
-- section logic / 外部轮廓与内部层高、跨度和结构的对应；
-- terrain / street / courtyard / water interface / 与地形、街道、庭院和水体的体量接口。
-
-建筑体量应由功能与构造产生，而不是为了“看起来不方”无理由制造奇形怪状。
-
-一个实用检查是：**暂时忽略材质、门窗和小构件，只看主要实体轮廓。** 如果不同建筑在这个层级仍只是几个尺寸不同的长方体，或主要建筑的入口、主次、顶部轮廓与空间等级都无法读出，就说明 massing 尚未完成。
-
-Facade articulation 用于解决近中距离的墙面深度；Massing / Silhouette 负责更早、更大的远中距离体量。两者不能互相替代。
-
-### Controlled Material Language｜受控材料语言
-
-“材质丰富”不等于随机混很多方块。设计应先形成清楚的材料层级，例如：
-
-- primary material / 主体材料；
-- secondary material / 次要材料；
-- structural accent / 构造强调；
-- transition / weathering / 边界、风化或地形过渡材料。
-
-大面积墙面、屋面、岩壁、铺地或地表如果长期只有单一纹理，应检查这是不是题材和构造的真实结果，而不是生成方便造成的平板化表面。
-
-目标运行时若提供合适的 stairs / slabs / walls / fences / trapdoors 或其它形状、状态与材料变体，可用于改善屋顶坡面、檐口、墙脚、开口、边缘、岩体和铺地的几何层次；但不得为了“细节”无意义堆零件。
-
-### Material Placement Logic｜材料变化必须跟随构造与环境原因
-
-建立了 palette 不等于已经完成材料设计。不同材料应尽量对应真实的构造、使用、年代或环境关系，例如：
-
-- foundation / wall base：承重、潮湿、接地或易磨损位置；
-- corner / opening surround：转角、门窗框、拱券等需要更整齐或更坚固的构造位置；
-- primary wall field：主体墙面；
-- repair / weathering / damp zone：修补、风化、受水、苔生或年代差异；
-- roof ridge / eave / edge：屋脊、檐口、收边；
-- paving transition：道路、院落和门口的边界变化。
-
-不要把一种材料整面铺满只因为生成方便，也不要用均匀概率噪声把第二、第三种材料随机撒进墙面来伪造“丰富度”。
-
-材料变化应让玩家能读出结构、使用和时间，而不是只看到颜色噪声。
-
-### Facade & Surface Articulation｜大型表面必须有可信的几何层次
-
-大型建筑完成主次体量后，应在玩家近中距离检查墙面、屋面和主要构件是否只剩下“巨大平面 + 方洞”。
-
-必要时根据题材和构造逻辑，通过以下方式形成适度 depth / shadow / rhythm：
-
-- base / plinth / 墙脚；
-- corner treatment / 转角；
-- door / window surround / 门窗框与拱券；
-- buttress / pilaster / 梁柱；
-- floor line / 腰线或楼层结构；
-- recess / projection / 局部退进与突出；
-- eave / cornice / 檐口；
-- roof ridge / 屋脊与收边；
-- parapet / battlement / 栏墙等与题材相符的顶部构造。
-
-不是每面墙都必须复杂，也不是要求平均添加装饰。防御性素墙、仓库、极简建筑都可以克制；关键是大型表面应体现其构造与比例，而不是仅靠更换材质掩盖平板几何。
-
-## 16. 小修补与整体重构采用不同策略
+## 11. 小修补与整体重构采用不同策略
 
 门窗、材料、局部屋顶、单株植物等小修改可以原地修补。
 
-若城堡内院、村庄核心、园林山水骨架、主水体、空间序列或植被围合关系发生根本变化，应优先有边界地清空后重构：
+若城堡内院、村庄核心、园林山水骨架、主水体、空间序列、植被围合关系、建筑主剖面或主要体量发生根本变化，应优先有边界地清空后重构：
 
 1. 明确保留范围；
 2. 明确拆除范围；
 3. 基于清空后的状态重新规划；
-4. 施工前检查新旧结构和新对象彼此碰撞。
+4. 施工前检查新旧结构和新对象之间的碰撞。
 
 不要持续在根本不合适的旧布局上叠加补丁。
 
-## 17. 逐阶段施工必须逐阶段自检，但自检不能只看施工成功
+---
 
-用户要求分阶段建造时，每一阶段完成后应检查与该阶段目标相关的设计质量。
+# Layer C｜Verification & Repair
 
-“方块成功写入 / samples 全通过”只证明施工执行成功，不等于空间设计成功。
+## 12. 分阶段自检，但自检不能只看施工成功
 
-复杂项目的阶段检查可根据现有工具选择：
+“方块成功写入 / samples 全通过 / 与 Blueprint 一致”只证明执行成功，不等于设计成功。
+
+复杂项目可根据工具选择：
 
 - top view；
-- height / contour view；
+- height / contour；
 - section / profile；
-- oblique / perspective view；
+- oblique / perspective；
 - 玩家关键视点；
 - 主要游览路线；
 - skyline；
-- 碰撞 / 可达性。
+- collision / reachability。
 
-不得只用顶视图判断三维景观是否成功。
+不得只用顶视图判断三维空间。
 
-### Construction Integrity Sweep｜施工完整性检查
+如果能取得真实 Minecraft 客户端截图 / 玩家视点，应优先用于最终感知检查。软件体素渲染只能作为补充，不能替代真实纹理、光照、方块模型、FOV 与尺度体验。
 
-阶段完成和最终交付前，应主动检查是否存在**非设计意图**造成的：
+## 13. Architecture Integrity｜验证建筑关系，而不只是全局可达
+
+### Space Graph / Circulation Edge Validation
+
+全局 `target reachable = true` 不能证明每一条设计连接都成立。
+
+对重要建筑，验证 Architectural Intent / Space Graph 中的关键边：
+
+- 指定空间 A 是否能通过预期入口 / 廊道 / 楼梯到达空间 B；
+- 是否必须绕行其它非预期路线；
+- 垂直交通是否真实落到目标楼层；
+- 路径是否需要异常跳跃、擦边或穿越错误空间。
+
+### Portal / Threshold Integrity
+
+重要门、门洞、拱廊入口、楼梯口、庭院接口等，检查：
+
+- from-space / to-space 是否明确；
+- 两侧 floor continuity 是否成立；
+- threshold / landing / step / ramp 是否连续；
+- headroom / width 是否合理；
+- 门外是否立即撞柱、墙、栏杆、深坑或其它构件；
+- 门洞是否真正穿透所需墙体层；
+- 室外接口是否与地面、道路、排水和建筑基座合理衔接。
+
+**Coordinate overlap is not architectural connection.**
+
+### Opening Grammar
+
+建筑 envelope 中足以被玩家读成开口的 void，应能解释其角色，例如：
+
+- door / portal；
+- window；
+- arcade；
+- stair void；
+- service opening；
+- intentional ruin / breach；
+- 其它明确用途。
+
+不要求建立繁琐注册表，但不得让随机 `air` carving 产生无意义洞口。
+
+如果声称是 arcade / colonnade，应从玩家视角读出连续的 column / pier + arch / lintel + bay rhythm，而不是只在代码注释里叫“尖拱列”。
+
+### Roof / Section / Junction Integrity
+
+重要体量交接必须在 Gate / Meso 阶段解决，而不是拖到 Micro 才发现：
+
+- main volume ↔ side aisle；
+- main block ↔ transept / wing；
+- tower ↔ crossing / roof；
+- building ↔ cloister / attached mass；
+- roof ↔ internal volume；
+- roof ridge / valley / eave / flashing-like junction；
+- floor / stair / landing；
+- wall thickness ↔ opening。
+
+检查是否有屋面穿进室内、半格缝隙、悬空屋面、错误封顶或大面积不合理重叠。
+
+## 14. Construction Integrity Sweep｜施工完整性
+
+阶段完成和最终交付前，主动检查非设计意图造成的：
 
 - floating / 悬空残片；
-- isolated / disconnected 小型几何；
-- 石块、岩体、挡墙、台地边缘或建筑构件与主体意外断开；
+- isolated / disconnected 几何；
+- 岩体、挡墙、台地边缘或建筑构件意外断开；
 - 浮空植被或施工残留；
-- 地形 / 建筑交界处明显缺少应有支承或接口。
+- 地形 / 建筑交界缺少应有支承或接口。
 
-这不是要求模拟现实物理，也不是要求每个 Minecraft 方块都直接接触下方方块。桥、拱、梁、挑檐、悬挑平台，以及题材明确允许的魔法悬浮都可以成立。
+不是要求模拟现实物理，也不是要求每个方块直接接触下方。桥、拱、梁、挑檐、悬挑平台、题材允许的魔法悬浮都可成立。
 
-检查目标是区分：
+目标是区分：
 
-> **intentional cantilever / suspension** 与 **unintended orphan geometry**。
+> intentional cantilever / suspension  
+> vs  
+> unintended orphan geometry
 
-如果工具允许，应结合连通分量、局部支承关系、目标对象包围盒、剖面 / 透视和玩家视点检查；不要只检查建筑楼板，也应覆盖岩石、挡墙、地形构件、植被和其它明显重型几何。
-
-### System Interface Integrity｜系统接口完整性
-
-不同空间系统分阶段施工时，后施工系统不得无意破坏已经成立的前序系统。
+## 15. System Interface Integrity｜后施工系统不得破坏前序系统
 
 重点检查：
 
@@ -635,88 +795,18 @@ Facade articulation 用于解决近中距离的墙面深度；Massing / Silhouet
 - terrain ↔ architecture；
 - water ↔ architecture；
 - vegetation ↔ circulation / architecture；
-- structure ↔ open space。
+- structure ↔ open space；
+- roof / facade ↔ internal volume。
 
-道路、地形整形、水体、植被或后期装饰如果需要修改既有建筑、墙体、屋顶、楼板、入口、桥梁或其它关键结构，应确认这种穿越、切割、覆盖或清空是明确设计意图。
+道路、地形整形、水体、植被或后期装饰需要修改既有建筑、墙体、屋顶、楼板、入口、桥梁等关键结构时，必须确认是明确设计意图。
 
-道路只有在门洞、城门、拱廊、内部街道等明确空间关系下才可进入建筑 envelope；不得为了获得道路净空而直接清除住宅墙体或其它无关结构。
+道路只有在门洞、城门、拱廊、内部街道等明确关系下才可进入建筑 envelope；不得为了获得净空直接清除住宅墙体。
 
-每个较大的后续阶段完成后，应重新抽查前序关键系统是否仍保持完整。不要只验证“当前阶段自身可达 / 无阻挡”，还要验证它没有让先前已经成立的系统退化。
+使用 `fill / clear / replace / carve` 等大范围写入时，尤其检查包络是否跨入已完成对象。
 
-当施工工具采用 `fill / clear / replace / carve` 等大范围写入时，尤其要检查其包络是否跨入其它已完成对象。
+## 16. Building Envelope Integrity
 
-## 18. Final Spatial Review｜最终必须检查玩家实际体验
-
-大型 / 复杂 / Landscape / Mixed 项目在交付前至少检查以下问题：
-
-### Anti-Flatness
-
-- 是否因为方便而把大部分空间压在同一标高？
-- 原型要求的山、水、高差和树冠层次是否真实存在？
-- 是否反过来为了“有高差”而制造无因果的巨大平台或强制抬高？
-
-### Terrain Morphology & Circulation
-
-- 自然地形是否出现长距离连续、平行的等高台阶或其它明显“数学高度场”痕迹？
-- 是否存在可读的 ridge / valley / gully / shoulder / cliff / talus 等地貌组织？
-- 室外山路、坡道、台阶是否优先依托坡面，还是被做成与地形脱节的高架实体？
-- 如存在桥梁、栈道、城防墙梯等脱离地形的结构，其工程理由和接口是否明确？
-
-### Water / Fluid Stability
-
-- 水体几何是否不仅连通，而且符合目标 Minecraft 版本的真实流体规则？
-- 河床、岸壁和池岸是否约束了目标水位？
-- 是否存在 source water 侧边开放、正常更新后会无意外溢的静态水带？
-- 多级水位之间是否有真实跌水 / 瀑布 / 溢流接口，而不是悬空的水平水片？
-- inlet / outlet / overflow 是否有去向？
-- 如果工具能执行 fluid update，更新后世界是否仍保持设计形态？
-- 如果不能验证，是否明确标记未验证，而不是用连通分量代替？
-
-### Anti-Grid
-
-- 道路、地块或自然式植被是否出现无理由的方正、等距、对称和机械重复？
-
-### Space Use
-
-- 是否存在大面积意义不明、空旷但没有构图或功能价值的留白？
-- 是否也存在为了“丰富”而过度填充的问题？
-
-### Vegetation Structure
-
-- Structural Vegetation 是否真的参与空间组织？
-- 自然环境是否形成合理的 canopy / understory / herbaceous / groundcover 层次与疏密变化？
-- 是否只是孤立大树 + 少数花草散点？
-- 允许花卉出现的环境里，是否只有极少量单一花种作为象征性点缀？
-- 对 lush / enchanted / sacred / ornamental 等题材，花层是否在玩家尺度上具有足够视觉存在感，并形成多个 substantial patch / ribbon / clearing community？
-
-### Scale
-
-- player / building / terrain / tree / canopy 尺度是否相互匹配？
-
-### Sequence
-
-- 玩家移动中是否有转折、开合、遮挡、释放、框景、回望或层次变化？
-
-### Architectural Massing & Silhouette
-
-- 暂时忽略材质、窗户和小构件时，主要建筑是否仍有清楚的三维身份？
-- primary / secondary mass 是否可读，还是只剩几个尺寸不同的 box？
-- 主要入口是否通过门楼、凹入、前室、廊道、体量突出或其它题材合理方式被强调，而不只是墙上开洞？
-- 不同功能建筑是否真的拥有不同 volume composition，而不仅是尺寸和材料不同？
-- roofline / skyline 是否与建筑类型、内部 section 和空间等级对应？
-- 是否存在有理由的高低、进退、庭院、侧翼、塔体、拱顶、穹顶、露台或女儿墙等层级；又是否反过来为了“反方盒”无理由制造复杂轮廓？
-- 从远 / 中距离看，建筑主次与整体 silhouette 是否已经成立，还是必须依赖 facade detail 才能被识别？
-
-### Architectural Surface Quality
-
-- 大型墙面是否只有单一材料平面和方洞？
-- material palette 是否真正通过构造、环境和风化逻辑落到表面，而不是只存在于代码 / palette 列表？
-- 近中距离是否存在与题材相符的墙脚、转角、门窗、梁柱、扶壁、退进、檐口、屋脊等几何层次？
-- 是否反过来为了细节而无意义堆砌构件或随机混材？
-
-### Building Envelope Integrity
-
-主要建筑最终应重新检查：
+主要建筑最终重新检查：
 
 - roof；
 - exterior walls；
@@ -725,16 +815,95 @@ Facade articulation 用于解决近中距离的墙面深度；Massing / Silhouet
 - entrances；
 - vertical circulation。
 
-应区分 intentional openness 与 accidental destruction。谷仓、敞廊、门洞等可以开放，但不能把道路、水体、地形整形或其它后续施工造成的墙体缺口误判成设计开口。
+区分 intentional openness 与 accidental destruction。谷仓、敞廊、门洞可以开放，但不能把后续施工造成的缺口误判成设计。
 
-### Construction / System Integrity
+## 17. Final Spatial Review｜最终检查真实空间质量
 
-- 是否存在非设计意图的悬空、孤立或断裂几何？
-- 后施工系统是否破坏前序建筑、道路、水体、地形或植被关系？
+大型 / 复杂 / Landscape / Mixed 项目交付前至少检查：
+
+### Anti-Flatness
+
+- 是否因为方便把大部分空间压在同一标高；
+- 原型要求的山、水、高差和树冠层次是否真实存在；
+- 是否为了“有高差”反而制造无因果平台或强制抬高。
+
+### Terrain Morphology & Circulation
+
+- 是否存在长距离连续平行等高台阶或数学 heightfield 痕迹；
+- 是否有可读 ridge / valley / gully / shoulder / cliff / talus；
+- 室外山路、坡道、台阶是否依托坡面；
+- 脱离地形的桥、栈道、城防梯是否有明确工程理由。
+
+### Water / Fluid Stability
+
+- 水体是否不仅几何连通，而且床岸、水位和流体规则成立；
+- 是否存在开放 source water 静态水带；
+- 多级水位是否有真实跌水 / overflow；
+- inlet / outlet 是否有去向；
+- 能执行 fluid update 时更新后是否稳定；
+- 不能验证时是否明确标记未验证。
+
+### Anti-Grid & Space Use
+
+- 道路、地块、自然式植被是否无理由方正、等距、镜像；
+- 是否存在意义不明的大面积空白；
+- 是否为了“丰富”反而过度填充。
+
+### Vegetation Structure
+
+- Structural Vegetation 是否真正参与空间组织；
+- 是否形成 canopy / understory / herbaceous / groundcover 层次；
+- 是否只是孤立大树 + 少数花草；
+- lush / enchanted / sacred / ornamental 等题材花层是否在玩家尺度上足够可见。
+
+### Scale & Minecraft Translation
+
+- player / building / terrain / canopy 比例是否匹配；
+- 现实尺度是否机械 1:1 转译导致过空或过密；
+- 方块分辨率下关键构造是否仍可读。
+
+### Sequence
+
+- 玩家移动中是否有合理 approach、threshold、转折、开合、遮挡、释放、框景、回望与主次转换。
+
+### Architectural Thinking Consistency
+
+回看 Architectural Intent：
+
+- 最终建筑是否仍服务最初 Purpose / Users；
+- Site / Program / Hierarchy 是否真实进入平面和剖面；
+- 结构与材料是否真的生成建筑，而不是后贴风格；
+- Form 是否能从前述因果链解释；
+- 是否出现“文档说一套、几何做另一套”。
+
+### Architectural Massing & Silhouette
+
+暂时忽略材质、窗户和小构件：
+
+- primary / secondary mass 是否清楚；
+- 比例、组合和主要 junction 是否成熟；
+- entrance hierarchy 是否成立；
+- roofline / skyline 是否与 section / structure 对应；
+- secondary masses 是否也有功能对应的质量；
+- 是否仍只是多个 primitive box；
+- 是否为了反 box 无理由复杂化。
+
+### Architectural Surface Quality
+
+- 大墙面是否只有单一材料平面和方洞；
+- palette 是否通过构造、环境、风化逻辑真正落到表面；
+- 近中距离是否有题材合理的墙脚、转角、门窗、梁柱、扶壁、退进、檐口、屋脊；
+- 是否反过来随机堆构件或混材。
+
+### Construction / System / Envelope
+
+- 是否有非设计意图的悬空、孤立、断裂；
+- 后施工系统是否破坏前序系统；
+- 门、楼梯、屋顶、墙、地坪和主要 opening 是否完整。
 
 如果 Macro / Meso 层面失败，应优先重建相关区域，不得仅靠 Micro 装饰掩盖。
 
-## 19. 自主完成，但不要过度工程化
+## 18. 自主完成，但不要过度工程化
 
 模型应自主完成研究、设计、施工、自检、必要返工和最终交付，不需要在每个普通设计选择上停下来向用户请示。
 
@@ -743,33 +912,33 @@ Facade articulation 用于解决近中距离的墙面深度；Massing / Silhouet
 - 无法确认真实写入存档；
 - 继续操作可能伤害用户真实世界；
 - 工具不可用；
-- 存档格式 / 版本存在无法安全处理的问题；
+- 存档格式 / 版本无法安全处理；
 - 任务存在真正无法自行消解的重大歧义。
 
-不要为了证明“严谨”而搭建远超任务需要的基础设施。检测和自动化应该服务于设计质量，而不是取代设计。
+检测和自动化应服务设计质量，而不是取代设计。
 
-## 20. 默认工作顺序
+## 19. 默认工作顺序
 
 除非任务明确需要其它顺序，默认：
 
-1. 理解任务；
-2. 判断 BUILDING / SETTLEMENT / LANDSCAPE / MIXED_ENVIRONMENT；
-3. 做必要现实研究或定义世界规则；
-4. 读取场地 / 当前世界；
-5. 找出不可缺少的空间系统；
-6. 做 Plan + Section + Sequence；
-7. 先解决 Macro Terrain / Water / Structural Vegetation / Architecture，并建立建筑主次体量与 silhouette；
-8. 对重要建筑执行 Massing Gate：Function / Typology → Massing → Section / Roofline；体量失败时先返工，不进入 facade / material；
-9. 检查高差是否由真实空间因果驱动，并检查 Terrain Morphology 与 Terrain-Conforming Circulation，避免 Forced Elevation / 高架式假山路；
-10. 如果存在真实水体，先检查河床 / 岸壁 / 水位 / 跌水 / inlet-outlet，再检查 Minecraft fluid-update stability；几何连通不能替代流体有效性；
-11. 检查尺度；
-12. 进入 Meso，完成建筑之间关系、roofline / facade / structure 与其它中尺度关系；
-13. 分阶段施工并做与阶段目标对应的自检；
-14. 每个后续阶段复核 System Interface Integrity，避免破坏前序系统；
-15. Micro 完成 Ground Plane、Layered / Flowering Vegetation、材料 placement、立面 / 表面构造和其它细节；对 lush / enchanted / sacred / ornamental 场景采用明显的 Flower Abundance Bias；
-16. 做 Top + Section + Perspective / Route 审核；
+1. 理解任务并判断 BUILDING / SETTLEMENT / LANDSCAPE / MIXED_ENVIRONMENT；
+2. 做必要现实研究或定义幻想世界规则；
+3. 读取场地 / 当前世界；
+4. 对重要建筑先建立 Architectural Intent：Purpose → Users → Site → Program / Space Graph → Hierarchy / Sequence → Plan + Section → Structure / Material / Technology → Form / Minecraft Translation；
+5. 找出整个项目不可缺少的一等空间系统；
+6. 形成整体 Plan + Section + Sequence；
+7. Macro：先完成 Terrain / Water / Structural Vegetation / 主要空间，以及重要建筑的 structural-spatial system、主次体量和主要 roofline；
+8. 重要建筑执行 Massing / Section / Tectonic Gate；检查比例、组合、主要 junction、roof transition、结构因果和 secondary masses；失败则先返工；
+9. 检查 Terrain Morphology、Anti-Forced-Elevation 与 Terrain-Conforming Circulation；
+10. 有真实水体时检查 bed / bank / water level / inlet-outlet / fluid stability；
+11. 检查 player / building / terrain / canopy 与 Minecraft 尺度转译；
+12. 进入 Meso：完成道路、桥、游廊、建筑 bay/support、主要 opening、垂直交通、roof junction、次级植被与空间开合；
+13. 做 Space Graph / Portal / Threshold / Roof-Junction 等建筑关系检查；
+14. 每个后续阶段复核 System Interface Integrity；
+15. Micro：完成 Ground Plane、Layered / Flowering Vegetation、材料 placement、立面收口、铺地、基础陈设与其它小细节；
+16. 做 Top + Section + Perspective / Route 审核；能取得真实客户端视点时优先使用；
 17. 做 Construction Integrity + Building Envelope + System Interface Sweep；
-18. 做 Water / Fluid + Terrain / Circulation + Vegetation + Architectural Massing / Silhouette + Architectural Surface 最终质量复核；
+18. 做 Final Spatial Review：Terrain / Water / Vegetation / Scale / Sequence / Architectural Thinking Consistency / Massing / Surface / Portal & Circulation；
 19. 对 Macro / Meso 缺陷做有界重建，而不是装饰掩盖；
 20. 完成世界；
 21. 输出推荐入库资产候选清单；
