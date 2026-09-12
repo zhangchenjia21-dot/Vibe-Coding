@@ -1,4 +1,4 @@
-# minecraft-builder v1.8
+# minecraft-builder v1.9
 
 ## 0. Mission｜从设计到完成品的一条主流程
 
@@ -9,14 +9,16 @@ Minecraft 建造任务的目标不是“尽快把方块写进去”，也不是�
 1. **Thinking｜先形成空间与建筑因果**；
 2. **Builder Core｜建立不可替代的空间、结构与环境骨架**；
 3. **Spatial Completion Gate｜确认核心已经成立，才允许精修**；
-4. **Finishing｜完成使用、材质、光、生活痕迹与近中景质量**；
+4. **Finishing｜完成使用、构造收口、材质、光、生活痕迹与玩家尺度质量，并通过 Finishing Completion Gate**；
 5. **Verification / Delivery｜验证结果、处理回退并交付**。
 
 核心原则：
 
-> **Design first. Build core second. Finish only after spatial completion. Verify the real world result last.**
+> **Design first. Build core second. Finish only after spatial completion. A finished scene must be perceptibly finished at player scale. Verify the real world result last.**
 
 QA 不能代替设计；Finishing 也不能拯救失败的建筑。作品即使“可达、无孤立方块、与 Blueprint 一致”，仍可能是糟糕空间；反过来，设计文档写得漂亮，也不能代替 Minecraft 世界里的真实结果。
+
+同样，**有精修动作不等于完成精修**。如果玩家正常游览时几乎感受不到从 `SPATIAL_COMPLETE` 到 `FINISHED` 的变化，不能因为“已经加过家具、做旧、灯光或执行过 Restraint”就宣告 `FINISHED`。
 
 ---
 
@@ -38,6 +40,7 @@ QA 不能代替设计；Finishing 也不能拯救失败的建筑。作品即使�
 规则：
 
 - Scope 没有达到 `SPATIAL_COMPLETE`，不得进入该 Scope 的 Finishing；
+- Scope 没有通过 **Finishing Completion Gate**，不得从 `FINISHING` 升为 `FINISHED`；
 - 如果 Scope 依赖的共享 Terrain / Water / Circulation / Structural Vegetation 尚未稳定，也不得提前精修；
 - 大型聚落不要求全世界同时进入 Finishing。已稳定的重点 Scope 可以先完成，外围普通 Scope 可停在 `SPATIAL_COMPLETE`；
 - 若用户只要求空间骨架或背景建筑，`SPATIAL_COMPLETE` 可以是合法交付状态；
@@ -588,7 +591,7 @@ Finishing 之前，对当前 Scope 执行一次 Spatial Completion Gate。它不
 
 不同使用强度、财富、管理水平和环境条件应产生不同程度的时间层。
 
-### 15.4 Finish From Attention
+### 15.4 Finish From Attention｜密度有主次，但主次不能成为漏做借口
 
 精修密度必须有主次：
 
@@ -597,6 +600,12 @@ Finishing 之前，对当前 Scope 执行一次 Spatial Completion Gate。它不
 - **Quiet**：允许安静、留白和背景。
 
 > **Uniform detail density = failure.**
+
+但 `Focal / Supporting / Quiet` 描述的是**信息密度与视觉权重**，不是“是否需要完成”。
+
+> **Quiet ≠ Untouched. Sparse ≠ Unfinished.**
+
+Quiet 区可以没有大量家具和 props，但仍应通过适合其角色的构造收口、材质关系、地面 / 墙脚 / 边缘处理、光暗、维护状态或其它低密度手段表现为**有意完成的安静空间**，而不是没有处理的毛坯。
 
 ### 15.5 Finish From Light
 
@@ -617,6 +626,28 @@ Finishing 之前，对当前 Scope 执行一次 Spatial Completion Gate。它不
 > `Near → furniture / surface / small objects / wear`
 
 考虑玩家眼高、FOV、移动速度、block resolution 和真实方块模型。现实中合理但 Minecraft 中不可读的细节可以适度放大或简化。
+
+Finishing 的价值必须在玩家相关视角中可读，而不是只能靠坐标账本、局部放大、代码注释或“告诉玩家去看哪里”才能发现。
+
+### 15.8 Finish Across Experience｜Coverage 与 Density 是两件事
+
+不要用几个精修得很好的点代替整个 Scope 的完成。
+
+先识别玩家真正会经历的：
+
+- approach / entrance；
+- 主要 route；
+- 核心空间；
+- 次要但高频使用空间；
+- 关键 threshold / junction；
+- 代表性的 outdoor / courtyard / service / quiet zone；
+- 主要近景、中景观察面。
+
+这些体验区域不要求同样复杂，也不要求每个区域都必须新增方块；但应逐一判断它是否已经以符合角色的方式达到完成状态。
+
+> **Detail Density ≠ Finishing Coverage.**
+
+如果一个空间本来已经完成，可以明确保持；如果它仍显毛坯、空洞、接口粗糙或玩家感知上与 Core 阶段几乎没有区别，不能仅因为它被定义为 Quiet 就跳过。
 
 ---
 
@@ -660,11 +691,24 @@ Finishing 之前，对当前 Scope 执行一次 Spatial Completion Gate。它不
 
 > 不只问“还缺什么”，也问“哪些东西应该删除”。
 
+Restraint 的目标是删除噪声，而不是把必要的完成度一起删掉。Restraint 后必须重新检查 Coverage 和 Perceptual Completion。
+
 ---
 
-## 17. Finishing Passes｜按用途和感知逐层完成
+## 17. Finishing Passes｜先建立 Coverage，再逐层完成
 
-默认：
+正式精修前建立一个轻量 **Finishing Coverage Map**。不需要长表格，只需把当前 Scope 的主要玩家体验区域分为 Focal / Supporting / Quiet，并注明最可能需要的系统，例如：
+
+- Use / Interior；
+- Architectural Refinement；
+- Surface / Aging；
+- Lighting；
+- Micro Landscape；
+- deliberate no-change / already complete。
+
+Coverage Map 不是配额，不要求每区使用所有系统，也不要求最低 block count；它只防止模型因为只盯几个局部节点而漏掉整个玩家体验。
+
+默认 Pass：
 
 1. **Functional Finish**：家具、活动区、储物、必要 props、功能照明与净空；
 2. **Architectural Finish**：门窗、墙脚、柱、檐口、屋脊、转角和接口收口；
@@ -672,13 +716,96 @@ Finishing 之前，对当前 Scope 执行一次 Spatial Completion Gate。它不
 4. **Composition / Atmosphere**：视觉主次、光暗、节奏、空间气氛；
 5. **Restraint Pass**：删除冗余、重复、抢戏或破坏空间关系的细节。
 
+每个 Pass 后可以局部复核；Restraint 后必须回看 Coverage Map。
+
 不要求所有 Scope 使用同一密度。核心建筑可以深入；普通背景 Scope 可以停在 `SPATIAL_COMPLETE` 或轻量 Finish。
+
+---
+
+## 18. Finishing Completion Gate｜只有玩家可感知地完成，才叫 FINISHED
+
+这是从 `FINISHING` 升为 `FINISHED` 的硬门。它检查的不是“是否执行过五个 Pass”，而是**最终玩家体验是否真的从空间完成提升到成品完成**。
+
+### 18.1 Coverage
+
+检查 Coverage Map 中的重要体验区域：
+
+- Focal 是否真正完成，而不只是放了几个 props；
+- Supporting 是否帮助空间被读懂；
+- Quiet 是否是有意的安静，而不是未处理；
+- 主要 route、入口、核心空间、关键接口与代表性 outdoor / service 区是否存在明显 unfinished pocket。
+
+不要求所有区域发生修改；但“未修改”必须是因为该区域已经完成或有意保持，而不是因为模型漏看。
+
+### 18.2 Perceptual Delta
+
+将进入 Finishing 前的 `SPATIAL_COMPLETE` baseline 与当前结果，用相同或可比较的玩家相关视点复核：
+
+- approach / entrance；
+- 一到两个核心空间；
+- 主要 route；
+- 代表性 Supporting / Quiet 区；
+- 必要的 Mid / Near 视角。
+
+问：
+
+> **如果不给坐标提示、不标注“这里改了什么”、不放大到单个方块，玩家正常游览时能否自然感到这个 Scope 已经从“建筑完成”进入“成品完成”？**
+
+不要求每个视角都发生巨大变化，也不要求追求戏剧化 before / after；但如果主要变化只存在于极少局部点，正常游览几乎看不出来，就不能通过。
+
+### 18.3 Role-Appropriate Completion
+
+完成度必须符合空间角色，而不是统一堆满：
+
+- Focal 可以高信息量；
+- Supporting 提供可读性与使用证据；
+- Quiet 通过低密度构造 / 材质 / 光 / 边缘 / 维护状态保持完整。
+
+> **A finished scene may be sparse, but it cannot feel unfinished.**
+
+### 18.4 Mid / Near Resolution
+
+至少检查：
+
+- 中景是否能读出 facade / material / structure / lighting rhythm；
+- 近景是否有可信 threshold、interface、furniture / props、surface 或其它与用途相关的完成信息；
+- 关键区域是否仍停留在大平面 + 少量点状 detail 的状态。
+
+### 18.5 Restraint Balance
+
+Restraint 后重新问：
+
+- 删除是否减少了噪声；
+- 是否误删了支持空间身份与完成感的必要信息；
+- 是否因为害怕 Over-detail 而系统性落入 Under-finish。
+
+### 18.6 Evidence Standard
+
+不能用以下证据单独通过此 Gate：
+
+- 修改方块数量；
+- Pass 已执行；
+- 修改账本完整；
+- Blueprint diff 正确；
+- 几个局部 close-up 有变化。
+
+优先使用真实 Minecraft 客户端玩家视角。如果没有客户端控制工具，使用当前工具能提供的最佳同机位前后透视、主要 route 视图与 Mid / Near 证据。
+
+如果现有证据仍明显不足以证明玩家尺度完成，不得为了流程闭环自行宣告 `FINISHED`；保持 `FINISHING`，继续有针对性的 Finish Pass，或明确报告 `perceptual completion unverified`。
+
+### Gate Result
+
+- **PASS**：状态可从 `FINISHING` 升为 `FINISHED`；
+- **FAIL — UNDER_FINISH**：保持 `FINISHING`，针对覆盖不足区域继续精修，再重跑本 Gate；
+- **FAIL — UPSTREAM_BUILDER_ISSUE**：如果真正问题属于 Frozen Core，则回 Builder Core，修复后重新 Spatial Completion Gate。
+
+此 Gate 不设最低 block count、最低家具数或“每面墙都必须变化”的配额。
 
 ---
 
 # Layer D｜Verification & Repair
 
-## 18. Verification Framework｜验证 invariants，不重复设计教材
+## 19. Verification Framework｜验证 invariants，不重复设计教材
 
 “方块成功写入 / samples 全通过 / Blueprint 一致”只证明执行成功，不等于设计成功。
 
@@ -688,7 +815,7 @@ Finishing 之前，对当前 Scope 执行一次 Spatial Completion Gate。它不
 
 ---
 
-## 19. Geometry / Construction Integrity
+## 20. Geometry / Construction Integrity
 
 检查非设计意图造成的：
 
@@ -703,7 +830,7 @@ Finishing 之前，对当前 Scope 执行一次 Spatial Completion Gate。它不
 
 ---
 
-## 20. Interface & Circulation Integrity
+## 21. Interface & Circulation Integrity
 
 ### System Interface
 
@@ -757,7 +884,7 @@ Finishing 之前，对当前 Scope 执行一次 Spatial Completion Gate。它不
 
 ---
 
-## 21. Semantic Integrity｜标签、几何和用途必须一致
+## 22. Semantic Integrity｜标签、几何和用途必须一致
 
 足以被玩家读成建筑 / 景观语义的对象，应同时在几何和使用逻辑上成立。
 
@@ -777,7 +904,7 @@ Finishing 之前，对当前 Scope 执行一次 Spatial Completion Gate。它不
 
 ---
 
-## 22. Finishing Quality & Phase Protection
+## 23. Finishing Quality & Phase Protection
 
 ### Functional Obstruction
 
@@ -795,7 +922,10 @@ Finishing 之前，对当前 Scope 执行一次 Spatial Completion Gate。它不
 - 是否 clutter 过多、Focal 消失；
 - 是否 Micro 破坏远景与空间层级；
 - 关键空间是否反而仍像毛坯；
-- 主要接口是否缺乏完成感。
+- 主要接口是否缺乏完成感；
+- 是否只有几个局部精修点，而主要 route / 核心空间在玩家视角下几乎仍与 `SPATIAL_COMPLETE` baseline 相同；
+- 是否把 Quiet 错误理解为 Untouched；
+- 是否为了避免 Over-detail 而整体精修幅度低到玩家难以察觉。
 
 ### Repetition
 
@@ -809,9 +939,9 @@ Finishing 不得未经回退流程修改 Frozen Core。条件允许时，在进�
 
 ---
 
-## 23. Perceptual Review｜最终服务玩家体验
+## 24. Perceptual Review｜最终服务玩家体验
 
-最终至少从以下层级复核当前 Scope：
+最终至少从以下层级复核当前 Scope，并在 Finishing 任务中尽量与 `SPATIAL_COMPLETE` baseline 使用同机位或可比较视角：
 
 ### Far
 
@@ -827,7 +957,8 @@ Finishing 不得未经回退流程修改 Frozen Core。条件允许时，在进�
 - openings；
 - structure readability；
 - Structural Vegetation；
-- 主要 lighting / props / path edge。
+- 主要 lighting / props / path edge；
+- Finishing 是否对普通游览距离产生可读提升，而不是只能近贴单块观察。
 
 ### Near
 
@@ -843,13 +974,15 @@ Finishing 不得未经回退流程修改 Frozen Core。条件允许时，在进�
 
 沿主要 approach / entry / sequence / circulation 检查转折、开合、遮挡、释放、框景、回望、净空与空间身份。
 
+Finishing 后还应问：如果不提供提示，沿这条 route 是否自然感到更多完成度、使用证据、材质深度和空间气氛？
+
 ### Thinking Consistency
 
 回看 Architectural Intent / World Rules：最终作品是否仍服务 Purpose / Users，Site / Program / Hierarchy 是否真实进入空间，Structure / Material 是否生成形态，Finishing 是否放大而不是覆盖这些逻辑。
 
 ---
 
-## 24. Repair Strategy｜小修、重构和阶段回退必须区分
+## 25. Repair Strategy｜小修、重构和阶段回退必须区分
 
 门窗、材料、局部屋顶、家具、单株植物等小问题可以有界原地修补。
 
@@ -861,6 +994,8 @@ Finishing 不得未经回退流程修改 Frozen Core。条件允许时，在进�
 - 主 circulation 错误；
 - Structural Vegetation 空间关系错误；
 - Finishing 必须拆核心才能继续。
+
+若只是 `UNDER_FINISH`，仍留在 Finishing：根据 Coverage Map 找到覆盖不足区域，优先补完成关系与玩家可读性，不得为了提高“幅度”盲目增加 clutter。
 
 重构时：
 
@@ -876,7 +1011,7 @@ Finishing 不得未经回退流程修改 Frozen Core。条件允许时，在进�
 
 # Layer E｜Delivery
 
-## 25. Completion Levels｜交付时明确当前真实状态
+## 26. Completion Levels｜交付时明确当前真实状态
 
 合法完成状态：
 
@@ -886,17 +1021,17 @@ Finishing 不得未经回退流程修改 Frozen Core。条件允许时，在进�
 
 ### `FINISHED`
 
-已完成与 Scope 重要性匹配的玩家尺度精修，包括用途、建筑收口、材质时间层、光、Micro 与 Restraint。
+已完成与 Scope 重要性匹配的玩家尺度精修，包括用途、建筑收口、材质时间层、光、Micro 与 Restraint，并且已经通过 **Finishing Completion Gate**：主要玩家体验范围具有足够 Coverage，正常游览能够感知从 Core 到成品的完成度提升，而不依赖提示去寻找零散修改点。
 
 ### `VERIFIED`
 
 在目标状态基础上完成当前工具能够提供的 Integrity / Semantic / Perceptual Verification，并明确未验证边界。
 
-不得用“写入成功”“蓝图一致”“全局可达”冒充更高完成状态。
+不得用“写入成功”“蓝图一致”“全局可达”“执行过五个 Finishing Pass”“修改了很多方块”冒充更高完成状态。
 
 ---
 
-## 26. Asset Candidate Gate｜复用资产必须真人批准
+## 27. Asset Candidate Gate｜复用资产必须真人批准
 
 最终输出中，如本轮出现确有重复使用价值的原创资产，可列：
 
@@ -908,7 +1043,7 @@ Finishing 不得未经回退流程修改 Frozen Core。条件允许时，在进�
 
 ---
 
-## 27. Autonomous Execution / Safety
+## 28. Autonomous Execution / Safety
 
 模型应自主完成研究、设计、Builder Core、Gate、自检、Finishing、必要返工与交付，不需要在每个普通设计选择上停下来请示。
 
@@ -924,7 +1059,7 @@ Finishing 不得未经回退流程修改 Frozen Core。条件允许时，在进�
 
 ---
 
-## 28. Canonical Workflow｜默认完整流程
+## 29. Canonical Workflow｜默认完整流程
 
 除非任务明确要求其它顺序：
 
@@ -941,18 +1076,21 @@ Finishing 不得未经回退流程修改 Frozen Core。条件允许时，在进�
 11. 执行 Space Graph / Portal / Threshold / Roof-Junction / System Interface 检查；
 12. Base Micro 只完成让空间成立所需的地表、材料、门窗收口、必要植被、照明和基础陈设；
 13. 执行 Spatial Completion Gate；未通过则保持 Core，禁止进入 Finishing；
-14. 通过后状态设为 `SPATIAL_COMPLETE`，冻结上游核心语义；
+14. 通过后状态设为 `SPATIAL_COMPLETE`，冻结上游核心语义，并保存可比较的 pre-Finishing baseline；
 15. 如果目标只需 `SPATIAL_COMPLETE`，进入 Verification / Delivery；否则进入 `FINISHING`；
-16. Finishing Pass 1：Functional Finish；
-17. Pass 2：Architectural Finish；
-18. Pass 3：Material / Environmental Finish；
-19. Pass 4：Composition / Atmosphere；
-20. Pass 5：Restraint；
-21. 检查 Phase Protection，确认 Finishing 未破坏 Frozen Core；
-22. 执行 Geometry / Interface / Circulation / Semantic / Water / Terrain / Vegetation invariants；
-23. 做 Far + Mid + Near + Route 的 Perceptual Review，能取得真实客户端视点时优先使用；
-24. 对问题执行有界 Repair；如触及上游则回退相应状态并重新过 Gate；
-25. 达到目标后标记 `FINISHED` / `VERIFIED`，明确仍未验证的客户端、流体或其它边界；
-26. 输出推荐入库资产候选；
-27. 等待 Owner 实机检查；
-28. 只有 Owner 明确批准的候选才能正式入库。
+16. 建立轻量 Finishing Coverage Map，识别 Focal / Supporting / Quiet 与主要玩家体验区域；
+17. Finishing Pass 1：Functional Finish；
+18. Pass 2：Architectural Finish；
+19. Pass 3：Material / Environmental Finish；
+20. Pass 4：Composition / Atmosphere；
+21. Pass 5：Restraint；
+22. 回看 Coverage Map，检查 Phase Protection，确认 Finishing 未破坏 Frozen Core；
+23. 执行 Finishing Completion Gate；若 `UNDER_FINISH`，保持 `FINISHING` 并针对覆盖不足区域继续精修，再重跑 Gate；若发现 Frozen Core 问题，则回 Builder Core；
+24. Gate 通过后，执行 Geometry / Interface / Circulation / Semantic / Water / Terrain / Vegetation invariants；
+25. 做 Far + Mid + Near + Route 的 Perceptual Review，并尽量与 pre-Finishing baseline 做相同视点比较；能取得真实客户端视点时优先使用；
+26. 对问题执行有界 Repair；如触及上游则回退相应状态并重新过 Gate；如只是精修不足则留在 Finishing；
+27. 只有 Finishing Completion Gate 与必要 Integrity 检查都支持时，才标记 `FINISHED`；完成当前工具能够提供的最终验证后可标记 `VERIFIED`；
+28. 明确仍未验证的客户端、流体、真实碰撞、夜间照明或其它边界；
+29. 输出推荐入库资产候选；
+30. 等待 Owner 实机检查；
+31. 只有 Owner 明确批准的候选才能正式入库。
