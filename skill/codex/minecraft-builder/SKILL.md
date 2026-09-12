@@ -1,4 +1,4 @@
-# minecraft-builder v1.9
+# minecraft-builder v1.10
 
 ## 0. Mission｜从设计到完成品的一条主流程
 
@@ -19,6 +19,8 @@ Minecraft 建造任务的目标不是“尽快把方块写进去”，也不是�
 QA 不能代替设计；Finishing 也不能拯救失败的建筑。作品即使“可达、无孤立方块、与 Blueprint 一致”，仍可能是糟糕空间；反过来，设计文档写得漂亮，也不能代替 Minecraft 世界里的真实结果。
 
 同样，**有精修动作不等于完成精修**。如果玩家正常游览时几乎感受不到从 `SPATIAL_COMPLETE` 到 `FINISHED` 的变化，不能因为“已经加过家具、做旧、灯光或执行过 Restraint”就宣告 `FINISHED`。
+
+此外，**视觉完整不等于物理完整**。只要建筑存在无意的墙脚 / 基座断开、构件没有真实落地、关键路线净空冲突、楼梯或门洞在玩家碰撞体下不可用，就不能以“整体很好看”或“终点可达”视为完成。
 
 ---
 
@@ -41,6 +43,8 @@ QA 不能代替设计；Finishing 也不能拯救失败的建筑。作品即使�
 
 - Scope 没有达到 `SPATIAL_COMPLETE`，不得进入该 Scope 的 Finishing；
 - Scope 没有通过 **Finishing Completion Gate**，不得从 `FINISHING` 升为 `FINISHED`；
+- `SPATIAL_COMPLETE` 之前必须通过当前适用的 **Construction Closure & Clearance Gate**；Finishing 后必须重新检查，避免后施工系统重新制造物理断裂或净空冲突；
+- 如果已宣告 `FINISHED` / `VERIFIED` 的 Scope 后续发现该 Gate 实际失败，该状态无效，先进入 Repair，再重新通过受影响 Gate；
 - 如果 Scope 依赖的共享 Terrain / Water / Circulation / Structural Vegetation 尚未稳定，也不得提前精修；
 - 大型聚落不要求全世界同时进入 Finishing。已稳定的重点 Scope 可以先完成，外围普通 Scope 可停在 `SPATIAL_COMPLETE`；
 - 若用户只要求空间骨架或背景建筑，`SPATIAL_COMPLETE` 可以是合法交付状态；
@@ -345,7 +349,7 @@ Minecraft 水不是静态蓝色体素。真实 `water` 必须考虑：
 
 主要 circulation 应在 Builder Core 阶段成立；不得等待 Finishing 用家具摆放或铺地来“提示路线”。
 
-**Invariant**：关键空间连接真实成立，门槛、落脚、净空和主要竖向交通可用。
+**Invariant**：关键空间连接真实成立，门槛、落脚、净空和主要竖向交通可用；可用性按玩家沿整条路线实际移动时的连续碰撞 / 净空包络判断，而不是只看起点与终点是否存在某条抽象可达路径。
 
 ---
 
@@ -491,7 +495,8 @@ Finishing 之前，对当前 Scope 执行一次 Spatial Completion Gate。它不
 ### Circulation
 
 - 主入口、主路线、主要楼层、门、楼梯、坡道、桥和关键连接成立；
-- 不依赖异常跳跃、绕行、擦边或错误空间。
+- 不依赖异常跳跃、绕行、擦边或错误空间；
+- 关键 route 已通过 **Construction Closure & Clearance Gate** 的 Movement Envelope 检查，而不是只有 endpoint reachability。
 
 ### Massing & Section
 
@@ -505,7 +510,8 @@ Finishing 之前，对当前 Scope 执行一次 Spatial Completion Gate。它不
 ### Minecraft Usability
 
 - 玩家尺度基本成立；
-- 没有大量穿墙、卡头、断层、悬空、门槛错误等 Core blocker。
+- 没有大量穿墙、卡头、断层、悬空、门槛错误等 Core blocker；
+- 墙、柱、基座、台阶、门槛、地坪与外部地面等预期接触处已通过 **Construction Closure & Clearance Gate** 的 Ground Contact / Edge Closure 检查。
 
 ### Upstream Defect Test
 
@@ -583,6 +589,8 @@ Finishing 之前，对当前 Scope 执行一次 Spatial Completion Gate。它不
 
 门框、柱脚、檐口、屋脊、墙脚、梁端、转角、排水、扶手、台阶等应说明建筑怎么被建出来、怎样收边和落地，而不是作为随机装饰件。
 
+Finishing 可以清理不改变 Core semantic 的局部接缝与收口，但不能用装饰、踢脚线、植物或表面材料去遮住真正缺失的支承、墙脚、地坪或 circulation blocker；这类问题属于 Physical Integrity Repair。
+
 ### 15.3 Finish From Material & Time
 
 表面变化来自接地、受水、烟熏、踩踏、维修、风化、潮湿、阳光、植物侵入和人为维护。
@@ -657,7 +665,7 @@ Finishing 的价值必须在玩家相关视角中可读，而不是只能靠坐�
 
 处理墙脚、门窗深度、拱券收边、柱脚 / 柱头、檐口、屋脊、局部排水、栏杆、台阶 landing、转角与接口。
 
-它只能完成既有建筑，不得重新决定“为什么这里是一扇门 / 为什么这里是一座塔”。
+它只能完成既有建筑，不得重新决定“为什么这里是一扇门 / 为什么这里是一座塔”。若发现墙 / 柱 / 台阶实际未落地，或 route 净空被 Core 构件阻断，不在 Finishing 中用表面装饰掩盖，而是触发 Construction Closure & Clearance Gate 的 Repair。
 
 ### 16.2 Interior / Activities / Props
 
@@ -828,6 +836,78 @@ Restraint 后重新问：
 
 桥、拱、梁、悬挑、题材允许的魔法悬浮可以成立。目标是区分 intentional cantilever / suspension 与 unintended orphan geometry。
 
+### 20.1 Construction Closure & Clearance Gate｜物理完成硬门
+
+本 Gate 是物理完整性验证的唯一 owner；其它 Gate 只引用它，不重复定义规则。它至少在以下时点执行：
+
+- `SPATIAL_COMPLETE` 之前；
+- Finishing 完成后；
+- 对建筑 envelope、foundation、floor、threshold、stair、beam、roof / eave、circulation 做过 Repair 后；
+- 资产候选准备正式批准之前。
+
+#### A. Ground Contact / Support Closure
+
+对所有**预期应与地面、楼板、基座、基础或下部构件接触**的对象检查连续支承链：
+
+> `wall / column / frame / threshold / stair / landing → floor / plinth / foundation / terrain`
+
+至少检查：
+
+- 外墙 / 内墙底部是否存在无意的一格空气缝、连续 daylight seam 或露草带；
+- 柱、墙垛、门框、台阶、栏杆起点等是否真正落到预期支承面；
+- floor ↔ wall ↔ foundation / plinth 是否连续；
+- threshold / landing 是否同时接上两侧地坪 / route；
+- 建筑外缘与道路、庭院、地面、台基的交界是否有无意细缝、断脚或悬空表皮；
+- facade / cladding 是否只是视觉贴片而底部缺少真实闭合。
+
+架空、悬挑、挑檐、桥、栈道等可以离地，但其 void / support 必须是**有意、可解释、可读**的设计，而不是生成遗漏。
+
+> **No accidental air seam under an element that is supposed to stand on something.**
+
+#### B. Movement Envelope Clearance
+
+对每条重要 expected route，尤其是门、楼梯、坡道、走廊、转角、landing、桥和上下楼节点，验证玩家沿**整条实际运动轨迹**的连续净空，而不是只验证节点连通。
+
+检查：
+
+- 每一级 stair / ramp 的可站立面与上方 headroom；
+- 楼梯起步、转折、landing、顶部出口；
+- 梁、檐、天花、slab、trapdoor、fence、栏杆、柱或装饰是否侵入头部 / 身体碰撞体；
+- 门洞 / corridor 的有效 width / height 是否沿整个厚度连续；
+- 转角处是否需要异常跳跃、低头无法实现的“擦边”、穿模或不可接受绕路；
+- expected edge 是否由预期 route 成立，而不是终点通过别处绕行仍显示 reachable。
+
+如果工具不能模拟真实 Minecraft collision / step movement：
+
+1. 使用保守的 voxel clearance envelope；
+2. 对竖向交通与窄接口优先取得真实客户端 walk-through；
+3. 无法真实确认时标记 `movement clearance unverified`，不得仅凭抽象 BFS / endpoint reachability 宣告 PASS。
+
+> **Reachable endpoint ≠ usable route.**
+
+#### C. Edge Closure Walk / Scan
+
+从玩家近景对建筑外围和关键内部接口做一轮 closure scan，重点看 foot / threshold / head 三个高度带：
+
+- 墙脚、柱脚、门脚、窗下口；
+- 建筑转角；
+- 道路 / 庭院 / 室内地坪与建筑交界；
+- 楼梯下口 / 上口；
+- 梁下、檐下与低天花；
+- 屋面 / 墙体 / 附属体量 junction；
+- 一格宽残余沟槽、意外 daylight、断开的铺地或浮空边缘。
+
+有意的排水沟、通风缝、架空层、采光井、构造 reveal 等应保留；Gate 的目标是区分 intentional void 与 accidental gap。
+
+#### Gate Result
+
+- **PASS**：当前 Scope 的支承闭合与主要 movement envelope 成立；
+- **FAIL — CLOSURE**：存在非设计意图的断脚、空缝、悬空、未闭合接口；
+- **FAIL — CLEARANCE**：存在玩家 route 的连续净空 / 碰撞冲突；
+- **UNVERIFIED**：工具无法充分验证真实 collision / movement，必须明确保留边界，不能用其它 QA 冒充通过。
+
+`FAIL — CLOSURE / CLEARANCE` 默认先做**有界物理 Repair**，不等于重新设计。若修复可以在不改变 Program / Space Graph / 主体量 / 主要 Section / 主要 Circulation 语义的情况下完成，允许修复后直接重跑本 Gate 与受影响 Interface / Spatial / Finishing Gate；如果必须改变 Frozen Core 才能消除失败，则升级为 `UPSTREAM_BUILDER_ISSUE`。
+
 ---
 
 ## 21. Interface & Circulation Integrity
@@ -857,7 +937,7 @@ Restraint 后重新问：
 - 垂直交通是否落到目标楼层；
 - 是否需要异常跳跃、擦边或穿越错误空间。
 
-优先采用受局部范围约束的 expected-edge reachability，不接受全局绕路代替指定连接。
+优先采用受局部范围约束的 expected-edge reachability，不接受全局绕路代替指定连接。涉及窄通道或竖向交通时，同时引用 Construction Closure & Clearance Gate 的 Movement Envelope 结果。
 
 ### Portal / Threshold Integrity
 
@@ -908,7 +988,7 @@ Restraint 后重新问：
 
 ### Functional Obstruction
 
-家具、props、植物和灯光不得堵门、楼梯、道路、关键视线或玩家净空。
+家具、props、植物和灯光不得堵门、楼梯、道路、关键视线或玩家净空。建筑 Core 自身造成的净空冲突由 Construction Closure & Clearance Gate 负责，不得因为 obstruction 不是 Finishing 新增就忽略。
 
 ### Semantic / Stylistic Fit
 
@@ -967,12 +1047,13 @@ Finishing 不得未经回退流程修改 Frozen Core。条件允许时，在进�
 - furniture；
 - surface；
 - construction interface；
+- ground contact / wall base / edge closure；
 - wear / props；
 - Detail Vegetation。
 
 ### Route
 
-沿主要 approach / entry / sequence / circulation 检查转折、开合、遮挡、释放、框景、回望、净空与空间身份。
+沿主要 approach / entry / sequence / circulation 检查转折、开合、遮挡、释放、框景、回望、净空与空间身份。对 stair / ramp / narrow corridor / doorway 不能只看静态截图，应结合 Construction Closure & Clearance Gate 的 movement envelope / walk-through 证据。
 
 Finishing 后还应问：如果不提供提示，沿这条 route 是否自然感到更多完成度、使用证据、材质深度和空间气氛？
 
@@ -985,6 +1066,13 @@ Finishing 后还应问：如果不提供提示，沿这条 route 是否自然感
 ## 25. Repair Strategy｜小修、重构和阶段回退必须区分
 
 门窗、材料、局部屋顶、家具、单株植物等小问题可以有界原地修补。
+
+对 `FAIL — CLOSURE` / `FAIL — CLEARANCE`：
+
+- 先定位物理失败范围，不根据截图提示或已知坐标只做“对题修补”；应按 Gate 重新扫描当前 Scope，避免只修已暴露点而留下同类缺陷；
+- 若不改变 Program / Space Graph / 主体量 / 主要 Section / 主要 Circulation 语义即可解决，执行有界 Core Repair；
+- 修复后重跑 Construction Closure & Clearance Gate、受影响 Interface / Circulation Integrity，并根据状态重跑 Spatial Completion Gate 或 Finishing Completion Gate；
+- 如果必须改变 Frozen Core 才能解决，升级为 `UPSTREAM_BUILDER_ISSUE`，回对应 Builder 模块。
 
 若发现以下问题，应回相应上游模块，而不是继续叠补丁：
 
@@ -1017,15 +1105,15 @@ Finishing 后还应问：如果不提供提示，沿这条 route 是否自然感
 
 ### `SPATIAL_COMPLETE`
 
-空间、结构、地形 / 水 / circulation 等 Core 已成立，可使用、可继续精修，但不声称展示级完成。
+空间、结构、地形 / 水 / circulation 等 Core 已成立，可使用、可继续精修，但不声称展示级完成；当前适用的 Construction Closure & Clearance Gate 已通过或明确标注真实碰撞未验证边界。
 
 ### `FINISHED`
 
-已完成与 Scope 重要性匹配的玩家尺度精修，包括用途、建筑收口、材质时间层、光、Micro 与 Restraint，并且已经通过 **Finishing Completion Gate**：主要玩家体验范围具有足够 Coverage，正常游览能够感知从 Core 到成品的完成度提升，而不依赖提示去寻找零散修改点。
+已完成与 Scope 重要性匹配的玩家尺度精修，包括用途、建筑收口、材质时间层、光、Micro 与 Restraint，并且已经通过 **Finishing Completion Gate**：主要玩家体验范围具有足够 Coverage，正常游览能够感知从 Core 到成品的完成度提升，而不依赖提示去寻找零散修改点。Finishing 后 Construction Closure & Clearance Gate 不得处于失败状态。
 
 ### `VERIFIED`
 
-在目标状态基础上完成当前工具能够提供的 Integrity / Semantic / Perceptual Verification，并明确未验证边界。
+在目标状态基础上完成当前工具能够提供的 Integrity / Semantic / Perceptual Verification，并明确未验证边界；Construction Closure & Clearance Gate 必须为 PASS，或在工具无法真实验证碰撞时明确标记 `UNVERIFIED`，不得伪装为 PASS。
 
 不得用“写入成功”“蓝图一致”“全局可达”“执行过五个 Finishing Pass”“修改了很多方块”冒充更高完成状态。
 
@@ -1038,6 +1126,8 @@ Finishing 后还应问：如果不提供提示，沿这条 route 是否自然感
 > **推荐入库资产候选清单**
 
 至少说明临时名称 / ID、类型、尺寸、spatial role、当前位置 / 预览、推荐理由、类似现有资产、建议类别。
+
+推荐为候选前，应确认当前版本至少通过 Construction Closure & Clearance Gate；若仍有 `CLOSURE / CLEARANCE` 失败，只能标记为 `ASSET_CANDIDATE_PENDING_REPAIR`，不得当作可直接复用的正式候选。
 
 只有 Owner 明确 `批准入库` 后，才能进入正式提取、转换和注册任务。不得因为模型自行生成成功就自动写入正式资产库。
 
@@ -1075,22 +1165,24 @@ Finishing 后还应问：如果不提供提示，沿这条 route 是否自然感
 10. Meso 完成道路、桥、游廊、building bay/support、主要 openings、vertical circulation、roof junction、次级植被与 Core Facade；
 11. 执行 Space Graph / Portal / Threshold / Roof-Junction / System Interface 检查；
 12. Base Micro 只完成让空间成立所需的地表、材料、门窗收口、必要植被、照明和基础陈设；
-13. 执行 Spatial Completion Gate；未通过则保持 Core，禁止进入 Finishing；
-14. 通过后状态设为 `SPATIAL_COMPLETE`，冻结上游核心语义，并保存可比较的 pre-Finishing baseline；
-15. 如果目标只需 `SPATIAL_COMPLETE`，进入 Verification / Delivery；否则进入 `FINISHING`；
-16. 建立轻量 Finishing Coverage Map，识别 Focal / Supporting / Quiet 与主要玩家体验区域；
-17. Finishing Pass 1：Functional Finish；
-18. Pass 2：Architectural Finish；
-19. Pass 3：Material / Environmental Finish；
-20. Pass 4：Composition / Atmosphere；
-21. Pass 5：Restraint；
-22. 回看 Coverage Map，检查 Phase Protection，确认 Finishing 未破坏 Frozen Core；
-23. 执行 Finishing Completion Gate；若 `UNDER_FINISH`，保持 `FINISHING` 并针对覆盖不足区域继续精修，再重跑 Gate；若发现 Frozen Core 问题，则回 Builder Core；
-24. Gate 通过后，执行 Geometry / Interface / Circulation / Semantic / Water / Terrain / Vegetation invariants；
-25. 做 Far + Mid + Near + Route 的 Perceptual Review，并尽量与 pre-Finishing baseline 做相同视点比较；能取得真实客户端视点时优先使用；
-26. 对问题执行有界 Repair；如触及上游则回退相应状态并重新过 Gate；如只是精修不足则留在 Finishing；
-27. 只有 Finishing Completion Gate 与必要 Integrity 检查都支持时，才标记 `FINISHED`；完成当前工具能够提供的最终验证后可标记 `VERIFIED`；
-28. 明确仍未验证的客户端、流体、真实碰撞、夜间照明或其它边界；
-29. 输出推荐入库资产候选；
-30. 等待 Owner 实机检查；
-31. 只有 Owner 明确批准的候选才能正式入库。
+13. 执行 **Construction Closure & Clearance Gate**：检查 Ground Contact / Support Closure、Movement Envelope 与 Edge Closure；失败则先做有界物理 Repair；
+14. 执行 Spatial Completion Gate；未通过则保持 Core，禁止进入 Finishing；
+15. 通过后状态设为 `SPATIAL_COMPLETE`，冻结上游核心语义，并保存可比较的 pre-Finishing baseline；
+16. 如果目标只需 `SPATIAL_COMPLETE`，进入 Verification / Delivery；否则进入 `FINISHING`；
+17. 建立轻量 Finishing Coverage Map，识别 Focal / Supporting / Quiet 与主要玩家体验区域；
+18. Finishing Pass 1：Functional Finish；
+19. Pass 2：Architectural Finish；
+20. Pass 3：Material / Environmental Finish；
+21. Pass 4：Composition / Atmosphere；
+22. Pass 5：Restraint；
+23. 回看 Coverage Map，检查 Phase Protection，确认 Finishing 未破坏 Frozen Core；
+24. 重新执行 **Construction Closure & Clearance Gate**；若 Finishing 或此前遗漏造成物理失败，先 Repair，再重跑受影响 Gate；
+25. 执行 Finishing Completion Gate；若 `UNDER_FINISH`，保持 `FINISHING` 并针对覆盖不足区域继续精修，再重跑 Gate；若发现 Frozen Core 问题，则回 Builder Core；
+26. Gate 通过后，执行 Geometry / Interface / Circulation / Semantic / Water / Terrain / Vegetation invariants；
+27. 做 Far + Mid + Near + Route 的 Perceptual Review，并尽量与 pre-Finishing baseline 做相同视点比较；能取得真实客户端视点时优先使用；
+28. 对问题执行有界 Repair；如触及上游则回退相应状态并重新过 Gate；如只是精修不足则留在 Finishing；对 CLOSURE / CLEARANCE Repair 不得只修已知坐标，必须按 Gate 重新扫描同类风险；
+29. 只有 Finishing Completion Gate、Construction Closure & Clearance Gate 与必要 Integrity 检查都支持时，才标记 `FINISHED`；完成当前工具能够提供的最终验证后可标记 `VERIFIED`；
+30. 明确仍未验证的客户端、流体、真实碰撞、夜间照明或其它边界；
+31. 输出推荐入库资产候选；
+32. 等待 Owner 实机检查；
+33. 只有 Owner 明确批准的候选才能正式入库。
