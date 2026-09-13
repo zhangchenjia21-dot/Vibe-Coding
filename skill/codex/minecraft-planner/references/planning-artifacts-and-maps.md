@@ -25,6 +25,7 @@ Optional when useful:
 
 ```text
 settlement-capacity.json
+surface-character.json
 sections/
 assumptions.md
 source-register.json
@@ -32,6 +33,8 @@ validation.json
 ```
 
 At L0 / L1, if several significant settlement nodes are proposed, `settlement-capacity.json` or equivalent fields in `planning-objects.json` are strongly recommended.
+
+If surface / substrate / land-cover materially affects planning, include `surface-character.json` or equivalent fields and an Owner-readable map layer.
 
 ---
 
@@ -150,6 +153,8 @@ Never use one circle / polygon ambiguously for all three.
 
 If exact shapes are not justified, `built_fabric_capacity` may be an area range + scale-coded symbol rather than a literal polygon.
 
+When consequential, add a separate `surface_character` summary rather than hiding it inside generic terrain text.
+
 ---
 
 ## 6. Authority / Evidence Register
@@ -167,6 +172,8 @@ used for which decisions
 ```
 
 If the project already has a terrain / Atlas evidence contract, reuse it instead of inventing parallel semantics.
+
+For surface / substrate evidence, keep direct observations separate from derived classes and do not infer geology / fertility beyond the source.
 
 ---
 
@@ -209,11 +216,17 @@ Recommended maps:
    - secondary centers;
    - obsolete / residual systems where important.
 
+6. **Surface / Land-Cover Map** — when materially important
+   - broad exposed-rock / soil-bearing / sand-gravel / wet / barren / vegetation classes as supported;
+   - clearly separated observed / derived status;
+   - no false fertility / geology claims.
+
 ### L1 REGIONAL_SYSTEM
 
 Recommended maps:
 
 - terrain / resource / constraint;
+- **surface / substrate / land-cover character when it changes candidate suitability**;
 - regional settlement network;
 - flow / processing chain;
 - settlement hierarchy / catchment;
@@ -225,10 +238,11 @@ Recommended maps:
 Recommended maps:
 
 1. Terrain / Constraint / Opportunity;
-2. Anchor + Growth + Movement;
-3. District / Density / Expansion;
-4. approximate current / target built-fabric envelope;
-5. current / inherited fabric when Existing Evolution.
+2. Surface / Ground Character when consequential;
+3. Anchor + Growth + Movement;
+4. District / Density / Expansion;
+5. approximate current / target built-fabric envelope;
+6. current / inherited fabric when Existing Evolution.
 
 ### L3 DISTRICT
 
@@ -237,6 +251,7 @@ Recommended maps:
 - existing condition;
 - route / service / commons;
 - block / parcel / frontage;
+- ground / vegetation / wetness constraints where relevant;
 - infill / subdivision / shared space;
 - Builder Package boundaries.
 
@@ -247,6 +262,7 @@ Recommended:
 - high-resolution parcel plan;
 - frontage / access / service diagram;
 - shared courtyard / negative space;
+- local surface / drainage / retaining context when relevant;
 - Builder Package map;
 - 1–2 street / terrain sections where elevation matters;
 - simplified 3D / massing / player-height view if useful.
@@ -276,6 +292,8 @@ location search envelope
 built-fabric capacity envelope
 functional hinterland / catchment
 ```
+
+For surface maps, legend must distinguish direct surface observation from derived land-character class.
 
 Avoid decorative medieval-style maps when they obscure planning evidence.
 
@@ -309,7 +327,32 @@ Do not draw catchment as urbanized area.
 
 ---
 
-## 10. Layer semantics
+## 10. Surface / substrate visualization
+
+When surface character materially changes planning, the Owner should be able to see **what kind of ground important candidates occupy**, not only how high or steep it is.
+
+Useful representations:
+
+- categorical surface-family raster / vector layer;
+- exposed-rock ratio or soil-bearing ratio summary by candidate envelope;
+- vegetation / canopy / barren / wet-ground layer where supported;
+- scarce productive-ground pockets;
+- uncertainty / unsurveyed mask.
+
+Keep Proposal envelopes visually separate from natural surface layers.
+
+A surface map should not imply:
+
+- grass = fertile farmland;
+- stone = quarry / ore;
+- trees = sustainable timber resource;
+- biome = soil model.
+
+Detailed rules: `surface-substrate-landcover.md`.
+
+---
+
+## 11. Layer semantics
 
 Recommended visual distinction:
 
@@ -327,7 +370,7 @@ Exact colors / styles are not prescribed. The important requirement is legibilit
 
 ---
 
-## 11. Growth visualization
+## 12. Growth visualization
 
 Do not default to concentric rings.
 
@@ -348,7 +391,7 @@ When built-fabric scale changes through time, show growth of extent only when su
 
 ---
 
-## 12. 3D and massing previews
+## 13. 3D and massing previews
 
 Planner 3D evidence may show:
 
@@ -374,7 +417,7 @@ Use primitive / low-detail massing when possible so downstream authorship remain
 
 ---
 
-## 13. Sections
+## 14. Sections
 
 Sections are useful when morphology depends on:
 
@@ -384,7 +427,8 @@ Sections are useful when morphology depends on:
 - riverbank;
 - ridge / valley crossing;
 - stacked streets;
-- dense frontage on uneven terrain.
+- dense frontage on uneven terrain;
+- shallow soil / exposed rock / wet-ground interface when supported.
 
 A Planner section should emphasize:
 
@@ -393,13 +437,14 @@ A Planner section should emphasize:
 - parcel / building envelopes;
 - retaining / drainage relation;
 - public / service space;
-- relative massing.
+- relative massing;
+- consequential ground-character transition where known.
 
 Detailed structural section remains Builder work.
 
 ---
 
-## 14. Planning packet markdown
+## 15. Planning packet markdown
 
 `settlement-plan.md` should be readable without opening every JSON file.
 
@@ -415,6 +460,7 @@ Flows / Externalities
 Anchors
 Growth Sequence
 Terrain Strategy
+Surface / Substrate / Land-Cover Strategy (when applicable)
 Movement / Commons
 Settlement Hierarchy / Catchment
 Settlement Capacity / Built-Fabric Scale
@@ -431,7 +477,7 @@ Use concise causal traces rather than repeating all raw data.
 
 ---
 
-## 15. Recursive package artifact
+## 16. Recursive package artifact
 
 For L0–L3, `implementation-packages.json` should normally contain Planner→Planner packages with fields such as:
 
@@ -441,6 +487,7 @@ downstream_to_resolve
 downstream_adaptable
 revision_triggers
 capacity_hypothesis
+surface_evidence_requirement (when consequential)
 ```
 
 Do not reuse Builder-specific `builder_adaptable` as the main child-planning schema.
@@ -449,7 +496,7 @@ For L4 / Builder-ready planning, switch to the Planner→Builder contract.
 
 ---
 
-## 16. Version / revision
+## 17. Version / revision
 
 A plan revision should record:
 
@@ -460,6 +507,7 @@ A plan revision should record:
 - material changes;
 - objects added / retired / split / merged;
 - capacity changes where material;
+- surface / land-cover evidence changes where material;
 - Gate results;
 - review status.
 
