@@ -1,4 +1,4 @@
-# minecraft-planner v0.2
+# minecraft-planner v0.3
 
 ## 0. Mission｜从因果关系推导空间，而不是从建筑清单拼聚落
 
@@ -6,7 +6,7 @@
 
 它负责解释：
 
-> **地理、资源、制度、经济、交通、防御、文化、技术 / 魔法与历史路径，为什么会共同生成现在这个国家、区域、聚落、街区与地块形态。**
+> **地理、地表与环境、资源、制度、经济、交通、防御、文化、技术 / 魔法与历史路径，为什么会共同生成现在这个国家、区域、聚落、街区与地块形态。**
 
 它不直接把建筑做成 Minecraft 成品，而是把世界事实、Canon 与规划假设转化为可审计的空间关系，并逐尺度下钻，直到形成可交给 `minecraft-builder` 的明确设计包。
 
@@ -14,6 +14,8 @@
 
 ```text
 WHO + WHERE + WHY
+        ↓
+TERRAIN + SURFACE / SUBSTRATE / LAND-COVER
         ↓
 PRESSURES / FLOWS / EXTERNALITIES
         ↓
@@ -40,7 +42,7 @@ BUILDER DESIGN PACKAGES
 
 最终始终要回答：
 
-> **Why is this here, next to that, reached by this route, at this density, at this scale, in this stage of growth?**
+> **Why is this here, next to that, reached by this route, at this density, on this kind of ground, at this scale, in this stage of growth?**
 
 只有 `WHAT / WHERE`、没有 `WHY`，不算完成规划。
 
@@ -53,6 +55,7 @@ BUILDER DESIGN PACKAGES
 - civilization / faction / polity context reading；
 - Just-in-time Worldbuilding；
 - Territorial / Settlement Premise；
+- terrain / surface / substrate / land-cover planning interpretation；
 - social / institutional demand；
 - flows / throughput / externalities；
 - Anchor selection 与 hierarchy；
@@ -86,9 +89,9 @@ BUILDER DESIGN PACKAGES
 - Finishing；
 - world-write execution。
 
-> **Planner owns relationships, growth logic and planning scale. Builder owns buildings and physical realization.**
+> **Planner owns relationships, growth logic, land-character interpretation and planning scale. Builder owns buildings and physical realization.**
 
-Planner 可以约束建筑为什么在这里、服务什么、必须邻接谁、frontage 朝哪、服务流从哪进入；不能替 Builder 决定精确屋顶、柱距、窗型、房间细部或方块材料。
+Planner 可以约束建筑为什么在这里、服务什么、必须邻接谁、frontage 朝哪、服务流从哪进入、应适应什么地表环境；不能替 Builder 决定精确屋顶、柱距、窗型、房间细部或具体 block palette。
 
 ---
 
@@ -111,7 +114,8 @@ Planner 可以约束建筑为什么在这里、服务什么、必须邻接谁、
 - frontier / buffer / sacred / institutional geography；
 - food / ore / timber / trade / people / authority / defense flows；
 - major historical expansion / contraction；
-- major settlement capacity / built-fabric scale classes。
+- major settlement capacity / built-fabric scale classes；
+- coarse surface / land-cover distinctions when they materially affect carrying capacity or network logic。
 
 **不处理**某个住宅地块宽几格、某条后巷怎么转弯。
 
@@ -127,6 +131,7 @@ Planner 可以约束建筑为什么在这里、服务什么、必须邻接谁、
 - regional corridors；
 - settlement spacing；
 - settlement capacity refinement；
+- consequential surface / substrate / land-cover differences between candidate areas；
 - cross-region interfaces；
 - regional Architecture Kit requirements。
 
@@ -143,7 +148,8 @@ Planner 可以约束建筑为什么在这里、服务什么、必须邻接谁、
 - district formation；
 - settlement-level density gradient；
 - settlement edge / expansion directions；
-- approximate built-fabric envelope and internal capacity distribution。
+- approximate built-fabric envelope and internal capacity distribution；
+- local surface mosaic / productive-ground protection / water-ground relation when evidence exists。
 
 ### L3 `DISTRICT`
 
@@ -158,7 +164,8 @@ Planner 可以约束建筑为什么在这里、服务什么、必须邻接谁、
 - frontage；
 - parcel subdivision / amalgamation；
 - infill；
-- specialized clusters。
+- specialized clusters；
+- surface / ground character where it changes parcel, courtyard or service logic。
 
 ### L4 `URBAN_ENSEMBLE`
 
@@ -173,14 +180,12 @@ Planner 可以约束建筑为什么在这里、服务什么、必须邻接谁、
 - service lane；
 - loading / pedestrian relation；
 - street enclosure；
-- local terrain adaptation；
+- local terrain / ground adaptation；
 - concrete Builder Packages。
 
 ---
 
 ## 0.3 Planning Context｜历史成熟度与当前实存观测必须分开
-
-v0.2 不再用单一 `GREENFIELD / EXISTING_EVOLUTION` 同时表达“历史状态”和“我们是否看过当前实存”。
 
 任何规划 Scope 至少记录两个正交维度。
 
@@ -200,7 +205,7 @@ v0.2 不再用单一 `GREENFIELD / EXISTING_EVOLUTION` 同时表达“历史状�
 - `GREENFIELD_FORMATION`：在确有空白或新拓殖前提下推导形成逻辑；
 - `EXISTING_EVOLUTION`：在已有道路、建筑、地块、旧城墙、旧院墙、废弃路线、火灾重建、历史边界上继续演化。
 
-一个已有数百年历史但当前实存未读取的国家，通常应是：
+一个已有长期历史但当前实存未读取的国家，通常应是：
 
 ```text
 Fabric Observation = EXISTING_FABRIC_UNVERIFIED
@@ -217,7 +222,7 @@ Evolution Logic = EXISTING_EVOLUTION / TO_BE_RESOLVED
 
 国家尺度应决定城市网络、区域分工、长距离流、节点容量级别与战略关系；不应决定某铁匠铺在哪个街角。
 
-区域尺度应决定 settlement hierarchy、corridor 与聚落容量收敛；不应决定某住宅门窗。
+区域尺度应决定 settlement hierarchy、corridor、capacity refinement 与重要地表差异；不应决定某住宅门窗。
 
 街区尺度可以决定 parcel / frontage / service lane；不应决定 exact roof geometry。
 
@@ -247,8 +252,8 @@ minecraft-builder
 
 Planner 对每项重要输入识别 authority：
 
-- `OBSERVED`：直接世界 / 地形 / 建筑 / 道路事实；
-- `DERIVED`：从 Observed 计算的 slope / connectivity / terrain class 等；
+- `OBSERVED`：直接 world / terrain / surface / building / road fact；
+- `DERIVED`：从 Observed 计算的 slope / connectivity / terrain class / surface ratio 等；
 - `APPROVED_CANON`：Owner 已批准的文明、制度、历史、政治等；
 - `OWNER_CONSTRAINT`：当前任务必须遵守的方向 / 禁止项；
 - `PLANNING_ASSUMPTION`：为了当前规划暂时采用的假设；
@@ -256,12 +261,13 @@ Planner 对每项重要输入识别 authority：
 
 规则：
 
-1. 粗尺度 terrain interpretation 不能伪装成逐块事实；
+1. 粗尺度 terrain / surface interpretation 不能伪装成逐块事实；
 2. `PLANNING_ASSUMPTION` 不自动升级为 Canon；
 3. terrain / Atlas / survey 的 freshness / uncertainty / lineage 必须保留；
 4. 规划读取权限不等于 world-write 权限；
 5. Planner 默认 `world writes = 0`；
-6. 上层 Planning Proposal 不能伪装成下层 Observed fact。
+6. 上层 Planning Proposal 不能伪装成下层 Observed fact；
+7. visible surface material 不自动证明 soil fertility、quarry quality、ore deposit、timber yield 或真实 hydrology。
 
 ## 2. Just-in-time Worldbuilding｜只补足会改变空间的设定
 
@@ -324,16 +330,15 @@ Premise 至少概括：
 
 # Layer B｜Causal Systems
 
-## 4. Terrain & Resistance｜地形参与因果过程
+## 4. Terrain & Resistance｜几何地形参与因果过程
 
 至少分析当前尺度真正相关的：
 
 - elevation / slope / roughness；
 - ridge / valley / terrace / pass；
 - water / shoreline / crossing；
-- flood / drainage；
-- arable / pasture / forest / resource access；
-- buildable ground；
+- flood / drainage evidence when available；
+- buildable-ground geometry；
 - visibility / defensibility；
 - movement resistance。
 
@@ -342,6 +347,46 @@ Premise 至少概括：
 > **不同活动承担怎样的 terrain cost？**
 
 重货、日常步行、礼仪地标、防御、仓储、农业对坡度 / 水患 / visibility 的偏好不同。
+
+### 4.1 Surface / Substrate / Land-Cover｜地表性质也是一等规划证据
+
+几何平坦不等于生活、生产或建设条件等价。
+
+在当前尺度会改变规划时，主动读取或明确标记未知：
+
+- natural exposed surface material / family；
+- soil-bearing surface vs exposed rock；
+- sand / gravel / mud / snow / barren character；
+- vegetation / canopy / open-ground cover；
+- wet / dry surface signals when supported；
+- shallow substrate only when evidence actually exists；
+- cultivated / disturbed surface only when directly observed。
+
+重要原则：
+
+> **Flat is not the same as habitable, productive, buildable or equivalent. Geometry does not describe land character.**
+
+例如，大面积裸岩缓台与草土缓台可以具有相同 slope / relief，却应产生不同的：
+
+- local food-support assumption；
+- water / drainage question；
+- expansion / open-space pressure；
+- productive-ground preservation；
+- construction opportunity；
+- settlement morphology；
+- Architecture Kit Requirements。
+
+但不得把表面现象过度推导为自然事实：
+
+- grass block ≠ fertile farmland；
+- exposed stone ≠ proven quarry / useful ore；
+- forest ≠ sustainable timber yield；
+- sand ≠ desert culture；
+- biome ≠ soil model。
+
+如果当前 survey 没有足够 surface evidence，而这种差异会影响 planning decision，必须在 `DOWNSTREAM_TO_RESOLVE` 中提出 targeted evidence requirement，而不是继续把所有低坡地视为同类。
+
+详见 `references/surface-substrate-landcover.md`。
 
 ## 5. Demand Model｜需求不等于一栋建筑
 
@@ -450,7 +495,7 @@ Driver
 
 先确定：
 
-> origin → destination → flow magnitude → terrain resistance → route
+> origin → destination → flow magnitude → terrain / surface resistance → route
 
 再形成 primary / secondary / service / freight / ritual / military / seasonal route（按需要）。
 
@@ -469,6 +514,8 @@ Why has it not been built over?
 ```
 
 > **Negative space is a social and environmental object.**
+
+当 scarce soil-bearing ground、water protection、forest recovery、bare-rock work ground 等具有明确作用时，也不能被当成“没建筑的空地”。
 
 ## 11. Settlement Hierarchy / Catchment｜节点不只按人口排序
 
@@ -496,7 +543,9 @@ Catchment / hinterland 是服务关系，不等于 built-up extent。
 
 > **search envelope ≠ built fabric ≠ catchment**
 
-Built-Fabric Capacity 应由人口 / household pressure、throughput、institutional role、terrain capacity、accessibility、density morphology、open / productive land requirements、maturity 共同推导。
+Built-Fabric Capacity 应由人口 / household pressure、throughput、institutional role、terrain capacity、**surface / substrate / land-cover character**、accessibility、density morphology、open / productive land requirements、maturity 共同推导。
+
+低坡面积不能直接作为 settlement carrying capacity 的代理。若某候选区以裸岩、湿地、砂砾、稀缺土壤或密林为主，应改变 capacity sensitivity 或至少产生明确 unresolved evidence；不设统一惩罚系数。
 
 优先输出：
 
@@ -508,6 +557,7 @@ resident_scale
 service_intensity
 freight_throughput
 political_significance
+surface_character_summary (when consequential)
 confidence
 drivers
 sensitivity / unresolved evidence
@@ -515,7 +565,7 @@ sensitivity / unresolved evidence
 
 如果证据不足，不得拍脑袋给假精确边界；可以给宽区间、order-of-magnitude class，或明确 `UNRESOLVED`。但只要把一个节点作为重要 settlement role 提交给 Owner，就应尽量表达“它大概有多大”，而不是只画同尺寸的点。
 
-详见 `references/settlement-capacity-and-scale.md`。
+详见 `references/settlement-capacity-and-scale.md` 与 `references/surface-substrate-landcover.md`。
 
 ## 13. District / Quarter｜关系网络，不是现代 Zoning
 
@@ -563,14 +613,14 @@ Building Program 是需求与建筑设计之间的桥，不是建筑清单。
 Planner 只定义下游 Architecture Kit **需要支持什么**，例如：
 
 - required typology skeletons；
-- terrain adaptation；
+- terrain / surface adaptation；
 - frontage behaviors；
 - service interfaces；
 - shared civilizational DNA；
 - regional variation dimensions；
 - forbidden mismatches。
 
-Planner 不决定具体柱距、门窗方块、roof block geometry、façade detail、palette。
+Planner 可以说“高裸岩环境需要强化贴岩 / 石基 / 台地适应能力”，但不能因此直接指定具体 stone block palette 或 façade 细节。
 
 详见 `references/architecture-kit-requirements.md`。
 
@@ -582,14 +632,7 @@ Planner 不决定具体柱距、门窗方块、roof block geometry、façade det
 
 ### `UPSTREAM_FIXED`
 
-只有违反后会破坏当前已接受因果结构的关系，例如：
-
-- settlement / regional role；
-- major anchor relation；
-- cross-region flow；
-- protected political / ecological constraint；
-- broad capacity relationship；
-- required inter-node dependency。
+只有违反后会破坏当前已接受因果结构的关系，例如 settlement / regional role、major anchor relation、cross-region flow、protected political / ecological constraint、broad capacity relationship、required inter-node dependency。
 
 ### `DOWNSTREAM_TO_RESOLVE`
 
@@ -598,6 +641,7 @@ Planner 不决定具体柱距、门窗方块、roof block geometry、façade det
 - current existing fabric；
 - exact node site；
 - water / road / harbor viability；
+- **surface / substrate / land-cover character where current evidence is insufficient**；
 - local settlement capacity refinement；
 - detailed catchment；
 - parcel / district logic。
@@ -608,11 +652,7 @@ Planner 不决定具体柱距、门窗方块、roof block geometry、façade det
 
 ### `REVISION_TRIGGER`
 
-若新证据推翻上层假设，明确何时：
-
-- 局部修订 child package；
-- 回退 parent plan；
-- 标记 `UPSTREAM_PLANNING_ISSUE`。
+若新证据推翻上层假设，明确何时局部修订 child package、回退 parent plan 或标记 `UPSTREAM_PLANNING_ISSUE`。
 
 L0→L1、L1→L2、L2→L3、L3→L4 都使用这一 contract。
 
@@ -665,17 +705,18 @@ WHY / DRIVER
 6. Anchor Hierarchy
 7. Causal Growth Sequence
 8. Terrain Strategy
-9. Movement Skeleton
-10. Commons / Negative Space
-11. Settlement Hierarchy / Catchment
-12. Settlement Capacity / Built-Fabric Envelopes
-13. District / Parcel / Density Logic（当前尺度适用时）
-14. Building Program
-15. Architecture Kit Requirements
-16. Recursive Planning Packages / Builder Packages
-17. Implementation Sequence
-18. Planner Critic
-19. Uncertainty / Planning Assumptions
+9. **Surface / Substrate / Land-Cover Strategy（当前尺度适用时）**
+10. Movement Skeleton
+11. Commons / Negative Space
+12. Settlement Hierarchy / Catchment
+13. Settlement Capacity / Built-Fabric Envelopes
+14. District / Parcel / Density Logic（当前尺度适用时）
+15. Building Program
+16. Architecture Kit Requirements
+17. Recursive Planning Packages / Builder Packages
+18. Implementation Sequence
+19. Planner Critic
+20. Uncertainty / Planning Assumptions
 
 ## 22. Machine-readable Planning Objects
 
@@ -710,18 +751,19 @@ Task-local ID 不自动成为 World Canon ID。
 - territorial structure；
 - major flows；
 - settlement hierarchy / catchment；
-- **settlement scale / built-fabric capacity**；
-- historical growth。
+- settlement scale / built-fabric capacity；
+- historical growth；
+- consequential surface / land-cover regions when they materially affect national structure。
 
-重要节点不得全部画成视觉上等大的点。应使用半透明 envelope、scale-coded symbol 或其它方式让 Owner 直观看到：
-
-> 哪些只是 location search，哪些是预计建成区，哪些是 service catchment。
+重要节点不得全部画成视觉上等大的点。应使用半透明 envelope、scale-coded symbol 或其它方式让 Owner 直观看到：哪些只是 location search，哪些是预计建成区，哪些是 service catchment。
 
 ### L1–L4
 
-随尺度增加细化 terrain / network / settlement extent / district / parcel / frontage / Builder Package。
+随尺度增加细化 terrain / **surface character** / network / settlement extent / district / parcel / frontage / Builder Package。
 
-详细要求见 `references/planning-artifacts-and-maps.md`。
+当 surface / substrate / land-cover materially changes planning，必须提供可读的 map layer / summary，而不是只在文字里提一句。
+
+详细要求见 `references/planning-artifacts-and-maps.md` 与 `references/surface-substrate-landcover.md`。
 
 ---
 
@@ -751,6 +793,22 @@ Task-local ID 不自动成为 World Canon ID。
 
 把方案平移到另一块等面积普通平地：如果几乎无需修改，而任务声称 terrain-driven，则 FAIL。
 
+## 28.1 Surface Character Necessity Test
+
+假设两个候选地具有相同 elevation / slope / relief，但一个是大面积裸岩，一个是 soil-bearing / vegetated ground：
+
+> 规划中的 capacity、livelihood、open-space、route、morphology 或 Kit requirements 是否会合理改变？
+
+如果完全不变，而题材明显依赖生活承载、生产、水土或地方材料条件，则 surface model 不完整。
+
+同时检查：
+
+- 是否把 low slope 默认为良好生活 / 农业地；
+- 是否把 exposed stone 直接升格为 quarry / ore；
+- 是否把 vegetation 当不存在；
+- 是否吞掉 scarce soil-bearing ground；
+- unsupported geology / ecology claim 是否保持 unknown。
+
 ## 29. Capacity Plausibility Test
 
 对重要 settlement node：
@@ -761,6 +819,7 @@ Task-local ID 不自动成为 World Canon ID。
 - catchment 是否被误画成建成区？
 - 各节点是否因为同一 symbol 造成虚假同规模？
 - 面积是否假精确到证据不支持的程度？
+- **地表 / substrate 差异是否被纳入 capacity sensitivity，而不是只看低坡面积？**
 
 失败时保持上游状态并修正 capacity / uncertainty。
 
@@ -773,6 +832,7 @@ Task-local ID 不自动成为 World Canon ID。
 - 保留足够自由吗？
 - 新证据如何回退上层清楚吗？
 - 是否错误地直接跳给 Builder？
+- 关键 surface / substrate uncertainty 是否在需要时被传递？
 
 ## 31. Kit Clone Test
 
@@ -799,7 +859,7 @@ Mode、区域、Authority 与 Context 清楚。
 社会 / 环境 /需求 / Anchor 因果成立。
 
 ### `MORPHOLOGY_READY`
-Growth、Movement、Hierarchy、Capacity、District / Parcel（当前尺度适用时）成立。
+Growth、Movement、Hierarchy、Capacity、Terrain / Surface、District / Parcel（当前尺度适用时）成立。
 
 ### `HANDOFF_READY`
 下一层 Planner 或 Builder 能执行，Fixed / unresolved / adaptable 清楚。
@@ -817,7 +877,7 @@ Planner 默认 `world writes = 0`。
 
 ### Morphology Gate
 
-确认 Terrain、Flow、Growth、Hierarchy、Capacity、Negative Space、District / Parcel（适用时）真正由因果生成。
+确认 Terrain、**Surface / Substrate / Land-Cover（适用时）**、Flow、Growth、Hierarchy、Capacity、Negative Space、District / Parcel（适用时）真正由因果生成。
 
 ### Handoff Gate
 
@@ -853,26 +913,28 @@ Planner 应自主完成研究、推理、Critic、制图和 artifact 输出，�
 
 1. 确认 Scope、Scale、Authority、Fabric Observation State 与 Evolution Logic；
 2. 读取当前尺度必要的 terrain / world / Canon；
-3. 建立 Territorial / Settlement Premise；
-4. Premise Gate；
-5. 建立 Demand；
-6. 建立 Flow / Externality；
-7. Anchor hierarchy；
-8. Causal Growth；
-9. Terrain / resistance strategy；
-10. Movement skeleton；
-11. Commons / Negative Space；
-12. Settlement hierarchy / catchment；
-13. Settlement Capacity / Built-Fabric Envelope；
-14. 当前尺度适用时建立 District / Parcel / Frontage / Density；
-15. Building Program；
-16. Architecture Kit Requirements；
-17. Planner Critic：Counterfactual / Anchor Removal / Historical Validity / Anti-Zoning / Terrain Necessity / Capacity Plausibility；
-18. Morphology Gate；
-19. 若仍需向下规划，形成 Recursive Planning Packages；否则形成 Builder Packages；
-20. Handoff Gate；
-21. 输出 Planning Packet、machine-readable objects、规划图、source register、uncertainty；
-22. 状态设为 `HANDOFF_READY`，停止等待下游 / review。
+3. 判断当前尺度是否存在会改变规划的 surface / substrate / land-cover 差异；有证据则读取并分类，无证据则登记 targeted evidence requirement；
+4. 建立 Territorial / Settlement Premise；
+5. Premise Gate；
+6. 建立 Demand；
+7. 建立 Flow / Externality；
+8. Anchor hierarchy；
+9. Causal Growth；
+10. Terrain / resistance strategy；
+11. Surface / substrate / land-cover strategy（适用时）；
+12. Movement skeleton；
+13. Commons / Negative Space；
+14. Settlement hierarchy / catchment；
+15. Settlement Capacity / Built-Fabric Envelope；
+16. 当前尺度适用时建立 District / Parcel / Frontage / Density；
+17. Building Program；
+18. Architecture Kit Requirements；
+19. Planner Critic：Counterfactual / Anchor Removal / Historical Validity / Anti-Zoning / Terrain Necessity / Surface Character Necessity / Capacity Plausibility；
+20. Morphology Gate；
+21. 若仍需向下规划，形成 Recursive Planning Packages；否则形成 Builder Packages；
+22. Handoff Gate；
+23. 输出 Planning Packet、machine-readable objects、规划图、source register、uncertainty；
+24. 状态设为 `HANDOFF_READY`，停止等待下游 / review。
 
 ---
 
@@ -884,6 +946,7 @@ Planner 应自主完成研究、推理、Critic、制图和 artifact 输出，�
 - `references/flows-externalities-and-demand.md`：需求、throughput、flows、externalities；
 - `references/morphology-parcels-and-density.md`：道路、block、parcel、frontage、density、anti-zoning；
 - `references/settlement-capacity-and-scale.md`：search / built fabric / catchment、面积区间与规模表达；
+- `references/surface-substrate-landcover.md`：surface / substrate / vegetation / ground character 与 capacity / morphology 的关系；
 - `references/architecture-kit-requirements.md`：Planner 可要求什么、不应设计什么；
 - `references/recursive-planning-handoff.md`：L0→L1→L2→L3→L4 的递归交接；
 - `references/planner-builder-handoff.md`：最低规划尺度 → Builder 的 Fixed / Adaptable contract；
@@ -892,7 +955,7 @@ Planner 应自主完成研究、推理、Critic、制图和 artifact 输出，�
 
 ---
 
-# 38. Core Invariants｜v0.2
+# 38. Core Invariants｜v0.3
 
 > **Settlement morphology is caused, not arranged.**
 
@@ -901,6 +964,10 @@ Planner 应自主完成研究、推理、Critic、制图和 artifact 输出，�
 > **Roads follow flows; parcels follow history and pressure.**
 
 > **Terrain changes the plan.**
+
+> **Flat land is not equivalent land: surface / substrate / land-cover can change carrying capacity and morphology.**
+
+> **Visible surface evidence must not be overclaimed as fertility, quarry quality, ore or hydrology.**
 
 > **Unknown existing fabric is not empty land.**
 
