@@ -1,29 +1,28 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 18.0
+version: 18.1
 created: 2026-08-26
 updated: 2026-09-13
-supersedes: 17.29
-phase: G7 Long-session Context & Knowledge Hardening — Package 8 Task Shaping
-current_task: G7 Package 8 Long-session Core — Task Shaping / Architecture Audit
-current_owner: GPT
-current_dispatch_state: ROUTE ACTIVE / TASK SHAPING / NO IMPLEMENTATION DISPATCH
+supersedes: 18.0
+phase: G7 Long-session Context & Knowledge Hardening — Package 8 Narrative Working Set
+current_task: MW-033 G7 Narrative Working-Set Orchestrator v0.1
+current_owner: Codex
+current_dispatch_state: AUTHORIZED / TASK SHAPED / NO IMPLEMENTATION RETURN YET
 parent_task: G7 Package 8 Long-session Core
 semantic_owner: GPT
 owner_uat_required: deferred until concentrated MW-032 + G7 Product test
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
 current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v5.1
 reviewed_implementation_main: e876e217f0220fdc6a577cd0b52143dc8d5b6b5c
+active_architecture: my world/architecture/G7_NARRATIVE_WORKING_SET_ORCHESTRATOR_V0_1_DECISION.md@v1.0
+active_task_packet: my-world/docs/tasks/MW-033_G7_NARRATIVE_WORKING_SET_ORCHESTRATOR_V0_1_TASK.md
+active_task_branch: mw-033-g7-narrative-working-set
+formal_code_base: e876e217f0220fdc6a577cd0b52143dc8d5b6b5c
+task_packet_commit: dc6c46d952ba0b63a8f713e9388896969cd71f7d
 closed_work_item: MW-032 G6 Reality Gate U1 Correction Train
-closed_task_packet: my-world/docs/tasks/MW-032_G6_REALITY_GATE_U1_CORRECTION_TRAIN_TASK.md
-closed_task_branch: mw-032-g6-reality-gate-u1-corrections
-mw032_implementation: 41cf4dfb87f12d9d99b9985e4e0dcf6e7f202b25
-mw032_candidate: dd51c5daef1db6f8a012f05148e49f6912bf6bd4
-mw032_review_commit: 4ca34ddcb7496945cbd3648183e0d5893433d5f7
 mw032_integration_verification: e876e217f0220fdc6a577cd0b52143dc8d5b6b5c
 active_uat_record: my world/docs/uat/G6_V0_CORE_CLOSURE_REALITY_GATE_U1.md@v1.2
-active_findings_record: my world/docs/uat/G6_V0_CORE_CLOSURE_REALITY_GATE_U1_FINDINGS.md@v1.1
 owner_build_pck_sha256_u1: 16a3aeb252eba841fedbf8a4f38d7643912764316e561d5b417b88e89085f8c4
 ---
 
@@ -38,153 +37,190 @@ G3 Persistence / Save / Timeline            PASS / CLOSED
 G4 Primary Source Assets & Local Game       PASS / CLOSED
 G5 World Semantics & GM Runtime             PRODUCT PASS / CLOSED
 G6 RPG Core Closure                         ENGINEERING CORE COMPLETE / PRODUCT CONFIRMATION DEFERRED
-G7 Long-session Context & Knowledge         PACKAGE 8 TASK SHAPING CURRENT
+G7 Long-session Context & Knowledge         MW-033 CURRENT
 G8 Product Expansion / Authoring            QUEUED
 G9 Standalone Alpha                         QUEUED
 ```
 
-## 2. MW-032 final reviewed state
+## 2. G6 handoff state
 
-Package-7 U1 originally tested:
+MW-032 is reviewed and integrated. The reviewed implementation baseline entering G7 is:
 
-`my-world/main@69ac2030b90f4165deb2ecb5302e3743422af585`
+`my-world/main@e876e217f0220fdc6a577cd0b52143dc8d5b6b5c`
 
-Owner final U1 instruction remains:
-
-> **“我不想继续测试了，你修吧，修完了直接继续主线等下一次测试”**
-
-MW-032 reviewed lineage:
-
-```text
-Formal Code Base          69ac2030b90f4165deb2ecb5302e3743422af585
-Task Packet / Start       30ca29f90300e876efefd083c4ef50c25d7fa4b8
-Production Implementation 41cf4dfb87f12d9d99b9985e4e0dcf6e7f202b25
-Submitted Candidate       dd51c5daef1db6f8a012f05148e49f6912bf6bd4
-Independent Review        4ca34ddcb7496945cbd3648183e0d5893433d5f7
-Integration Verification  e876e217f0220fdc6a577cd0b52143dc8d5b6b5c
-```
-
-Independent Review verdict:
-
-> **ENGINEERING PASS_WITH_NOTES**
-
-Integration:
-
-> **REVIEWED NON-FORCE FAST-FORWARD COMPLETE**
-
-MW-032 is no longer Current Work.
-
-## 3. Integrated G6 correction outcome
-
-All four U1 findings are now present in reviewed `main`:
-
-### Opening
-
-A newly accepted GM-only Opening is a bounded semantic + information bootstrap opportunity. Opening-established factual Inventory, legitimate People/Threads information and exact actor bindings may become current before the first Player-authored action, without fabricating Player action/Public d20/default state.
-
-### People
-
-`player-known People subject/referent != authoritative World actor`.
-
-Program owns stable People subject identity; referent-only People is valid player-information truth and does not imply World/Agency/Knowledge truth. Later actor linking is exact-ref based and preserves People subject identity. Display-name matching, fame/name allowlists and Program importance scoring remain prohibited.
-
-### Recommendations
-
-One unchanged current accepted prefix may start at most two recommendation requests: initial + one bounded recovery after recoverable malformed/transient/timeout failure. Stale/foreground/cancelled/configuration-invalid work does not create obsolete retry. Strict five `{label,draft}` success semantics remain.
-
-### Open Threads
-
-Every legitimate Opening/action curation opportunity actively reviews the full current Threads set. Model owns keep/update/remove/new semantics; Program owns stable Thread identity. Stable Threads support presentation-only hide/recover without completion/delete/model-feedback semantics.
-
-## 4. MW-032 Engineering evidence / remaining notes
-
-Reviewed evidence:
-
-- focused production-path validation: `98 / 98`;
-- 960×540 / 1280×720 / 1920×1080 real-window validation: `484 / 484`;
-- direct regression batch: `43 / 45`;
-- both nonzero G3 assertions reproduced on exact Formal Base as retained Context debt;
-- Godot 4.7.2 final import PASS;
-- fresh Windows export + `ValidateExportOnly` PASS;
-- real Provider calls: `0`.
-
-Remaining notes are non-blocking for this route:
-
-1. two existing G3 Context assertions remain debt/evidence for G7 Package 8;
-2. bounded legacy ObjectDB/resource-at-exit warnings remain recorded;
-3. live-model People/Thread semantic quality was not proven by deterministic MW-032 Engineering tests and remains part of the next concentrated Product test.
-
-## 5. G6 gate meaning
-
-G6 is now formally:
+G6 remains:
 
 > **ENGINEERING CORE COMPLETE / PRODUCT CONFIRMATION DEFERRED**
 
-This is intentionally **not** `PRODUCT PASS`.
+Per Owner instruction there is no immediate MW-032 build/re-UAT. The next concentrated Product test will validate the MW-032 corrections together with sufficient G7 long-session work.
 
-Per explicit Owner instruction:
+## 3. Package-8 evidence audit result
 
-- do not install a new Owner build merely for MW-032;
-- do not run immediate MW-032 re-UAT;
-- do not reopen Package-7 testing before advancing the mainline;
-- next concentrated Product test will validate MW-032 together with G7 long-session work.
+The pre-dispatch G7 audit is complete for the first bounded slice.
 
-Only Owner may eventually declare `V0 Core Game Loop = PRODUCT PASS`.
-
-## 6. G7 Package 8｜CURRENT
-
-Current Package outcome from Roadmap v5.1:
+Current production Narrative continuation effectively combines:
 
 ```text
-Context Orchestrator
-+
-Structured Output Reliability for proven machine-schema lanes
-+
-working-set / currentness / latency / long-session reality hardening
+full frozen Game/T0 World + Character + Guaranteed NPC setup
++ current World materialization / Knowledge / Agency / Evolution
++ factual Inventory
++ Public mechanics
++ literary style reference
++ latest 12 accepted Conversation turns
++ current Player attempt
 ```
 
-Current principles:
+These pieces have local protections, but there is no one request-level owner for cross-domain budget, whole-block selection, inclusion/omission diagnostics, or long-session working-set composition.
 
-> **相关 != 当前有效 != 当前有权使用**
->
-> **Bounded context != starved context**
+At the same time, G6 already maintains durable/current model-curated Character / Important Experiences / People / Open Threads, yet these current summaries are not first-class Narrative continuation material. This creates both context-starvation and context-flooding risk as a Game grows.
 
-Package 8 must solve actual long-session/context/reliability pressure exposed by G3–G6 evidence. It must not turn into a universal memory platform, generic agent framework or generalized schema protocol merely because those abstractions are possible.
+The two retained G3 Context failures were also audited. Their original safety goal remains valid—no raw/opaque/stale persisted World/Provider blobs in Context—but their literal assertion now incorrectly forbids any `Current Game Context`, including later reviewed bounded owner-projected Context. MW-033 must repair these tests to the actual authority/currentness boundary, not remove legitimate Game Context.
 
-Protected authorities entering G7:
+## 4. Frozen first G7 slice
 
-- accepted Narrative remains primary gameplay content;
-- free-form Player natural-language action remains primary;
-- `World Truth != actor Knowledge != human-player disclosure`;
-- Context is derived working material, never canonical World truth;
-- UI remains player-safe projection, never Context/World authority;
-- Save/Restore/Regenerate currentness remains authoritative;
-- Source / Game-local / Runtime separation remains intact;
-- domain owners remain responsible for their truth and player-safe projections.
+Architecture:
 
-## 7. Current execution gate
+`architecture/G7_NARRATIVE_WORKING_SET_ORCHESTRATOR_V0_1_DECISION.md@v1.0`
 
-Current owner is GPT because Package 8 has entered **Task Shaping / Architecture Audit**, not implementation.
+Executable work:
 
-Before dispatching Codex:
+**MW-033｜G7 Narrative Working-Set Orchestrator v0.1**
 
-1. audit existing G2/G3 context assembly, G5/G6 model lanes and the two retained exact-baseline Context failures;
-2. identify the smallest real production seams that require orchestration/reliability work;
-3. separate Package-8 outcomes into bounded executable work rather than dispatching one giant “memory/context platform” task;
-4. freeze any architecture/ownership changes required by the first slice;
-5. mint the next flat `MW-xxx` only after checking current task identity/lineage;
-6. write a repository-native Task Packet and provide Owner-facing product-language dispatch summary.
+Product outcome:
 
-No Codex implementation task is currently authorized until this shaping gate is complete.
+> As a Game gets longer, the GM should continue from current protagonist/world/matters/people rather than depending mainly on whatever fits in the last 12 Turns, while avoiding an ever-growing dump of starting and historical data.
 
-## 8. Immediate next step
+The existing `src/context` request-assembly ownership evolves into one Narrative continuation Working-Set Orchestrator. It owns request composition/budget/whole-block selection/diagnostics only; canonical domains still own truth, currentness and disclosure.
+
+## 5. MW-033 authorized architecture
+
+### Consumer scope
+
+Narrative continuation only for v0.1.
+
+First Opening keeps its exact current frozen Game-local setup path. Other model lanes do not migrate into a universal Context platform in this task.
+
+### Required current contributions
+
+Narrative working set may consume only domain-authorized/public contributions:
+
+- durable Game/World/GM source inertia;
+- current Information Curation: Character / Important Experiences / People / Open Threads;
+- current World/Knowledge/Agency/Evolution projection;
+- factual Inventory;
+- Public mechanics;
+- current accepted Conversation + current Player attempt;
+- literary style reference as explicitly non-factual style material.
+
+Context does not read raw `world_state` and then reinterpret semantic truth.
+
+### Budget
+
+Current model settings already expose the authoritative `context_token_ceiling` for supported 256k/1m profiles.
+
+Frozen v0.1 rule:
 
 ```text
-G7 Package 8 evidence / architecture audit
-→ bounded first executable slice
-→ Task Identity / Lineage check
-→ repository-native Task Packet
-→ Codex implementation
-→ GPT Independent Review
-→ later concentrated Owner Product test at the planned risk boundary
+Narrative safe input byte budget = floor(context_token_ceiling * 0.80)
 ```
+
+Final UTF-8 Provider-message payload is budgeted conservatively. No Narrative output `max_tokens` cap is introduced. Whole contribution blocks / complete accepted Turns are selected atomically; required P0 overflow fails before Provider start.
+
+### Structural selection
+
+```text
+P0 REQUIRED
+→ system/protocol + current Player attempt + minimum Game/World instructions
+
+P1 CURRENT CONTINUITY
+→ recent accepted Conversation + current Character + current Threads
+→ current World/Knowledge/Agency/Evolution + Inventory/mechanics
+
+P2 DURABLE BACKGROUND
+→ Important Experiences + current People
+→ broader T0/source/NPC background + literary style reference
+```
+
+This is structural request policy, not Program semantic scoring. No keywords, importance scores, fame rules, embeddings or similarity search are authorized.
+
+### Currentness
+
+Working set is rebuilt from current owners for every request. It is not durable truth. Restore/Regenerate/reopen must not carry displaced-future Context. UI hide/recover preferences do not change model Context eligibility.
+
+## 6. MW-033 task facts
+
+```text
+Formal Code Base
+  e876e217f0220fdc6a577cd0b52143dc8d5b6b5c
+
+Branch
+  mw-033-g7-narrative-working-set
+
+Required worktree
+  D:/AI/Projects/.worktrees/my-world/mw-033-g7-narrative-working-set
+
+Task Packet
+  docs/tasks/MW-033_G7_NARRATIVE_WORKING_SET_ORCHESTRATOR_V0_1_TASK.md
+
+Task Packet Commit / Starting HEAD
+  dc6c46d952ba0b63a8f713e9388896969cd71f7d
+```
+
+`current_owner: Codex` means authorized implementation responsibility only; it is not evidence that a Codex process is currently running.
+
+## 7. Required engineering outcome
+
+Before return MW-033 must prove at minimum:
+
+- one Narrative continuation working-set owner;
+- first Opening unchanged;
+- 256k/1m model capacity changes working-set budget correctly;
+- final request payload remains under safe derived budget;
+- required overflow fails loud with zero Provider start;
+- lower-tier pressure omits whole blocks/Turns rather than truncating bytes;
+- current Character/People/Threads/Experiences can survive beyond recent transcript roll-off;
+- People remains player-known information rather than World actor truth;
+- UI hide preferences do not alter model Context;
+- stale World/Knowledge/Agency/Evolution remains excluded;
+- Restore/Regenerate/reopen currentness remains exact;
+- the two old G3 Context failures become passing stronger raw/stale-leak tests;
+- request-local inclusion/omission/budget diagnostics are available;
+- directly affected G2–G6 regressions remain safe;
+- Godot 4.7.2 import + fresh Windows export + `ValidateExportOnly` pass.
+
+Codex return ceiling:
+
+> **READY FOR INDEPENDENT REVIEW**
+
+No Product PASS / G7 completion claim is authorized.
+
+## 8. Explicit non-scope
+
+MW-033 must not absorb:
+
+- embeddings / vector DB / semantic similarity retrieval;
+- model-generated memory as new truth;
+- universal all-agent Context framework;
+- Structured Output Reliability middleware;
+- generic JSON repair/retry platform;
+- Package 9 Provenance/Epistemic/Reality Correction;
+- new durable Context table/cache;
+- Provider routing/model split redesign;
+- Narrative brevity/max-token policy;
+- external Source/Expansion/Creator Context contract;
+- UI redesign;
+- broad World/Knowledge ownership changes.
+
+## 9. Post-MW-033 route
+
+After Codex return:
+
+```text
+GPT Independent Review
+→ reviewed integration if PASS
+→ inspect real production-shaped working-set diagnostics / long-session evidence
+→ decide whether the next Context slice truly needs semantic retrieval/source recall
+→ separately audit machine-schema failure evidence for Structured Output Reliability
+```
+
+Do not pre-commit the next G7 executable Work Item before MW-033 evidence is reviewed.
