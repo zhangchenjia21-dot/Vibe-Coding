@@ -1,26 +1,29 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 17.29
+version: 18.0
 created: 2026-08-26
-updated: 2026-09-10
-phase: G6 RPG Core Closure — Reality Gate U1 Correction Train
-current_task: MW-032 G6 Reality Gate U1 Correction Train
-current_owner: Codex
-current_dispatch_state: AUTHORIZED / TASK SHAPED / NO IMPLEMENTATION RETURN YET
-parent_task: G6 Package 7 Reality Gate bounded correction
+updated: 2026-09-13
+supersedes: 17.29
+phase: G7 Long-session Context & Knowledge Hardening — Package 8 Task Shaping
+current_task: G7 Package 8 Long-session Core — Task Shaping / Architecture Audit
+current_owner: GPT
+current_dispatch_state: ROUTE ACTIVE / TASK SHAPING / NO IMPLEMENTATION DISPATCH
+parent_task: G7 Package 8 Long-session Core
 semantic_owner: GPT
-owner_uat_required: deferred after correction by explicit Owner instruction
+owner_uat_required: deferred until concentrated MW-032 + G7 Product test
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
-current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v5.0
+current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v5.1
+reviewed_implementation_main: e876e217f0220fdc6a577cd0b52143dc8d5b6b5c
+closed_work_item: MW-032 G6 Reality Gate U1 Correction Train
+closed_task_packet: my-world/docs/tasks/MW-032_G6_REALITY_GATE_U1_CORRECTION_TRAIN_TASK.md
+closed_task_branch: mw-032-g6-reality-gate-u1-corrections
+mw032_implementation: 41cf4dfb87f12d9d99b9985e4e0dcf6e7f202b25
+mw032_candidate: dd51c5daef1db6f8a012f05148e49f6912bf6bd4
+mw032_review_commit: 4ca34ddcb7496945cbd3648183e0d5893433d5f7
+mw032_integration_verification: e876e217f0220fdc6a577cd0b52143dc8d5b6b5c
 active_uat_record: my world/docs/uat/G6_V0_CORE_CLOSURE_REALITY_GATE_U1.md@v1.2
 active_findings_record: my world/docs/uat/G6_V0_CORE_CLOSURE_REALITY_GATE_U1_FINDINGS.md@v1.1
-active_architecture: my world/architecture/G6_REALITY_GATE_U1_CORRECTION_TRAIN_V1_0_DECISION.md@v1.0
-active_task_packet: my-world/docs/tasks/MW-032_G6_REALITY_GATE_U1_CORRECTION_TRAIN_TASK.md
-active_task_branch: mw-032-g6-reality-gate-u1-corrections
-formal_code_base: 69ac2030b90f4165deb2ecb5302e3743422af585
-task_packet_commit: 30ca29f90300e876efefd083c4ef50c25d7fa4b8
-reviewed_implementation_main: 69ac2030b90f4165deb2ecb5302e3743422af585
 owner_build_pck_sha256_u1: 16a3aeb252eba841fedbf8a4f38d7643912764316e561d5b417b88e89085f8c4
 ---
 
@@ -34,138 +37,154 @@ G2 AI Conversation Spine                    PASS / CLOSED
 G3 Persistence / Save / Timeline            PASS / CLOSED
 G4 Primary Source Assets & Local Game       PASS / CLOSED
 G5 World Semantics & GM Runtime             PRODUCT PASS / CLOSED
-G6 RPG Core Closure                         U1 COMPLETE / MW-032 CORRECTION CURRENT
-G7 Long-session Context & Knowledge         NEXT AFTER MW-032
+G6 RPG Core Closure                         ENGINEERING CORE COMPLETE / PRODUCT CONFIRMATION DEFERRED
+G7 Long-session Context & Knowledge         PACKAGE 8 TASK SHAPING CURRENT
 G8 Product Expansion / Authoring            QUEUED
 G9 Standalone Alpha                         QUEUED
 ```
 
-## 2. U1 final state
+## 2. MW-032 final reviewed state
 
-Package-7 U1 tested exact build:
+Package-7 U1 originally tested:
 
 `my-world/main@69ac2030b90f4165deb2ecb5302e3743422af585`
 
-PCK SHA256:
-
-`16a3aeb252eba841fedbf8a4f38d7643912764316e561d5b417b88e89085f8c4`
-
-Owner final instruction:
+Owner final U1 instruction remains:
 
 > **“我不想继续测试了，你修吧，修完了直接继续主线等下一次测试”**
 
-U1 verdict:
-
-> **OWNER UAT COMPLETE / PASS_WITH_NOTES / BOUNDED CORRECTION REQUIRED / RE-UAT DEFERRED**
-
-U1 is not Product PASS.
-
-## 3. MW-032 authorized outcome
-
-MW-032 fixes all and only:
+MW-032 reviewed lineage:
 
 ```text
-F01  accepted Opening semantic/bootstrap gap
-F02  People eligibility over-constrained by World actor identity
-F03  recommendation one-shot availability/recovery gap
-F04  Open Threads lifecycle cleanup + stable identity + hide/recover
+Formal Code Base          69ac2030b90f4165deb2ecb5302e3743422af585
+Task Packet / Start       30ca29f90300e876efefd083c4ef50c25d7fa4b8
+Production Implementation 41cf4dfb87f12d9d99b9985e4e0dcf6e7f202b25
+Submitted Candidate       dd51c5daef1db6f8a012f05148e49f6912bf6bd4
+Independent Review        4ca34ddcb7496945cbd3648183e0d5893433d5f7
+Integration Verification  e876e217f0220fdc6a577cd0b52143dc8d5b6b5c
 ```
 
-Canonical architecture:
+Independent Review verdict:
 
-`architecture/G6_REALITY_GATE_U1_CORRECTION_TRAIN_V1_0_DECISION.md@v1.0`
+> **ENGINEERING PASS_WITH_NOTES**
 
-Task Packet:
+Integration:
 
-`my-world/docs/tasks/MW-032_G6_REALITY_GATE_U1_CORRECTION_TRAIN_TASK.md`
+> **REVIEWED NON-FORCE FAST-FORWARD COMPLETE**
 
-Task Packet commit / Starting HEAD:
+MW-032 is no longer Current Work.
 
-`30ca29f90300e876efefd083c4ef50c25d7fa4b8`
+## 3. Integrated G6 correction outcome
 
-Formal Code Base:
-
-`69ac2030b90f4165deb2ecb5302e3743422af585`
-
-Branch:
-
-`mw-032-g6-reality-gate-u1-corrections`
-
-Required worktree:
-
-`D:/AI/Projects/.worktrees/my-world/mw-032-g6-reality-gate-u1-corrections`
-
-Current meaning of `current_owner: Codex`:
-
-**authorized implementation responsibility only; it is not evidence that a Codex process is currently running.**
-
-## 4. Frozen correction semantics
+All four U1 findings are now present in reviewed `main`:
 
 ### Opening
 
-Accepted GM-only Opening becomes a bounded semantic + information bootstrap opportunity. Only accepted player-visible Opening facts may materialize. No fake/default Inventory/Threads and no synthetic Player action.
+A newly accepted GM-only Opening is a bounded semantic + information bootstrap opportunity. Opening-established factual Inventory, legitimate People/Threads information and exact actor bindings may become current before the first Player-authored action, without fabricating Player action/Public d20/default state.
 
 ### People
 
 `player-known People subject/referent != authoritative World actor`.
 
-Character Card/stable actor is not a prerequisite. Model may retain historically/socially important known persons with sparse or explicitly uncertain cards. Program must not use fame/name allowlists, importance scores or display-name identity.
-
-People subject identity is Program-owned; optional later actor linking is exact-ref based. Referent-only People never becomes World/Agency/Knowledge truth by implication.
+Program owns stable People subject identity; referent-only People is valid player-information truth and does not imply World/Agency/Knowledge truth. Later actor linking is exact-ref based and preserves People subject identity. Display-name matching, fame/name allowlists and Program importance scoring remain prohibited.
 
 ### Recommendations
 
-One unchanged current accepted prefix may start at most two recommendation requests: initial + one bounded recovery after recoverable malformed/transient/timeout failure. Stale/foreground/cancelled obsolete work cannot retry. Strict five `{label,draft}` success shape remains.
+One unchanged current accepted prefix may start at most two recommendation requests: initial + one bounded recovery after recoverable malformed/transient/timeout failure. Stale/foreground/cancelled/configuration-invalid work does not create obsolete retry. Strict five `{label,draft}` success semantics remain.
 
 ### Open Threads
 
-Every legitimate Opening/lived curation opportunity actively reviews current Threads. Model decides keep/update/remove/new; Program owns stable Thread identity and request refs. Stable Threads gain the existing presentation-only hide/recover right. Hide never means complete/delete/model feedback.
+Every legitimate Opening/action curation opportunity actively reviews the full current Threads set. Model owns keep/update/remove/new semantics; Program owns stable Thread identity. Stable Threads support presentation-only hide/recover without completion/delete/model-feedback semantics.
 
-## 5. Scope protections
+## 4. MW-032 Engineering evidence / remaining notes
 
-MW-032 must not absorb:
+Reviewed evidence:
 
-- G7 Context Orchestrator or generalized Structured Output platform;
-- unrelated G3 debt;
-- Quest engine/manual completion controls;
-- universal entity graph;
-- external UI/Creator/Visual Runtime/Map;
-- People Shared History/Organizations/Factions;
-- Inventory/System hide;
-- generic Action Intent;
-- broad Shell/layer refactor.
+- focused production-path validation: `98 / 98`;
+- 960×540 / 1280×720 / 1920×1080 real-window validation: `484 / 484`;
+- direct regression batch: `43 / 45`;
+- both nonzero G3 assertions reproduced on exact Formal Base as retained Context debt;
+- Godot 4.7.2 final import PASS;
+- fresh Windows export + `ValidateExportOnly` PASS;
+- real Provider calls: `0`.
 
-Existing Conversation, Public d20, factual Inventory, model-driven curation, player-safe disclosure, Timeline currentness, Dynamic UI and visibility-preference authorities remain protected.
+Remaining notes are non-blocking for this route:
 
-## 6. Required return / review
+1. two existing G3 Context assertions remain debt/evidence for G7 Package 8;
+2. bounded legacy ObjectDB/resource-at-exit warnings remain recorded;
+3. live-model People/Thread semantic quality was not proven by deterministic MW-032 Engineering tests and remains part of the next concentrated Product test.
 
-Codex return ceiling:
+## 5. G6 gate meaning
 
-**READY FOR INDEPENDENT REVIEW**
+G6 is now formally:
 
-Required before return:
+> **ENGINEERING CORE COMPLETE / PRODUCT CONFIRMATION DEFERRED**
 
-- focused deterministic MW-032 evidence;
-- directly affected regression batch;
-- 960×540 / 1280×720 / 1920×1080 real-window checks;
-- exact-baseline evidence for any retained known failure;
-- Godot 4.7.2 final import;
-- fresh Windows export + `ValidateExportOnly`;
-- commit + push;
-- no merge main;
-- no Owner build install;
-- no Owner real Game/Source/settings/preference mutation;
-- no Product PASS claim.
+This is intentionally **not** `PRODUCT PASS`.
 
-## 7. Post-MW-032 route
+Per explicit Owner instruction:
 
-If GPT Independent Review passes:
+- do not install a new Owner build merely for MW-032;
+- do not run immediate MW-032 re-UAT;
+- do not reopen Package-7 testing before advancing the mainline;
+- next concentrated Product test will validate MW-032 together with G7 long-session work.
+
+Only Owner may eventually declare `V0 Core Game Loop = PRODUCT PASS`.
+
+## 6. G7 Package 8｜CURRENT
+
+Current Package outcome from Roadmap v5.1:
 
 ```text
-reviewed non-force integration
-→ NO immediate Owner build / NO immediate re-UAT
-→ G6 ENGINEERING CORE COMPLETE / PRODUCT CONFIRMATION DEFERRED
-→ G7 Package 8 Long-session Core CURRENT
+Context Orchestrator
++
+Structured Output Reliability for proven machine-schema lanes
++
+working-set / currentness / latency / long-session reality hardening
 ```
 
-The next later concentrated Product test will cover MW-032 together with G7. Only Owner may eventually declare `V0 Core Game Loop = PRODUCT PASS`.
+Current principles:
+
+> **相关 != 当前有效 != 当前有权使用**
+>
+> **Bounded context != starved context**
+
+Package 8 must solve actual long-session/context/reliability pressure exposed by G3–G6 evidence. It must not turn into a universal memory platform, generic agent framework or generalized schema protocol merely because those abstractions are possible.
+
+Protected authorities entering G7:
+
+- accepted Narrative remains primary gameplay content;
+- free-form Player natural-language action remains primary;
+- `World Truth != actor Knowledge != human-player disclosure`;
+- Context is derived working material, never canonical World truth;
+- UI remains player-safe projection, never Context/World authority;
+- Save/Restore/Regenerate currentness remains authoritative;
+- Source / Game-local / Runtime separation remains intact;
+- domain owners remain responsible for their truth and player-safe projections.
+
+## 7. Current execution gate
+
+Current owner is GPT because Package 8 has entered **Task Shaping / Architecture Audit**, not implementation.
+
+Before dispatching Codex:
+
+1. audit existing G2/G3 context assembly, G5/G6 model lanes and the two retained exact-baseline Context failures;
+2. identify the smallest real production seams that require orchestration/reliability work;
+3. separate Package-8 outcomes into bounded executable work rather than dispatching one giant “memory/context platform” task;
+4. freeze any architecture/ownership changes required by the first slice;
+5. mint the next flat `MW-xxx` only after checking current task identity/lineage;
+6. write a repository-native Task Packet and provide Owner-facing product-language dispatch summary.
+
+No Codex implementation task is currently authorized until this shaping gate is complete.
+
+## 8. Immediate next step
+
+```text
+G7 Package 8 evidence / architecture audit
+→ bounded first executable slice
+→ Task Identity / Lineage check
+→ repository-native Task Packet
+→ Codex implementation
+→ GPT Independent Review
+→ later concentrated Owner Product test at the planned risk boundary
+```
