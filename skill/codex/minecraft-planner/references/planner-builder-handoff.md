@@ -2,13 +2,32 @@
 
 ## Purpose
 
-This reference defines the contract between `minecraft-planner` and `minecraft-builder`.
+This reference defines the contract between `minecraft-planner` and `minecraft-builder` **after planning recursion has reached a Builder-ready scale**.
+
+It does not define L0→L1→L2→L3→L4 planning recursion. For that use `recursive-planning-handoff.md`.
 
 The goal is to preserve settlement-scale causality without turning Planner into an architect or allowing Builder to silently erase upstream relationships.
 
 ---
 
-## 1. Builder Design Package
+## 1. When this contract applies
+
+Use Planner→Builder handoff only when the current planning package is concrete enough that Builder can design one of the following without another full planning scale in between:
+
+- one important building;
+- a compound;
+- a small building cluster;
+- a bridge / gate / market structure;
+- a terrain / circulation preparation scope;
+- part of an accepted Urban Ensemble.
+
+Typical entry point is L4 `URBAN_ENSEMBLE`, but a low-density isolated building may become Builder-ready directly from L2/L3 if its settlement relationships are already sufficiently resolved.
+
+Do **not** send national / regional unresolved nodes directly to Builder.
+
+---
+
+## 2. Builder Design Package
 
 Each downstream package should contain:
 
@@ -31,22 +50,13 @@ Known uncertainty
 Implementation note
 ```
 
-A Package may represent:
-
-- one important building;
-- a compound;
-- a small building cluster;
-- a bridge / gate / market structure;
-- a terrain / circulation preparation scope;
-- part of a larger Urban Ensemble.
-
-Do not assume Package = one building.
+A Package does not have to equal one building.
 
 ---
 
-## 2. PLANNER_FIXED
+## 3. PLANNER_FIXED
 
-Use only for relationships whose violation would break the accepted settlement logic.
+Use only for relationships whose violation would break accepted settlement logic.
 
 Typical examples:
 
@@ -64,11 +74,11 @@ Typical examples:
 - growth age / inherited fabric relation;
 - required use or program category.
 
-Do not put details here simply because Planner has an opinion.
+Do not freeze exact geometry simply because Planner has an opinion.
 
 ---
 
-## 3. BUILDER_ADAPTABLE
+## 4. BUILDER_ADAPTABLE
 
 Builder should retain authorship over:
 
@@ -85,11 +95,28 @@ Builder should retain authorship over:
 - furniture / finishing;
 - Minecraft Translation.
 
-Builder may also refine minor route geometry when it preserves the upstream route role and connection.
+Builder may refine minor route geometry when it preserves the upstream route role and connection.
 
 ---
 
-## 4. UPSTREAM_PLANNING_ISSUE
+## 5. Capacity and Builder handoff
+
+If Planner supplies a settlement / district capacity estimate, Builder should receive only the portion relevant to the current package.
+
+Do not tell Builder that a national node has `20,000 blocks² built fabric` and expect one building task to realize it.
+
+Instead, lower-scale planning should have decomposed that capacity into:
+
+- district / ensemble envelopes;
+- building program;
+- shared routes / spaces;
+- phased packages.
+
+Builder may challenge a local envelope when real Site / terrain evidence makes the required program infeasible.
+
+---
+
+## 6. UPSTREAM_PLANNING_ISSUE
 
 Builder should return this status when accepted fixed constraints cannot all be satisfied without breaking planning logic.
 
@@ -100,7 +127,8 @@ Examples:
 - terrain makes both frontage and rear access impossible;
 - two mandatory adjacencies contradict;
 - planner-fixed courtyard has no drainage / usable ground;
-- settlement package assumes a crossing that current world data disproves.
+- settlement package assumes a crossing that current world data disproves;
+- actual building footprint needed would materially exceed the planned ensemble capacity.
 
 Builder should report:
 
@@ -115,7 +143,7 @@ Do not silently move the building, delete a lane or remove a shared yard.
 
 ---
 
-## 5. Planner revision after upstream issue
+## 7. Planner revision after upstream issue
 
 Planner should:
 
@@ -130,7 +158,7 @@ Do not rebuild the whole settlement plan for a local conflict unless the conflic
 
 ---
 
-## 6. Cross-package dependencies
+## 8. Cross-package dependencies
 
 Packages should record shared dependencies such as:
 
@@ -148,7 +176,7 @@ This allows a large design unit to be built in bounded phases.
 
 ---
 
-## 7. Design Unit ≠ Write Batch
+## 9. Design Unit ≠ Write Batch
 
 A single accepted design unit can be larger than one safe world-write batch.
 
@@ -164,11 +192,11 @@ Urban Ensemble design
 → finishing / district review
 ```
 
-The Planner may recommend dependency order, but Builder / implementation tooling owns exact write batching and repair strategy.
+Planner may recommend dependency order, but Builder / implementation tooling owns exact write batching and repair strategy.
 
 ---
 
-## 8. Growth Sequence ≠ Implementation Sequence
+## 10. Growth Sequence ≠ Implementation Sequence
 
 A Builder Package may represent a building historically older than another package but be constructed later in Minecraft because dependencies or safety require it.
 
@@ -181,23 +209,25 @@ Never infer historical age from Minecraft task order.
 
 ---
 
-## 9. Handoff Gate checklist
+## 11. Handoff Gate checklist
 
-Before declaring `HANDOFF_READY`, verify:
+Before declaring a package Builder-ready, verify:
 
+- current planning recursion has reached a sufficient scale;
 - every package has a clear WHY;
-- boundaries are understandable;
+- boundaries / envelope are understandable;
 - fixed constraints are few but meaningful;
 - Builder has genuine architectural freedom;
 - shared routes / courtyards / interfaces have explicit owners;
-- no package depends on an undefined future object without a placeholder dependency;
+- no package depends on an undefined future object without placeholder dependency;
 - planning assumptions are visible;
 - Architecture Kit requirements do not prescribe finished geometry;
+- capacity has been decomposed enough for bounded design scopes;
 - world-write authorization is not implied.
 
 ---
 
-## 10. Recommended package JSON shape
+## 12. Recommended package JSON shape
 
 ```json
 {

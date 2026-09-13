@@ -2,233 +2,67 @@
 
 ## Purpose
 
-This reference defines how to test and independently review `minecraft-planner` without overfitting prompts to the Skill.
+This reference defines how to test `minecraft-planner` without leaking answers into the task prompt.
 
-The objective is to test whether the Skill changes planning reasoning, not whether an Agent can imitate a checklist.
+The goal is to distinguish:
 
----
+- actual Skill behavior;
+- model execution quality;
+- tooling / evidence limits;
+- task-specific judgment.
 
-## 1. Test discipline
-
-Regression prompts should contain only:
-
-- planning subject;
-- planning scale / hard scope;
-- source data / allowed evidence;
-- safety boundaries;
-- Skill path / version;
-- required deliverables;
-- evidence / archive requirements.
-
-Do **not** restate the Skill’s internal planning method in the task prompt.
-
-No mid-test corrective hints.
-
-If a model omits an important causal layer, that omission is evidence.
+Do not write the rubric back into the benchmark prompt.
 
 ---
 
-## 2. Default world-write policy
+## 1. Regression prompt discipline
 
-Planner regression should normally use:
+A benchmark prompt should normally provide only:
 
-> `world writes = 0`
+- what must be planned;
+- planning scale;
+- allowed factual / Canon sources;
+- prohibited answer-leaking sources;
+- hard safety boundaries;
+- required evidence / artifact class;
+- output location.
 
-A valid test may read:
+Do not restate:
 
-- Minecraft terrain data;
-- Current Natural Atlas / surveys;
-- existing buildings / roads;
-- approved Canon;
-- prior accepted planning hierarchy.
+- Demand model;
+- Anchor rules;
+- Growth algorithm;
+- Anti-zoning checklist;
+- Capacity tests;
+- Recursive handoff schema;
+- Critic questions.
 
-It should produce planning artifacts and maps only.
-
----
-
-## 3. Core review dimensions
-
-### A. Premise / Authority
-
-Check:
-
-- scale is appropriate;
-- source authority is distinguished;
-- assumptions are not disguised as Canon;
-- settlement / territorial premise explains durable human presence;
-- magnitude / maturity is plausible.
-
-### B. Terrain Causality
-
-Check:
-
-- terrain actually changes routes / nodes / density / edges;
-- slope / water / crossing / resource / hazard are not decorative background layers;
-- coarse evidence is not overclaimed as precise local fact.
-
-### C. Demand
-
-Check:
-
-- demands come from users / institutions / economy / security;
-- demand is not a genre building list;
-- demand magnitude influences specialization;
-- embedded / shared facilities are considered.
-
-### D. Flow / Externality
-
-Check:
-
-- important flows have origins and destinations;
-- route hierarchy follows flows;
-- externalities affect adjacency / separation;
-- freight / public / service / ritual relations are considered where relevant.
-
-### E. Anchors
-
-Check:
-
-- anchors have temporal role;
-- anchors materially affect morphology;
-- removal would change the plan;
-- scale of anchor is appropriate.
-
-### F. Growth / Path Dependence
-
-Check:
-
-- stages are causal, not merely chronological labels;
-- early stages work without future knowledge;
-- inherited roads / parcels / scars influence later form;
-- Existing Evolution does not reset the site.
-
-### G. Territorial / Settlement Hierarchy
-
-At L0 / L1 check:
-
-- node roles differ beyond population size;
-- hinterland / catchment logic exists;
-- long-distance flows support major centers;
-- frontier / gateway / specialized nodes have reasons.
-
-### H. Morphology
-
-Check:
-
-- roads are not arbitrary organic scribbles;
-- districts are relation-driven, not modern zoning blocks;
-- commons / negative spaces have ownership / use / environmental reason;
-- settlement edge and expansion directions are explained.
-
-### I. Parcel / Frontage
-
-At L3 / L4 check:
-
-- parcel width / depth / frontage have a causal mechanism;
-- subdivision / amalgamation / rear access are plausible;
-- mixed-use and service relationships survive;
-- plot geometry is not just a regular grid unless planning institutions justify it.
-
-### J. Density
-
-Check:
-
-- density is represented through morphology variables;
-- “high density” does not mean uniform fill;
-- local density and regional density are not confused;
-- terrain / property / flow explain gradient.
-
-### K. Architecture Kit Interface
-
-Check:
-
-- requirements specify vocabulary capability, not complete clones;
-- regional continuity is preserved;
-- site adaptation remains possible;
-- unbuilt kit hypotheses are not described as proven.
-
-### L. Builder Handoff
-
-Check:
-
-- packages explain WHY;
-- PLANNER_FIXED is minimal and meaningful;
-- BUILDER_ADAPTABLE preserves architectural authorship;
-- dependencies are explicit;
-- Growth Sequence and Implementation Sequence are distinct;
-- Planner does not prematurely design facade / roof / palette.
-
-### M. Visual Planning Evidence
-
-Check:
-
-- maps are legible;
-- source vs proposal is distinguishable;
-- scale / north / coordinates / legend are present;
-- maps make causal relationships understandable;
-- 3D massing does not over-design architecture.
+Those must come from the Skill itself.
 
 ---
 
-## 4. Mandatory Critic tests
+## 2. Independent review principle
 
-### Counterfactual Test
+Model self-report is evidence, not verdict.
 
-Change one major terrain / anchor / flow / institution variable.
+Independent review should inspect:
 
-Expected: meaningful spatial consequence.
+- actual source register;
+- planning logic;
+- machine-readable objects;
+- maps;
+- downstream packages;
+- Critic;
+- factual consistency with allowed evidence;
+- Owner visual / worldbuilding experience.
 
-Failure signal: almost identical plan regardless of changed cause.
-
-### Anchor Removal Test
-
-Remove major Anchor.
-
-Expected: routes / demand / density / hierarchy lose or change rationale.
-
-Failure signal: anchor is only a label.
-
-### Historical Validity Test
-
-Inspect each growth stage without future stages.
-
-Expected: stage independently viable.
-
-Failure signal: future-aware teleological layout.
-
-### Anti-Zoning Test
-
-Hide land-use labels.
-
-Expected: spatial relations remain legible from morphology.
-
-Failure signal: four colored functional blocks with weak causal mixing.
-
-### Terrain Necessity Test
-
-Transfer plan to different terrain.
-
-Expected: terrain-driven plan needs material revision.
-
-Failure signal: plan is effectively portable.
-
-### Parcel Causality Test
-
-For important parcels ask why width / depth / access exist.
-
-Failure signal: parcel grid has no formation logic.
-
-### Kit Clone Test
-
-Inspect whether Kit would generate clones.
-
-Failure signal: same whole-house template repeated with superficial material changes.
+A clean JSON package does not prove good planning.
 
 ---
 
-## 5. Finding classes
+## 3. Finding classes
 
-Use when helpful:
+Use the same general classes as Builder regression where useful:
 
 - `SKILL_GAP`
 - `MODEL_EXECUTION_FAILURE`
@@ -236,129 +70,341 @@ Use when helpful:
 - `TASK_SPECIFIC_JUDGMENT`
 - `UNKNOWN`
 
-Do not modify the Skill after every isolated model mistake.
+Do not modify Skill merely because one weaker model executes it poorly.
 
-Repeated / foundational issues are stronger update candidates.
+Repeated failures across capable models or foundational contract failures are stronger Skill evidence.
 
 ---
 
-## 6. Suggested first regression ladder
+## 4. Core planning audit dimensions
 
-Do not hard-code these subjects into the Skill.
+### Authority / Evidence discipline
 
-### P01 — Whole Polity / Territory
+Check:
 
-Use an existing terrain-rich world and approved Canon.
+- Observed / Derived / Canon / Assumption / Proposal are distinguished;
+- uncertainty is preserved;
+- coarse terrain is not treated as exact site geometry;
+- current-world unknowns are not silently invented;
+- Planning Proposal is not promoted to Canon.
 
-Test:
+### Planning Context correctness
 
-- L0 territorial settlement system;
-- major regions;
-- settlement hierarchy;
+Check:
+
+- historical maturity and current fabric observation are separate;
+- `EXISTING_FABRIC_UNVERIFIED` is not mislabeled as empty Greenfield;
+- Existing Evolution respects inherited fabric when observed;
+- unknown current fabric generates downstream investigation rather than demolition assumptions.
+
+### Premise quality
+
+Check:
+
+- why people / institutions persist there;
+- economy / society / terrain actually change planning;
+- premise is not just “the task asked for a town”.
+
+### Demand quality
+
+Check:
+
+- needs come from real social / institutional / productive pressures;
+- Demand ≠ one building each;
+- magnitude / frequency / throughput matter;
+- embedded / shared / later dedicated responses are considered.
+
+### Flow / Externality quality
+
+Check:
+
+- major people / goods / authority / waste / ritual flows are identified where relevant;
+- roads / nodes follow flows;
+- externalities explain adjacency / separation;
+- functional zoning is not used as a shortcut.
+
+### Anchor quality
+
+Check:
+
+- Anchor has causal role;
+- timing matters;
+- surrounding morphology depends on it;
+- Anchor Removal Test produces consequences.
+
+### Growth / Path Dependence
+
+Check:
+
+- growth is not decorative chronology;
+- each step has driver → response → new constraint → next pressure;
+- early stages stand alone;
+- later form inherits earlier decisions;
+- contraction / decline is possible where relevant.
+
+### Terrain necessity
+
+Check:
+
+- terrain actually changes route / node / density / capacity;
+- a flat-map translation would require meaningful redesign;
+- major routes are not falsely certified from coarse samples.
+
+### Settlement hierarchy / catchment
+
+Check:
+
+- node rank is not merely population ordering;
+- political / economic / symbolic / network roles can diverge;
+- catchments reflect transport / terrain / competition;
+- nodes are not mechanically scattered to fill the map.
+
+### Settlement capacity / built-fabric scale
+
+Check:
+
+- important nodes communicate approximate built scale, not just points;
+- `search envelope ≠ built fabric ≠ catchment`;
+- area ranges have causal drivers;
+- political significance is separate from physical size;
+- freight importance is separate from resident scale;
+- confidence matches evidence;
+- no fake exact area is claimed from weak evidence;
+- map visually communicates relative settlement magnitude.
+
+### Morphology / parcels / density
+
+At scales where applicable, check:
+
+- district relations are not modern zoning;
+- parcels have formation logic;
+- frontage / rear access / shared courts follow pressure and history;
+- density is morphological, not just more objects.
+
+### Architecture Kit requirements
+
+Check:
+
+- Planner asks for needed vocabulary / typologies;
+- it does not design finished component geometry;
+- Kit does not become prefab cloning.
+
+### Scale Discipline
+
+Check:
+
+- L0 does not solve street corners;
+- L1 does not solve parcel widths;
+- L2 does not solve façade details;
+- L3/L4 may progressively become concrete;
+- lower-scale unknowns remain intentionally unresolved.
+
+### Recursive Planner→Planner handoff
+
+For L0–L3, check:
+
+- recipient is the next Planner scale, not Builder by default;
+- `UPSTREAM_FIXED` contains only meaningful parent constraints;
+- `DOWNSTREAM_TO_RESOLVE` contains real lower-scale questions;
+- `DOWNSTREAM_ADAPTABLE` preserves child planning freedom;
+- revision triggers exist;
+- capacity hypothesis is handed down separately from search / catchment;
+- new evidence has an upstream issue protocol;
+- Builder-specific fields do not dominate Planner→Planner packages.
+
+### Planner→Builder handoff
+
+At Builder-ready scales, check:
+
+- fixed planning relations are clear;
+- Builder retains architectural authorship;
+- package boundaries / shared interfaces are implementable;
+- world-write is not implicitly authorized.
+
+### Visual planning evidence
+
+Check:
+
+- maps use real coordinates / terrain context;
+- Observed / Proposal / Assumption are legible;
+- scale / north / legend exist;
+- node sizes / envelopes communicate morphology and capacity;
+- search uncertainty is not visually confused with built extent;
+- catchment is not shown as urbanized land;
+- visual output helps Owner understand the plan without reading every JSON field.
+
+---
+
+## 5. Strong Critic tests
+
+### Counterfactual Test
+
+Change a major geographic / institutional condition.
+
+Question:
+
+> Would the plan materially change?
+
+If not, causal reasoning may be decorative.
+
+### Anchor Removal Test
+
+Remove one Anchor conceptually.
+
+Question:
+
+> Which flows / density / capacity / routes lose their reason?
+
+### Historical Validity Test
+
+For each stage:
+
+> If later stages never occur, is this stage still viable?
+
+### Anti-Zoning Test
+
+Hide land-use labels.
+
+Question:
+
+> Does spatial structure still make sense from adjacency / flow / externality / history?
+
+### Terrain Necessity Test
+
+Move the plan to generic flat terrain.
+
+Question:
+
+> How much must change?
+
+### Capacity Plausibility Test
+
+For each important settlement:
+
+> Where is the search area? What is the built-fabric scale? What is the catchment? Why that size? How uncertain is it?
+
+### Recursive Handoff Test
+
+Question:
+
+> Can the child Planner continue intelligently without either redoing the parent plan or blindly obeying a frozen masterplan?
+
+### Kit Clone Test
+
+Question:
+
+> Is Kit a language or a building copy machine?
+
+---
+
+## 6. Suggested regression ladder
+
+Use heterogeneous scales so the Skill does not overfit one project.
+
+Suggested ladder:
+
+### P01 POLITY_TERRITORY
+
+Tests:
+
+- whole polity structure;
+- national / alliance settlement hierarchy;
 - long-distance flows;
-- historical growth;
-- maps / planning tree.
+- capacity scale;
+- L0→L1 handoff.
 
-No world-write.
+### P02 REGIONAL_SYSTEM
 
-### P02 — Regional System
+Tests:
 
-Choose one large region with terrain / resource contrast.
+- regional settlement network;
+- corridor / resource chain;
+- local evidence refinement;
+- capacity refinement;
+- L1→L2 handoff.
 
-Test:
+### P03 SETTLEMENT
 
-- settlement network;
-- catchments;
-- specialized centers;
-- regional flow / processing chain;
-- regional Architecture Kit Requirements.
+Tests:
 
-### P03 — Complete Settlement
+- complete town / village morphology;
+- anchors / movement / districts;
+- built-fabric envelope;
+- L2→L3 handoff.
 
-Plan one town / port / mining settlement from premise to districts.
+### P04 DISTRICT / EXISTING_EVOLUTION
 
-Test:
+Tests:
 
-- anchors;
-- growth;
-- movement;
-- district formation;
-- density / edge.
+- inherited roads / parcels;
+- infill / subdivision;
+- mixed-use logic;
+- L3→L4 handoff.
 
-### P04 — Existing District Evolution
+### P05 URBAN_ENSEMBLE
 
-Provide existing roads / parcels / buildings.
+Tests:
 
-Test:
+- multiple-building relationships;
+- frontage / service / courtyard;
+- final Planner→Builder handoff.
 
-- path dependence;
-- infill;
-- subdivision;
-- scars;
-- no reset-to-masterplan behavior.
-
-### P05 — Urban Ensemble
-
-Use a dense local area.
-
-Test:
-
-- parcel / frontage;
-- service lane;
-- shared yards;
-- Builder Packages;
-- local terrain / circulation integration.
+Additional synthetic cases should cover river ford, mining mountains, monastic agriculture, port / floodplain, and existing town evolution.
 
 ---
 
-## 7. Independent review order
+## 7. No pass-seeking
 
-Prefer reviewing in this order:
+During regression:
 
-```text
-source / authority
-→ premise
-→ causal model
-→ growth
-→ morphology
-→ planning objects
-→ maps
-→ handoff packages
-→ self-critic
-```
+- do not give mid-test corrective hints;
+- do not reveal independent review criteria;
+- do not tell the model what previous tests failed;
+- do not make the prompt a copy of the Skill;
+- do not patch obvious omissions during execution.
 
-Do not let a polished map override weak causal logic.
-
-Do not let a sophisticated JSON schema override bad morphology.
-
-Do not let a long historical essay compensate for missing downstream interfaces.
+Omissions are evidence.
 
 ---
 
-## 8. Owner review
+## 8. Owner review role
 
-Owner feedback is especially valuable for:
+Independent technical review and Owner experience are complementary.
 
-- whether the territorial / settlement structure feels believable;
-- whether maps communicate the plan intuitively;
-- whether density / hierarchy match intended world character;
-- whether the plan creates useful future building opportunities;
-- whether downstream packages feel appropriately bounded.
+Owner should especially judge:
 
-Independent technical review should preferably happen before Owner reveals detailed aesthetic or strategic feedback when regression independence matters.
+- whether the polity / settlement feels believable;
+- whether scale is understandable from maps;
+- whether major nodes feel too large / too small / too evenly distributed;
+- whether the planning reads as historical growth rather than masterplanning;
+- whether maps make spatial consequences intuitive;
+- whether the proposed world feels worth building.
+
+Do not reduce Owner review to coordinate correctness.
 
 ---
 
-## 9. Pass philosophy
+## 9. Skill update policy
 
-A regression should not be judged PASS because:
+Do not update Skill after every minor failure.
 
-- all required files exist;
-- every section heading is filled;
-- a map looks attractive;
-- JSON validates;
-- the Agent claims the Gates passed.
+Use stronger evidence when:
 
-The core question is:
+- a foundational contract is missing;
+- the same failure recurs across multiple tests;
+- a capable model cannot infer a required behavior because the Skill is ambiguous;
+- a missing distinction causes unsafe / misleading downstream work.
 
-> **Did the Skill cause the model to derive a believable multi-scale spatial system from real constraints, and did it leave downstream design both constrained and genuinely free?**
+Task-specific planning disagreements should normally remain review findings, not universal rules.
+
+---
+
+## 10. v0.2 regression focus
+
+v0.2 specifically adds three foundational contracts and should be tested for them:
+
+1. **Existing-but-unobserved context**：unknown current fabric must not become Greenfield;
+2. **Settlement Capacity / Built-Fabric Scale**：important nodes must communicate approximate physical magnitude;
+3. **Recursive Planner→Planner Handoff**：upper-scale packages must hand down constraints/questions, not Builder details.
+
+P02 should therefore test whether an accepted L0 package can be refined at L1 without losing parent causality or treating parent search points / capacity envelopes as exact local plans.
