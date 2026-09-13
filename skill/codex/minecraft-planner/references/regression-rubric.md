@@ -34,6 +34,7 @@ Do not restate:
 - Growth algorithm;
 - Anti-zoning checklist;
 - Capacity tests;
+- Surface / substrate checklist;
 - Recursive handoff schema;
 - Critic questions.
 
@@ -85,6 +86,7 @@ Check:
 - Observed / Derived / Canon / Assumption / Proposal are distinguished;
 - uncertainty is preserved;
 - coarse terrain is not treated as exact site geometry;
+- surface observations are not overclaimed as fertility / quarry / ore / hydrology;
 - current-world unknowns are not silently invented;
 - Planning Proposal is not promoted to Canon.
 
@@ -150,6 +152,18 @@ Check:
 - a flat-map translation would require meaningful redesign;
 - major routes are not falsely certified from coarse samples.
 
+### Surface / Substrate / Land-Cover necessity
+
+When land character is consequential, check:
+
+- surface / substrate / vegetation evidence is actually read or explicitly marked unresolved;
+- low slope is not silently equated with good living / farming / building land;
+- exposed rock changes carrying-capacity / livelihood / morphology reasoning where appropriate;
+- scarce soil-bearing or vegetated pockets can be protected from built-fabric expansion;
+- forest / wet / sand / gravel / barren differences are not ignored when materially relevant;
+- grass ≠ fertility, stone ≠ quarry / ore, forest ≠ timber yield;
+- Owner can see the land-character distinction in map / summary when it matters.
+
 ### Settlement hierarchy / catchment
 
 Check:
@@ -170,7 +184,8 @@ Check:
 - freight importance is separate from resident scale;
 - confidence matches evidence;
 - no fake exact area is claimed from weak evidence;
-- map visually communicates relative settlement magnitude.
+- map visually communicates relative settlement magnitude;
+- capacity does not use low-slope area as a stand-in for carrying capacity when surface character matters.
 
 ### Morphology / parcels / density
 
@@ -186,6 +201,7 @@ At scales where applicable, check:
 Check:
 
 - Planner asks for needed vocabulary / typologies;
+- terrain / surface adaptation requirements may be stated without choosing exact palette;
 - it does not design finished component geometry;
 - Kit does not become prefab cloning.
 
@@ -209,6 +225,7 @@ For L0–L3, check:
 - `DOWNSTREAM_ADAPTABLE` preserves child planning freedom;
 - revision triggers exist;
 - capacity hypothesis is handed down separately from search / catchment;
+- consequential surface / substrate uncertainty is handed down when unresolved;
 - new evidence has an upstream issue protocol;
 - Builder-specific fields do not dominate Planner→Planner packages.
 
@@ -231,6 +248,7 @@ Check:
 - node sizes / envelopes communicate morphology and capacity;
 - search uncertainty is not visually confused with built extent;
 - catchment is not shown as urbanized land;
+- consequential surface / land-cover differences are visually understandable;
 - visual output helps Owner understand the plan without reading every JSON field.
 
 ---
@@ -277,11 +295,21 @@ Question:
 
 > How much must change?
 
+### Surface Character Necessity Test
+
+Hold elevation / slope / relief roughly constant but change the ground from soil-bearing / vegetated to exposed rock, wet ground, sand-gravel or other materially different surface.
+
+Question:
+
+> Would capacity, livelihood, open-space, route, morphology or Kit requirements change?
+
+If not in a task where those conditions matter, the terrain model is incomplete.
+
 ### Capacity Plausibility Test
 
 For each important settlement:
 
-> Where is the search area? What is the built-fabric scale? What is the catchment? Why that size? How uncertain is it?
+> Where is the search area? What is the built-fabric scale? What is the catchment? Why that size? How uncertain is it? Does surface character materially alter that estimate?
 
 ### Recursive Handoff Test
 
@@ -321,6 +349,7 @@ Tests:
 - corridor / resource chain;
 - local evidence refinement;
 - capacity refinement;
+- **surface / substrate / land-cover differentiation**;
 - L1→L2 handoff.
 
 ### P03 SETTLEMENT
@@ -330,6 +359,7 @@ Tests:
 - complete town / village morphology;
 - anchors / movement / districts;
 - built-fabric envelope;
+- ground-character response;
 - L2→L3 handoff.
 
 ### P04 DISTRICT / EXISTING_EVOLUTION
@@ -349,7 +379,7 @@ Tests:
 - frontage / service / courtyard;
 - final Planner→Builder handoff.
 
-Additional synthetic cases should cover river ford, mining mountains, monastic agriculture, port / floodplain, and existing town evolution.
+Additional synthetic cases should cover river ford, mining mountains, monastic agriculture, port / floodplain, exposed-rock vs soil-bearing plateau, wetland / dry-ground contrast, and existing town evolution.
 
 ---
 
@@ -375,6 +405,7 @@ Owner should especially judge:
 
 - whether the polity / settlement feels believable;
 - whether scale is understandable from maps;
+- whether important ground-character differences are visible and affect planning plausibly;
 - whether major nodes feel too large / too small / too evenly distributed;
 - whether the planning reads as historical growth rather than masterplanning;
 - whether maps make spatial consequences intuitive;
@@ -399,12 +430,31 @@ Task-specific planning disagreements should normally remain review findings, not
 
 ---
 
-## 10. v0.2 regression focus
+## 10. v0.2 regression result
 
-v0.2 specifically adds three foundational contracts and should be tested for them:
+v0.2 added three foundational contracts:
 
-1. **Existing-but-unobserved context**：unknown current fabric must not become Greenfield;
-2. **Settlement Capacity / Built-Fabric Scale**：important nodes must communicate approximate physical magnitude;
-3. **Recursive Planner→Planner Handoff**：upper-scale packages must hand down constraints/questions, not Builder details.
+1. **Existing-but-unobserved context**；
+2. **Settlement Capacity / Built-Fabric Scale**；
+3. **Recursive Planner→Planner Handoff**。
 
-P02 should therefore test whether an accepted L0 package can be refined at L1 without losing parent causality or treating parent search points / capacity envelopes as exact local plans.
+P01R and P02 provided evidence that these contracts can operate across L0→L1.
+
+---
+
+## 11. v0.3 regression focus
+
+v0.3 adds a fourth foundational environmental contract:
+
+> **Surface / Substrate / Land-Cover Character**
+
+The key question is not whether the model can color a terrain map by block type. It is whether land character changes planning causally without overclaiming unsupported geology or ecology.
+
+A strong v0.3 regression should verify that:
+
+- geometry-identical but surface-different candidates can produce different planning consequences;
+- exposed-rock plateaus do not inherit lowland food-support assumptions merely because they are flat;
+- scarce soil-bearing / vegetated pockets can constrain built-fabric expansion;
+- surface evidence changes capacity / morphology / downstream questions where appropriate;
+- surface uncertainty is propagated through recursive handoff;
+- exact Builder palette remains downstream authorship.
