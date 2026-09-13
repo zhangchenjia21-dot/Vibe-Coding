@@ -75,7 +75,8 @@ resident / household pressure
 + visitor / event peak
 + freight / production throughput
 + institutional role
-+ terrain capacity / resistance
++ terrain geometry / resistance
++ surface / substrate / land-cover character
 + transport accessibility
 + density morphology
 + required commons / work yards
@@ -125,6 +126,7 @@ freight_throughput
 political_significance
 symbolic_significance
 maturity_state
+surface_character_summary (when consequential)
 confidence
 main_drivers
 sensitivity / unresolved evidence
@@ -279,7 +281,8 @@ A settlement-scale estimate must not silently consume land needed for:
 - defensive clear ground;
 - sacred / burial ground;
 - commons;
-- water supply protection.
+- water supply protection;
+- scarce soil-bearing / vegetated ground where such scarcity is supported.
 
 Especially at L0/L1, built-fabric growth should be balanced against the same economic / ecological system that supports the settlement.
 
@@ -302,6 +305,7 @@ For LOW / UNRESOLVED, identify sensitivity, e.g.:
 if water supply fails → node remains seasonal / much smaller
 if freight volume high → gateway built fabric expands
 if existing settlement already occupies site → evolution path must be recalculated
+if surface is mostly exposed rock with little soil-bearing ground → local food-support assumption must be reduced / external supply increased
 ```
 
 ---
@@ -338,5 +342,45 @@ Before Morphology / Handoff Gate, ask:
 8. Is the range too precise for the evidence?
 9. Would a major change in transport / water / population pressure change the capacity estimate?
 10. Does the next planner know which capacity assumptions need refinement?
+11. Did low slope or large flat area get silently treated as high carrying capacity without checking relevant surface / substrate / land-cover character?
 
 A plan that locates important towns but cannot communicate approximate settlement scale is incomplete at L0/L1.
+
+---
+
+## 12. Surface-conditioned Capacity｜v0.3
+
+Settlement capacity must distinguish **geometric opportunity** from **land-character support**.
+
+A flat plateau can be:
+
+- deep soil-bearing and vegetated;
+- mostly exposed rock;
+- loose sand / gravel;
+- wet / soft ground;
+- densely forested;
+- snow / barren surface.
+
+These conditions can have similar slope / relief but different settlement implications.
+
+Important rule:
+
+> **Low-slope area is not a proxy for settlement carrying capacity.**
+
+When surface character is consequential, capacity reasoning should explicitly consider:
+
+```text
+surface / land-cover evidence
+→ effect on local food-support assumptions
+→ effect on water / drainage questions
+→ effect on clearing / foundation / maintenance cost
+→ effect on productive-ground preservation
+→ effect on compact / dispersed / fragmented morphology
+→ capacity sensitivity / confidence
+```
+
+Do not apply a universal numeric penalty. A bare-rock plateau may still support substantial construction, but it may require stronger external food/water support and should not be treated like fertile lowland merely because it is flat. Conversely, a scarce soil-bearing terrace may deserve protection from building even if it is geometrically ideal.
+
+If surface evidence is absent, capacity should carry an explicit unresolved requirement rather than silently assume neutral land character.
+
+Detailed rules: `surface-substrate-landcover.md`.
