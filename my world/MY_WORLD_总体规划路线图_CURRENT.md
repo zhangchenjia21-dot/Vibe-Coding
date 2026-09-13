@@ -1,13 +1,13 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 5.0
+version: 5.1
 created: 2026-08-25
-updated: 2026-09-10
-current_phase: G6 correction → G7 handoff
+updated: 2026-09-13
+current_phase: G7 Long-session Context & Knowledge Hardening
 current_status_source: MY_WORLD_CURRENT_STATUS.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
-supersedes: v4.9
+supersedes: v5.0
 ---
 
 # my world｜总体规划路线图 CURRENT
@@ -22,22 +22,24 @@ Owner 冻结：
 
 通用方法仍是：Vertical before platform；Consumer before Creator；真实需求 → 最小能力 → Engineering Review → Product evidence。
 
-### 2026-09-10 Owner route override
+### 2026-09-10 Owner route override｜已执行
 
 Package-7 U1 后，Owner 明确要求：
 
 > **“我不想继续测试了，你修吧，修完了直接继续主线等下一次测试”**
 
-因此：
+该 route override 已完成传播：
 
 - U1 = `PASS_WITH_NOTES / BOUNDED CORRECTION REQUIRED`；
-- MW-032 一次性修 U1-F01～F04；
-- MW-032 Engineering PASS/integration 后**不立即 re-UAT**；
-- G6 不虚标 Product PASS，而记为 `ENGINEERING CORE COMPLETE / PRODUCT CONFIRMATION DEFERRED`；
-- 直接进入 G7 Package 8；
+- MW-032 已一次性修复 U1-F01～F04；
+- MW-032 Independent Review = `ENGINEERING PASS_WITH_NOTES`；
+- reviewed non-force integration 已完成；
+- G6 不虚标 Product PASS，正式进入 `ENGINEERING CORE COMPLETE / PRODUCT CONFIRMATION DEFERRED`；
+- 不立即 re-UAT；
+- 当前直接进入 G7 Package 8；
 - 下一次集中 Product test 再验证 MW-032 + G7。
 
-此显式 Owner 指令 supersede v4.9 中“必须先立即复验 Package 7 才能推进 G7”的顺序要求，但不取消 Owner 对最终 Product PASS 的唯一裁决权。
+此显式 Owner 指令继续 supersede v4.9 中“必须先立即复验 Package 7 才能推进 G7”的顺序要求，但不取消 Owner 对最终 Product PASS 的唯一裁决权。
 
 ## 1. 总体阶段
 
@@ -47,8 +49,8 @@ G2 AI Conversation Spine                              PASS / CLOSED
 G3 Persistent Game / Save / Timeline Foundation      PASS / CLOSED
 G4 Primary Source Assets & Local Game Creation        PASS / CLOSED
 G5 World Semantics & GM Runtime                       PRODUCT PASS / CLOSED
-G6 RPG Core Closure                                   CORRECTION TRAIN CURRENT
-G7 Long-session Context & Knowledge Hardening         NEXT AFTER MW-032
+G6 RPG Core Closure                                   ENGINEERING CORE COMPLETE / PRODUCT CONFIRMATION DEFERRED
+G7 Long-session Context & Knowledge Hardening         PACKAGE 8 CURRENT
 G8 Product Expansion / Authoring / External Contract  QUEUED
 G9 Standalone Alpha / Release Validation              QUEUED
 ```
@@ -68,7 +70,7 @@ Launch / New Game / Continue
 → continue play
 ```
 
-# G6｜Core-first Package Axis
+# G6｜Core-first Package Axis｜ENGINEERING CORE COMPLETE
 
 ## Package 0｜Correction Train + Focused Owner UAT｜PRODUCT PASS / CLOSED
 
@@ -94,11 +96,11 @@ Integrated MW-024/025/026:
 - compact recommendation UI;
 - no internal OOC marker leakage.
 
-Final Product confirmation remains deferred into later concentrated testing.
+Final Product confirmation remains deferred into the later concentrated test.
 
 ## Package 3｜Open Threads / 事务｜ENGINEERING PASS_WITH_NOTES / INTEGRATED
 
-MW-027 established model-curated unresolved-matters snapshot using the existing Information Curator. U1 later found lifecycle/identity gaps now assigned to MW-032.
+MW-027 established model-curated unresolved-matters snapshot using the existing Information Curator. Package-7 U1 lifecycle/identity findings are now corrected by MW-032.
 
 ## Package 4｜System / Public d20｜ENGINEERING PASS_WITH_NOTES / INTEGRATED
 
@@ -106,11 +108,11 @@ MW-028 established real accepted/current Public d20 history with no second mecha
 
 ## Package 5｜factual Inventory / 行囊｜ENGINEERING PASS_WITH_NOTES / INTEGRATED
 
-MW-029 established exact factual possession ADD/UPDATE/REMOVE on the existing World semantic lane with Program-owned item identity and foreground grounding. U1 opening bootstrap gap is assigned to MW-032.
+MW-029 established exact factual possession ADD/UPDATE/REMOVE on the existing World semantic lane with Program-owned item identity and foreground grounding. Package-7 Opening bootstrap gap is now corrected by MW-032.
 
 ## Package 6｜Internal Dynamic UI Host v0.1｜ENGINEERING PASS_WITH_NOTES / INTEGRATED
 
-MW-030 established one bounded internal Host for Character / Experiences / People / Threads / Inventory / System and presentation-only hide/recover for People + Important Experiences.
+MW-030 established one bounded internal Host for Character / Experiences / People / Threads / Inventory / System and presentation-only hide/recover. MW-032 extends the proven visibility-preference seam to stable Threads without expanding semantic authority.
 
 Reviewed/integrated baseline entering U1:
 
@@ -139,13 +141,24 @@ F03 Recommendations can remain unavailable after one transient/malformed attempt
 F04 Threads need active model lifecycle review + stable identity + player hide/recover
 ```
 
-### MW-032｜G6 Reality Gate U1 Correction Train｜CURRENT
+### MW-032｜G6 Reality Gate U1 Correction Train｜ENGINEERING PASS_WITH_NOTES / REVIEWED INTEGRATION COMPLETE
 
 Canonical architecture:
 
 `architecture/G6_REALITY_GATE_U1_CORRECTION_TRAIN_V1_0_DECISION.md@v1.0`
 
-Outcome:
+Reviewed lineage:
+
+```text
+Formal Base              69ac2030b90f4165deb2ecb5302e3743422af585
+Task Packet              30ca29f90300e876efefd083c4ef50c25d7fa4b8
+Implementation           41cf4dfb87f12d9d99b9985e4e0dcf6e7f202b25
+Submitted Candidate      dd51c5daef1db6f8a012f05148e49f6912bf6bd4
+Independent Review       4ca34ddcb7496945cbd3648183e0d5893433d5f7
+Integration Verification e876e217f0220fdc6a577cd0b52143dc8d5b6b5c
+```
+
+Integrated outcome:
 
 ```text
 accepted Opening gets bounded semantic + information bootstrap
@@ -157,9 +170,18 @@ Recommendations get max-one same-prefix recovery retry
 Threads get active model review + stable identity + hide/recover
 ```
 
-Protected:
+Independent Engineering evidence:
 
-- no fake opening facts;
+- focused: `98 / 98`;
+- three-size real-window: `484 / 484`;
+- direct regression: `43 / 45`, with both failures reproduced on exact Formal Base as retained G3 Context debt;
+- Godot 4.7.2 final import PASS;
+- fresh Windows export + `ValidateExportOnly` PASS;
+- real Provider calls: `0`.
+
+Protected boundaries remain intact:
+
+- no fake Opening facts;
 - no Player statement → automatic World truth;
 - no fame/name allowlists or display-name authority;
 - no Quest engine or Program completion heuristics;
@@ -167,17 +189,17 @@ Protected:
 - no second Provider lane for Inventory/People/Threads;
 - no G7 platform work smuggled into G6 correction.
 
-After MW-032 Engineering PASS + reviewed integration:
+G6 current meaning:
 
-> **G6 = ENGINEERING CORE COMPLETE / PRODUCT CONFIRMATION DEFERRED**
+> **ENGINEERING CORE COMPLETE / PRODUCT CONFIRMATION DEFERRED**
 
-No immediate Owner build/UAT is required.
+There is no immediate Owner build/UAT. The next concentrated Product test will cover the MW-032 corrections together with G7.
 
 ---
 
-# G7｜Long-session Context & Knowledge Hardening
+# G7｜Long-session Context & Knowledge Hardening｜CURRENT
 
-## Package 8｜Long-session Core｜NEXT AFTER MW-032
+## Package 8｜Long-session Core｜CURRENT / TASK SHAPING
 
 Primary outcomes:
 
@@ -191,7 +213,20 @@ Principle:
 >
 > `Bounded context != starved context`
 
-Package 8 should learn from real G6 failures rather than build a universal memory platform. It must preserve existing World/Knowledge/disclosure authority and free-form Narrative primacy.
+Package 8 must learn from actual G3/G5/G6 evidence rather than build a universal memory platform. It must preserve existing World/Knowledge/disclosure authority, accepted Narrative primacy, free-form Player action, Game/Timeline currentness and domain ownership.
+
+Current execution meaning:
+
+```text
+Package route = AUTHORIZED / CURRENT
+Executable implementation task = NOT YET DISPATCHED
+Current owner = GPT task shaping / architecture audit
+Next gate = bounded G7 task architecture + executable Task Packet
+```
+
+The two exact-baseline G3 Context assertions retained through MW-032 are direct Package-8 evidence, not a reason to reopen G3 as a separate repair train.
+
+Structured Output Reliability must be pulled only from production machine-schema lanes with demonstrated failure/recovery pressure; do not create a generalized universal model protocol layer merely because several JSON responses exist.
 
 ## Package 9｜Knowledge Integrity & Correction Foundation
 
@@ -262,9 +297,9 @@ Source Library productization + Composition
 
 Continue to defer multiplayer/cloud-account/server dependency, 3D free movement, full-universe per-NPC tick simulator, universal ECS/giant EventBus, arbitrary external code execution, giant universal Source/UI schema, automatic map generation without evidence, generic Action Intent, external declarative UI before first-party evidence, and Visual Runtime before authored first-party demand.
 
-Retained engineering debt that MW-032 must not absorb merely because U1 ended:
+Retained engineering debt entering G7:
 
-- exact-baseline G3 Context assertions;
+- exact-baseline G3 Context assertions — now evidence for Package 8, not a standalone G3 reopening;
 - bounded teardown/resource warnings;
 - layer-boundary/Shell decomposition debt;
-- general long-session Context Orchestrator and generalized Structured Output reliability work reserved for G7.
+- live-model semantic People/Thread quality confirmation deferred to the next concentrated Product test.
