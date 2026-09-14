@@ -1,4 +1,4 @@
-# minecraft-builder v1.10
+# minecraft-builder v1.11
 
 ## 0. Mission｜从设计到完成品的一条主流程
 
@@ -21,6 +21,10 @@ QA 不能代替设计；Finishing 也不能拯救失败的建筑。作品即使�
 同样，**有精修动作不等于完成精修**。如果玩家正常游览时几乎感受不到从 `SPATIAL_COMPLETE` 到 `FINISHED` 的变化，不能因为“已经加过家具、做旧、灯光或执行过 Restraint”就宣告 `FINISHED`。
 
 此外，**视觉完整不等于物理完整**。只要建筑存在无意的墙脚 / 基座断开、构件没有真实落地、关键路线净空冲突、楼梯或门洞在玩家碰撞体下不可用，就不能以“整体很好看”或“终点可达”视为完成。
+
+v1.11 新增 Planner → Builder 正式输入协议：当任务带有 Builder Design Package 时，Builder 不再把它当普通背景资料，而是在 Architectural Thinking 之前执行 **Planner Context Intake**，在设计冻结前执行 **Planning Fidelity Gate**。目标不是减少 Builder 的建筑作者权，而是确保建筑真正继承上游 WHY、Program、Rights、Flow、Shared Interface 与 uncertainty，同时不靠回读完整上游规划或自行猜测缺失接口来“补课”。
+
+共享接口协议：`../shared/minecraft-planner-builder-contract.md`。
 
 ---
 
@@ -48,7 +52,8 @@ QA 不能代替设计；Finishing 也不能拯救失败的建筑。作品即使�
 - 如果 Scope 依赖的共享 Terrain / Water / Circulation / Structural Vegetation 尚未稳定，也不得提前精修；
 - 大型聚落不要求全世界同时进入 Finishing。已稳定的重点 Scope 可以先完成，外围普通 Scope 可停在 `SPATIAL_COMPLETE`；
 - 若用户只要求空间骨架或背景建筑，`SPATIAL_COMPLETE` 可以是合法交付状态；
-- 对边界明确的重要单体 / 核心场景，如果用户没有要求停止在空间完成阶段，默认继续到 `FINISHED`。
+- 对边界明确的重要单体 / 核心场景，如果用户没有要求停止在空间完成阶段，默认继续到 `FINISHED`；
+- **当存在 Planner Builder Design Package 时，`DESIGN_READY` 还要求 Planning Fidelity Gate 已通过；若必要 interface / boundary / responsibility 信息缺失，则保持在设计前 HOLD，状态标记 `INCOMPLETE_HANDOFF`，不得伪装成 `DESIGN_READY`。**
 
 **Spatial role overrides object size.** 模块职责由对象对空间的作用决定，不由对象大小决定。小花海可能属于 Builder Core；巨大雕塑也可能只是 Finishing。
 
@@ -64,6 +69,98 @@ QA 不能代替设计；Finishing 也不能拯救失败的建筑。作品即使�
 - `MIXED_ENVIRONMENT`：建筑、地形、水体、道路、植被共同构成主体。
 
 `LANDSCAPE` 与 `MIXED_ENVIRONMENT` 中，Terrain、Water、Rock、Structural Vegetation、Circulation、Architecture 都是可能的一等系统，不得默认降为“后期装饰”。
+
+---
+
+## 0.3 Planner Context Intake｜先继承规划，再开始建筑设计
+
+当输入存在 `minecraft-planner` 的 Builder Design Package / BDP 时，Builder 必须在 Architectural Intent 之前执行本步骤。
+
+不要把 BDP 当成“参考建议”；它是当前 Scope 的上游规划合同。
+
+### 0.3.1 只读当前包与直接依赖
+
+默认读取：
+
+- 目标 BDP；
+- BDP 指定的 direct interface dependencies；
+- BDP 明确引用的 immutable local object / section / evidence；
+- 当前批准 Canon / Architecture Grammar；
+- 当前建筑设计确有必要的 Site evidence。
+
+不要为了理解一个门前接口就自动读取完整 district / settlement / regional plan。
+
+> **Progressive disclosure over context flooding.**
+
+如果 BDP 本身缺信息，不要通过 uncontrolled upstream fishing 把整个父规划翻出来替 Planner 补答案；按共享 contract 返回最小 `INCOMPLETE_HANDOFF`。
+
+### 0.3.2 Compile `Inherited Planning Intent`
+
+把 BDP 编译为轻量、可审计的设计前提：
+
+```text
+WHY / planning role
+Users / Actors
+Program
+Flows / rhythms / externalities
+Rights / public-common-private semantics
+Site / parcel envelope
+Boundary semantic
+PLANNER_FIXED
+BUILDER_ADAPTABLE
+Interface Baselines
+External Service Interfaces
+Architecture Kit Requirements
+Known uncertainty + resolve_before
+Upstream issue protocol
+```
+
+不要把 hidden Planner reasoning 当作必需输入。Builder 需要的是**因果结论、权利、接口、证据、边界和不确定性**。
+
+### 0.3.3 Interface resolution
+
+凡是当前设计阶段必须保留的 planning-fixed external interface，检查它是否可解析：
+
+- 有本地 geometry / protected envelope 吗？
+- geometry semantic 清楚吗？
+- 有 relevant elevation / section baseline 吗？
+- nominal width 和 minimum clear requirement 是否区分？
+- 可调整范围清楚吗？
+- rights / access semantic 清楚吗？
+- coordination owner / interface revision 清楚吗？
+
+一个 route ID + “2格宽”不足以支持门前冻结，如果 Builder 连 route 在哪里、Y 怎样、哪两格必须净空都不知道。
+
+### 0.3.4 Minecraft boundary resolution
+
+Planner 的连续 polygon / 斜边如果会决定 voxel 合法包络，必须读取明确 boundary semantic，例如：
+
+- `CELL_CENTER_MASK`
+- `FULL_VOXEL_INSIDE`
+- `CONTINUOUS_BOUNDARY_WITH_TOLERANCE`
+- `NEGOTIABLE_EDGE`
+- `REFERENCE_ONLY`
+
+没有语义时，Builder 不得自己猜一种落格规则然后宣告边界通过。
+
+### 0.3.5 External service responsibility
+
+水、排水、污物、货运、燃料、公共挡墙等系统一旦跨出本 Scope，先确认：
+
+- 谁拥有外部接口；
+- Builder 是只预留、设计本地连接、共同设计，还是全 Scope owner；
+- 什么时候必须闭合。
+
+没有公共排水接口时，不能因为建筑需要排水就自行把水排到公共路。
+
+### 0.3.6 Intake result
+
+- `PASS`：信息足以进入 Architectural Thinking；
+- `CONCEPT_DESIGN_WITH_INTERFACE_HOLD`：允许有界概念设计，但某些接口必须在 Design freeze 前补齐；
+- `INCOMPLETE_HANDOFF`：缺少当前设计阶段不能绕过的 planning-fixed 信息；停止冻结，报告最小补充；
+- `UPSTREAM_PLANNING_ISSUE`：输入信息完整，但 planning-fixed 条件彼此冲突或在真实 Site 下不可兼容。
+
+`INCOMPLETE_HANDOFF` 不是 Builder 设计失败，也不是 Planner 整体失败；它是接口合同缺口。
 
 ---
 
@@ -98,6 +195,8 @@ QA 不能代替设计；Finishing 也不能拯救失败的建筑。作品即使�
 
 不必写长篇世界观，但不能无规则拼贴。
 
+如果已经有 Planner `Inherited Planning Intent`，不要重新发明与其冲突的 World Rules / Site role；研究用于补足建筑设计知识，不用于绕过 PLANNER_FIXED。
+
 ---
 
 ## 2. Shared Spatial Principles｜所有类型共用的空间原则
@@ -130,11 +229,15 @@ QA 不能代替设计；Finishing 也不能拯救失败的建筑。作品即使�
 
 先确定建筑存在理由、建设者与使用者、人数 / 身份 / 活动，以及它在社会、组织或文明中的角色。建筑首先解决需求，不是先得到外观再往里塞功能。
 
+如果存在 Planner handoff，Purpose / Users 应从 `Inherited Planning Intent` 开始，而不是重新把建筑角色抽象成一个更容易设计的类型。
+
 ### 3.2 Site & Context｜为什么建在这里
 
 主动读取并利用地形、水源、道路、港口、城墙、田地、周边建筑、公共空间、视线、防御、礼仪、日照、风雨、湿度与排水。
 
 优先 **fit architecture to context**。不要把建筑当成可以任意平移的独立模型，再让场地去迁就它。
+
+Planner package 若给出 parcel、frontage、common / private threshold、Interface Baseline，则这些是 Site 的一部分，不是建筑设计之外的“附加备注”。
 
 ### 3.3 Program & Spatial Relationships｜先有活动与空间，再有墙
 
@@ -170,6 +273,8 @@ QA 不能代替设计；Finishing 也不能拯救失败的建筑。作品即使�
 - 雨水、遮阳、排水、坡度与地形。
 
 复杂项目至少同时建立 **Plan + Section + Sequence**。
+
+共享 interface 的 elevation / clear envelope 如果来自 Planner baseline，Plan + Section 必须实际接上它，而不是只在文字里说“保留公共通行”。
 
 ### 3.6 Structure, Material & Technology｜先理解怎么建得出来
 
@@ -209,6 +314,8 @@ Minecraft 不是现实建筑的低清晰度导出格式，而是独立媒介。�
 
 主动判断哪些现实细节需要放大、哪些距离需要压缩，以及 stairs / slabs / walls / fences / trapdoors 等如何服务几何表达。检查玩家眼高、移动速度、FOV 与视距下的近 / 中 / 远景，不机械 1:1 复制现实绝对尺度。
 
+Planner 给出的 boundary semantic 必须在 voxel translation 中真正执行；不能在连续图上合法、落块后越过 fixed edge。
+
 ### Architectural Intent｜同一份意图贯穿 Builder 与 Finishing
 
 重要建筑正式施工前，简短记录：
@@ -222,7 +329,45 @@ Minecraft 不是现实建筑的低清晰度导出格式，而是独立媒介。�
 - Structure / Material / Technology；
 - Form + Minecraft Translation。
 
-每项一两句话即可。它是后续 Core 与 Finishing 共用的设计状态，不是交接文档，也不是为了制造长篇报告。普通小建筑可简化。
+当有 Planner handoff 时，再附一小段：
+
+```text
+Inherited Planning Intent
+- WHY / role
+- key PLANNER_FIXED
+- key shared interfaces
+- unresolved items that still matter
+```
+
+每项一两句话即可。它是后续 Core 与 Finishing 共用的设计状态，不是为了制造长篇报告。普通小建筑可简化。
+
+### 3.9 Planning Fidelity Gate｜设计冻结前验证“没有背叛 Planner”
+
+当 Scope 来自 Planner BDP 时，在 Architecture Design 冻结 / `DESIGN_READY` 之前执行。
+
+检查：
+
+- **WHY**：最终建筑是否仍能解释上游为什么需要它，而不是变成同风格但无关的房子？
+- **Program**：Planner required program 是否被保留，没有为了好画而偷换？
+- **Flow / Sequence**：上游 people / goods / clean-dirty / service flow 是否落到真实 threshold / Space Graph？
+- **Rights**：公共 / 共有 / 私有关系是否仍成立？private geometry 有没有吞掉 common easement？
+- **PLANNER_FIXED**：是否逐项保存？
+- **Capacity / Envelope**：是否越过 parcel / package / household / program ceiling？
+- **Boundary semantic**：voxel design 是否遵守 planning boundary 的落格规则？
+- **Interface Baselines**：门、落脚、院、道路、共享构造是否与 local baseline 连续？
+- **External Services**：跨 Scope 的 water / waste / drainage / delivery 是否按责任只预留、连接或 co-design，而不是自行发明？
+- **Terrain / Mitigation**：是否仍服务上游的 terrain / adaptation relation？
+- **Uncertainty**：是否把 `UNRESOLVED / UNVERIFIED` 偷偷写成事实？
+- **Builder authorship**：Planner 是否没有把建筑设计锁死，Builder 是否仍有真正的 Plan / Section / Tectonics / Form 作者权？
+
+Gate result：
+
+- `PASS`：设计可冻结并进入 `DESIGN_READY`；
+- `FAIL_BUILDER_DESIGN`：问题在 Builder authority 内，修正设计后重跑；
+- `INCOMPLETE_HANDOFF`：缺 upstream interface / boundary / responsibility baseline，报告最小补充，不回读完整父规划补答案；
+- `UPSTREAM_PLANNING_ISSUE`：信息完整，但 fixed relations 在真实 Site / Architecture Design 下仍互相冲突或不可行。
+
+如果只做概念设计且 handoff 声明 `CONCEPT_DESIGN_READY`，可以形成方案，但必须保留 interface HOLD，不能宣告 `DESIGN_READY`。
 
 ---
 
@@ -349,6 +494,8 @@ Minecraft 水不是静态蓝色体素。真实 `water` 必须考虑：
 
 主要 circulation 应在 Builder Core 阶段成立；不得等待 Finishing 用家具摆放或铺地来“提示路线”。
 
+如果 route 来自 Planner Interface Baseline，Builder 可以设计局部 threshold / step / landing，但不得把 public / common corridor 缩进、封闭或重定向到私人空间，除非 adjustment envelope 明确允许。
+
 **Invariant**：关键空间连接真实成立，门槛、落脚、净空和主要竖向交通可用；可用性按玩家沿整条路线实际移动时的连续碰撞 / 净空包络判断，而不是只看起点与终点是否存在某条抽象可达路径。
 
 ---
@@ -421,6 +568,8 @@ Builder Core 应建立“这座建筑为什么用这些材料、它们如何构�
 
 高价值植被、假山、小型构筑物等：先查已有资产；合适则选 variant；没有则可在当前任务设计 candidate。Candidate 可以用于本轮，但不得自动写入正式资产库。
 
+已有资产如果与 Planner fixed frontage / rights / shared interface 冲突，不得因为“资产已经很好”就强行塞入。
+
 ---
 
 ## 12. Builder Phases｜Macro → Design Gate → Meso → Base Micro
@@ -456,6 +605,8 @@ Builder Core 应建立“这座建筑为什么用这些材料、它们如何构�
 不能仅因为“看得出这是中殿 / 塔 / 侧翼”就通过。失败时先重做体量 / 剖面 / 构造，不进入 Meso。
 
 景观 Scope 则执行与当前 Macro 对应的 Terrain / Water / Vegetation Gate。
+
+如果有 Planner BDP，本 Gate 不能替代 Planning Fidelity Gate；一个建筑可以体量很好却破坏公共地役或上游 Program。
 
 ### Meso
 
@@ -513,6 +664,14 @@ Finishing 之前，对当前 Scope 执行一次 Spatial Completion Gate。它不
 - 没有大量穿墙、卡头、断层、悬空、门槛错误等 Core blocker；
 - 墙、柱、基座、台阶、门槛、地坪与外部地面等预期接触处已通过 **Construction Closure & Clearance Gate** 的 Ground Contact / Edge Closure 检查。
 
+### Planning Fidelity
+
+如果当前 Scope 来自 Planner：
+
+- Planning Fidelity Gate 必须仍为 PASS；
+- Finishing / Core 施工不得制造新的 shared-interface 侵占；
+- Planner interface revision 变化时，应先做 fidelity recheck。
+
 ### Upstream Defect Test
 
 问：
@@ -567,7 +726,8 @@ Finishing 之前，对当前 Scope 执行一次 Spatial Completion Gate。它不
 - 主水体；
 - Structural Vegetation；
 - 核心 skyline；
-- 主要空间序列与功能分区。
+- 主要空间序列与功能分区；
+- Planner-fixed public / shared interface semantics。
 
 若 Finishing 发现必须修改 Frozen 内容：
 
@@ -821,6 +981,8 @@ Restraint 后重新问：
 
 如果能取得真实 Minecraft 客户端截图 / 玩家视点，应优先用于最终感知检查。软件体素渲染只能补充，不能替代真实纹理、光照、模型、FOV 与移动尺度体验。
 
+Planner-derived Scope 还应保留 package / interface revision，便于在上游接口变化后触发 fidelity recheck。
+
 ---
 
 ## 20. Geometry / Construction Integrity
@@ -922,9 +1084,23 @@ Restraint 后重新问：
 - vegetation ↔ circulation / architecture；
 - structure ↔ open space；
 - roof / facade ↔ internal volume；
-- finishing ↔ frozen core。
+- finishing ↔ frozen core；
+- Planner Interface Baseline ↔ current Builder geometry when applicable。
 
 后施工系统不得无意破坏前序系统。使用 `fill / clear / replace / carve` 等大范围写入时，尤其检查其包络是否跨入已完成对象。
+
+### Shared External Interface Integrity
+
+对 Planner-derived Scope 的 public / common / cross-package interface 检查：
+
+- Builder threshold / landing 是否真实接到 baseline；
+- minimum clear requirement 是否仍成立；
+- 门扇、台阶、檐、柱、挡墙、排水构造是否侵入 protected clear envelope；
+- Builder 是否只在 adjustment envelope 内调整；
+- interface revision 是否仍是当前版本；
+- external service 是否按照责任语义连接或保留，而不是丢进公共空间。
+
+如果 baseline 缺失，返回 `INCOMPLETE_HANDOFF`，不要用局部截图或推测坐标冒充接口通过。
 
 ### Space Graph / Local Expected Edge Validation
 
@@ -1013,7 +1189,7 @@ Restraint 后重新问：
 
 ### Phase Protection
 
-Finishing 不得未经回退流程修改 Frozen Core。条件允许时，在进入 Finishing 时记录当前 Scope 的关键边界 / Space Graph edges / roofline / major route / water / terrain / Structural Vegetation 等 baseline，并在结束后复核。
+Finishing 不得未经回退流程修改 Frozen Core。条件允许时，在进入 Finishing 时记录当前 Scope 的关键边界 / Space Graph edges / roofline / major route / water / terrain / Structural Vegetation / Planner fixed interfaces 等 baseline，并在结束后复核。
 
 发现未经授权的核心损坏：标记 `UPSTREAM_DAMAGE`，回 Builder Core 修复并重新通过 Spatial Completion Gate。
 
@@ -1059,7 +1235,7 @@ Finishing 后还应问：如果不提供提示，沿这条 route 是否自然感
 
 ### Thinking Consistency
 
-回看 Architectural Intent / World Rules：最终作品是否仍服务 Purpose / Users，Site / Program / Hierarchy 是否真实进入空间，Structure / Material 是否生成形态，Finishing 是否放大而不是覆盖这些逻辑。
+回看 Architectural Intent / World Rules / Inherited Planning Intent：最终作品是否仍服务 Purpose / Users，Site / Program / Hierarchy 是否真实进入空间，Structure / Material 是否生成形态，Finishing 是否放大而不是覆盖这些逻辑，Planner 的 WHY / rights / shared interfaces 是否仍可从空间读出。
 
 ---
 
@@ -1073,6 +1249,13 @@ Finishing 后还应问：如果不提供提示，沿这条 route 是否自然感
 - 若不改变 Program / Space Graph / 主体量 / 主要 Section / 主要 Circulation 语义即可解决，执行有界 Core Repair；
 - 修复后重跑 Construction Closure & Clearance Gate、受影响 Interface / Circulation Integrity，并根据状态重跑 Spatial Completion Gate 或 Finishing Completion Gate；
 - 如果必须改变 Frozen Core 才能解决，升级为 `UPSTREAM_BUILDER_ISSUE`，回对应 Builder 模块。
+
+对 Planner-derived Scope：
+
+- 若问题可在 `BUILDER_ADAPTABLE` 内解决，Builder 自行修复；
+- 若缺少 baseline / boundary / responsibility，返回 `INCOMPLETE_HANDOFF`；
+- 若必须改变 `PLANNER_FIXED` 才能解决，返回 `UPSTREAM_PLANNING_ISSUE`，附冲突、证据、已尝试 bounded adaptation 与最小上游决定；
+- 不得为了赶完任务静默改地块、户数、公共通路、共享院或 required program。
 
 若发现以下问题，应回相应上游模块，而不是继续叠补丁：
 
@@ -1091,7 +1274,8 @@ Finishing 后还应问：如果不提供提示，沿这条 route 是否自然感
 2. 明确拆除范围；
 3. 基于清空状态重新规划；
 4. 施工前检查新旧对象碰撞；
-5. 重新执行对应 Gate。
+5. 重新执行对应 Gate；
+6. Planner-derived Scope 重新执行 Planning Fidelity Gate。
 
 不要在根本不合适的旧布局上无限叠加补丁。
 
@@ -1105,7 +1289,7 @@ Finishing 后还应问：如果不提供提示，沿这条 route 是否自然感
 
 ### `SPATIAL_COMPLETE`
 
-空间、结构、地形 / 水 / circulation 等 Core 已成立，可使用、可继续精修，但不声称展示级完成；当前适用的 Construction Closure & Clearance Gate 已通过或明确标注真实碰撞未验证边界。
+空间、结构、地形 / 水 / circulation 等 Core 已成立，可使用、可继续精修，但不声称展示级完成；当前适用的 Construction Closure & Clearance Gate 已通过或明确标注真实碰撞未验证边界。Planner-derived Scope 的 Planning Fidelity 仍必须成立。
 
 ### `FINISHED`
 
@@ -1116,6 +1300,8 @@ Finishing 后还应问：如果不提供提示，沿这条 route 是否自然感
 在目标状态基础上完成当前工具能够提供的 Integrity / Semantic / Perceptual Verification，并明确未验证边界；Construction Closure & Clearance Gate 必须为 PASS，或在工具无法真实验证碰撞时明确标记 `UNVERIFIED`，不得伪装为 PASS。
 
 不得用“写入成功”“蓝图一致”“全局可达”“执行过五个 Finishing Pass”“修改了很多方块”冒充更高完成状态。
+
+`INCOMPLETE_HANDOFF` / `CONCEPT_DESIGN_WITH_INTERFACE_HOLD` 是设计前的 interface status，不是完成等级。
 
 ---
 
@@ -1128,6 +1314,8 @@ Finishing 后还应问：如果不提供提示，沿这条 route 是否自然感
 至少说明临时名称 / ID、类型、尺寸、spatial role、当前位置 / 预览、推荐理由、类似现有资产、建议类别。
 
 推荐为候选前，应确认当前版本至少通过 Construction Closure & Clearance Gate；若仍有 `CLOSURE / CLEARANCE` 失败，只能标记为 `ASSET_CANDIDATE_PENDING_REPAIR`，不得当作可直接复用的正式候选。
+
+如果资产是为 Planner-derived Scope 设计，还应确认它没有把一个任务特定的 `PLANNER_FIXED` 关系误冻结成通用模板。
 
 只有 Owner 明确 `批准入库` 后，才能进入正式提取、转换和注册任务。不得因为模型自行生成成功就自动写入正式资产库。
 
@@ -1143,7 +1331,8 @@ Finishing 后还应问：如果不提供提示，沿这条 route 是否自然感
 - 继续操作可能伤害用户真实世界；
 - 工具不可用；
 - 存档格式 / 版本无法安全处理；
-- 任务存在真正无法自行消解的重大歧义。
+- 任务存在真正无法自行消解的重大歧义；
+- Planner-derived Scope 的当前阶段需要 planning-fixed interface / boundary / responsibility，但 handoff 无法解析。
 
 检测和自动化应服务设计质量，而不是取代设计。不要为了“严谨”搭建远超任务需要的基础设施。
 
@@ -1154,35 +1343,62 @@ Finishing 后还应问：如果不提供提示，沿这条 route 是否自然感
 除非任务明确要求其它顺序：
 
 1. 确认世界、Scope、任务类型和目标完成等级；
-2. 现实题材研究或幻想题材定义 World Rules；
-3. 读取场地与现有系统；
-4. 对重要建筑建立 Architectural Intent；
-5. 找出当前 Scope 的一等系统和依赖；
-6. 建立整体 Plan + Section + Sequence / Landscape spatial logic；
-7. `CORE_BUILDING`：Macro 完成 Terrain / Water / Structural Vegetation / 主要空间 / 建筑 structural-spatial system 与主次体量；
-8. 执行 Design / Massing / Section / Tectonic Gate；失败则先返工；
-9. 完成 Terrain Morphology、Water semantics、Circulation 与 Minecraft scale 检查；
-10. Meso 完成道路、桥、游廊、building bay/support、主要 openings、vertical circulation、roof junction、次级植被与 Core Facade；
-11. 执行 Space Graph / Portal / Threshold / Roof-Junction / System Interface 检查；
-12. Base Micro 只完成让空间成立所需的地表、材料、门窗收口、必要植被、照明和基础陈设；
-13. 执行 **Construction Closure & Clearance Gate**：检查 Ground Contact / Support Closure、Movement Envelope 与 Edge Closure；失败则先做有界物理 Repair；
-14. 执行 Spatial Completion Gate；未通过则保持 Core，禁止进入 Finishing；
-15. 通过后状态设为 `SPATIAL_COMPLETE`，冻结上游核心语义，并保存可比较的 pre-Finishing baseline；
-16. 如果目标只需 `SPATIAL_COMPLETE`，进入 Verification / Delivery；否则进入 `FINISHING`；
-17. 建立轻量 Finishing Coverage Map，识别 Focal / Supporting / Quiet 与主要玩家体验区域；
-18. Finishing Pass 1：Functional Finish；
-19. Pass 2：Architectural Finish；
-20. Pass 3：Material / Environmental Finish；
-21. Pass 4：Composition / Atmosphere；
-22. Pass 5：Restraint；
-23. 回看 Coverage Map，检查 Phase Protection，确认 Finishing 未破坏 Frozen Core；
-24. 重新执行 **Construction Closure & Clearance Gate**；若 Finishing 或此前遗漏造成物理失败，先 Repair，再重跑受影响 Gate；
-25. 执行 Finishing Completion Gate；若 `UNDER_FINISH`，保持 `FINISHING` 并针对覆盖不足区域继续精修，再重跑 Gate；若发现 Frozen Core 问题，则回 Builder Core；
-26. Gate 通过后，执行 Geometry / Interface / Circulation / Semantic / Water / Terrain / Vegetation invariants；
-27. 做 Far + Mid + Near + Route 的 Perceptual Review，并尽量与 pre-Finishing baseline 做相同视点比较；能取得真实客户端视点时优先使用；
-28. 对问题执行有界 Repair；如触及上游则回退相应状态并重新过 Gate；如只是精修不足则留在 Finishing；对 CLOSURE / CLEARANCE Repair 不得只修已知坐标，必须按 Gate 重新扫描同类风险；
-29. 只有 Finishing Completion Gate、Construction Closure & Clearance Gate 与必要 Integrity 检查都支持时，才标记 `FINISHED`；完成当前工具能够提供的最终验证后可标记 `VERIFIED`；
-30. 明确仍未验证的客户端、流体、真实碰撞、夜间照明或其它边界；
-31. 输出推荐入库资产候选；
-32. 等待 Owner 实机检查；
-33. 只有 Owner 明确批准的候选才能正式入库。
+2. **若存在 Planner BDP，执行 Planner Context Intake：只读目标包、direct interface refs 与必要 Site evidence，编译 Inherited Planning Intent；**
+3. **检查 handoff readiness、Interface Baselines、boundary semantic、external service responsibility；若当前阶段必要信息缺失，返回 `INCOMPLETE_HANDOFF`，不要通过回读完整父规划补答案；**
+4. 现实题材研究或幻想题材定义 / 继承 World Rules；
+5. 读取场地与现有系统；
+6. 对重要建筑建立 Architectural Intent，并继承 Planner WHY / fixed relations；
+7. 建立整体 Plan + Section + Sequence / Landscape spatial logic；
+8. 对 Planner-derived Scope 执行 **Planning Fidelity Gate**；如果仅允许 `CONCEPT_DESIGN_WITH_INTERFACE_HOLD`，可以输出概念方案但不得进入 `DESIGN_READY`；
+9. Gate 通过后状态进入 `DESIGN_READY`；识别当前 Scope 的一等系统和依赖；
+10. `CORE_BUILDING`：Macro 完成 Terrain / Water / Structural Vegetation / 主要空间 / 建筑 structural-spatial system 与主次体量；
+11. 执行 Design / Massing / Section / Tectonic Gate；失败则先返工；
+12. 完成 Terrain Morphology、Water semantics、Circulation 与 Minecraft scale 检查；
+13. Meso 完成道路、桥、游廊、building bay/support、主要 openings、vertical circulation、roof junction、次级植被与 Core Facade；
+14. 执行 Space Graph / Portal / Threshold / Roof-Junction / System Interface 检查；对 Planner-derived Scope 同时检查 shared external interface；
+15. Base Micro 只完成让空间成立所需的地表、材料、门窗收口、必要植被、照明和基础陈设；
+16. 执行 **Construction Closure & Clearance Gate**：检查 Ground Contact / Support Closure、Movement Envelope 与 Edge Closure；失败则先做有界物理 Repair；
+17. 对 Planner-derived Scope 重跑 **Planning Fidelity Gate**，确认施工几何没有侵占固定公共 / shared relation；
+18. 执行 Spatial Completion Gate；未通过则保持 Core，禁止进入 Finishing；
+19. 通过后状态设为 `SPATIAL_COMPLETE`，冻结上游核心语义，并保存可比较的 pre-Finishing baseline；
+20. 如果目标只需 `SPATIAL_COMPLETE`，进入 Verification / Delivery；否则进入 `FINISHING`；
+21. 建立轻量 Finishing Coverage Map，识别 Focal / Supporting / Quiet 与主要玩家体验区域；
+22. Finishing Pass 1：Functional Finish；
+23. Pass 2：Architectural Finish；
+24. Pass 3：Material / Environmental Finish；
+25. Pass 4：Composition / Atmosphere；
+26. Pass 5：Restraint；
+27. 回看 Coverage Map，检查 Phase Protection，确认 Finishing 未破坏 Frozen Core / Planner fixed interfaces；
+28. 重新执行 **Construction Closure & Clearance Gate**；若 Finishing 或此前遗漏造成物理失败，先 Repair，再重跑受影响 Gate；
+29. 执行 Finishing Completion Gate；若 `UNDER_FINISH`，保持 `FINISHING` 并针对覆盖不足区域继续精修，再重跑 Gate；若发现 Frozen Core 问题，则回 Builder Core；
+30. Gate 通过后，执行 Geometry / Interface / Circulation / Semantic / Water / Terrain / Vegetation invariants；
+31. Planner-derived Scope 再核 package / interface revision；若上游 interface 已变化，标记 `STALE_FOR_FIDELITY_REVIEW` 并重跑 Planning Fidelity Gate；
+32. 做 Far + Mid + Near + Route 的 Perceptual Review，并尽量与 pre-Finishing baseline 做相同视点比较；能取得真实客户端视点时优先使用；
+33. 对问题执行有界 Repair；如触及 Planner fixed relation 则返回 `UPSTREAM_PLANNING_ISSUE`；如只是精修不足则留在 Finishing；对 CLOSURE / CLEARANCE Repair 不得只修已知坐标，必须按 Gate 重新扫描同类风险；
+34. 只有 Finishing Completion Gate、Construction Closure & Clearance Gate、Planning Fidelity（适用时）与必要 Integrity 检查都支持时，才标记 `FINISHED`；完成当前工具能够提供的最终验证后可标记 `VERIFIED`；
+35. 明确仍未验证的客户端、流体、真实碰撞、夜间照明、rights / supply 或其它边界；
+36. 输出推荐入库资产候选；
+37. 等待 Owner 实机检查；
+38. 只有 Owner 明确批准的候选才能正式入库。
+
+---
+
+## 30. Planner–Builder Core Invariants｜v1.11
+
+> **Builder does not start from zero when a valid Planner package exists.**
+
+> **Inherited planning intent constrains relationships, not architectural creativity.**
+
+> **A planning-fixed external interface must be locally resolvable before design freeze.**
+
+> **Missing interface information is `INCOMPLETE_HANDOFF`, not permission to invent upstream geometry.**
+
+> **Planner-fixed boundaries require explicit Minecraft discretization semantics when voxel legality depends on them.**
+
+> **Public / common rights may not be erased by private architectural optimization.**
+
+> **External services crossing the Scope require explicit responsibility; do not invent a public drain, water route or waste terminal.**
+
+> **Planning Fidelity Gate is different from architectural quality, physical clearance and Finishing quality; all can independently fail.**
+
+> **If Builder adaptation cannot satisfy complete planning-fixed inputs, return `UPSTREAM_PLANNING_ISSUE` instead of silently rewriting the plan.**
