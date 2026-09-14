@@ -2,13 +2,16 @@
 
 ## Purpose
 
-This reference expands the causal-growth part of `minecraft-planner`. It teaches how territorial systems, settlements, districts and parcels emerge through accumulated causes instead of being arranged from a final masterplan.
+This reference expands the causal-growth part of `minecraft-planner`. It explains how territorial systems, settlements, districts and parcels emerge through accumulated choices and feedback instead of being arranged from a final masterplan.
+
+v0.4 adds two foundational ideas:
+
+- historical actors have **bounded knowledge**;
+- spatial choices create **feedback** that changes later conditions.
 
 ---
 
 ## 1. Growth is recursive across scales
-
-Growth may occur at several nested scales:
 
 ```text
 Territorial Morphogenesis
@@ -20,18 +23,23 @@ Territorial Morphogenesis
 
 Do not assume growth only means “which house was built first”.
 
-Examples:
-
-- a national port system may emerge before the inland market network that later depends on it;
-- a mining frontier may turn into a politically important region after roads, fortifications and administration follow resource extraction;
-- a market settlement may later subdivide frontage into narrow parcels;
-- a former farm lane may survive as a crooked urban street long after farming disappears.
-
 ---
 
 ## 2. Growth step grammar
 
-Use the following causal grammar for important stages:
+For important stages, prefer the full grammar:
+
+```text
+World condition / pressure
+→ What relevant actors know
+→ Actor interest / rights / capability
+→ Choice / negotiation / adaptation
+→ Spatial response
+→ Modified condition / new anchor / new access
+→ Next pressure / feedback
+```
+
+For simpler cases, the short form remains valid:
 
 ```text
 Driver
@@ -40,68 +48,90 @@ Driver
 → Next Pressure
 ```
 
+A valid stage must change what later stages can reasonably do.
+
 Example:
 
 ```text
-Reliable ford
-→ waiting / crossing / toll activity
-→ people spend time at the crossing
-→ food and lodging demand
-→ mixed commercial frontage
-→ frontage value increases
-→ lateral parcel subdivision
-→ narrow deep plots
-→ rear service access becomes necessary
+Reliable ford is locally known
+→ merchants and local authority value the crossing
+→ waiting / toll / exchange activity
+→ repeated use stabilizes access rights
+→ bridge becomes proportionate investment
+→ bridge concentrates traffic
+→ bridgehead frontage becomes more valuable
+→ market activity intensifies
+→ congestion / subdivision pressure appears
 ```
-
-A valid stage should change what the next stage can reasonably do.
 
 ---
 
-## 3. Anchor roles through time
+## 3. Planner knowledge ≠ historical actor knowledge
+
+A world fact visible to the Planner may not yet be known to historical actors.
+
+When consequential, use epistemic states such as:
+
+- `HISTORICALLY_KNOWN`
+- `LOCALLY_KNOWN`
+- `PARTIALLY_KNOWN`
+- `UNDISCOVERED`
+- `UNKNOWN_TO_PLANNER`
+- `PLANNER_ONLY_EVIDENCE`
+
+Example:
+
+```text
+remote ore exists in Planner evidence
+but is UNDISCOVERED in founding stage
+→ no founding road may target it
+→ later exploration discovers it
+→ extraction begins
+→ route and settlement hierarchy change
+```
+
+Do not use future / global information to optimize early history.
+
+---
+
+## 4. Anchor roles through time
 
 ### ORIGIN_ANCHOR
 
-The reason a durable settlement or regional concentration first appears.
+Explains why a durable concentration first appears.
 
-Examples:
-
-- ford;
-- spring;
-- monastery;
-- mine;
-- protected harbor;
-- manor;
-- sacred site;
-- strategic pass.
+Examples: ford, spring, monastery, known mine, protected harbor, manor, sacred site, pass.
 
 ### GROWTH_ANCHOR
 
 Appears later and redirects growth.
 
-Examples:
-
-- bridge replacing a ford;
-- new market charter;
-- city gate;
-- dock basin;
-- castle;
-- regional temple;
-- major workshop complex.
+Examples: bridge replacing a ford, new market right, city gate, dock basin, castle, new road junction.
 
 ### STABILIZING_ANCHOR
 
 Helps a mature system remain organized.
 
-Examples:
+Examples: common well, shared granary, court, cemetery, permanent market square.
 
-- common well;
-- public granary;
-- court;
-- council hall;
-- cemetery;
-- fortified warehouse;
-- permanent market square.
+### Human-created Anchors
+
+v0.4 explicitly allows infrastructure created by earlier pressures to become later Anchors:
+
+```text
+water difficulty
+→ communal well
+→ daily convergence
+→ shared court / lane
+→ surrounding household growth
+```
+
+```text
+repeated crossing
+→ bridge
+→ traffic concentration
+→ market / bridgehead growth
+```
 
 For each important Anchor record:
 
@@ -110,6 +140,8 @@ role
 scale
 why
 when
+relevant actors
+knowledge state when useful
 attracts
 repels
 morphological effects
@@ -118,11 +150,11 @@ counterfactual removal effect
 
 ---
 
-## 4. Path dependence
+## 5. Path dependence
 
 Historic environments are rarely globally optimal.
 
-Preserve inherited constraints when they still plausibly matter:
+Possible inherited constraints:
 
 - old road alignment;
 - former gate;
@@ -134,56 +166,51 @@ Preserve inherited constraints when they still plausibly matter:
 - former channel;
 - absorbed farmstead;
 - manor boundary;
-- pre-existing irrigation;
+- irrigation;
 - fire-rebuild patch;
 - abandoned industrial yard.
 
 Ask:
 
-> Would later inhabitants really erase this, or would they adapt around it?
+> Would later inhabitants really erase this, or would rights, use, terrain, social meaning or switching burden keep it?
 
-Do not preserve every relic automatically. A path-dependent feature survives only if demolition cost, ownership, ritual value, continued use, terrain or institutional inertia makes survival plausible.
+Do not preserve every relic automatically.
+
+Do not introduce a full maintenance / lifecycle simulation; the relevant question is whether inherited spatial inertia changes the current plan.
 
 ---
 
-## 5. Existing Evolution
+## 6. Existing Evolution
 
 For `EXISTING_EVOLUTION`, distinguish:
 
-- `INHERITED_ACTIVE`: still used and constraining;
-- `INHERITED_RESIDUAL`: no longer primary, but morphology persists;
-- `REDEVELOPABLE`: can change with moderate cost;
-- `PROTECTED / SACRED / LOCKED`: should not be casually altered;
-- `OBSOLETE / REMOVED`: can disappear, but its previous existence may leave scars.
+- `INHERITED_ACTIVE`
+- `INHERITED_RESIDUAL`
+- `REDEVELOPABLE`
+- `PROTECTED / SACRED / LOCKED`
+- `OBSOLETE / REMOVED`
 
 Typical transformations:
 
 ```text
-wide estate plot
-→ inheritance split
-→ narrow parcels
-→ rear lane
+wide household / estate plot
+→ household or inheritance split
+→ narrower parcels
+→ rear access pressure
 ```
 
 ```text
 outer gate road
 → suburb frontage
-→ wall removed
-→ former gate becomes intersection / market node
-```
-
-```text
-burned block
-→ rebuilding with new firebreak
-→ local street widening
-→ visible break in older parcel rhythm
+→ wall loses function
+→ former gate remains a high-access node
 ```
 
 ---
 
-## 6. Maturity State
+## 7. Maturity State
 
-A plan should identify settlement / territorial maturity when relevant:
+Useful states:
 
 - `FOUNDING`
 - `EARLY_GROWTH`
@@ -193,110 +220,157 @@ A plan should identify settlement / territorial maturity when relevant:
 - `DECLINING`
 - `REBUILT / TRANSFORMED`
 
-Maturity affects:
+Maturity can affect infrastructure permanence, parcel subdivision, infill intensity, specialization, edge condition and road hierarchy.
 
-- infrastructure permanence;
-- parcel subdivision;
-- infill intensity;
-- specialization;
-- institutional buildings;
-- edge condition;
-- maintenance and abandonment;
-- road hierarchy.
-
-The same premise should not produce the same morphology at every maturity stage.
+Do not add a detailed infrastructure replacement model by default.
 
 ---
 
-## 7. Territorial growth
+## 8. Feedback loops
+
+Growth is not always a one-way sequence.
+
+### Reinforcing feedback
+
+```text
+bridge
+→ traffic concentration
+→ market activity
+→ settlement growth
+→ more crossing demand
+→ stronger bridgehead importance
+```
+
+```text
+market frontage
+→ visibility / exchange value
+→ subdivision / density
+→ more activity
+→ still higher frontage pressure
+```
+
+### Balancing feedback
+
+```text
+frontage intensification
+→ congestion / externality
+→ bypass / secondary route
+→ new frontage opportunity
+→ old center growth slows or changes role
+```
+
+```text
+large central service dependency
+→ vulnerability to disruption
+→ secondary local service point
+→ pressure on central node stabilizes
+```
+
+Feedback may weaken or be interrupted by rights, politics, competing centers, environmental conditions, new knowledge or changing demand.
+
+---
+
+## 9. Territorial growth
 
 At L0 / L1, causal growth may include:
 
 ```text
-resource discovery
-→ extraction node
-→ freight corridor
-→ processing center
+exploration
+→ resource discovery
+→ local extraction
+→ knowledge spreads
+→ freight path strengthens
+→ transfer / processing node
 → regional market
-→ administrative interest
-→ defensive infrastructure
-→ permanent frontier settlement network
+→ administrative / political interest
+→ permanent settlement network
 ```
 
 or:
 
 ```text
-agricultural core
-→ surplus exchange
+agricultural surplus
+→ periodic exchange
 → market center
-→ river / coastal export
-→ port growth
-→ hinterland road strengthening
+→ export route strengthens
+→ gateway / port grows
+→ hinterland access improves
 → secondary market towns
-→ political centralization
 ```
 
-National-scale planning must not jump directly from “resource region” to individual facilities. First explain settlement and transport systems.
+National-scale planning must not jump from “resource region” to individual facilities.
 
 ---
 
-## 8. Historical Validity Test
+## 10. Historical Validity Test
 
-For each proposed growth stage:
+For each proposed stage:
 
 > If every later stage never happened, would this stage still be viable and understandable?
 
 FAIL examples:
 
 - a founding village reserves a grand future boulevard with no current use;
-- an early settlement positions houses around a future market that does not yet exist;
-- a frontier road follows a future political border not yet established.
+- early residents target an undiscovered future resource;
+- a frontier road follows a political border not yet established.
 
 ---
 
-## 9. Counterfactual Test
+## 11. Knowledge Test
+
+Ask:
+
+> Which facts are available to the Planner but not yet plausibly available to the actors in this stage?
+
+If those facts drive a decision, revise the sequence.
+
+---
+
+## 12. Feedback Test
+
+Ask:
+
+> Did major infrastructure, access, rights, density or institutions modify the conditions of the next stage?
+
+If growth is always only “more demand → more buildings”, the causal model may be too linear.
+
+---
+
+## 13. Counterfactual Test
 
 Change one major causal variable:
 
-- remove the ford;
-- move the mine;
-- close the pass;
-- shift the harbor;
-- remove the monastery;
-- change land tenure;
+- remove the crossing;
+- move the known resource;
+- change access rights;
+- remove the institution;
+- alter actor knowledge;
+- remove a mitigation option;
 - reverse a trade connection.
 
-Ask what should change.
-
-If the final spatial plan barely changes, the cited causal factor may only be decorative explanation.
+If final morphology barely changes, the cited cause may be decorative.
 
 ---
 
-## 10. Anchor Removal Test
+## 14. Anchor Removal Test
 
-For each major Anchor, temporarily remove it and identify:
+Remove one major Anchor and identify routes, demand, capacity, density, public space or hierarchy losing purpose.
 
-- routes losing purpose;
-- building demand disappearing;
-- density changing;
-- public space weakening;
-- district identity changing;
-- settlement rank changing.
-
-If no meaningful consequence follows, reconsider whether the object is truly an Anchor.
+If no meaningful consequence follows, reconsider whether it is truly an Anchor.
 
 ---
 
-## 11. Growth Map requirements
+## 15. Growth Map requirements
 
-A growth diagram should distinguish at least:
+A growth diagram should distinguish as relevant:
 
 - existing / inherited fabric;
 - earliest durable Anchor(s);
+- knowledge / discovery transitions when consequential;
 - subsequent growth stage(s);
-- major route reinforcement;
-- expansion fronts;
-- scars / residual constraints;
+- infrastructure / access changes;
+- feedback-driven expansion or redirection;
+- residual constraints / scars;
 - current morphology.
 
-Avoid arbitrary colored rings when actual growth followed corridors, terrain pockets, riverbanks, ridges or fragmented ownership.
+Avoid arbitrary concentric rings when growth followed corridors, terrain pockets, rights, bridges, markets or fragmented ownership.
