@@ -9,7 +9,8 @@ The goal is to distinguish:
 - actual Skill behavior;
 - model execution quality;
 - tooling / evidence limits;
-- task-specific judgment.
+- task-specific judgment；
+- Planner↔Builder interface-contract completeness.
 
 Do not write the rubric back into the benchmark prompt.
 
@@ -36,9 +37,10 @@ Do not restate:
 - Anti-zoning checklist;
 - capacity tests;
 - recursive handoff schema;
-- Critic questions.
+- Critic questions;
+- Planner–Builder shared-contract checklist.
 
-Those must come from the Skill itself.
+Those must come from the Skills themselves.
 
 ---
 
@@ -57,7 +59,14 @@ Independent review should inspect:
 - factual consistency with allowed evidence;
 - Owner spatial / worldbuilding experience.
 
-A clean JSON package does not prove good planning.
+For Planner→Builder integration, also inspect:
+
+- which BDP fields Builder actually consumed;
+- whether it reread forbidden upstream context;
+- whether planning-fixed interfaces were preserved;
+- whether missing handoff data was reported instead of guessed.
+
+A clean JSON package does not prove good planning or good integration.
 
 ---
 
@@ -66,6 +75,7 @@ A clean JSON package does not prove good planning.
 Use:
 
 - `SKILL_GAP`
+- `HANDOFF_CONTRACT_GAP`
 - `MODEL_EXECUTION_FAILURE`
 - `TOOLING_LIMITATION`
 - `TASK_SPECIFIC_JUDGMENT`
@@ -291,14 +301,27 @@ For L0–L3 check:
 - parent rollback happens only when bounded child adaptation is insufficient;
 - Builder-specific fields do not dominate.
 
-## Planner→Builder handoff
+## Planner→Builder handoff｜v0.5
 
 At Builder-ready scales check:
 
-- planning-fixed relations clear;
-- Builder retains architecture / exact engineering authorship;
-- package boundaries / shared interfaces implementable;
-- world-write not implicitly authorized.
+- package has clear WHY / role / program;
+- `PLANNER_FIXED` is small but meaningful;
+- `BUILDER_ADAPTABLE` preserves Architecture Design authorship;
+- Builder handoff readiness (`CONCEPT_DESIGN_READY / DESIGN_FREEZE_READY / INCOMPLETE_HANDOFF`) matches actual package completeness;
+- every planning-fixed cross-package physical interface required for the next Builder stage has a local Interface Baseline or direct immutable ref;
+- interface geometry semantic is explicit;
+- topographically sensitive interfaces include enough local elevation / section control;
+- nominal width is not confused with minimum clear requirement;
+- adjustable edge / threshold range is explicit where relevant;
+- public / common / private rights survive into the package;
+- continuous / diagonal planning boundaries declare Minecraft discretization semantics where voxel legality depends on them;
+- external water / drainage / waste / loading / service relationships declare responsibility rather than being left for Builder to invent;
+- uncertainty carries `resolve_before` when stage timing matters;
+- package / interface revision lineage is visible;
+- world-write is not implicitly authorized.
+
+A BDP can be semantically excellent yet still fail design-freeze readiness if a fixed public interface is only named rather than geometrically resolvable.
 
 ## Visual planning evidence
 
@@ -311,7 +334,8 @@ Check:
 - search uncertainty not confused with built extent;
 - catchment not urbanized land;
 - conditional / unresolved access is not drawn like certified road;
-- surface / rights / adaptation layers appear when they materially change Owner understanding.
+- surface / rights / adaptation layers appear when they materially change Owner understanding;
+- Builder-facing interface slices are readable when design freeze depends on them.
 
 ---
 
@@ -373,6 +397,16 @@ Do rights, competition, households, inheritance, migration or frontage pressure 
 
 Can child Planner continue intelligently without redoing parent or blindly obeying frozen masterplan?
 
+## Builder Interface Completeness Test
+
+Can Builder preserve every planning-fixed cross-scope relation using only the target BDP plus its direct immutable interface refs, without reading the complete upstream plan or guessing geometry / responsibility?
+
+If not, classify whether the issue is:
+
+- `HANDOFF_CONTRACT_GAP`;
+- task-specific missing evidence;
+- or model execution failure.
+
 ## Kit Clone Test
 
 Is Kit a language or copy machine?
@@ -423,6 +457,31 @@ Tests inherited routes / parcels, rights / easements, site-value competition, ho
 
 Tests multiple-building relationships, frontage / service / courtyard, final Planner→Builder handoff.
 
+### I01 PLANNER→BUILDER INTEGRATION
+
+Use one P05 Builder Design Package with `minecraft-builder`.
+
+Prompt should tell Builder which BDP to consume and forbid full upstream reread. Do **not** remind it of the expected WHY / rights / access / fixed fields.
+
+Audit:
+
+- did Builder actually consume BDP causal context?
+- did architecture differ because of planning role / site / flow?
+- were PLANNER_FIXED relations preserved?
+- did Builder retain architectural authorship?
+- were missing interface data reported rather than guessed?
+- did Builder avoid reading forbidden upstream plans?
+
+### I01R CONTRACT REGRESSION
+
+After handoff-contract changes, rerun the same architectural scope with a regenerated BDP.
+
+Primary question:
+
+> **Can the new package reach `DESIGN_FREEZE_READY` and pass Builder Planning Fidelity Gate without full upstream reread?**
+
+If yes, the integration fix is validated.
+
 Additional cases can cover ford / bridge, mountain service center, monastic agriculture, port / floodplain and existing-town evolution.
 
 ---
@@ -451,6 +510,7 @@ Owner should especially judge:
 - whether modest constraints are treated with common-sense adaptation;
 - whether history feels like bounded people acting, not omniscient masterplanning;
 - whether routes / commons / parcels feel socially possible;
+- whether Builder architecture still feels like the same place / social system Planner described;
 - whether world feels worth building.
 
 ---
@@ -470,24 +530,27 @@ Task-specific planning disagreements normally remain review findings.
 
 ---
 
-# 10. v0.4 regression focus
+# 10. v0.5 regression focus
 
-v0.4 adds four foundational kernels:
+v0.5 retains v0.4's four foundational human-geography kernels:
 
 1. **Agency & Bounded Knowledge**
 2. **Human Adaptation & Effective Accessibility**
 3. **Metabolism & Resilience**
 4. **Competition, Demography & Feedback**
 
-The primary regression question is not whether every plan contains every kernel.
+and adds a fifth regression concern:
 
-It is:
+5. **Planner→Builder Interface Completeness**
 
-> **When one of these mechanisms materially changes spatial choice, does the Planner recognize and use it without over-simulating the world?**
+The primary v0.5 question is:
 
-Explicitly out of scope for v0.4 regression by default:
+> **Can Planner hand Builder enough local causal, spatial, rights and interface information to preserve planning intent and freeze Architecture Design without either over-specifying architecture or forcing a full upstream reread?**
+
+Explicitly out of scope by default:
 
 - infrastructure lifecycle / replacement simulation;
 - resource depletion / regeneration simulation;
 - full monetary economy;
-- political or demographic microsimulation.
+- political or demographic microsimulation;
+- heavyweight BIM / GIS exchange formats.
