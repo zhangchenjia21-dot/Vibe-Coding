@@ -1,4 +1,4 @@
-# minecraft-planner v0.4
+# minecraft-planner v0.5
 
 ## 0. Mission｜从“条件决定空间”升级为“人类在条件中行动，反过来塑造空间”
 
@@ -9,6 +9,8 @@
 > **地理、地表与环境、资源、制度、权利、知识、经济、交通、防御、文化、技术 / 魔法、人口过程与历史路径，为什么会共同生成现在这个国家、区域、聚落、街区与地块形态。**
 
 v0.4 的核心升级是：Planner 不再把自然与社会条件当成静态 suitability map。真实的人类空间来自**行动者在有限知识、有限权利、有限能力和持续物质需求下作出的选择、协商、适应与竞争**；这些选择又会改变下一阶段的环境、通达与空间价值。
+
+v0.5 不改变这套人类地理 Kernel；它补强最后一公里：**Planner 输出给 Builder 的固定关系必须可被局部解析，尤其是跨 parcel / package 的公共通路、共享空间、边界与外部服务接口。** Builder 不应为了理解一个门前接口而回读整份上游规划，也不应靠猜测把连续规划边界离散成 Minecraft 方块。
 
 核心链：
 
@@ -66,6 +68,12 @@ RECURSIVE PLANNING HANDOFF
         ↓
 
 BUILDER DESIGN PACKAGES
++ INTERFACE BASELINES
++ BOUNDARY / SERVICE SEMANTICS
+
+        ↓
+
+minecraft-builder
 ```
 
 最终始终要回答：
@@ -103,6 +111,9 @@ BUILDER DESIGN PACKAGES
 - Architecture Kit Requirements；
 - Planner → Planner recursive handoff；
 - downstream Builder Design Packages；
+- Builder-ready cross-scope Interface Baselines；
+- Minecraft planning boundary semantics；
+- external service interface responsibility at planning level；
 - planning-scale Critic / QA。
 
 ### minecraft-builder owns
@@ -124,7 +135,9 @@ BUILDER DESIGN PACKAGES
 
 > **Planner owns causal relationships, human-geography logic and planning scale. Builder owns buildings and exact physical realization.**
 
-Planner 可以要求“这里需要井 / 小桥 / 挡墙 / 蓄水 / 退让 / 共享接口”等规划级能力，但不能因此替 Builder 设计精确井筒、桥拱、基础、屋顶、柱距、窗型或方块材料。
+Planner 可以要求“这里需要井 / 小桥 / 挡墙 / 蓄水 / 退让 / 共享接口”等规划级能力，也必须把跨 Scope 的固定接口说明到 Builder 能解析；但不能因此替 Builder 设计精确井筒、桥拱、基础、屋顶、柱距、窗型或方块材料。
+
+共享接口协议：`../shared/minecraft-planner-builder-contract.md`。
 
 ---
 
@@ -217,7 +230,10 @@ Planner 可以要求“这里需要井 / 小桥 / 挡墙 / 蓄水 / 退让 / 共
 - street enclosure；
 - local terrain / ground adaptation；
 - planning-fixed access / rights / shared interfaces；
-- concrete Builder Packages。
+- Builder-facing local Interface Baselines；
+- explicit Minecraft boundary semantics where needed；
+- external service interface ownership / reservation；
+- concrete Builder Design Packages。
 
 ---
 
@@ -266,7 +282,7 @@ SETTLEMENT
 DISTRICT
 ↓ recursive planning constraints
 URBAN_ENSEMBLE
-↓ builder handoff
+↓ builder handoff contract
 minecraft-builder
 ```
 
@@ -803,16 +819,69 @@ L0→L1、L1→L2、L2→L3、L3→L4 都使用这一 contract。
 
 详见 `references/recursive-planning-handoff.md`。
 
-## 25. Builder Handoff｜只有最低规划尺度才进入 Builder
+## 25. Builder Handoff｜最低规划尺度进入 Builder 时必须接口完整
 
-当规划已下钻到具体 building / compound / urban ensemble 关系时，才输出 Builder Design Package：
+当规划已下钻到具体 building / compound / urban ensemble 关系时，才输出 Builder Design Package。
+
+除了：
 
 - `PLANNER_FIXED`
 - `BUILDER_ADAPTABLE`
 - dependencies
+- uncertainty / `resolve_before`
 - `UPSTREAM_PLANNING_ISSUE`
 
-详见 `references/planner-builder-handoff.md`。
+v0.5 还要求：
+
+### A. Builder handoff readiness
+
+区分：
+
+- `CONCEPT_DESIGN_READY`
+- `DESIGN_FREEZE_READY`
+- `INCOMPLETE_HANDOFF`
+
+### B. Interface Baseline
+
+凡是进入 `PLANNER_FIXED`、跨 package / parcel、且影响 Builder 当前设计阶段的物理接口，必须提供可解析的局部 baseline 或 direct immutable ref：
+
+```text
+interface_id
+source_object / revision
+local_geometry + semantic
+height / section baseline
+nominal_width
+minimum_clear_requirement
+adjustment_envelope
+rights / access semantic
+coordination_owner
+resolve_before
+```
+
+### C. Minecraft boundary semantic
+
+连续 polygon / 斜边若会成为 voxel 设计边界，必须说明例如：
+
+- `CELL_CENTER_MASK`
+- `FULL_VOXEL_INSIDE`
+- `CONTINUOUS_BOUNDARY_WITH_TOLERANCE`
+- `NEGOTIABLE_EDGE`
+- `REFERENCE_ONLY`
+
+不得让 Builder 自己猜用哪种落格规则。
+
+### D. External Service Interface
+
+水、污物、排水、货物、燃料等一旦跨出当前 parcel / package，需要说明接口位置 / ref、责任 owner、Builder 只预留还是共同设计、何时必须闭合。
+
+### E. Progressive disclosure
+
+Builder 应能只读取 BDP + direct interface refs 理解当前设计；不要把“回读完整上游规划”作为正常补接口方法。
+
+详见：
+
+- `references/planner-builder-handoff.md`
+- `../shared/minecraft-planner-builder-contract.md`
 
 ## 26. Growth Sequence ≠ Implementation Sequence
 
@@ -875,9 +944,11 @@ BLOCK-01
 PARCEL-01
 PROGRAM-01
 PACKAGE-01
+INTERFACE-01
+SERVICE-01
 ```
 
-不要求每次都建立 `ACTOR-*`；只有复杂 actor / rights 关系值得单独对象化。
+不要求每次都建立 `ACTOR-* / INTERFACE-* / SERVICE-*`；只有复杂 actor / rights / cross-scope interface 值得单独对象化。
 
 常见可选字段：
 
@@ -894,6 +965,10 @@ resilience_role
 site_value_drivers
 demographic_driver
 feedback_relations
+boundary_semantic
+interface_baselines
+external_service_interfaces
+resolve_before
 ```
 
 Task-local ID 不自动成为 World Canon ID。
@@ -912,7 +987,8 @@ Task-local ID 不自动成为 World Canon ID。
 - capacity；
 - growth / feedback；
 - district / parcel / frontage；
-- Builder Package。
+- Builder Package；
+- Builder-facing local interface slice where design freeze depends on it。
 
 Actor / stock / rights 不必都画图；只有空间后果需要 Owner 直观看到时可视化。
 
@@ -1012,6 +1088,8 @@ SCOPED
 
 `HANDOFF_READY` 只表示下一层能继续，不等于可 world-write，也不等于所有工程 / access / resource 已实证。
 
+对于 Builder handoff，另用 `builder_handoff_readiness` 描述它能否只做概念设计、能否冻结设计，或是否缺少必要接口；不要用 Planner state 取代该语义。
+
 ## 46. Three Gates
 
 ### Premise Gate
@@ -1025,6 +1103,16 @@ SCOPED
 ### Handoff Gate
 
 确认下一层 recipient、Fixed / unresolved / adaptable、mitigation boundary、uncertainty、revision protocol 清楚，没有越级设计。
+
+如果 recipient = Builder，还必须确认：
+
+- planning-fixed cross-scope physical interface 有可解析的 Interface Baseline / immutable ref；
+- boundary semantic 足以支持 Minecraft voxel design；
+- external service responsibility 清楚；
+- package / interface revision 可追踪；
+- `builder_handoff_readiness` 与实际信息完整度一致。
+
+缺这些内容时，不得把包误标成 `DESIGN_FREEZE_READY`。
 
 ## 47. Autonomous Execution / Safety
 
@@ -1064,10 +1152,11 @@ Planner 应自主完成研究、推理、Critic、制图与 artifact 输出。�
 18. Architecture Kit Requirements；
 19. Planner Critic：Counterfactual / Anchor Removal / Historical Validity / Anti-Zoning / Terrain / Surface / Agency / Knowledge / Mitigation / Metabolism & Resilience / Feedback / Capacity / Parcel；
 20. Morphology Gate；
-21. 若仍需向下规划，形成 Recursive Planning Packages；否则形成 Builder Packages；
-22. Handoff Gate；
-23. 输出 Planning Packet、machine-readable objects、规划图、source register、uncertainty；
-24. 状态设为 `HANDOFF_READY`，停止等待下游 / review。
+21. 若仍需向下规划，形成 Recursive Planning Packages；否则形成 Builder Design Packages；
+22. 对 Builder package 编译 direct causal context、Interface Baselines、boundary semantics、external service responsibilities、revision / `resolve_before`；
+23. Handoff Gate；
+24. 输出 Planning Packet、machine-readable objects、规划图、source register、uncertainty；
+25. 状态设为 `HANDOFF_READY`，记录 `builder_handoff_readiness`，停止等待下游 / review。
 
 并非每项任务都要把 3–19 全部写成长篇章节。只展开会改变空间结果的机制。
 
@@ -1077,7 +1166,7 @@ Planner 应自主完成研究、推理、Critic、制图与 artifact 输出。�
 
 按任务需要读取：
 
-- `references/human-geography-kernels.md`：v0.4 四个底层 Kernel；
+- `references/human-geography-kernels.md`：v0.4 起的四个底层 Kernel；
 - `references/causal-growth-model.md`：历史生长、bounded knowledge、Anchor、feedback、path dependence；
 - `references/flows-externalities-and-demand.md`：需求、flows、stocks、rhythms、externalities、resilience；
 - `references/morphology-parcels-and-density.md`：roads、rights、site value、demography、parcel、frontage、density；
@@ -1085,13 +1174,14 @@ Planner 应自主完成研究、推理、Critic、制图与 artifact 输出。�
 - `references/surface-substrate-landcover.md`：surface / substrate / vegetation / ground character；
 - `references/architecture-kit-requirements.md`：Planner 可要求什么、不应设计什么；
 - `references/recursive-planning-handoff.md`：L0→L1→L2→L3→L4 递归交接；
-- `references/planner-builder-handoff.md`：最低规划尺度 → Builder contract；
+- `references/planner-builder-handoff.md`：最低规划尺度 → Builder emitter contract；
+- `../shared/minecraft-planner-builder-contract.md`：Planner ↔ Builder shared interface contract；
 - `references/planning-artifacts-and-maps.md`：JSON、ID、地图、sections、版本；
 - `references/regression-rubric.md`：独立测试与审核维度。
 
 ---
 
-# 50. Core Invariants｜v0.4
+# 50. Core Invariants｜v0.5
 
 > **Settlement morphology is caused, not arranged.**
 
@@ -1135,8 +1225,16 @@ Planner 应自主完成研究、推理、Critic、制图与 artifact 输出。�
 
 > **Planner constrains relationships; Builder retains architectural authorship.**
 
-### Explicit non-goals of v0.4
+> **A planning-fixed cross-scope physical interface must be locally resolvable without forcing Builder to reread the full upstream plan.**
 
-v0.4 does **not** add a full monetary economy, detailed political simulation, population microsimulation, infrastructure lifecycle / replacement model, resource depletion / regeneration simulation, or exhaustive maintenance engineering model.
+> **Continuous planning boundaries must declare their Minecraft discretization semantics when voxel legality depends on them.**
 
-> **Model a mechanism only when it materially changes spatial choice, morphology, capacity, hierarchy or downstream design.**
+> **External services crossing a Builder scope must declare interface responsibility instead of being silently invented by the building design.**
+
+> **Builder handoff readiness is not world-write authorization.**
+
+### Explicit non-goals of v0.5
+
+v0.5 does **not** add a full monetary economy, detailed political simulation, population microsimulation, infrastructure lifecycle / replacement model, resource depletion / regeneration simulation, exhaustive maintenance engineering model, or a heavyweight BIM / GIS exchange standard.
+
+> **Model a mechanism only when it materially changes spatial choice, morphology, capacity, hierarchy, interface responsibility or downstream design.**
