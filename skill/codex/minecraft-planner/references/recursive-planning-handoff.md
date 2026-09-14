@@ -2,9 +2,7 @@
 
 ## Purpose
 
-This reference defines the contract for **Planner → Planner** recursion across planning scales.
-
-It applies to:
+This reference defines the contract for **Planner → Planner** recursion across planning scales:
 
 ```text
 L0 POLITY_TERRITORY → L1 REGIONAL_SYSTEM
@@ -15,7 +13,7 @@ L3 DISTRICT → L4 URBAN_ENSEMBLE
 
 It is intentionally different from `planner-builder-handoff.md`.
 
-The goal is to preserve accepted higher-scale causality while allowing lower-scale planning to discover new evidence and retain real planning freedom.
+v0.4 expands the handoff so lower scales inherit not only geometry / capacity questions, but also relevant Actor rights, bounded-knowledge uncertainty, mitigation assumptions, effective-access conditions, metabolism and resilience dependencies.
 
 ---
 
@@ -27,9 +25,9 @@ A regional plan should not design every parcel.
 
 A settlement plan should not decide every building roof.
 
-Therefore higher-scale planning should hand down:
+Higher-scale planning should hand down:
 
-> constraints + questions + unresolved evidence
+> constraints + causal relations + unresolved questions + evidence boundaries
 
 rather than finished lower-scale geometry.
 
@@ -41,7 +39,7 @@ Core rule:
 
 ## 2. Planning Package fields
 
-A recursive Planning Package should contain:
+A recursive Planning Package should contain as relevant:
 
 ```text
 Package ID
@@ -59,55 +57,62 @@ Evidence / source refs
 Known uncertainty
 Cross-package dependencies
 Revision triggers
-Expected visual / machine-readable outputs
+Expected outputs
 World-write authorization = false
 ```
 
-Do not assume Package = settlement.
+v0.4 optional-but-important fields when consequential:
 
-A package may represent:
+```text
+actor / rights assumptions
+epistemic / discovery state
+mitigation assumptions / constraint-transformations
+effective-access conditions
+stock / buffer / seasonal dependency
+resilience requirement / fallback relation
+site-value / demographic pressure
+feedback relations
+```
 
-- a natural-social region;
-- a city / town search system;
-- a frontier corridor;
-- a district;
-- an urban ensemble candidate;
-- a cross-region interface that needs its own refinement.
+Do not include these mechanically when they do not affect spatial reasoning.
 
 ---
 
 ## 3. UPSTREAM_FIXED
 
-Only place a relation here if breaking it would invalidate the accepted parent-scale logic.
+Only place a relation here if breaking it would invalidate accepted parent-scale causality.
 
 Examples:
 
 ### L0 → L1
 
 - region role in national exchange;
-- major political / territorial boundary;
+- political / territorial boundary;
 - strategic gateway relationship;
-- broad settlement hierarchy relation;
+- broad settlement hierarchy;
 - major cross-region food / ore / authority flow;
-- approximate capacity relationship between nodes;
-- protected national commons / frontier / sacred area.
+- major access-right or commons relation;
+- approximate capacity relationship;
+- strategic resilience dependency.
 
 ### L1 → L2
 
 - settlement role in regional system;
-- required connection to regional route / harbor / pass;
+- required relation to route / harbor / pass / market;
 - regional catchment relation;
-- production / processing role;
-- approximate settlement capacity range;
-- cross-settlement dependency.
+- production / transfer role;
+- approximate capacity range;
+- cross-settlement dependency;
+- important Actor / access relation if role depends on it.
 
 ### L2 → L3
 
 - district role / anchor relation;
 - major settlement movement route;
-- protected commons / market / sacred / infrastructure space;
+- protected commons / infrastructure space;
 - broad density / frontage logic;
-- district capacity / expansion relationship.
+- district capacity / expansion relationship;
+- shared rights / easement / access where essential.
 
 ### L3 → L4
 
@@ -115,33 +120,37 @@ Examples:
 - required frontage / service route;
 - shared courtyard / loading interface;
 - protected lane / negative space;
-- program relationship between building groups.
+- program relationship between building groups;
+- critical shared access / rights.
 
-Do not freeze details merely because the parent Planner happened to imagine them.
+Do not freeze details merely because the parent Planner imagined them.
 
 ---
 
 ## 4. DOWNSTREAM_TO_RESOLVE
 
-This is the most important field for healthy recursion.
+This field lists questions the child Planner **must investigate or decide**, not simply inherit.
 
-It lists questions the child Planner **must investigate or decide**, not simply inherit.
-
-Examples:
+Common examples:
 
 - current existing fabric;
-- exact settlement site within a search envelope;
-- water availability;
+- exact site within search envelope;
+- water source / well / storage feasibility;
 - harbor / ford / bridge viability;
-- terrain continuity;
+- terrain / surface continuity;
 - current road / path inheritance;
-- local land tenure;
-- real settlement capacity;
-- exact catchment competition;
-- current resource access;
+- local land tenure / easement / public access;
+- Actor authority / cooperation where consequential;
+- whether key information was historically known / discovered;
+- ordinary mitigation feasibility and residual constraint;
+- effective accessibility for relevant transport modes;
+- local settlement capacity;
+- catchment competition;
+- actual resource access;
+- stock / buffer / seasonal peak needs;
+- resilience fallback if failure consequence is high;
 - district / parcel morphology;
-- seasonal constraints;
-- local religious / institutional expression.
+- local institutional expression.
 
 An upstream plan that leaves no meaningful questions for the child scale is probably over-designed.
 
@@ -149,26 +158,28 @@ An upstream plan that leaves no meaningful questions for the child scale is prob
 
 ## 5. DOWNSTREAM_ADAPTABLE
 
-The child Planner may modify these without parent revision, provided UPSTREAM_FIXED relations remain true.
+The child Planner may modify these without parent revision, provided UPSTREAM_FIXED remains true.
 
 Examples:
 
-- precise node location inside approved search logic;
-- exact route corridor among several equivalent options;
+- precise node location inside search logic;
+- exact route corridor among equivalent options;
+- local mitigation method among equivalent bounded solutions;
 - internal settlement hierarchy;
-- number of local villages / hamlets needed;
+- number of local villages / hamlets;
 - district boundaries;
 - local capacity distribution;
 - parcel / frontage evolution;
-- lower-scale Architecture Kit requirements.
+- lower-scale Architecture Kit requirements;
+- resilience implementation form when parent only fixes the need for fallback.
 
-Adaptive freedom should be explicit enough that the child Planner does not treat the parent plan as a frozen masterplan drawing.
+Adaptive freedom prevents the parent plan from becoming a frozen masterplan.
 
 ---
 
 ## 6. Capacity handoff
 
-When the parent scale proposes an important settlement / node, hand down separately:
+For an important settlement / node, hand down separately:
 
 ```text
 location_search_envelope
@@ -176,64 +187,154 @@ built_fabric_capacity_hypothesis
 functional_hinterland_relation
 ```
 
-Never hand down one polygon ambiguously representing all three.
+When relevant also include:
+
+```text
+surface_character_summary
+adaptation_assumptions
+external_supply_dependency
+effective_access_conditions
+stock / seasonal dependency
+resilience dependency
+```
 
 The child Planner should:
 
-1. test local terrain / fabric;
-2. refine or reject the built-fabric capacity range;
-3. preserve the strategic role if evidence permits;
-4. trigger parent revision if role and feasible capacity become incompatible.
+1. refresh local evidence;
+2. test ordinary mitigation before treating a raw constraint as fatal;
+3. refine or reject capacity range;
+4. preserve strategic role if evidence permits;
+5. trigger parent revision only when role and feasible effective capacity become incompatible.
 
 Example:
 
 ```text
-Parent L0:
-regional market node
-working built fabric 12k–25k blocks²
-MEDIUM confidence
+Parent L1:
+regional service node
+working built fabric 5k–9k
+surface water unverified
 
-Child L1 finds:
-only 4k–7k safe land near required crossing
+Child L2 finds:
+no nearby surface source, but ordinary well / cistern is plausible at LOW–MODERATE intervention burden
 
-Possible outcomes:
-A. fragmented / vertical morphology still supports role → refine capacity;
-B. nearby alternative site supports role → move within adaptable search;
-C. no feasible location supports role → UPSTREAM_PLANNING_ISSUE.
+Result:
+keep settlement role;
+record water infrastructure as local planning requirement;
+reduce agricultural assumption if necessary;
+do not automatically collapse residence to zero.
 ```
 
 ---
 
-## 7. Revision triggers
+## 7. Constraint / mitigation handoff
+
+A parent may pass a raw constraint without fixing its solution.
+
+Recommended pattern:
+
+```text
+raw_constraint: steep approach
+parent_implication: heavy freight must not cross settlement core
+mitigation_space: switchback / staged unloading / retaining / alternative approach
+child_freedom: choose bounded solution based on detailed terrain
+revision_trigger: no period-appropriate bounded mitigation can preserve required flow
+```
+
+This keeps human adaptation inside recursive planning without stealing Builder geometry.
+
+---
+
+## 8. Effective-access handoff
+
+Do not hand down “route exists” if only physical geometry was tested.
+
+When relevant distinguish:
+
+```text
+physical_access
+tenure / legal access
+political permission
+security
+seasonality
+transport-mode compatibility
+```
+
+If a parent route depends on unresolved passage rights, say so.
+
+---
+
+## 9. Bounded-knowledge handoff
+
+When historical discovery matters, pass the epistemic boundary.
+
+Example:
+
+```text
+Planner evidence: mineralized area exists
+parent historical stage: UNDISCOVERED
+child task: model plausible discovery / exploitation sequence before route stabilization
+```
+
+Do not let a lower-scale Planner retroactively use future knowledge to justify earlier form.
+
+---
+
+## 10. Metabolism / resilience handoff
+
+Where material, pass:
+
+- replenishment cadence;
+- peak / seasonal use;
+- storage / buffer role;
+- failure consequence;
+- required fallback relation.
+
+Do not force numerical stock simulation.
+
+Example:
+
+```text
+regional market receives seasonal grain
+→ settlement needs buffer/storage capacity
+→ child decides distributed vs shared storage morphology
+```
+
+---
+
+## 11. Revision triggers
 
 A Planning Package should say what evidence is strong enough to challenge its parent.
 
 Typical triggers:
 
-- proposed crossing is impossible;
-- water supply cannot support proposed settlement scale;
-- existing settlement fabric conflicts with parent Greenfield assumption;
-- terrain prevents required regional route;
-- resource / throughput evidence is far smaller or larger than assumed;
+- proposed crossing remains infeasible **after proportionate mitigation is considered**;
+- effective access fails because rights / security / mode cannot be reconciled;
+- ordinary water adaptation cannot support proposed scale;
+- existing fabric conflicts with parent assumption;
+- resource / throughput evidence differs drastically;
 - political Canon changes;
-- two upstream fixed relationships cannot both hold;
-- capacity hypothesis collapses by an order of magnitude;
-- important Anchor disappears / moves.
+- two fixed relationships cannot both hold;
+- capacity collapses by an order of magnitude;
+- important Anchor disappears / moves;
+- a critical resilience dependency cannot be satisfied.
+
+Do **not** trigger parent revision merely because a natural convenience is absent if bounded local adaptation can solve it.
 
 ---
 
-## 8. UPSTREAM_PLANNING_ISSUE
+## 12. UPSTREAM_PLANNING_ISSUE
 
-Use this status when the child scale cannot satisfy accepted parent logic with bounded local adaptation.
+Use when child scale cannot satisfy accepted parent logic with bounded local adaptation.
 
 Report:
 
 ```text
 parent package / fixed relation
 new evidence
-what fails
+raw constraint / access / rights issue
+mitigation options considered
 why local adaptation is insufficient
-smallest parent object(s) that need revision
+smallest parent object(s) requiring revision
 possible branches
 ```
 
@@ -243,40 +344,39 @@ Do not automatically rebuild the whole parent plan.
 
 ---
 
-## 9. Parent revision protocol
+## 13. Parent revision protocol
 
-When an upstream issue is valid:
+When upstream issue is valid:
 
 1. preserve unaffected parent objects;
-2. revise the smallest causal chain necessary;
+2. revise the smallest causal chain;
 3. record predecessor / successor IDs where material;
 4. update affected flows / capacities / packages;
 5. increment plan revision;
-6. rerun relevant Critic / Morphology / Handoff Gates;
-7. mark downstream packages stale if their assumptions changed.
+6. rerun relevant Critic / Gates;
+7. mark downstream packages stale if assumptions changed.
 
 This is planning lineage, not destructive overwrite.
 
 ---
 
-## 10. Cross-package dependencies
-
-A parent may create multiple child packages that share dependencies.
+## 14. Cross-package dependencies
 
 Examples:
 
-- two regions depend on the same crossing;
+- two regions depend on same crossing;
 - multiple settlements depend on one market hierarchy;
 - two districts share a freight route;
-- a political commons must remain independently accessible from several regions.
+- political commons requires multi-region access;
+- distributed storage / alternate water points provide shared resilience.
 
-Record such dependencies explicitly so one child Planner does not optimize locally and break the whole system.
+Record dependencies so local optimization does not break the larger system.
 
 ---
 
-## 11. No Builder leakage
+## 15. No Builder leakage
 
-Planner → Planner package must not use Builder-specific freedom as its main schema.
+Planner → Planner packages must not use Builder-specific freedom as their main schema.
 
 Wrong at L0→L1:
 
@@ -287,86 +387,61 @@ builder_adaptable:
 - palette
 ```
 
-Those questions are several scales too low.
-
 Correct:
 
 ```text
 DOWNSTREAM_TO_RESOLVE:
 - exact settlement site
 - local capacity
-- water
+- rights / access
+- water adaptation
 - internal network
 
 DOWNSTREAM_ADAPTABLE:
 - node location within search logic
+- local mitigation among equivalent options
 - secondary settlement pattern
-- regional route alternatives
 ```
 
-Builder-specific fields appear only when the planning recursion actually reaches a Builder-ready package.
+Builder-specific fields appear only when planning reaches Builder-ready scope.
 
 ---
 
-## 12. Child-scale output expectation
-
-The parent package should say what type of answer would close it.
-
-Examples:
+## 16. Child-scale output expectation
 
 ### L0 → L1
 
-Need:
-
-- refined regional settlement network;
-- local evidence refresh;
-- settlement capacity refinement;
-- cross-region interface validation;
-- L2 settlement packages.
+Need refined regional network, local evidence, effective access, capacity refinement, cross-region interfaces, L2 packages.
 
 ### L1 → L2
 
-Need:
-
-- settlement site / morphology;
-- anchors / major movement;
-- current / inherited fabric;
-- district formation;
-- L3 packages.
+Need settlement site / morphology, actors / anchors / major movement, current fabric, adaptation / supply closure as needed, district formation, L3 packages.
 
 ### L2 → L3
 
-Need:
-
-- district morphology;
-- block / route / frontage relation;
-- capacity / density distribution;
-- L4 packages.
+Need district morphology, block / route / frontage / rights relation, capacity / density distribution, L4 packages.
 
 ### L3 → L4
 
-Need:
-
-- parcel group / ensemble relation;
-- shared space / service logic;
-- concrete Builder package boundaries.
+Need parcel group / ensemble relation, shared space / service / access logic, concrete Builder package boundaries.
 
 ---
 
-## 13. Recursive Handoff Gate
+## 17. Recursive Handoff Gate
 
-Before declaring parent `HANDOFF_READY`, verify:
+Before parent `HANDOFF_READY`, verify:
 
 - recipient scale is correct;
 - UPSTREAM_FIXED contains only meaningful causal constraints;
-- DOWNSTREAM_TO_RESOLVE contains real unresolved lower-scale questions;
-- DOWNSTREAM_ADAPTABLE preserves planning authorship;
-- capacity hypothesis is separated from search / catchment;
+- DOWNSTREAM_TO_RESOLVE contains real questions;
+- DOWNSTREAM_ADAPTABLE preserves authorship;
+- capacity is separated from search / catchment;
+- Actor / rights / epistemic / mitigation / access / metabolism dependencies are passed only when consequential;
 - uncertainty is visible;
-- revision triggers exist;
+- revision triggers consider bounded mitigation before parent rollback;
 - cross-package dependencies are explicit;
 - no lower-scale geometry is prematurely frozen;
 - no direct Builder authorization is implied;
 - world-write remains false.
 
-If these fail, the parent plan is not yet ready to recurse.
+If these fail, the parent is not ready to recurse.

@@ -4,7 +4,7 @@
 
 This reference defines lightweight machine-readable artifacts and visual planning evidence for `minecraft-planner`.
 
-The objective is auditability and Owner readability, not building a GIS platform.
+The objective is auditability and Owner readability, not building a GIS / economy / politics simulator.
 
 ---
 
@@ -26,24 +26,31 @@ Optional when useful:
 ```text
 settlement-capacity.json
 surface-character.json
+actors.json
+metabolism.json
 sections/
 assumptions.md
 source-register.json
 validation.json
 ```
 
-At L0 / L1, if several significant settlement nodes are proposed, `settlement-capacity.json` or equivalent fields in `planning-objects.json` are strongly recommended.
+Do **not** create every optional file by default. Add one only when the mechanism materially changes the plan.
 
-If surface / substrate / land-cover materially affects planning, include `surface-character.json` or equivalent fields and an Owner-readable map layer.
+At L0 / L1, if several significant settlement nodes are proposed, `settlement-capacity.json` or equivalent fields are strongly recommended.
+
+If surface / substrate / land-cover materially affects planning, include equivalent evidence fields and an Owner-readable map layer.
+
+If Actor / rights / bounded knowledge materially affects planning, represent it either inline or in `actors.json`.
 
 ---
 
 ## 2. Task-local planning IDs
 
-Use stable IDs inside one planning packet, for example:
+Useful IDs:
 
 ```text
 REGION-01
+ACTOR-01
 NODE-01
 SETTLEMENT-01
 ANCHOR-01
@@ -58,20 +65,19 @@ PACKAGE-01
 
 Rules:
 
-1. IDs are stable within the plan revision where practical;
-2. deleted IDs should not be silently reused inside the same planning lineage;
-3. split / merge should record predecessor / successor when material;
-4. task-local IDs do not automatically become World Canon IDs;
-5. coordinate / geometry provenance remains separate from narrative names;
-6. at L0/L1, use `NODE-*` or `ANCHOR-*` for search-role objects that are not yet proven long-term settlements; promote to `SETTLEMENT-*` only when the settlement role is actually supported.
+1. IDs stable within plan revision where practical;
+2. deleted IDs not silently reused;
+3. split / merge records predecessor / successor when material;
+4. task-local IDs do not become World Canon automatically;
+5. geometry provenance remains separate from narrative names;
+6. at L0/L1 use `NODE-* / ANCHOR-*` until long-term settlement role is supported;
+7. do not create Actor IDs for trivial relationships merely to satisfy schema.
 
 ---
 
 ## 3. Planning object minimum fields
 
-Use only fields relevant to the object.
-
-Common fields:
+Common example:
 
 ```json
 {
@@ -89,23 +95,35 @@ Common fields:
 }
 ```
 
-Geometry may be:
+Optional v0.4 fields when consequential:
 
-- point;
-- centerline;
-- polygon / mask;
-- bounds only when true geometry is not yet available;
-- reference to an existing authoritative spatial object.
+```text
+actor_refs
+epistemic_state
+rights / access_conditions
+constraint_transformation
+mitigation_options
+residual_constraint
+effective_access
+stock_buffer
+seasonal_pattern
+resilience_role
+site_value_drivers
+demographic_driver
+feedback_relations
+```
 
-Do not use bbox as if it were exact footprint when source geometry is irregular.
+Use only fields that explain spatial consequences.
+
+Geometry may be point, centerline, polygon / mask, bounds when true geometry unavailable, or reference to authoritative object.
+
+Do not use bbox as exact footprint when source geometry is irregular.
 
 ---
 
 ## 4. Planning Context fields
 
-Planning artifacts should keep historical/evolution logic separate from current observation state.
-
-Recommended fields:
+Recommended:
 
 ```json
 {
@@ -116,22 +134,34 @@ Recommended fields:
 }
 ```
 
-Do not encode “we did not inspect existing fabric” as `GREENFIELD`.
-
-Useful observation values:
-
-```text
-NO_EXISTING_FABRIC_EXPECTED
-EXISTING_FABRIC_OBSERVED
-EXISTING_FABRIC_PARTIAL
-EXISTING_FABRIC_UNVERIFIED
-```
+Do not encode “not inspected” as `GREENFIELD`.
 
 ---
 
-## 5. Settlement scale object
+## 5. Actor / rights object
 
-For important L0/L1 settlement nodes, record three distinct geometries / semantics when available:
+When Actor relations materially change planning, a lightweight object may contain:
+
+```json
+{
+  "id": "ACTOR-01",
+  "role": "merchant_group",
+  "interests": ["reliable market access"],
+  "rights": ["market use"],
+  "constraints": ["no compulsory land-taking authority"],
+  "cooperation_required": ["local landholders"],
+  "knowledge": ["LOCALLY_KNOWN crossing"],
+  "spatial_effects": ["prefers frontage near crossing"]
+}
+```
+
+Do not infer detailed political institutions unless evidence / Canon supports them.
+
+---
+
+## 6. Settlement scale object
+
+For important L0/L1 nodes, keep separate:
 
 ```json
 {
@@ -140,7 +170,10 @@ For important L0/L1 settlement nodes, record three distinct geometries / semanti
     "area_range_blocks2": [12000, 25000],
     "confidence": "MEDIUM",
     "morphology": "compact_market_town",
-    "drivers": []
+    "drivers": [],
+    "adaptation_assumptions": [],
+    "external_supply_dependency": [],
+    "effective_access_summary": "..."
   },
   "functional_hinterland": {
     "type": "RELATIONAL",
@@ -149,21 +182,77 @@ For important L0/L1 settlement nodes, record three distinct geometries / semanti
 }
 ```
 
-Never use one circle / polygon ambiguously for all three.
-
-If exact shapes are not justified, `built_fabric_capacity` may be an area range + scale-coded symbol rather than a literal polygon.
-
-When consequential, add a separate `surface_character` summary rather than hiding it inside generic terrain text.
+Never use one circle / polygon ambiguously for search, built fabric and catchment.
 
 ---
 
-## 6. Authority / Evidence Register
+## 7. Constraint Transformation object
+
+When an environmental / access condition could materially block or redirect planning, record:
+
+```json
+{
+  "constraint": "weak surface-water evidence",
+  "affected_activity": "permanent residence",
+  "mitigation_options": ["well", "cistern", "carried supply"],
+  "capability_required": "mature premodern ordinary works",
+  "relative_burden": "LOW_TO_MODERATE",
+  "residual_constraint": "large agricultural expansion remains weak",
+  "confidence": "LOW"
+}
+```
+
+Do not require exact engineering dimensions.
+
+---
+
+## 8. Effective Access object
+
+When relevant:
+
+```json
+{
+  "physical_access": "POSSIBLE / UNVERIFIED",
+  "tenure_access": "UNRESOLVED",
+  "political_permission": "UNRESOLVED",
+  "security": "NORMAL / CONDITIONAL / UNRESOLVED",
+  "seasonality": "YEAR_ROUND / SEASONAL / UNRESOLVED",
+  "mode": ["pedestrian", "pack_animal"],
+  "planning_result": "conditional regional corridor"
+}
+```
+
+Do not call a route “usable” merely because its geometry is continuous.
+
+---
+
+## 9. Metabolism object
+
+When stock / rhythm matters, use concise fields such as:
+
+```json
+{
+  "flow": "grain inflow",
+  "cadence": "seasonal",
+  "consumption": "daily",
+  "buffer_role": "shared + household storage",
+  "peak": "harvest / market period",
+  "failure_consequence": "temporary food stress",
+  "resilience_response": "distributed stores"
+}
+```
+
+No numerical inventory simulator is required.
+
+---
+
+## 10. Authority / Evidence Register
 
 For important inputs record:
 
 ```text
 source
-snapshot / commit / hash if available
+snapshot / commit / hash
 authority class
 scale
 freshness
@@ -171,89 +260,64 @@ uncertainty
 used for which decisions
 ```
 
-If the project already has a terrain / Atlas evidence contract, reuse it instead of inventing parallel semantics.
+Keep direct observations separate from derived classes.
 
-For surface / substrate evidence, keep direct observations separate from derived classes and do not infer geology / fertility beyond the source.
+If a fact is relevant to historical sequence, optionally record epistemic state separately from evidence authority.
 
 ---
 
-## 7. Map hierarchy
+## 11. Map hierarchy
 
-Visual evidence should adapt to planning scale.
+Visual evidence adapts to planning scale.
 
 ### L0 POLITY_TERRITORY
 
 Recommended maps:
 
-1. **Territorial Structure Map**
-   - natural regions;
-   - political / cultural regions if approved;
-   - major nodes / anchors;
-   - frontier / sparse / strategic areas;
-   - major resource / environmental constraints.
-
-2. **Flow Network Map**
-   - major land / river / sea corridors;
-   - selected important food / ore / timber / trade / military / pilgrimage flows;
-   - gateways and chokepoints.
-
-3. **Settlement Hierarchy / Catchment Map**
-   - primary / regional / specialized centers;
-   - market / service relationships;
-   - qualitative hinterlands.
-
-4. **Settlement Scale / Built-Fabric Map**
-   - proposed node centers / search logic;
-   - approximate built-fabric area range or scale-coded extent;
-   - compact / dispersed / fragmented morphology;
-   - capacity confidence;
-   - clear visual distinction from catchment.
-
-5. **Historical Growth Map**
-   - early cores;
-   - later corridors;
-   - frontier incorporation;
-   - secondary centers;
-   - obsolete / residual systems where important.
-
-6. **Surface / Land-Cover Map** — when materially important
-   - broad exposed-rock / soil-bearing / sand-gravel / wet / barren / vegetation classes as supported;
-   - clearly separated observed / derived status;
-   - no false fertility / geology claims.
+1. Territorial Structure
+2. Flow / Effective Access Network
+3. Settlement Hierarchy / Catchment
+4. Settlement Scale / Built-Fabric
+5. Historical Growth / Major Feedback
+6. Surface / Land-Cover — when materially important
+7. Rights / political-access layer — only when it materially changes network structure
 
 ### L1 REGIONAL_SYSTEM
 
-Recommended maps:
+Recommended:
 
-- terrain / resource / constraint;
-- **surface / substrate / land-cover character when it changes candidate suitability**;
+- terrain / resource / raw constraints;
+- surface / substrate / land-cover when consequential;
 - regional settlement network;
-- flow / processing chain;
+- effective access / conditional corridors;
+- flow / stock / processing chain when relevant;
 - settlement hierarchy / catchment;
-- settlement built-fabric scale / capacity;
-- expansion / interface with neighboring regions.
+- built-fabric scale / capacity;
+- adaptation / fallback relation where it materially changes interpretation.
 
 ### L2 SETTLEMENT
 
-Recommended maps:
+Recommended:
 
-1. Terrain / Constraint / Opportunity;
-2. Surface / Ground Character when consequential;
-3. Anchor + Growth + Movement;
-4. District / Density / Expansion;
-5. approximate current / target built-fabric envelope;
-6. current / inherited fabric when Existing Evolution.
+1. Terrain / Raw Constraint / Opportunity;
+2. Surface / Ground Character;
+3. Existing / inherited fabric;
+4. Anchor + Growth + Movement + major infrastructure;
+5. District / Density / Expansion;
+6. approximate built-fabric envelope;
+7. commons / rights / effective-access layer when consequential.
 
 ### L3 DISTRICT
 
-Recommended maps:
+Recommended:
 
 - existing condition;
 - route / service / commons;
 - block / parcel / frontage;
-- ground / vegetation / wetness constraints where relevant;
-- infill / subdivision / shared space;
-- Builder Package boundaries.
+- ground constraints / adaptation relation;
+- rights / easement / shared access when consequential;
+- site-value / subdivision pressure where it helps explain morphology;
+- L4 package boundaries.
 
 ### L4 URBAN_ENSEMBLE
 
@@ -262,191 +326,94 @@ Recommended:
 - high-resolution parcel plan;
 - frontage / access / service diagram;
 - shared courtyard / negative space;
-- local surface / drainage / retaining context when relevant;
+- local terrain / drainage / adaptation context;
 - Builder Package map;
-- 1–2 street / terrain sections where elevation matters;
-- simplified 3D / massing / player-height view if useful.
+- sections / simple massing when useful.
 
 ---
 
-## 8. Map readability requirements
+## 12. Map readability requirements
 
-Every important planning map should provide enough context to interpret it:
+Every important map should provide enough context:
 
 - title;
 - planning scale / mode;
 - north / orientation;
-- coordinate reference or world coordinates;
-- bounds / extent;
+- world coordinates / bounds;
 - legend;
 - scale indication when practical;
 - source snapshot / revision;
-- major uncertainty or provisional layers;
-- clear visual separation between observed evidence and design proposal.
+- uncertainty / provisional layers;
+- clear separation between Observed / Derived / Canon / Proposal.
 
-For settlement scale maps, legend must explicitly distinguish:
+For settlement scale maps distinguish node / anchor, search envelope, built-fabric capacity and catchment.
 
-```text
-node / anchor point
-location search envelope
-built-fabric capacity envelope
-functional hinterland / catchment
-```
+For effective-access maps distinguish confirmed / conditional / unresolved access rather than drawing all lines as roads.
 
-For surface maps, legend must distinguish direct surface observation from derived land-character class.
-
-Avoid decorative medieval-style maps when they obscure planning evidence.
+Avoid decorative maps that obscure evidence.
 
 ---
 
-## 9. Built-fabric visualization
+## 13. Built-fabric visualization
 
-At L0/L1, important settlements should not all be identical dots.
+At L0/L1 important settlements should not all be identical dots.
 
 Useful methods:
 
-### Semi-transparent approximate envelope
+- approximate envelope;
+- area-scaled symbol;
+- fragmented cluster symbol;
+- side-table / tooltip range.
 
-Use when terrain and role support a rough local shape.
-
-### Area-scaled symbol
-
-Use when location is known broadly but exact shape is not. Scale the symbol to represent working built-fabric area and label the range.
-
-### Fragmented cluster symbol
-
-Use for mountain / island / terrace settlements where one continuous polygon would be misleading.
-
-### Tooltip / side-table range
-
-Use with HTML when map clutter would be high.
-
-Do not draw the full search radius as if it were built town.
-
-Do not draw catchment as urbanized area.
+Do not draw search radius as town or catchment as urbanized area.
 
 ---
 
-## 10. Surface / substrate visualization
+## 14. Surface / adaptation visualization
 
-When surface character materially changes planning, the Owner should be able to see **what kind of ground important candidates occupy**, not only how high or steep it is.
+When ground character materially changes planning, Owner should see what kind of ground candidates occupy.
 
-Useful representations:
-
-- categorical surface-family raster / vector layer;
-- exposed-rock ratio or soil-bearing ratio summary by candidate envelope;
-- vegetation / canopy / barren / wet-ground layer where supported;
-- scarce productive-ground pockets;
-- uncertainty / unsurveyed mask.
-
-Keep Proposal envelopes visually separate from natural surface layers.
-
-A surface map should not imply:
-
-- grass = fertile farmland;
-- stone = quarry / ore;
-- trees = sustainable timber resource;
-- biome = soil model.
-
-Detailed rules: `surface-substrate-landcover.md`.
-
----
-
-## 11. Layer semantics
-
-Recommended visual distinction:
+When mitigation materially changes the conclusion, maps / side notes may distinguish:
 
 ```text
-Observed / existing
-Derived / interpreted evidence
-Approved Canon constraint
-Planning proposal
-Planning assumption / provisional
-Protected / locked
-Future / optional
+raw constraint
+candidate adaptation / mitigation area
+residual constraint / protected ground
 ```
 
-Exact colors / styles are not prescribed. The important requirement is legibility and legend consistency.
+Do not make a conceptual mitigation layer look like built infrastructure.
 
 ---
 
-## 12. Growth visualization
+## 15. Growth visualization
 
 Do not default to concentric rings.
 
-Growth may be:
+Growth may be corridor / ridge / valley / terrace / shoreline / multi-core / bridgehead / parcel-infill / satellite driven.
 
-- corridor-based;
-- ridge / valley-based;
-- fragmented around buildable terraces;
-- shoreline-linear;
-- multi-core;
-- gate / bridgehead-based;
-- parcel-by-parcel infill;
-- satellite cluster absorption.
+Where important, show feedback such as:
 
-Use arrows, stage overlays, separate panels or animation / HTML when clearer.
+```text
+new crossing → traffic concentration → frontage growth
+```
 
-When built-fabric scale changes through time, show growth of extent only when supported as a planning hypothesis; do not make future maximum area look already built.
+Do not make future maximum area look already built.
 
 ---
 
-## 13. 3D and massing previews
+## 16. 3D and sections
 
-Planner 3D evidence may show:
+Planner 3D may show settlement / district extent, terrain stepping, street enclosure, courtyard proportions, skyline hierarchy and local adaptation context.
 
-- overall block mass;
-- settlement / district extent relative to terrain;
-- street enclosure;
-- terrain stepping;
-- courtyard proportions;
-- skyline relationships;
-- relative building hierarchy;
-- visual corridor / landmark relation.
+Do not prematurely lock facade / roof ornament / windows / palette / furniture / exact engineering.
 
-Planner 3D should **not** prematurely lock:
-
-- facade details;
-- exact roof ornament;
-- window families;
-- material palette;
-- furniture;
-- architectural finishing.
-
-Use primitive / low-detail massing when possible so downstream authorship remains visible.
-
----
-
-## 14. Sections
-
-Sections are useful when morphology depends on:
-
-- slope;
-- terrace;
-- retaining walls;
-- riverbank;
-- ridge / valley crossing;
-- stacked streets;
-- dense frontage on uneven terrain;
-- shallow soil / exposed rock / wet-ground interface when supported.
-
-A Planner section should emphasize:
-
-- ground profile;
-- route levels;
-- parcel / building envelopes;
-- retaining / drainage relation;
-- public / service space;
-- relative massing;
-- consequential ground-character transition where known.
+Sections are useful for slope, terrace, retaining, riverbank, crossing, stacked street, shallow ground relation or dense frontage.
 
 Detailed structural section remains Builder work.
 
 ---
 
-## 15. Planning packet markdown
-
-`settlement-plan.md` should be readable without opening every JSON file.
+## 17. Planning packet markdown
 
 Recommended order:
 
@@ -454,17 +421,17 @@ Recommended order:
 Executive Premise
 Authority / Evidence
 Planning Context
-Scale / Scope
+Actors / Rights / Bounded Knowledge (when consequential)
 Demand
-Flows / Externalities
+Flows / Stocks / Rhythms / Externalities
+Terrain + Surface
+Constraint Transformation / Effective Access (when consequential)
 Anchors
-Growth Sequence
-Terrain Strategy
-Surface / Substrate / Land-Cover Strategy (when applicable)
+Growth + Feedback
 Movement / Commons
 Settlement Hierarchy / Catchment
 Settlement Capacity / Built-Fabric Scale
-Morphology
+Morphology / Site Value / Parcel / Density
 Building Program
 Architecture Kit Requirements
 Recursive Planning Packages / Builder Packages
@@ -473,13 +440,13 @@ Critic / Uncertainty
 Map Index
 ```
 
-Use concise causal traces rather than repeating all raw data.
+Use concise causal traces rather than copying all raw data.
 
 ---
 
-## 16. Recursive package artifact
+## 18. Recursive package artifact
 
-For L0–L3, `implementation-packages.json` should normally contain Planner→Planner packages with fields such as:
+For L0–L3, `implementation-packages.json` should normally include:
 
 ```text
 upstream_fixed
@@ -487,27 +454,35 @@ downstream_to_resolve
 downstream_adaptable
 revision_triggers
 capacity_hypothesis
-surface_evidence_requirement (when consequential)
 ```
 
-Do not reuse Builder-specific `builder_adaptable` as the main child-planning schema.
+When consequential, also pass:
 
-For L4 / Builder-ready planning, switch to the Planner→Builder contract.
+```text
+actor_rights_assumptions
+epistemic_unknowns
+mitigation_assumptions
+effective_access_conditions
+metabolic_dependencies
+resilience_requirements
+feedback_dependencies
+```
+
+Do not reuse Builder-specific fields as child-planning schema.
 
 ---
 
-## 17. Version / revision
+## 19. Version / revision
 
-A plan revision should record:
+Record:
 
-- plan ID;
-- revision;
-- upstream source snapshot(s);
+- plan ID / revision;
+- upstream snapshots;
 - previous revision;
 - material changes;
 - objects added / retired / split / merged;
-- capacity changes where material;
-- surface / land-cover evidence changes where material;
+- capacity changes;
+- relevant evidence / access / Actor / mitigation changes;
 - Gate results;
 - review status.
 

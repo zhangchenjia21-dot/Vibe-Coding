@@ -4,58 +4,37 @@
 
 This reference defines how `minecraft-planner` represents settlement magnitude without confusing location uncertainty, built fabric and service hinterland.
 
-The goal is to let the Owner understand **how much land a settlement is expected to occupy**, while preserving scale discipline and uncertainty.
+v0.4 adds a critical distinction:
+
+> **Natural capacity is not effective capacity.**
+
+Human adaptation, external supply, access rights, stock / buffer needs and resilience can materially change the scale a settlement can support.
 
 ---
 
 ## 1. Three different envelopes
 
-For every important settlement / settlement candidate, distinguish:
+For every important settlement / candidate distinguish:
 
 ### A. Location Search Envelope
 
-Question:
+Where should the next scale look?
 
-> Where should the next planning scale look for the settlement or anchor?
-
-It may be:
-
-- a point + search radius / halfwidth;
-- a broad terrain pocket;
-- a shoreline segment;
-- a valley / terrace / pass search area.
-
-It represents **location uncertainty**.
-
-It is not the settlement boundary.
+Represents location uncertainty, not settlement boundary.
 
 ### B. Built-Fabric Capacity Envelope
 
-Question:
+How much actual settlement fabric is plausibly needed at the current / target maturity?
 
-> At the current / target maturity, how much actual built settlement fabric is plausibly needed?
+May include buildings, streets / lanes, small courts / work yards, embedded civic / market space and necessary internal open space.
 
-It may include:
-
-- buildings;
-- streets / lanes;
-- small courtyards / work yards;
-- embedded civic / market space;
-- necessary internal open space.
-
-It should normally exclude the full agricultural / extraction / service hinterland.
-
-This is the Owner-facing scale estimate that answers “how big is the town / node expected to be?”
+Normally excludes the full agricultural / extraction / service hinterland.
 
 ### C. Functional Hinterland / Catchment
 
-Question:
+What population, production area, route system or institution does the node serve?
 
-> What population, production area, route system or institution does this node serve?
-
-This may be many times larger than built fabric.
-
-It is a **relationship field**, not urbanized land.
+This is a relationship field, not urbanized land.
 
 Core invariant:
 
@@ -67,7 +46,7 @@ Core invariant:
 
 Do not assign area because “regional center sounds large”.
 
-Estimate capacity from the strongest available drivers:
+A stronger v0.4 reasoning chain is:
 
 ```text
 resident / household pressure
@@ -77,44 +56,73 @@ resident / household pressure
 + institutional role
 + terrain geometry / resistance
 + surface / substrate / land-cover character
-+ transport accessibility
++ ordinary affordable adaptation
++ effective accessibility
++ external supply support
++ stock / buffer requirements
++ resilience requirements
 + density morphology
 + required commons / work yards
-+ productive land that must remain outside built fabric
++ productive ground that should remain outside built fabric
 + maturity / growth stage
-→ Built-Fabric Capacity Envelope
+→ Effective Built-Fabric Capacity Envelope
 ```
 
-Different roles may produce very different scale profiles.
+Do not treat each term as a numeric coefficient. Use the strongest evidence and causal direction.
+
+---
+
+## 3. Natural Capacity vs Effective Capacity
+
+### Natural Capacity
+
+What the site supports before ordinary human adaptation is considered.
+
+Examples:
+
+- visible surface water access;
+- low-slope ground;
+- soil-bearing surface;
+- natural crossing;
+- protected landing.
+
+### Affordable Adaptation
+
+Period-appropriate, scale-proportionate measures may improve usable capacity:
+
+- well / cistern;
+- short bridge / ferry;
+- retaining / steps / switchback;
+- drainage;
+- modest terrace / cut / fill;
+- road stabilization;
+- local storage / transfer infrastructure.
+
+### External Supply
+
+A settlement may depend on external food, fuel, materials or water support if the network / Actor relations make that dependence plausible.
+
+A specialized mining / port / political settlement need not be locally self-sufficient.
+
+### Residual Constraint
+
+After adaptation and supply are considered, identify what still limits scale.
 
 Example:
 
 ```text
-political center
-resident scale = low–medium
-political significance = very high
-event peak = high
-freight throughput = low
-built fabric = small–medium
+bare-rock plateau + no obvious surface water
+→ ordinary well / cistern may support small residence
+→ external food supply handles weak local agriculture
+→ basic settlement remains plausible
+→ large agricultural expansion and major population growth remain constrained
 ```
-
-versus:
-
-```text
-freight conversion center
-resident scale = medium
-political significance = medium
-freight throughput = very high
-built fabric = medium but compact
-```
-
-Do not collapse these into one `city_size` adjective.
 
 ---
 
-## 3. Recommended capacity fields
+## 4. Recommended capacity fields
 
-At L0 / L1, important settlement nodes should attempt to provide:
+At L0 / L1, important nodes should attempt to provide:
 
 ```text
 resident_scale
@@ -127,6 +135,11 @@ political_significance
 symbolic_significance
 maturity_state
 surface_character_summary (when consequential)
+adaptation_assumptions (when consequential)
+external_supply_dependency (when consequential)
+stock_buffer_need (when consequential)
+resilience_dependency (when consequential)
+effective_access_summary (when consequential)
 confidence
 main_drivers
 sensitivity / unresolved evidence
@@ -145,26 +158,13 @@ Use only relevant fields.
 
 ---
 
-## 4. Area range, not fake precision
+## 5. Area range, not fake precision
 
-Prefer ranges such as:
+Prefer ranges such as `8,000–15,000 blocks²` when evidence supports order of magnitude.
 
-```text
-8,000–15,000 blocks²
-20,000–35,000 blocks²
-```
+Do not claim fake exact values unless lower-scale geometry supports them.
 
-when evidence reasonably supports that order of magnitude.
-
-Do not claim:
-
-```text
-17,428 blocks²
-```
-
-unless geometry or a lower-scale plan actually supports that precision.
-
-When evidence is weak, use broad class + range:
+If evidence is weak:
 
 ```text
 class: SMALL_TOWN
@@ -178,209 +178,197 @@ If even order of magnitude cannot be supported:
 built_fabric_capacity: UNRESOLVED
 ```
 
-and state exactly what evidence the next scale must obtain.
+and state what evidence / decision is missing.
 
 ---
 
-## 5. Capacity classes are descriptive, not universal law
+## 6. Capacity classes are descriptive, not universal law
 
-The planner may use project-local classes such as:
+Project-local classes such as HAMLET / VILLAGE / TOWN / CITY may be useful, but never assume universal Minecraft area thresholds.
 
-```text
-HAMLET
-VILLAGE
-LARGE_VILLAGE
-SMALL_TOWN
-TOWN
-LARGE_TOWN
-CITY
-MAJOR_CITY
-```
+A mountain settlement, port, dense trading town and agricultural village can occupy different areas at similar resident scale.
 
-but must never assume fixed universal Minecraft area thresholds.
-
-A mountain settlement, port, dense trading town and low-density agricultural town can occupy different areas at similar resident scale.
-
-Therefore area range + morphology are more important than the class name.
+Area range + morphology matter more than class name.
 
 ---
 
-## 6. Morphology changes land consumption
-
-Built-fabric capacity depends on settlement form.
-
-Examples:
+## 7. Morphology changes land consumption
 
 ### Compact trade / gateway town
 
-- continuous frontage;
-- narrower parcels;
-- more shared walls / courts;
-- higher verticality;
-- smaller built area per resident or unit of trade.
+continuous frontage / narrower parcels / shared courts / higher verticality / smaller footprint per unit of trade.
 
 ### Agricultural village
 
-- detached compounds;
-- barns / animal yards;
-- wider service gaps;
-- lower verticality;
-- larger settlement footprint per household, while productive fields remain outside built fabric.
+detached compounds / barns / animal yards / wider gaps / lower verticality; productive fields remain outside built fabric.
 
 ### Mountain settlement
 
-- fragmented terrace clusters;
-- non-contiguous built fabric;
-- vertical stacking;
-- large geographic spread may coexist with small total built area.
+fragmented terrace clusters / vertical stacking / wide geographic spread with small total built area.
 
-Do not estimate capacity using one density constant for all cultures and terrains.
+Do not estimate all settlements with one density constant.
 
 ---
 
-## 7. Current capacity vs future capacity
+## 8. Current capacity vs future capacity
 
-When planning a growth sequence, distinguish:
+Distinguish:
 
-- `current / target built fabric`；
-- `later growth potential`；
-- `reserved / constrained expansion`。
+- current / target built fabric;
+- later growth potential;
+- reserved / constrained expansion.
 
-A node may have:
-
-```text
-current built fabric: 8k–12k
-mature plausible range: 15k–25k
-```
-
-without drawing the entire future extent as if already built.
-
-If current fabric is unobserved, do not call a capacity estimate “current existing area”. Use:
-
-```text
-planning capacity hypothesis
-```
-
-or
-
-```text
-target maturity envelope
-```
+If current fabric is unobserved, call the estimate `planning capacity hypothesis` or `target maturity envelope`, not existing area.
 
 ---
 
-## 8. Capacity and productive land
+## 9. Capacity and productive land
 
-A settlement-scale estimate must not silently consume land needed for:
+Built-fabric estimate must not silently consume land needed for:
 
 - food production;
 - pasture;
-- woodland / fuel renewal;
 - flood storage;
 - quarry / mine safety;
 - defensive clear ground;
 - sacred / burial ground;
 - commons;
-- water supply protection;
-- scarce soil-bearing / vegetated ground where such scarcity is supported.
+- water protection;
+- scarce soil-bearing / vegetated ground where supported.
 
-Especially at L0/L1, built-fabric growth should be balanced against the same economic / ecological system that supports the settlement.
+Do not model resource depletion / regeneration by default. The question here is current spatial competition and support, not long-horizon resource simulation.
 
 ---
 
-## 9. Capacity and uncertainty
+## 10. Capacity and metabolism
 
-Confidence should reflect evidence, not model confidence rhetoric.
+A settlement may need land not because more people live there, but because periodic flows require buffers.
+
+Examples:
+
+- seasonal grain storage;
+- caravan waiting / animal holding;
+- water storage;
+- event / market peak space;
+- transfer / reserve yards.
+
+Therefore capacity should consider peak / storage logic separately from resident scale.
+
+---
+
+## 11. Capacity and resilience
+
+A highly efficient settlement may still be fragile.
+
+Where vulnerability matters, capacity may include bounded redundancy such as:
+
+- secondary water point;
+- distributed storage;
+- fallback access;
+- multiple local service points.
+
+Do not automatically duplicate facilities. The resilience space must answer a credible failure mode.
+
+---
+
+## 12. Capacity and effective accessibility
+
+Catchment and scale depend on actual usable access, not only distance.
+
+A physically near hinterland may contribute little if:
+
+- passage rights are absent;
+- route is seasonally unreliable;
+- freight mode cannot use it;
+- political / security barriers are high.
+
+Conversely, a farther settlement may have strong capacity because a reliable, permitted transport corridor connects it.
+
+---
+
+## 13. Capacity and uncertainty
 
 Useful labels:
 
-- `HIGH`: lower-scale geometry / current fabric / strong throughput evidence supports range;
-- `MEDIUM`: multiple independent drivers support order of magnitude, but exact fabric unresolved;
-- `LOW`: mostly Canon / role / coarse terrain reasoning;
-- `UNRESOLVED`: evidence cannot support a useful area range.
+- `HIGH`
+- `MEDIUM`
+- `LOW`
+- `UNRESOLVED`
 
-For LOW / UNRESOLVED, identify sensitivity, e.g.:
+For LOW / UNRESOLVED, identify sensitivity.
+
+Bad sensitivity:
+
+> no surface spring observed → settlement impossible
+
+Better:
+
+> no surface source observed → test well / cistern / nearby supply; if ordinary mitigation closes daily demand, residence remains plausible; if not, reduce scale / seasonality.
+
+Other examples:
 
 ```text
-if water supply fails → node remains seasonal / much smaller
-if freight volume high → gateway built fabric expands
-if existing settlement already occupies site → evolution path must be recalculated
-if surface is mostly exposed rock with little soil-bearing ground → local food-support assumption must be reduced / external supply increased
+if freight volume high → gateway area expands
+if current fabric occupies the site → evolution path recalculates
+if access rights fail → catchment / route shifts
+if seasonal peak is larger → shared yard / storage increases
 ```
 
 ---
 
-## 10. Map representation
+## 14. Map representation
 
-At L0 / L1, do not draw all settlement nodes as identical dots.
+At L0 / L1, do not draw all nodes as identical dots.
 
-Recommended visual grammar:
+Useful grammar:
 
-- central symbol / point = location hypothesis / anchor;
-- dashed search envelope = location uncertainty;
-- semi-transparent built-fabric envelope / scaled disk / irregular blob = estimated settlement magnitude;
-- separate faint catchment / arrows = functional hinterland;
-- confidence / provisional styling = uncertainty.
+- central point = location hypothesis;
+- dashed envelope = search uncertainty;
+- semi-transparent / scale-coded built-fabric magnitude;
+- separate catchment / arrows;
+- confidence styling;
+- adaptation / conditional access annotation only when it materially changes interpretation.
 
-The legend must explicitly state that the built-fabric envelope is **approximate planning scale, not exact construction boundary**.
-
-If map scale makes literal polygons misleading, use scale-coded symbols but show the area range in label / tooltip / side table.
+Legend must state built-fabric envelope is approximate planning scale, not exact construction boundary.
 
 ---
 
-## 11. Capacity Plausibility Test
+## 15. Capacity Plausibility Test
 
-Before Morphology / Handoff Gate, ask:
+Ask:
 
-1. Does each important settlement node have more than a point?
-2. Is its expected built scale visible to the Owner?
-3. Does the area range follow from demand / throughput / terrain / maturity?
-4. Are political significance and physical size kept separate?
-5. Are freight importance and resident population kept separate?
+1. Does each important node have more than a point?
+2. Is expected built scale visible to Owner?
+3. Does area follow from demand / throughput / terrain / maturity?
+4. Are political significance and physical size separate?
+5. Are freight importance and resident scale separate?
 6. Is search uncertainty separated from settlement size?
 7. Is catchment separated from built land?
-8. Is the range too precise for the evidence?
-9. Would a major change in transport / water / population pressure change the capacity estimate?
-10. Does the next planner know which capacity assumptions need refinement?
-11. Did low slope or large flat area get silently treated as high carrying capacity without checking relevant surface / substrate / land-cover character?
+8. Is the range too precise?
+9. Did low slope become a false carrying-capacity proxy?
+10. Were proportionate ordinary adaptations considered before shrinking / rejecting capacity?
+11. Is external supply allowed where network logic supports it, without assuming infinite imports?
+12. Do stock / peak / resilience needs change land demand where relevant?
+13. Does effective accessibility alter catchment / scale where relevant?
+14. Does the next Planner know which assumptions must be refined?
 
-A plan that locates important towns but cannot communicate approximate settlement scale is incomplete at L0/L1.
+A plan that locates towns but cannot communicate approximate effective settlement scale is incomplete at L0/L1.
 
 ---
 
-## 12. Surface-conditioned Capacity｜v0.3
+## 16. Surface-conditioned Capacity
 
-Settlement capacity must distinguish **geometric opportunity** from **land-character support**.
-
-A flat plateau can be:
-
-- deep soil-bearing and vegetated;
-- mostly exposed rock;
-- loose sand / gravel;
-- wet / soft ground;
-- densely forested;
-- snow / barren surface.
-
-These conditions can have similar slope / relief but different settlement implications.
+Surface / substrate / cover remain first-class inputs.
 
 Important rule:
 
 > **Low-slope area is not a proxy for settlement carrying capacity.**
 
-When surface character is consequential, capacity reasoning should explicitly consider:
+But equally:
 
-```text
-surface / land-cover evidence
-→ effect on local food-support assumptions
-→ effect on water / drainage questions
-→ effect on clearing / foundation / maintenance cost
-→ effect on productive-ground preservation
-→ effect on compact / dispersed / fragmented morphology
-→ capacity sensitivity / confidence
-```
+> **Poor natural surface conditions are not an automatic rejection if ordinary adaptation and external supply plausibly transform the constraint.**
 
-Do not apply a universal numeric penalty. A bare-rock plateau may still support substantial construction, but it may require stronger external food/water support and should not be treated like fertile lowland merely because it is flat. Conversely, a scarce soil-bearing terrace may deserve protection from building even if it is geometrically ideal.
+Do not apply universal bare-rock / wetland / forest penalties. Explain direction, adaptation and residual uncertainty.
 
-If surface evidence is absent, capacity should carry an explicit unresolved requirement rather than silently assume neutral land character.
-
-Detailed rules: `surface-substrate-landcover.md`.
+Detailed surface rules: `surface-substrate-landcover.md`.
+Detailed human adaptation rules: `human-geography-kernels.md`.

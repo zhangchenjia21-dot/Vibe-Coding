@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This reference defines how to test `minecraft-planner` without leaking answers into the task prompt.
+This reference defines how to test `minecraft-planner` without leaking answers into the benchmark prompt.
 
 The goal is to distinguish:
 
@@ -24,18 +24,18 @@ A benchmark prompt should normally provide only:
 - allowed factual / Canon sources;
 - prohibited answer-leaking sources;
 - hard safety boundaries;
-- required evidence / artifact class;
+- required artifact class;
 - output location.
 
 Do not restate:
 
 - Demand model;
-- Anchor rules;
-- Growth algorithm;
+- Actor / knowledge rules;
+- mitigation algorithm;
+- growth / feedback rules;
 - Anti-zoning checklist;
-- Capacity tests;
-- Surface / substrate checklist;
-- Recursive handoff schema;
+- capacity tests;
+- recursive handoff schema;
 - Critic questions.
 
 Those must come from the Skill itself.
@@ -48,14 +48,14 @@ Model self-report is evidence, not verdict.
 
 Independent review should inspect:
 
-- actual source register;
+- source register;
 - planning logic;
 - machine-readable objects;
 - maps;
 - downstream packages;
 - Critic;
 - factual consistency with allowed evidence;
-- Owner visual / worldbuilding experience.
+- Owner spatial / worldbuilding experience.
 
 A clean JSON package does not prove good planning.
 
@@ -63,7 +63,7 @@ A clean JSON package does not prove good planning.
 
 ## 3. Finding classes
 
-Use the same general classes as Builder regression where useful:
+Use:
 
 - `SKILL_GAP`
 - `MODEL_EXECUTION_FAILURE`
@@ -73,388 +73,421 @@ Use the same general classes as Builder regression where useful:
 
 Do not modify Skill merely because one weaker model executes it poorly.
 
-Repeated failures across capable models or foundational contract failures are stronger Skill evidence.
+Repeated failure across capable models or a missing foundational contract is stronger evidence.
 
 ---
 
-## 4. Core planning audit dimensions
+# 4. Core planning audit dimensions
 
-### Authority / Evidence discipline
+## Authority / Evidence discipline
 
 Check:
 
 - Observed / Derived / Canon / Assumption / Proposal are distinguished;
-- uncertainty is preserved;
-- coarse terrain is not treated as exact site geometry;
-- surface observations are not overclaimed as fertility / quarry / ore / hydrology;
-- current-world unknowns are not silently invented;
+- uncertainty and freshness are preserved;
+- coarse terrain / surface is not treated as exact geometry;
+- current-world unknowns are not invented;
 - Planning Proposal is not promoted to Canon.
 
-### Planning Context correctness
+## Planning Context correctness
 
 Check:
 
 - historical maturity and current fabric observation are separate;
-- `EXISTING_FABRIC_UNVERIFIED` is not mislabeled as empty Greenfield;
+- unknown existing fabric is not Greenfield;
 - Existing Evolution respects inherited fabric when observed;
-- unknown current fabric generates downstream investigation rather than demolition assumptions.
+- unknown current fabric generates investigation, not demolition assumptions.
 
-### Premise quality
+## Agency / Rights
+
+Check:
+
+- important spatial changes have plausible actors;
+- actor interests / authority / rights matter where they should;
+- physical possibility is not automatically social permission;
+- public / common / private access is not silently flattened;
+- conflict / veto / cooperation is considered when materially consequential.
+
+Do not require Actor tables for trivial decisions.
+
+## Bounded Knowledge
+
+Check:
+
+- Planner knowledge is not automatically historical actor knowledge;
+- discovery / information spread is modeled when it changes growth;
+- early actors do not target future resources / borders / markets they could not know.
+
+## Premise quality
 
 Check:
 
 - why people / institutions persist there;
-- economy / society / terrain actually change planning;
-- premise is not just “the task asked for a town”.
+- economy / society / terrain / rights actually change planning;
+- actors / capabilities exist to make important changes;
+- premise is not just “task asked for a town”.
 
-### Demand quality
+## Human Adaptation / Constraint Transformation
 
 Check:
 
-- needs come from real social / institutional / productive pressures;
+- environmental conditions are not treated as static suitability scores;
+- proportionate period-appropriate mitigation is considered before major rejection / relocation;
+- small ordinary works are not treated as extraordinary blockers;
+- disproportionate megaprojects are not invented to rescue preferred sites;
+- residual constraints remain visible after mitigation.
+
+## Demand quality
+
+Check:
+
+- needs come from social / institutional / productive pressures;
 - Demand ≠ one building each;
 - magnitude / frequency / throughput matter;
-- embedded / shared / later dedicated responses are considered.
+- embedded / shared / later-dedicated responses are considered.
 
-### Flow / Externality quality
+## Metabolism quality
 
 Check:
 
-- major people / goods / authority / waste / ritual flows are identified where relevant;
-- roads / nodes follow flows;
-- externalities explain adjacency / separation;
-- functional zoning is not used as a shortcut.
+- important flows include stock / buffer / replenishment rhythm when spatially consequential;
+- seasonal / periodic peaks affect yard / storage / access where relevant;
+- average demand is not used to erase event / harvest / caravan peaks;
+- no unnecessary numerical inventory simulation is invented.
 
-### Anchor quality
+## Flow / Externality quality
+
+Check:
+
+- people / goods / authority / waste / ritual flows identified where relevant;
+- routes follow flows and effective accessibility;
+- externalities explain adjacency / separation;
+- modern zoning is not used as shortcut.
+
+## Effective Accessibility
+
+Check:
+
+- terrain resistance is not the only access factor;
+- tenure / legal rights, permission, security, seasonality and transport mode are considered when consequential;
+- a geometric line is not falsely certified as usable route;
+- catchments do not rely only on Euclidean distance.
+
+## Anchor quality
 
 Check:
 
 - Anchor has causal role;
 - timing matters;
-- surrounding morphology depends on it;
+- morphology depends on it;
+- human-created infrastructure may become later Anchor;
 - Anchor Removal Test produces consequences.
 
-### Growth / Path Dependence
+## Growth / Path Dependence
 
 Check:
 
 - growth is not decorative chronology;
-- each step has driver → response → new constraint → next pressure;
-- early stages stand alone;
+- important stages have actor / knowledge / choice when needed;
+- each stage stands alone without future teleology;
 - later form inherits earlier decisions;
-- contraction / decline is possible where relevant.
+- inherited suboptimal form is allowed when historically plausible.
 
-### Terrain necessity
+## Feedback
 
 Check:
 
-- terrain actually changes route / node / density / capacity;
-- a flat-map translation would require meaningful redesign;
-- major routes are not falsely certified from coarse samples.
+- important infrastructure / access / density changes later conditions;
+- reinforcing / balancing loops are recognized where they materially change growth;
+- feedback is not treated as deterministic destiny.
 
-### Surface / Substrate / Land-Cover necessity
+## Terrain necessity
 
-When land character is consequential, check:
+Check terrain actually changes route / node / density / capacity; flat-map translation should require redesign when terrain-driven.
 
-- surface / substrate / vegetation evidence is actually read or explicitly marked unresolved;
-- low slope is not silently equated with good living / farming / building land;
-- exposed rock changes carrying-capacity / livelihood / morphology reasoning where appropriate;
-- scarce soil-bearing or vegetated pockets can be protected from built-fabric expansion;
-- forest / wet / sand / gravel / barren differences are not ignored when materially relevant;
-- grass ≠ fertility, stone ≠ quarry / ore, forest ≠ timber yield;
-- Owner can see the land-character distinction in map / summary when it matters.
+## Surface Character necessity
 
-### Settlement hierarchy / catchment
+Check:
+
+- low slope is not high carrying capacity by default;
+- exposed rock does not become quarry / ore automatically;
+- soil / vegetation differences change planning where they should;
+- surface is a raw condition, not automatic blocker;
+- ordinary adaptation is considered before rejecting difficult ground.
+
+## Settlement hierarchy / catchment
 
 Check:
 
 - node rank is not merely population ordering;
 - political / economic / symbolic / network roles can diverge;
-- catchments reflect transport / terrain / competition;
-- nodes are not mechanically scattered to fill the map.
+- catchments reflect effective transport / rights / competition / seasonality;
+- nodes are not scattered merely to fill map.
 
-### Settlement capacity / built-fabric scale
+## Settlement capacity / built-fabric scale
 
 Check:
 
-- important nodes communicate approximate built scale, not just points;
+- important nodes communicate approximate scale;
 - `search envelope ≠ built fabric ≠ catchment`;
-- area ranges have causal drivers;
-- political significance is separate from physical size;
-- freight importance is separate from resident scale;
+- area ranges have drivers;
+- political significance separated from physical size;
+- freight importance separated from resident scale;
 - confidence matches evidence;
-- no fake exact area is claimed from weak evidence;
-- map visually communicates relative settlement magnitude;
-- capacity does not use low-slope area as a stand-in for carrying capacity when surface character matters.
+- no fake exact area;
+- natural limitation is not automatically effective-capacity collapse;
+- affordable adaptation and external supply are considered where justified;
+- stock / peak / resilience needs change land demand where relevant.
 
-### Morphology / parcels / density
+## Resilience
 
-At scales where applicable, check:
+Check:
+
+- network does not optimize itself into unjustified single points of failure;
+- fallback route / water / storage / local service exists when failure consequence justifies it;
+- redundancy has a real vulnerability reason;
+- every facility is not duplicated mechanically.
+
+## Morphology / Site Value / Parcels / Density
+
+At applicable scales check:
 
 - district relations are not modern zoning;
+- relative site value explains competition where relevant;
+- access / prestige / throughput / externalities / rights affect frontage;
+- household formation / inheritance / migration can explain subdivision / infill where relevant;
 - parcels have formation logic;
-- frontage / rear access / shared courts follow pressure and history;
 - density is morphological, not just more objects.
 
-### Architecture Kit requirements
+## Architecture Kit requirements
 
 Check:
 
-- Planner asks for needed vocabulary / typologies;
-- terrain / surface adaptation requirements may be stated without choosing exact palette;
-- it does not design finished component geometry;
+- Planner asks for vocabulary / typologies / adaptation capabilities;
+- exact engineering / building geometry remains Builder work;
 - Kit does not become prefab cloning.
 
-### Scale Discipline
+## Scale Discipline
 
 Check:
 
-- L0 does not solve street corners;
-- L1 does not solve parcel widths;
-- L2 does not solve façade details;
-- L3/L4 may progressively become concrete;
+- L0 does not solve streets;
+- L1 does not solve parcels;
+- L2 does not solve facade / exact engineering;
+- L3/L4 progressively become concrete;
 - lower-scale unknowns remain intentionally unresolved.
 
-### Recursive Planner→Planner handoff
+## Recursive Planner→Planner handoff
 
-For L0–L3, check:
+For L0–L3 check:
 
-- recipient is the next Planner scale, not Builder by default;
+- recipient is next Planner scale;
 - `UPSTREAM_FIXED` contains only meaningful parent constraints;
 - `DOWNSTREAM_TO_RESOLVE` contains real lower-scale questions;
-- `DOWNSTREAM_ADAPTABLE` preserves child planning freedom;
+- `DOWNSTREAM_ADAPTABLE` preserves child freedom;
 - revision triggers exist;
-- capacity hypothesis is handed down separately from search / catchment;
-- consequential surface / substrate uncertainty is handed down when unresolved;
-- new evidence has an upstream issue protocol;
-- Builder-specific fields do not dominate Planner→Planner packages.
+- capacity / search / catchment remain separate;
+- Actor rights / epistemic / mitigation / access / metabolism dependencies are handed down when consequential;
+- parent rollback happens only when bounded child adaptation is insufficient;
+- Builder-specific fields do not dominate.
 
-### Planner→Builder handoff
+## Planner→Builder handoff
 
-At Builder-ready scales, check:
+At Builder-ready scales check:
 
-- fixed planning relations are clear;
-- Builder retains architectural authorship;
-- package boundaries / shared interfaces are implementable;
-- world-write is not implicitly authorized.
+- planning-fixed relations clear;
+- Builder retains architecture / exact engineering authorship;
+- package boundaries / shared interfaces implementable;
+- world-write not implicitly authorized.
 
-### Visual planning evidence
+## Visual planning evidence
 
 Check:
 
 - maps use real coordinates / terrain context;
-- Observed / Proposal / Assumption are legible;
+- Observed / Proposal / Assumption legible;
 - scale / north / legend exist;
-- node sizes / envelopes communicate morphology and capacity;
-- search uncertainty is not visually confused with built extent;
-- catchment is not shown as urbanized land;
-- consequential surface / land-cover differences are visually understandable;
-- visual output helps Owner understand the plan without reading every JSON field.
+- node sizes / envelopes communicate capacity;
+- search uncertainty not confused with built extent;
+- catchment not urbanized land;
+- conditional / unresolved access is not drawn like certified road;
+- surface / rights / adaptation layers appear when they materially change Owner understanding.
 
 ---
 
-## 5. Strong Critic tests
+# 5. Strong Critic tests
 
-### Counterfactual Test
+## Counterfactual Test
 
-Change a major geographic / institutional condition.
+Change major geographic / institutional / Actor / access condition. Would plan materially change?
 
-Question:
+## Anchor Removal Test
 
-> Would the plan materially change?
+Remove one Anchor. Which flows / density / capacity / routes lose reason?
 
-If not, causal reasoning may be decorative.
+## Historical Validity Test
 
-### Anchor Removal Test
+If later stages never occur, is each stage still viable?
 
-Remove one Anchor conceptually.
+## Anti-Zoning Test
 
-Question:
+Hide land-use labels. Does structure still make sense from flow / rights / adjacency / externality / history?
 
-> Which flows / density / capacity / routes lose their reason?
+## Terrain Necessity Test
 
-### Historical Validity Test
+Move plan to generic flat terrain. How much must change?
 
-For each stage:
+## Surface Character Necessity Test
 
-> If later stages never occur, is this stage still viable?
+Hold geometry constant, change rock / soil / vegetation / wetness. Does relevant planning change?
 
-### Anti-Zoning Test
+## Agency Test
 
-Hide land-use labels.
+Who causes / permits the important change, who bears burden, who can resist?
 
-Question:
+## Knowledge Test
 
-> Does spatial structure still make sense from adjacency / flow / externality / history?
+Is a historical actor using Planner-only information?
 
-### Terrain Necessity Test
+## Mitigation Test
 
-Move the plan to generic flat terrain.
+Before a raw constraint blocks / relocates / radically shrinks the plan, were proportionate period-appropriate adaptations considered? Was disproportionate engineering avoided?
 
-Question:
+## Metabolism & Resilience Test
 
-> How much must change?
+Do important flows have timing / buffers? Is there an unjustified single point of failure?
 
-### Surface Character Necessity Test
+## Feedback Test
 
-Hold elevation / slope / relief roughly constant but change the ground from soil-bearing / vegetated to exposed rock, wet ground, sand-gravel or other materially different surface.
+Do major choices modify next-stage conditions?
 
-Question:
+## Capacity Plausibility Test
 
-> Would capacity, livelihood, open-space, route, morphology or Kit requirements change?
+Where is search area? Built scale? Catchment? Why that size? What adaptation / supply assumptions matter? How uncertain?
 
-If not in a task where those conditions matter, the terrain model is incomplete.
+## Parcel Causality Test
 
-### Capacity Plausibility Test
+Do rights, competition, households, inheritance, migration or frontage pressure actually explain parcel form?
 
-For each important settlement:
+## Recursive Handoff Test
 
-> Where is the search area? What is the built-fabric scale? What is the catchment? Why that size? How uncertain is it? Does surface character materially alter that estimate?
+Can child Planner continue intelligently without redoing parent or blindly obeying frozen masterplan?
 
-### Recursive Handoff Test
+## Kit Clone Test
 
-Question:
-
-> Can the child Planner continue intelligently without either redoing the parent plan or blindly obeying a frozen masterplan?
-
-### Kit Clone Test
-
-Question:
-
-> Is Kit a language or a building copy machine?
+Is Kit a language or copy machine?
 
 ---
 
-## 6. Suggested regression ladder
-
-Use heterogeneous scales so the Skill does not overfit one project.
-
-Suggested ladder:
+# 6. Suggested regression ladder
 
 ### P01 POLITY_TERRITORY
 
-Tests:
-
-- whole polity structure;
-- national / alliance settlement hierarchy;
-- long-distance flows;
-- capacity scale;
-- L0→L1 handoff.
+Tests whole polity structure, hierarchy, long-distance flows, capacity scale, L0→L1.
 
 ### P02 REGIONAL_SYSTEM
 
-Tests:
-
-- regional settlement network;
-- corridor / resource chain;
-- local evidence refinement;
-- capacity refinement;
-- **surface / substrate / land-cover differentiation**;
-- L1→L2 handoff.
+Tests regional network, local evidence, surface, effective access, capacity refinement, L1→L2.
 
 ### P03 SETTLEMENT
 
-Tests:
+Tests complete settlement morphology, anchors, movement, adaptation, built-fabric envelope, L2→L3.
 
-- complete town / village morphology;
-- anchors / movement / districts;
-- built-fabric envelope;
-- ground-character response;
-- L2→L3 handoff.
+### P03M MITIGATION / HUMAN-GEOGRAPHY MICRO-REGRESSION
+
+Useful after foundational kernel changes.
+
+Use a real or synthetic site with several ordinary constraints such as:
+
+- weak surface-water evidence;
+- shallow void;
+- slope / terrace;
+- bare rock / scarce soil;
+- external food dependence;
+- alternate access.
+
+Do **not** tell model how to solve them. Test whether it distinguishes:
+
+- ordinary mitigable constraint;
+- residual operating / capacity constraint;
+- effective-access issue;
+- genuine upstream blocker.
+
+Also inspect Actor / knowledge / stock / resilience reasoning where relevant.
 
 ### P04 DISTRICT / EXISTING_EVOLUTION
 
-Tests:
-
-- inherited roads / parcels;
-- infill / subdivision;
-- mixed-use logic;
-- L3→L4 handoff.
+Tests inherited routes / parcels, rights / easements, site-value competition, household / inheritance logic, infill, L3→L4.
 
 ### P05 URBAN_ENSEMBLE
 
-Tests:
+Tests multiple-building relationships, frontage / service / courtyard, final Planner→Builder handoff.
 
-- multiple-building relationships;
-- frontage / service / courtyard;
-- final Planner→Builder handoff.
-
-Additional synthetic cases should cover river ford, mining mountains, monastic agriculture, port / floodplain, exposed-rock vs soil-bearing plateau, wetland / dry-ground contrast, and existing town evolution.
+Additional cases can cover ford / bridge, mountain service center, monastic agriculture, port / floodplain and existing-town evolution.
 
 ---
 
-## 7. No pass-seeking
+# 7. No pass-seeking
 
 During regression:
 
-- do not give mid-test corrective hints;
-- do not reveal independent review criteria;
-- do not tell the model what previous tests failed;
-- do not make the prompt a copy of the Skill;
-- do not patch obvious omissions during execution.
+- no mid-test corrective hints;
+- no independent-review criteria leakage;
+- no explanation of previous failures;
+- no prompt copy of Skill;
+- no patching omissions during execution.
 
 Omissions are evidence.
 
 ---
 
-## 8. Owner review role
-
-Independent technical review and Owner experience are complementary.
+# 8. Owner review role
 
 Owner should especially judge:
 
-- whether the polity / settlement feels believable;
-- whether scale is understandable from maps;
-- whether important ground-character differences are visible and affect planning plausibly;
-- whether major nodes feel too large / too small / too evenly distributed;
-- whether the planning reads as historical growth rather than masterplanning;
-- whether maps make spatial consequences intuitive;
-- whether the proposed world feels worth building.
-
-Do not reduce Owner review to coordinate correctness.
+- whether polity / settlement feels believable;
+- whether scale is understandable;
+- whether human choices feel plausible rather than environmentally deterministic;
+- whether modest constraints are treated with common-sense adaptation;
+- whether history feels like bounded people acting, not omniscient masterplanning;
+- whether routes / commons / parcels feel socially possible;
+- whether world feels worth building.
 
 ---
 
-## 9. Skill update policy
+# 9. Skill update policy
 
 Do not update Skill after every minor failure.
 
 Use stronger evidence when:
 
-- a foundational contract is missing;
-- the same failure recurs across multiple tests;
-- a capable model cannot infer a required behavior because the Skill is ambiguous;
-- a missing distinction causes unsafe / misleading downstream work.
+- foundational contract missing;
+- same failure recurs;
+- capable model cannot infer required behavior because Skill ambiguous;
+- missing distinction causes misleading downstream work.
 
-Task-specific planning disagreements should normally remain review findings, not universal rules.
-
----
-
-## 10. v0.2 regression result
-
-v0.2 added three foundational contracts:
-
-1. **Existing-but-unobserved context**；
-2. **Settlement Capacity / Built-Fabric Scale**；
-3. **Recursive Planner→Planner Handoff**。
-
-P01R and P02 provided evidence that these contracts can operate across L0→L1.
+Task-specific planning disagreements normally remain review findings.
 
 ---
 
-## 11. v0.3 regression focus
+# 10. v0.4 regression focus
 
-v0.3 adds a fourth foundational environmental contract:
+v0.4 adds four foundational kernels:
 
-> **Surface / Substrate / Land-Cover Character**
+1. **Agency & Bounded Knowledge**
+2. **Human Adaptation & Effective Accessibility**
+3. **Metabolism & Resilience**
+4. **Competition, Demography & Feedback**
 
-The key question is not whether the model can color a terrain map by block type. It is whether land character changes planning causally without overclaiming unsupported geology or ecology.
+The primary regression question is not whether every plan contains every kernel.
 
-A strong v0.3 regression should verify that:
+It is:
 
-- geometry-identical but surface-different candidates can produce different planning consequences;
-- exposed-rock plateaus do not inherit lowland food-support assumptions merely because they are flat;
-- scarce soil-bearing / vegetated pockets can constrain built-fabric expansion;
-- surface evidence changes capacity / morphology / downstream questions where appropriate;
-- surface uncertainty is propagated through recursive handoff;
-- exact Builder palette remains downstream authorship.
+> **When one of these mechanisms materially changes spatial choice, does the Planner recognize and use it without over-simulating the world?**
+
+Explicitly out of scope for v0.4 regression by default:
+
+- infrastructure lifecycle / replacement simulation;
+- resource depletion / regeneration simulation;
+- full monetary economy;
+- political or demographic microsimulation.

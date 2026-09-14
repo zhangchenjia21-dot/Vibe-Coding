@@ -6,13 +6,13 @@ This reference defines the contract between `minecraft-planner` and `minecraft-b
 
 It does not define L0→L1→L2→L3→L4 planning recursion. For that use `recursive-planning-handoff.md`.
 
-The goal is to preserve settlement-scale causality without turning Planner into an architect or allowing Builder to silently erase upstream relationships.
+The goal is to preserve settlement-scale causality, rights, shared access and planning-level adaptation requirements without turning Planner into an architect / engineer or allowing Builder to erase upstream relationships.
 
 ---
 
 ## 1. When this contract applies
 
-Use Planner→Builder handoff only when the current planning package is concrete enough that Builder can design one of the following without another full planning scale in between:
+Use Planner→Builder handoff only when scope is concrete enough that Builder can design without another full planning scale in between:
 
 - one important building;
 - a compound;
@@ -21,7 +21,7 @@ Use Planner→Builder handoff only when the current planning package is concrete
 - a terrain / circulation preparation scope;
 - part of an accepted Urban Ensemble.
 
-Typical entry point is L4 `URBAN_ENSEMBLE`, but a low-density isolated building may become Builder-ready directly from L2/L3 if its settlement relationships are already sufficiently resolved.
+Typical entry point is L4 `URBAN_ENSEMBLE`, though isolated low-density scopes may become Builder-ready from L2/L3 when relationships are already resolved.
 
 Do **not** send national / regional unresolved nodes directly to Builder.
 
@@ -29,7 +29,7 @@ Do **not** send national / regional unresolved nodes directly to Builder.
 
 ## 2. Builder Design Package
 
-Each downstream package should contain:
+Each downstream package should contain as relevant:
 
 ```text
 Package ID
@@ -38,7 +38,7 @@ WHY / planning role
 Upstream anchors / flows
 Spatial envelope / parcel relation
 Required adjacency
-Required access
+Required access / access-right relation
 Shared-space / service relation
 Program requirements
 Historical / maturity note
@@ -64,143 +64,160 @@ Typical examples:
 - required frontage orientation;
 - must-adjoin / must-share-access relation;
 - parcel / ensemble boundary;
-- protected route;
+- protected route / easement;
 - freight / service access side;
 - shared courtyard relation;
 - negative space that must remain open;
-- approximate scale relationship to neighboring objects;
-- location relative to an Anchor;
-- public vs private threshold logic;
+- approximate scale relationship to neighbors;
+- location relative to Anchor;
+- public / common / private threshold logic;
 - growth age / inherited fabric relation;
-- required use or program category.
+- required use / program category;
+- planning-level mitigation requirement when accepted, such as “provide shared water interface”, “avoid known shallow void”, “retain stepped access”, or “preserve fallback lane”.
 
-Do not freeze exact geometry simply because Planner has an opinion.
+Do not freeze exact geometry merely because Planner has an opinion.
 
 ---
 
 ## 4. BUILDER_ADAPTABLE
 
-Builder should retain authorship over:
+Builder retains authorship over:
 
 - exact footprint inside approved envelope;
 - room arrangement;
 - exact section / floor heights;
-- exact number of floors unless strategic relation requires a range;
+- exact floor count unless strategic relation requires range;
 - structure / tectonics;
 - roof geometry;
 - facade composition;
 - opening geometry;
 - detailed terrain interface;
+- exact well / cistern / retaining / bridge / drainage geometry when required at planning level;
 - block palette;
 - furniture / finishing;
 - Minecraft Translation.
 
-Builder may refine minor route geometry when it preserves the upstream route role and connection.
+Builder may refine minor route / access geometry while preserving upstream role and rights.
 
 ---
 
-## 5. Capacity and Builder handoff
+## 5. Adaptation / mitigation boundary
 
-If Planner supplies a settlement / district capacity estimate, Builder should receive only the portion relevant to the current package.
+Planner may hand down an accepted **relationship-level** requirement, but Builder chooses exact realization.
 
-Do not tell Builder that a national node has `20,000 blocks² built fabric` and expect one building task to realize it.
+Example:
 
-Instead, lower-scale planning should have decomposed that capacity into:
+```text
+PLANNER_FIXED:
+- shared clean-water point must remain accessible from SPACE-02
+- no dirty-service flow crosses this access
 
-- district / ensemble envelopes;
-- building program;
-- shared routes / spaces;
-- phased packages.
+BUILDER_ADAPTABLE:
+- exact well / cistern form
+- depth / section after site evidence
+- materials / structure
+```
 
-Builder may challenge a local envelope when real Site / terrain evidence makes the required program infeasible.
+If several equivalent mitigation options remain unresolved at planning scale, do **not** force one into Builder package unless the Builder task itself is meant to compare them.
 
 ---
 
-## 6. UPSTREAM_PLANNING_ISSUE
+## 6. Capacity and Builder handoff
 
-Builder should return this status when accepted fixed constraints cannot all be satisfied without breaking planning logic.
+Builder receives only capacity relevant to current package.
+
+Lower-scale planning should decompose settlement capacity into district / ensemble envelopes, building program, shared routes / spaces and phased packages.
+
+Builder may challenge a local envelope when real site / terrain / ground evidence makes required program infeasible.
+
+---
+
+## 7. Rights / effective access in Builder handoff
+
+When a planning relationship depends on shared / public / service access, make it explicit.
 
 Examples:
 
-- parcel too small for required program after real terrain read;
-- required service access conflicts with protected route;
-- terrain makes both frontage and rear access impossible;
+- public passage must remain open;
+- rear service easement shared by three parcels;
+- loading access is pack-animal compatible but not intended for full freight convoy;
+- commons edge cannot be privatized by one package.
+
+Builder must not optimize geometry by silently closing a planning-fixed access relation.
+
+---
+
+## 8. UPSTREAM_PLANNING_ISSUE
+
+Builder should return this when accepted fixed constraints cannot all be satisfied without breaking planning logic.
+
+Examples:
+
+- parcel too small after real terrain / ground read;
+- service access conflicts with protected route / right;
+- terrain makes both required frontage and rear access impossible;
 - two mandatory adjacencies contradict;
-- planner-fixed courtyard has no drainage / usable ground;
-- settlement package assumes a crossing that current world data disproves;
-- actual building footprint needed would materially exceed the planned ensemble capacity.
+- fixed courtyard has no usable ground;
+- accepted mitigation proves disproportionate / physically infeasible at detailed design scale;
+- actual footprint would materially exceed ensemble capacity.
 
 Builder should report:
 
 ```text
 conflicting fixed constraints
 observed evidence
-why bounded adaptation is insufficient
+bounded adaptations considered
+why Builder-level adaptation is insufficient
 minimum upstream decision required
 ```
 
-Do not silently move the building, delete a lane or remove a shared yard.
+Do not silently move building, delete lane, remove shared yard or cancel shared access.
 
 ---
 
-## 7. Planner revision after upstream issue
+## 9. Planner revision after upstream issue
 
 Planner should:
 
-1. preserve unaffected accepted relationships;
-2. update only the smallest necessary upstream object(s);
-3. explain the changed causal logic;
+1. preserve unaffected relationships;
+2. update smallest necessary upstream object(s);
+3. explain changed causal logic;
 4. regenerate impacted packages;
-5. increment planning artifact revision;
-6. rerun Morphology / Handoff Gate as appropriate.
+5. increment planning revision;
+6. rerun relevant Gates.
 
-Do not rebuild the whole settlement plan for a local conflict unless the conflict reveals a systemic error.
+Do not rebuild whole settlement for a local conflict unless systemic error is revealed.
 
 ---
 
-## 8. Cross-package dependencies
+## 10. Cross-package dependencies
 
-Packages should record shared dependencies such as:
+Packages may share:
 
 - terrain preparation;
-- retaining wall system;
-- shared lane;
+- retaining / access system;
+- shared lane / easement;
 - courtyard drainage;
-- party wall / shared wall line;
-- bridge / gate completion;
-- water channel;
-- shared Architecture Kit version;
-- neighboring anchor completion.
-
-This allows a large design unit to be built in bounded phases.
+- party wall line;
+- bridge / gate;
+- water / storage interface;
+- resilience fallback route / service point;
+- Architecture Kit version;
+- neighboring Anchor completion.
 
 ---
 
-## 9. Design Unit ≠ Write Batch
+## 11. Design Unit ≠ Write Batch
 
-A single accepted design unit can be larger than one safe world-write batch.
-
-Example:
-
-```text
-Urban Ensemble design
-→ terrain / drainage package
-→ primary route package
-→ anchor building package
-→ secondary building packages
-→ shared courtyard / service package
-→ finishing / district review
-```
+One accepted design unit can be larger than one safe world-write batch.
 
 Planner may recommend dependency order, but Builder / implementation tooling owns exact write batching and repair strategy.
 
 ---
 
-## 10. Growth Sequence ≠ Implementation Sequence
+## 12. Growth Sequence ≠ Implementation Sequence
 
-A Builder Package may represent a building historically older than another package but be constructed later in Minecraft because dependencies or safety require it.
-
-Every handoff should keep both concepts separately labeled:
+Keep separately labeled:
 
 - `historical_growth_stage`
 - `implementation_dependency`
@@ -209,25 +226,26 @@ Never infer historical age from Minecraft task order.
 
 ---
 
-## 11. Handoff Gate checklist
+## 13. Handoff Gate checklist
 
-Before declaring a package Builder-ready, verify:
+Before Builder-ready:
 
-- current planning recursion has reached a sufficient scale;
-- every package has a clear WHY;
-- boundaries / envelope are understandable;
-- fixed constraints are few but meaningful;
-- Builder has genuine architectural freedom;
-- shared routes / courtyards / interfaces have explicit owners;
-- no package depends on an undefined future object without placeholder dependency;
-- planning assumptions are visible;
-- Architecture Kit requirements do not prescribe finished geometry;
-- capacity has been decomposed enough for bounded design scopes;
-- world-write authorization is not implied.
+- planning recursion has reached sufficient scale;
+- every package has clear WHY;
+- boundary / envelope understandable;
+- fixed constraints few but meaningful;
+- Actor / rights / access relations are explicit where consequential;
+- adaptation requirement is relationship-level, not exact engineering;
+- Builder has genuine architectural / engineering freedom;
+- shared routes / courts / interfaces have owners / access semantics;
+- planning assumptions visible;
+- Kit requirements do not prescribe finished geometry;
+- capacity decomposed enough for bounded scope;
+- world-write authorization not implied.
 
 ---
 
-## 12. Recommended package JSON shape
+## 14. Recommended package JSON shape
 
 ```json
 {
@@ -240,12 +258,14 @@ Before declaring a package Builder-ready, verify:
     "frontage_on": "ROUTE-01",
     "rear_service_access": "ROUTE-04",
     "shared_courtyard": "SPACE-02",
-    "protected_open_space": ["SPACE-03"]
+    "protected_open_space": ["SPACE-03"],
+    "shared_access_right": "PUBLIC / COMMON"
   },
   "builder_adaptable": [
     "exact_footprint",
     "plan_section",
     "structure",
+    "local_mitigation_geometry",
     "roof",
     "facade",
     "palette"
@@ -255,4 +275,4 @@ Before declaring a package Builder-ready, verify:
 }
 ```
 
-This is an example contract, not a mandatory universal schema.
+Example only; not mandatory universal schema.
