@@ -28,6 +28,8 @@ settlement-capacity.json
 surface-character.json
 actors.json
 metabolism.json
+builder-design-packages.json
+interface-baselines.json
 sections/
 assumptions.md
 source-register.json
@@ -41,6 +43,8 @@ At L0 / L1, if several significant settlement nodes are proposed, `settlement-ca
 If surface / substrate / land-cover materially affects planning, include equivalent evidence fields and an Owner-readable map layer.
 
 If Actor / rights / bounded knowledge materially affects planning, represent it either inline or in `actors.json`.
+
+At Builder-ready scale, `builder-design-packages.json` should follow the shared Planner–Builder contract and include local interface data when design freeze depends on it.
 
 ---
 
@@ -61,6 +65,8 @@ BLOCK-01
 PARCEL-01
 PROGRAM-01
 PACKAGE-01
+INTERFACE-01
+SERVICE-01
 ```
 
 Rules:
@@ -71,7 +77,7 @@ Rules:
 4. task-local IDs do not become World Canon automatically;
 5. geometry provenance remains separate from narrative names;
 6. at L0/L1 use `NODE-* / ANCHOR-*` until long-term settlement role is supported;
-7. do not create Actor IDs for trivial relationships merely to satisfy schema.
+7. do not create Actor / Interface / Service IDs for trivial relationships merely to satisfy schema.
 
 ---
 
@@ -95,7 +101,7 @@ Common example:
 }
 ```
 
-Optional v0.4 fields when consequential:
+Optional v0.4+ fields when consequential:
 
 ```text
 actor_refs
@@ -111,6 +117,10 @@ resilience_role
 site_value_drivers
 demographic_driver
 feedback_relations
+boundary_semantic
+interface_baselines
+external_service_interfaces
+resolve_before
 ```
 
 Use only fields that explain spatial consequences.
@@ -328,6 +338,7 @@ Recommended:
 - shared courtyard / negative space;
 - local terrain / drainage / adaptation context;
 - Builder Package map;
+- Builder-facing local interface slice / protected clear envelope when design freeze depends on it;
 - sections / simple massing when useful.
 
 ---
@@ -349,6 +360,8 @@ Every important map should provide enough context:
 For settlement scale maps distinguish node / anchor, search envelope, built-fabric capacity and catchment.
 
 For effective-access maps distinguish confirmed / conditional / unresolved access rather than drawing all lines as roads.
+
+For Builder-facing interface maps, distinguish planning centerline, corridor envelope, protected clear envelope, threshold search segment and adjustable edge when those semantics differ.
 
 Avoid decorative maps that obscure evidence.
 
@@ -408,6 +421,8 @@ Planner 3D may show settlement / district extent, terrain stepping, street enclo
 Do not prematurely lock facade / roof ornament / windows / palette / furniture / exact engineering.
 
 Sections are useful for slope, terrace, retaining, riverbank, crossing, stacked street, shallow ground relation or dense frontage.
+
+At Builder handoff, a local section baseline may be appropriate when threshold / lane / shared-ground continuity cannot be understood from plan alone. It should control relationship and clearance, not design the final structure.
 
 Detailed structural section remains Builder work.
 
@@ -472,7 +487,77 @@ Do not reuse Builder-specific fields as child-planning schema.
 
 ---
 
-## 19. Version / revision
+## 19. Builder Design Package artifact｜v0.5
+
+When planning recursion reaches Builder-ready scope, prefer `builder-design-packages.json` or equivalent machine-readable objects.
+
+Minimum fields should follow `../shared/minecraft-planner-builder-contract.md` and normally include:
+
+```text
+package_id / revision
+recipient = minecraft-builder
+builder_handoff_readiness
+WHY / role
+design_context
+planning_causal_context
+spatial_envelope
+boundary_semantic
+program_requirements
+PLANNER_FIXED
+BUILDER_ADAPTABLE
+dependencies
+known_uncertainty + resolve_before
+world_write_authorization = false
+```
+
+### Interface Baselines
+
+If a planning-fixed cross-scope physical interface affects the next Builder stage, embed it or place it in `interface-baselines.json` and reference it directly.
+
+Recommended artifact fields:
+
+```json
+{
+  "interface_id": "IF-LANE-04-P01",
+  "source_object": "LANE-04",
+  "source_revision": "P04-r1",
+  "role": "common pedestrian frontage",
+  "local_geometry": {"type": "corridor_envelope", "geometry": {}},
+  "nominal_width": 2,
+  "minimum_clear_requirement": 2,
+  "height_or_section_baseline": {},
+  "adjustment_envelope": {},
+  "rights_access_semantic": "COMMON_EASEMENT",
+  "coordination_owner": "BDP-00",
+  "resolve_before": "BEFORE_DESIGN_FREEZE"
+}
+```
+
+Do not store only an object ID if Builder cannot resolve the local geometry without opening the full parent plan.
+
+### Boundary semantic
+
+If voxel legality depends on a continuous edge, record one of:
+
+```text
+CELL_CENTER_MASK
+FULL_VOXEL_INSIDE
+CONTINUOUS_BOUNDARY_WITH_TOLERANCE
+NEGOTIABLE_EDGE
+REFERENCE_ONLY
+```
+
+Where relevant also persist edge tolerance / adjustment strip.
+
+### External service interfaces
+
+If water / drainage / waste / goods / fuel / shared retaining crosses package boundaries, record location or direct ref, status, responsibility and `resolve_before`.
+
+The artifact must distinguish “Builder reserves an interface” from “Builder owns the public system”.
+
+---
+
+## 20. Version / revision
 
 Record:
 
@@ -483,7 +568,11 @@ Record:
 - objects added / retired / split / merged;
 - capacity changes;
 - relevant evidence / access / Actor / mitigation changes;
+- Builder package revision when emitted;
+- Interface Baseline revisions when material;
 - Gate results;
 - review status.
+
+If a fixed interface changes materially, mark dependent Builder packages / designs stale for fidelity review rather than silently overwriting their baseline.
 
 Do not silently overwrite accepted plans without lineage.
