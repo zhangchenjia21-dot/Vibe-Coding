@@ -1,13 +1,13 @@
 ---
 title: my world｜总体规划路线图
 status: current-canonical-roadmap
-version: 5.4
+version: 5.5
 created: 2026-08-25
 updated: 2026-09-14
 current_phase: G7 Long-session Context & Knowledge Hardening
 current_status_source: MY_WORLD_CURRENT_STATUS.md
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
-supersedes: v5.3
+supersedes: v5.4
 ---
 
 # my world｜总体规划路线图 CURRENT
@@ -33,7 +33,7 @@ G3 Persistent Game / Save / Timeline Foundation      PASS / CLOSED
 G4 Primary Source Assets & Local Game Creation        PASS / CLOSED
 G5 World Semantics & GM Runtime                       PRODUCT PASS / CLOSED
 G6 RPG Core Closure                                   ENGINEERING CORE COMPLETE / PRODUCT CONFIRMATION DEFERRED
-G7 Long-session Context & Knowledge Hardening         PACKAGE 8 POST-MW-034 EVIDENCE AUDIT CURRENT
+G7 Long-session Context & Knowledge Hardening         PACKAGE 8 / MW-035 CURRENT
 G8 Product Expansion / Authoring / External Contract  QUEUED
 G9 Standalone Alpha / Release Validation              QUEUED
 ```
@@ -135,37 +135,13 @@ R1 corrected Opening/T0 source classification:
 
 Engineering evidence: focused `206/206`, relevant regressions `49/49`, Restore/Regenerate/reopen PASS, Godot 4.7.2 import/export/ValidateExportOnly PASS, real Provider calls `0`.
 
-### Post-MW-033 Structured Output audit｜COMPLETE
-
-The audit compared production machine-schema lanes instead of assuming all JSON calls should share one framework.
-
-Observed terminal semantics differed materially across Recommendations, Public d20 control, Information Curator, World semantic, World Evolution and Agency.
-
-Conclusion:
-
-> **A universal Structured Output Reliability framework was not justified.**
-
-Consumer-before-abstraction selected Information Curator as the next concrete reliability consumer.
-
 ### MW-034｜Information Curator Bounded Recovery｜ENGINEERING PASS_WITH_NOTES / REVIEWED INTEGRATION COMPLETE
 
 Architecture:
 
 `architecture/G7_INFORMATION_CURATOR_BOUNDED_RECOVERY_V1_0_DECISION.md@v1.0`
 
-Reviewed lineage:
-
-```text
-Formal Code Base          651362305a7d4a2872a2da9293b9a2a77e33b7f4
-Task Packet / Start       8abed26d60fea2c5cc8bfbad1c60f08bbb707675
-Implementation            e5a8464700592ed5c423ca48a8b95c9a53ea3757
-Codex Candidate           2f94fd2a843173370e3d9de01fd804f063067014
-Independent Review IR1    f0cd73d39c13f39e91d6582a8432a5a9637d2876
-Integration Merge         85f57cb861d2e186c0436a7a7349414d1596c3f0
-Integration Verification  0066b587f1d756b55ee18abfa5f473e78a3aeea2
-```
-
-Current reviewed implementation main:
+Current reviewed implementation baseline entering MW-035:
 
 `my-world/main@0066b587f1d756b55ee18abfa5f473e78a3aeea2`
 
@@ -180,65 +156,139 @@ Information Curator logical opportunity
 → exactly one durable success commit OR final fail-soft
 ```
 
-Frozen guarantees now integrated:
-
-- both initial Character baseline and lived Character / Experiences / People / Threads curation are covered;
-- maximum automatic Provider starts per logical opportunity = `2`;
-- strict Curator parser/schema remains unchanged;
-- no raw malformed response is echoed into recovery;
-- late attempt-1 callbacks are rejected by request serial/currentness isolation;
-- timeout disconnects/invalidates old request before deferred recovery;
-- People/Thread/actor refs are regenerated per recovery request and old refs have no authority;
-- permanent config/credential failures, unknown Provider statuses, deterministic size failures, stale/Restore/cancel/shutdown and persistence failures do not automatically retry;
-- `retry_pending()` remains a distinct explicit later repair seam;
-- Narrative/free-form gameplay never waits for Curator success.
-
 Engineering evidence:
 
-- MW-034 focused `441/441`, real Provider calls `0`;
+- focused `441/441`, real Provider calls `0`;
 - relevant existing regressions `49/49`;
-- MW-033 focused `206/206`;
+- MW-033 `206/206`;
 - MW-027 final `157/157`;
 - real-window `484/484`;
-- Godot 4.7.2 import/export/ValidateExportOnly PASS;
-- no retained failing suite.
-
-Independent Review notes remain nonblocking:
-
-1. live Provider curation quality is not proven because deterministic tests used zero real Provider calls;
-2. Provider `malformed_stream` is deliberately fail-closed rather than guessed transient;
-3. late-callback safety must be revalidated if a future Provider adapter changes the current synchronous cancel contract;
-4. existing bounded ObjectDB/resource-at-exit warnings remain unchanged.
+- Godot 4.7.2 import/export/ValidateExportOnly PASS.
 
 No Product PASS is claimed.
 
-### Post-MW-034 Package-8 gate｜GPT EVIDENCE / ARCHITECTURE AUDIT CURRENT
+### Post-MW-034 Structured Output Recovery abstraction gate｜FROZEN / NO EXTRACTION
 
-Three real recovery consumers now exist, but this does **not** automatically authorize extraction of a shared framework.
+Decision:
 
-GPT must now compare:
+`architecture/G7_STRUCTURED_OUTPUT_RECOVERY_ABSTRACTION_GATE_V1_0_DECISION.md@v1.0`
+
+Three real recovery consumers were compared directly:
 
 ```text
-Recommendations recovery
-Public d20 control recovery
-Information Curator recovery
+Recommendations
+Public d20 control
+Information Curator
 ```
 
-and separate genuinely policy-free lifecycle mechanics from lane-specific semantics:
+They do **not** share one policy-free lifecycle:
 
-- opportunity identity/currentness;
-- callback/transport isolation;
-- recovery eligibility;
-- second-failure terminal policy;
-- request rebuilding/ref authority;
-- diagnostics;
-- foreground/background gating.
+- Recommendations is a background optional UI lane keyed to accepted prefix; foreground invalidates it; final failure = unavailable.
+- Public d20 control is one foreground action-pipeline stage; only parse failure gets one recovery; second parse failure degrades to ordinary Narrative; Provider failure is terminal.
+- Information Curator is a background durable-state lane keyed to Game + binding/prefix/parent + Restore epoch; malformed/timeout/allowlisted transient failures may recover; final failure may later be explicitly repaired.
 
-Only if the common part is both repeated and semantically neutral may a tiny shared primitive be proposed. Do not create a generic retry base class merely because three consumers exist.
+Conclusion:
 
-The same evidence gate must also reassess whether Package 8 now needs another consumer-specific reliability correction, latency/long-session reality hardening, or live-product evidence before further architecture. No next Codex implementation task is authorized yet.
+> **Do not extract a generic Structured Output Reliability framework or cross-lane retry base class.**
 
-Owner UAT remains deferred; the next concentrated Product test should cover the accumulated G6 corrections plus sufficient G7 long-session behavior rather than MW-034 alone.
+A shared framework would need policy hooks for opportunity identity, foreground gating, retry classification, request-scoped authority, persistence, degradation and terminal publication. That is not a small semantically neutral primitive.
+
+Package 8 now moves to remaining long-session currentness/latency defects instead of spending another Work Item on retry abstraction.
+
+### MW-035｜Public d20 Control Working-Set Currentness v0.1｜CURRENT / AUTHORIZED
+
+Architecture:
+
+`architecture/G7_PUBLIC_D20_CONTROL_WORKING_SET_V0_1_DECISION.md@v0.1`
+
+Product problem:
+
+Public d20 Narrative stages already use MW-033 working-set assembly, but `control` / `control_recovery` still use the full Opening-era Game-local projector plus the old fixed-window Conversation assembler.
+
+That old control path repeatedly sends broad T0 material while failing to make current long-session Character and current World/Knowledge/Agency/Evolution first-class control inputs.
+
+Product promise:
+
+> In a long-running Game, Public d20 should judge the current action from the current character, current world, current inventory and current mechanics, while treating large New-Game source material as optional background rather than repeatedly making it the dominant control context.
+
+Frozen mechanics-control tiers:
+
+```text
+P0 REQUIRED
+- control schema / protocol
+- active Player action exactly once
+- exact materialized Expansion mechanics rules
+- minimum Game/World identity + World/GM instructions
+- selected Entry identity
+- recovery cue only on control_recovery
+
+P1 CURRENT CONTINUITY
+- latest accepted Conversation
+- current Character
+- current World / Knowledge / Agency / Evolution
+- factual Inventory
+- current Public mechanics
+- remaining complete accepted Conversation under budget
+
+P2 DURABLE STARTING BACKGROUND
+- Opening supplement
+- selected Entry opening seed
+- T0 World source sections
+- Player Character source sections
+- Guaranteed NPC source sections
+```
+
+`literary_style_reference` is excluded from mechanics control.
+
+Budget:
+
+```text
+safe control input bytes = floor(context_token_ceiling × 0.80)
+```
+
+Expected current capacities:
+
+- 256k → `209715` bytes;
+- 1m → `838860` bytes.
+
+Whole-block / whole-Turn selection only; P0 overflow fails before Provider start. No hardcoded capacity fallback.
+
+Current Character is a derived continuity snapshot, not a second mechanics truth. Durable d20, factual Inventory and accepted/current World owners remain authoritative.
+
+Existing control recovery remains unchanged:
+
+```text
+control parse failure
+→ one control_recovery
+→ second parse failure
+→ degraded ordinary Narrative
+```
+
+MW-035 does not add Provider-failure or timeout retry.
+
+Explicitly not authorized:
+
+- generic retry/Structured Output framework;
+- all-agent Context platform;
+- embeddings/vector DB/semantic retrieval;
+- new stat system;
+- semantic NPC ranking;
+- Provider/model fallback;
+- Narrative output caps;
+- UI redesign;
+- persistence schema changes;
+- Package-9 work.
+
+Post-MW-035 gate:
+
+```text
+GPT Independent Review
+→ reviewed integration if PASS
+→ reassess whether Package 8 has enough Engineering coverage for concentrated Owner Product evidence
+→ only mint another G7 Work Item if a concrete remaining long-session blocker is proven
+```
+
+Owner UAT remains deferred until that gate.
 
 ## Package 9｜Knowledge Integrity & Correction Foundation
 
