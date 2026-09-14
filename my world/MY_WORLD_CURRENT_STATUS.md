@@ -1,30 +1,27 @@
 ---
 title: my world｜当前状态
 status: current-project-status
-version: 18.5
+version: 18.6
 created: 2026-08-26
 updated: 2026-09-14
-supersedes: 18.4
-phase: G7 Long-session Context & Knowledge Hardening — Package 8 Post-MW-034 Evidence Audit
-current_task: G7 Package 8 — Post-MW-034 Evidence / Architecture Audit
-current_owner: GPT
-current_dispatch_state: MW-034 REVIEWED INTEGRATED / NEXT IMPLEMENTATION NOT YET DISPATCHED
+supersedes: 18.5
+phase: G7 Long-session Context & Knowledge Hardening — Package 8 Public d20 Control Working Set
+current_task: MW-035 G7 Public d20 Control Working-Set Currentness v0.1
+current_owner: Codex
+current_dispatch_state: AUTHORIZED / TASK SHAPED / NO IMPLEMENTATION RETURN YET
 parent_task: G7 Package 8 Long-session Core
 semantic_owner: GPT
 owner_uat_required: deferred until concentrated MW-032 + sufficient G7 Product test
 implementation_repo: https://github.com/zhangchenjia21-dot/my-world
-current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v5.4
+current_roadmap: MY_WORLD_总体规划路线图_CURRENT.md@v5.5
 reviewed_implementation_main: 0066b587f1d756b55ee18abfa5f473e78a3aeea2
 closed_work_item: MW-034 G7 Information Curator Bounded Recovery
-mw034_architecture: my world/architecture/G7_INFORMATION_CURATOR_BOUNDED_RECOVERY_V1_0_DECISION.md@v1.0
-mw034_task_branch: mw-034-g7-information-curator-recovery
-mw034_formal_base: 651362305a7d4a2872a2da9293b9a2a77e33b7f4
-mw034_task_start: 8abed26d60fea2c5cc8bfbad1c60f08bbb707675
-mw034_implementation: e5a8464700592ed5c423ca48a8b95c9a53ea3757
-mw034_candidate: 2f94fd2a843173370e3d9de01fd804f063067014
-mw034_ir1: f0cd73d39c13f39e91d6582a8432a5a9637d2876
-mw034_integration_merge: 85f57cb861d2e186c0436a7a7349414d1596c3f0
-mw034_integration_verification: 0066b587f1d756b55ee18abfa5f473e78a3aeea2
+structured_output_gate: my world/architecture/G7_STRUCTURED_OUTPUT_RECOVERY_ABSTRACTION_GATE_V1_0_DECISION.md@v1.0
+active_architecture: my world/architecture/G7_PUBLIC_D20_CONTROL_WORKING_SET_V0_1_DECISION.md@v0.1
+active_task_packet: my-world/docs/tasks/MW-035_G7_PUBLIC_D20_CONTROL_WORKING_SET_V0_1_TASK.md
+active_task_branch: mw-035-g7-d20-control-working-set
+formal_code_base: 0066b587f1d756b55ee18abfa5f473e78a3aeea2
+task_packet_commit: 120062661ad419d52c36fc339cee6f226b09a78d
 ---
 
 # my world｜CURRENT STATUS
@@ -38,156 +35,34 @@ G3 Persistence / Save / Timeline            PASS / CLOSED
 G4 Primary Source Assets & Local Game       PASS / CLOSED
 G5 World Semantics & GM Runtime             PRODUCT PASS / CLOSED
 G6 RPG Core Closure                         ENGINEERING CORE COMPLETE / PRODUCT CONFIRMATION DEFERRED
-G7 Long-session Context & Knowledge         PACKAGE 8 POST-MW-034 EVIDENCE AUDIT CURRENT
+G7 Long-session Context & Knowledge         PACKAGE 8 / MW-035 CURRENT
 G8 Product Expansion / Authoring            QUEUED
 G9 Standalone Alpha                         QUEUED
 ```
 
-## 2. Current reviewed implementation
-
-Current reviewed implementation main:
+## 2. Current reviewed implementation baseline
 
 `my-world/main@0066b587f1d756b55ee18abfa5f473e78a3aeea2`
 
-This contains the reviewed MW-033 Narrative Working-Set Orchestrator and reviewed MW-034 Information Curator Bounded Recovery.
+This contains reviewed/integrated:
+
+- MW-032 V0 Reality Gate corrections;
+- MW-033 Narrative Working-Set Orchestrator v0.1 + R1 source-tier correction;
+- MW-034 Information Curator Bounded Recovery.
 
 G6 remains:
 
 > **ENGINEERING CORE COMPLETE / PRODUCT CONFIRMATION DEFERRED**
 
-Per Owner route, there is still no immediate MW-032/MW-033/MW-034-only UAT.
+There is still no immediate MW-032/MW-033/MW-034-only Owner UAT.
 
-## 3. MW-034 final reviewed state
+## 3. Post-MW-034 recovery abstraction audit — CLOSED
 
-MW-034 established one bounded automatic recovery for the Information Curator without creating a shared retry framework.
+Frozen decision:
 
-Reviewed lineage:
+`architecture/G7_STRUCTURED_OUTPUT_RECOVERY_ABSTRACTION_GATE_V1_0_DECISION.md@v1.0`
 
-```text
-Formal Code Base          651362305a7d4a2872a2da9293b9a2a77e33b7f4
-Task Packet / Start       8abed26d60fea2c5cc8bfbad1c60f08bbb707675
-Implementation            e5a8464700592ed5c423ca48a8b95c9a53ea3757
-Codex Candidate           2f94fd2a843173370e3d9de01fd804f063067014
-Independent Review IR1    f0cd73d39c13f39e91d6582a8432a5a9637d2876
-Integration Merge         85f57cb861d2e186c0436a7a7349414d1596c3f0
-Integration Verification  0066b587f1d756b55ee18abfa5f473e78a3aeea2
-```
-
-Final Engineering verdict:
-
-> **ENGINEERING PASS_WITH_NOTES / REVIEWED INTEGRATION COMPLETE**
-
-No Product PASS is claimed.
-
-## 4. Integrated Curator recovery behavior
-
-For one still-current logical Curator opportunity:
-
-```text
-attempt 1
-→ if malformed_response / Curator timeout / allowlisted transient Provider failure
-→ invalidate serial + detach old callbacks/timer + terminal/cancel old transport
-→ deferred currentness check
-→ attempt 2 rebuilt from current owners
-→ one durable success commit OR final fail-soft
-```
-
-The same lifecycle covers:
-
-- initial Character baseline curation;
-- lived Opening/action Character;
-- Important Experiences;
-- People;
-- Open Threads.
-
-Maximum automatic Provider starts per logical opportunity = `2`.
-
-`retry_pending()` remains a separate explicit later repair seam and cannot reset the automatic budget while work is still active/pending.
-
-## 5. Currentness / authority guarantees
-
-Integrated guarantees:
-
-- request callbacks and timers are bound to a monotonic request serial;
-- attempt-1 late delta/completed/failed/cancelled cannot mutate or terminate attempt 2;
-- Restore/shutdown invalidate prior epoch/request work;
-- initial recovery remains bound to exact Game + frozen-profile binding + epoch;
-- lived recovery remains bound to Game + accepted index + exact prefix + current curation parent + epoch;
-- attempt 2 rebuilds bounded current material rather than replaying attempt-1 request objects;
-- People / Thread / actor refs are fresh request-local authorities on attempt 2;
-- old refs and display-name matching cannot regain write authority;
-- malformed attempt-1 raw output is never echoed into the recovery prompt;
-- strict Curator parser/schema remains unchanged;
-- only a valid, current attempt can reach the existing single durable curation commit;
-- Narrative/free-form gameplay never waits for Curator recovery.
-
-## 6. Failure policy now integrated
-
-Automatic recovery is allowed only on attempt 1 for:
-
-- `malformed_response`;
-- Curator-owned `timeout`;
-- `transport`;
-- HTTP `408`, `429`, `500`, `502`, `503`, `504`.
-
-No automatic retry for:
-
-- missing credential/key;
-- invalid/unknown/incompatible profile/settings/context/reasoning configuration;
-- HTTP `401` / `403`;
-- unknown Provider statuses;
-- deterministic input/response oversize;
-- invalid profile/storage prerequisites;
-- stale history / stale parent / changed initial binding;
-- Restore / explicit cancel / shutdown;
-- persistence failure.
-
-Unknown Provider failures fail closed rather than being guessed transient.
-
-## 7. Engineering evidence
-
-MW-034 focused:
-
-- `441 / 441` checks pass;
-- real Provider calls: `0`.
-
-Relevant regressions:
-
-- `49 / 49` existing suites pass;
-- MW-033 focused `206 / 206`;
-- MW-027 final `157 / 157`;
-- three-size real-window smoke `484 / 484`.
-
-Build:
-
-- Godot 4.7.2 final import PASS;
-- fresh Windows export PASS;
-- `ValidateExportOnly` PASS.
-
-Five existing ObjectDB/resource-at-exit warning suites remain the same bounded warning family with exit 0. No retained failing suite.
-
-## 8. Independent Review notes
-
-Nonblocking notes retained:
-
-1. live Provider curation quality remains unproven because MW-034 deterministic acceptance used zero real Provider calls;
-2. Provider stream status `malformed_stream` is not guessed transient and therefore does not auto-retry; this may be revisited only if live evidence warrants it;
-3. late-callback safety depends on the current synchronous Provider `cancel()` contract plus request-serial isolation; a future async adapter must revalidate the lifecycle;
-4. existing bounded teardown warnings remain unchanged.
-
-## 9. Integration verification
-
-MW-034 was integrated without force/history rewriting.
-
-The integration merge tree was taken from the reviewed task integration-record tip. Comparing that reviewed tip with merge commit `85f57cb861d2e186c0436a7a7349414d1596c3f0` reported zero changed files.
-
-A short documentation-only preparation lineage on `main` remains visible in Git history, but its temporary content is absent from the current tree and introduced no production-code mutation. The post-merge `0066b587…` commit only refines the integration record.
-
-## 10. Current Package-8 gate
-
-Ownership returns to GPT for **post-MW-034 evidence / architecture audit**.
-
-Three real recovery consumers now exist:
+GPT compared the three proven recovery consumers:
 
 ```text
 Recommendations
@@ -195,33 +70,241 @@ Public d20 control
 Information Curator
 ```
 
-Before authorizing another Codex task, GPT must determine whether their shared mechanics are genuinely policy-free or only superficially similar.
+Conclusion:
 
-Audit dimensions:
+> **Do not extract a generic Structured Output / retry lifecycle framework.**
 
-- logical opportunity identity/currentness;
-- callback and transport isolation;
-- retry eligibility;
-- second-failure terminal policy;
-- request rebuilding / request-scoped authority;
-- diagnostics;
-- foreground/background gating.
+The visible similarity is superficial.
 
-A tiny shared lifecycle primitive may be proposed only if it removes repeated mechanics without flattening lane semantics. There is no automatic authorization for a generic retry base class or Structured Output platform.
+### Recommendations
 
-The same gate should reassess whether Package 8 next needs another bounded reliability consumer, long-session latency/reality hardening, or live Product evidence.
+- background optional UI lane;
+- accepted-prefix opportunity identity;
+- foreground invalidates work;
+- malformed/timeout/provider failure may recover except known config failures;
+- final failure = unavailable;
+- no durable semantic write.
 
-## 11. Immediate route
+### Public d20 control
+
+- foreground action pipeline stage;
+- only invalid control parse gets one recovery;
+- Provider failure is terminal;
+- second parse failure deliberately degrades to ordinary Narrative;
+- durable CHECK/NO_CHECK semantics belong to the action pipeline.
+
+### Information Curator
+
+- background durable-state lane;
+- Game + initial binding or accepted prefix/parent + Restore epoch identity;
+- request serial distinct from logical opportunity;
+- malformed/timeout/allowlisted transient Provider failure may recover;
+- final failure can later be explicitly repaired;
+- successful result durably updates Character/Experiences/People/Threads.
+
+A shared class would therefore require lane policy hooks for currentness, foreground gating, retry classification, request-scoped authority, persistence, degraded behavior and terminal publication. That is not a small policy-free primitive.
+
+Package 8 moves on from retry abstraction.
+
+## 4. Next proven long-session defect
+
+Public d20 Narrative stages already use MW-033 working-set Context.
+
+Public d20 **control/control_recovery** still use:
 
 ```text
-MW-034 reviewed integration COMPLETE
-→ GPT post-MW-034 Package-8 evidence audit
-→ choose next bounded problem only from actual evidence
-→ freeze architecture if needed
-→ next flat MW-xxx Task Packet only after that gate
-→ Codex implementation
-→ GPT Independent Review
-→ concentrated Owner Product test at the planned risk boundary
+full Game-local Opening-era projector
++ materialized Expansion rules
++ Inventory
++ historical fixed recent Conversation assembly
 ```
 
-No next Codex implementation task is currently authorized.
+The full projector retains broad T0 material including:
+
+- Opening supplement;
+- selected Entry opening seed;
+- World source sections;
+- Player Character starting source sections;
+- every Guaranteed NPC starting section.
+
+But control does not make current long-session Character or current World/Knowledge/Agency/Evolution first-class inputs.
+
+This creates a concrete long-session risk:
+
+> after a capability or world condition changed many turns ago and its original prose falls outside the old transcript window, mechanics control can still be anchored more strongly to New-Game state than current durable state.
+
+It also repeats large T0 material without the runtime-capacity budget already proven by MW-033.
+
+## 5. MW-035 frozen product outcome
+
+Architecture:
+
+`architecture/G7_PUBLIC_D20_CONTROL_WORKING_SET_V0_1_DECISION.md@v0.1`
+
+Product promise:
+
+> In a long-running Game, Public d20 should judge the current action from the current character, current world, current inventory and current mechanics, while treating large New-Game source material as optional background rather than repeatedly making it the dominant control context.
+
+No new player-facing screen/button is added.
+
+## 6. MW-035 mechanics working-set tiers
+
+### P0 REQUIRED
+
+- control schema/protocol;
+- active Player action exactly once;
+- exact materialized Expansion mechanics rules;
+- minimum Game/World identity + World/GM instructions;
+- selected Entry identity;
+- control-recovery cue only for attempt 2.
+
+P0 overflow must fail before Provider start.
+
+### P1 CURRENT CONTINUITY
+
+- latest complete accepted Conversation Turn;
+- current Character;
+- current World / Knowledge / Agency / Evolution;
+- factual Inventory;
+- current Public mechanics;
+- remaining complete accepted Conversation while budget remains.
+
+Current Character is a derived current continuity snapshot, not a second mechanics truth.
+
+### P2 DURABLE STARTING BACKGROUND
+
+- Opening supplement;
+- selected Entry opening seed;
+- T0 World source sections;
+- Player Character source sections;
+- Guaranteed NPC source sections.
+
+These are starting reference/inertia, not current lived truth.
+
+`literary_style_reference` is excluded entirely from mechanics control.
+
+## 7. Capacity rule
+
+Use current validated runtime model capacity:
+
+```text
+safe control input bytes = floor(context_token_ceiling × 0.80)
+```
+
+Expected current values:
+
+- 256k → `209715` bytes;
+- 1m → `838860` bytes.
+
+Selection is whole-block / whole-Turn only.
+
+No partial source/NPC section, no partial accepted Turn, no silent Expansion-rule truncation, no hardcoded capacity fallback.
+
+## 8. Existing d20 semantics protected
+
+MW-035 must not change:
+
+- CHECK_REQUIRED / NO_CHECK parser/schema;
+- DC/modifier/stance rules;
+- RNG timing;
+- durable check/NO_CHECK identity;
+- same-action replay/dedup;
+- narrative accepted-marker recovery;
+- System/Public mechanics projection;
+- World semantic grounding from durable Mechanical Resolution.
+
+Existing recovery remains:
+
+```text
+control parse failure
+→ one control_recovery
+→ second parse failure
+→ degraded ordinary Narrative
+```
+
+No Provider-failure retry or timeout retry is added.
+
+All d20 Narrative phases continue to use the existing MW-033 Narrative working-set path.
+
+## 9. Task facts
+
+```text
+Formal Code Base
+  0066b587f1d756b55ee18abfa5f473e78a3aeea2
+
+Branch
+  mw-035-g7-d20-control-working-set
+
+Required worktree
+  D:/AI/Projects/.worktrees/my-world/mw-035-g7-d20-control-working-set
+
+Task Packet
+  docs/tasks/MW-035_G7_PUBLIC_D20_CONTROL_WORKING_SET_V0_1_TASK.md
+
+Task Packet / Starting HEAD
+  120062661ad419d52c36fc339cee6f226b09a78d
+```
+
+`current_owner: Codex` means implementation is authorized; it does not prove a Codex process is currently running.
+
+## 10. Required Engineering proof
+
+MW-035 must prove at minimum:
+
+- >12-turn Character currentness survives old transcript eviction;
+- current accepted-hash World/Knowledge/Agency/Evolution enters control independently of old prose;
+- current Inventory and Public mechanics enter through their owners;
+- large T0 source/NPC background cannot crowd current P1 at 256k;
+- 1m may admit more whole P2 material;
+- final serialized control/control_recovery messages stay within runtime budget;
+- P0 overflow produces zero Provider start and zero RNG use;
+- no partial Turn/source/NPC/supplement/seed;
+- literary-style canary never enters control;
+- active Player action appears exactly once;
+- Restore/Regenerate displaced material is excluded;
+- one malformed control still gets one recovery;
+- second malformed still degrades to ordinary Narrative without fake mechanics;
+- CHECK and NO_CHECK durable/replay semantics remain unchanged;
+- Narrative stages remain MW-033 consumers;
+- safe context diagnostics contain no raw/private material;
+- Godot 4.7.2 import + fresh Windows export + ValidateExportOnly PASS.
+
+Codex return ceiling:
+
+> **READY FOR INDEPENDENT REVIEW**
+
+No Product PASS / Package-8 completion / generic Context-platform claim is authorized.
+
+## 11. Explicit non-scope
+
+MW-035 does not implement:
+
+- shared Structured Output/retry framework;
+- generic all-agent Context platform;
+- JSON repair;
+- embeddings/vector DB/semantic retrieval;
+- NPC/person semantic ranking;
+- new stats/attribute/skill-number system;
+- Expansion rule DSL;
+- Provider/model fallback or routing redesign;
+- Narrative output cap;
+- UI redesign;
+- new persistence schema;
+- World/Knowledge ownership rewrite;
+- Package-9 provenance/epistemic correction.
+
+## 12. Product validation route
+
+No Owner UAT for MW-035 alone.
+
+After Codex return:
+
+```text
+GPT Independent Review
+→ reviewed integration if PASS
+→ GPT Package-8 sufficiency audit
+→ concentrated Owner Product test if G7 evidence is now sufficient
+→ only create another G7 engineering task if a concrete blocker remains
+```
+
+The later concentrated Product test will validate accumulated MW-032 + MW-033 + MW-034 + sufficient G7 mechanics/currentness behavior together.
