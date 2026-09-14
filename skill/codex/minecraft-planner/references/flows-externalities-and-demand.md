@@ -2,20 +2,22 @@
 
 ## Purpose
 
-This reference explains how social demand, throughput, flows and externalities generate spatial relationships. It exists to prevent checklist planning such as “every medieval town needs a tavern, blacksmith and church”.
+This reference explains how social demand, throughput, flows, stocks, rhythms and externalities generate spatial relationships. It prevents checklist planning such as “every medieval town needs a tavern, blacksmith and church”.
+
+v0.4 extends the model from **Flow** to **Metabolism** and adds resilience reasoning where system failure would materially change planning.
 
 ---
 
 ## 1. Demand is a social requirement, not a building name
 
-Represent demand as:
+Represent important demand as:
 
 ```text
 Demand
 WHY / Driver
-Users
+Users / Actors
 Magnitude / Throughput
-Frequency
+Frequency / Rhythm
 Maturity Stage
 Spatial Dependencies
 Externalities
@@ -28,24 +30,22 @@ Examples:
 Need: local dispute resolution
 WHY: autonomous local community
 Early response: periodic meeting in an existing large room
-Later response: dedicated council / court space
+Later response: shared court / council space
 ```
 
 ```text
-Need: grain storage
-WHY: seasonal agricultural surplus + risk buffering
-Early response: household storage
-Middle response: household barns
-Mature response: shared granary / merchant storehouses
+Need: grain buffering
+WHY: seasonal surplus + daily consumption + interruption risk
+Possible responses: household storage / barns / shared granary / merchant stores
 ```
 
-One demand may create several spatial responses; several demands may share one building.
+One demand may create several spatial responses; several demands may share one space or building.
 
 ---
 
 ## 2. Demand levels
 
-Use these only as planning priority, not as a quota:
+Use as planning priority, not quota:
 
 - `ANCHOR / CORE`
 - `ESSENTIAL_SUPPORT`
@@ -54,31 +54,16 @@ Use these only as planning priority, not as a quota:
 - `LATER_GROWTH`
 - `OPTIONAL`
 
-At L0 / L1, avoid listing individual buildings when the correct unit is a territorial or settlement function.
-
-Prefer:
-
-```text
-stable regional grain exchange
-→ market-town function
-```
-
-before:
-
-```text
-market hall + inn + warehouse + ...
-```
+At L0 / L1, prefer territorial / settlement functions before individual buildings.
 
 ---
 
 ## 3. Magnitude and throughput
 
-A plan needs approximate intensity even when exact population simulation is unnecessary.
-
-Useful qualitative scales:
+Useful qualitative or ranged measures include:
 
 - households / resident order of magnitude;
-- daily / weekly / seasonal visitors;
+- daily / periodic / seasonal visitors;
 - freight pressure;
 - market catchment;
 - institutional importance;
@@ -86,67 +71,29 @@ Useful qualitative scales:
 - livestock / caravan / ship frequency;
 - defensive staffing pressure.
 
-Use ranges or relative categories if exact numbers are not justified.
-
-Example:
-
-```text
-LOW: household-local
-MEDIUM: neighborhood / village
-HIGH: settlement-wide
-REGIONAL: multi-settlement
-STRATEGIC: polity-wide / external trade
-```
-
-Magnitude should affect space. A regional grain market should not spatially resemble a household exchange point.
+Magnitude must affect space.
 
 ---
 
-## 4. Flows
-
-Common flow families:
+## 4. Flow families
 
 ### People
 
-- residents;
-- commuters / workers;
-- visitors;
-- pilgrims;
-- officials;
-- soldiers;
-- traders;
-- seasonal labor.
+residents / workers / visitors / pilgrims / officials / soldiers / traders / seasonal labor.
 
 ### Goods
 
-- food;
-- livestock;
-- timber;
-- stone;
-- ore;
-- fuel;
-- manufactured goods;
-- luxury goods;
-- waste / by-products.
+food / livestock / timber / stone / ore / fuel / manufactured goods / luxury goods / waste / by-products.
 
 ### Environmental / utility
 
-- water;
-- drainage;
-- sewage / waste;
-- wind exposure;
-- flood movement where relevant.
+water / drainage / sewage / waste / flood movement where relevant.
 
 ### Institutional / symbolic
 
-- ritual processions;
-- taxation;
-- information / notices;
-- judicial access;
-- military response;
-- political assembly.
+ritual / taxation / information / judicial access / military response / political assembly.
 
-For each major flow identify:
+For each major flow identify when useful:
 
 ```text
 origin
@@ -154,43 +101,114 @@ sink / destination
 frequency
 magnitude
 time pattern
-terrain sensitivity
+terrain / surface sensitivity
+transport mode
+rights / permission
 sharing compatibility
 security / ceremonial constraints
 ```
 
 ---
 
-## 5. Flow creates route hierarchy
+## 5. Metabolism = Flow + Stock + Rhythm
 
-Do not draw roads first.
+A settlement or regional system does not survive only through lines on a map.
 
-Derive routes from:
+For consequential systems consider:
 
 ```text
-origin → destination → magnitude → terrain resistance → route choice
+Flow
++ Stock / Buffer
++ Consumption / Use
++ Replenishment Cadence
++ Peak / Seasonal Rhythm
++ Failure Consequence
 ```
 
-A path may become primary because many modest flows overlap, not because a planner labels it “main road”.
+Examples:
 
-A route can also decline when:
+```text
+harvest arrives seasonally
+→ grain stored for daily use
+→ storage space persists near exchange / households
+```
 
-- a bridge replaces a ford;
-- a mine closes;
-- a port silts up;
-- a wall gate moves;
-- a political center shifts;
-- a new road captures trade.
+```text
+caravan arrives periodically
+→ short intense animal / loading / lodging peak
+→ yard and frontage sized for peak, not average day
+```
 
-Residual morphology may persist after flow weakens.
+```text
+water source is intermittent
+→ storage / multiple collection points may buffer use
+→ spatial demand differs from continuous stream access
+```
+
+Do not simulate inventories numerically unless evidence and task require it.
 
 ---
 
-## 6. Externalities
+## 6. Time / rhythm classes
 
-Externality means one activity changes the desirability of nearby space.
+Useful classes:
 
-Common examples:
+- continuous / daily;
+- periodic / market-day-like;
+- seasonal;
+- annual / harvest-linked;
+- event / pilgrimage / assembly;
+- emergency / reserve.
+
+A space can be mostly empty most days and still be spatially essential.
+
+Average occupancy is not the only sizing logic.
+
+---
+
+## 7. Flow creates route hierarchy through effective accessibility
+
+Do not draw roads first.
+
+Derive route choice from:
+
+```text
+origin → destination → magnitude
+→ physical resistance
+→ legal / tenure access
+→ political permission
+→ security
+→ seasonality
+→ transport mode
+→ effective route
+```
+
+A path may become primary because many modest flows overlap, not because it is labeled “main road”.
+
+A route can decline when access, anchor, trade or knowledge changes.
+
+---
+
+## 8. Buffers and storage are spatial objects
+
+Stocks / waiting / transfer may create:
+
+- household storage;
+- distributed barns;
+- granaries / storehouses;
+- cistern / reservoir / water court;
+- caravan / loading yard;
+- livestock holding space;
+- reserve depot;
+- sheltered waiting / transfer area.
+
+Demand still does not imply one dedicated building. Choose distributed / embedded / shared / institutional response according to scale and actors.
+
+---
+
+## 9. Externalities
+
+Common externalities:
 
 - smoke;
 - heat;
@@ -199,7 +217,7 @@ Common examples:
 - smell;
 - contamination;
 - crowding;
-- flood risk;
+- flood / erosion;
 - security risk;
 - animal traffic;
 - dust;
@@ -207,23 +225,15 @@ Common examples:
 - ceremonial visibility;
 - defensive clear field.
 
-Avoid absolute deterministic rules. Externalities create trade-offs.
+Externalities create trade-offs, not automatic modern zoning.
 
-Example:
-
-```text
-blacksmith / forge
-needs market and freight access
-but adds noise + sparks + fire risk
-→ often near movement and trade
-→ but not deep inside the densest quiet residential core
-```
+Mitigation can change residual externality, but do not assume every externality disappears through engineering.
 
 ---
 
-## 7. Adjacency reasoning
+## 10. Adjacency reasoning
 
-Use relationship labels when useful:
+Useful labels:
 
 - `MUST_ADJOIN`
 - `PREFER_NEAR`
@@ -236,47 +246,44 @@ Use relationship labels when useful:
 - `VISUAL_RELATION`
 - `CAN_EMBED_IN`
 
-Do not make every relationship hard. Historical settlements often tolerate imperfect adjacency.
+Do not make every relationship hard. Historical settlements tolerate imperfect adjacency.
 
 ---
 
-## 8. Mixed use is often the default historical condition
+## 11. Mixed use is often the default historical condition
 
-Do not assume residence, commerce and production are separate buildings or zones.
+Residence, commerce and production need not be separated.
 
 Possible embedded relationships:
 
-- shop below / family above;
+- shop + dwelling;
 - workshop + dwelling;
 - inn + stable + family rooms;
 - merchant house + short warehouse;
 - monastery + agriculture + lodging + production;
 - manor + administration + storage + household.
 
-Ask whether specialized standalone buildings are actually justified by scale, wealth, regulation or maturity.
+Ask whether standalone specialization is justified by scale, wealth, regulation, maturity, externality or ownership.
 
 ---
 
-## 9. Land tenure changes demand response
+## 12. Land tenure and Actor rights change demand response
 
-The same economic pressure may produce different morphology under different property systems.
-
-Examples:
+The same pressure may produce different morphology under different rights.
 
 ### Family hereditary parcels
 
-- frontage competition;
 - inheritance subdivision;
-- narrow / deep lots;
-- rear extensions;
+- frontage competition;
+- rear extension;
 - shared alleys.
 
 ### Guild / institutional holdings
 
 - larger persistent compounds;
-- shared courtyards;
 - controlled frontage;
-- less frequent subdivision.
+- shared courtyards;
+- resistance to subdivision.
 
 ### Manor / estate control
 
@@ -285,20 +292,48 @@ Examples:
 - common fields;
 - weaker private parcel expression.
 
-If tenure is unknown and materially changes the plan, preserve alternatives as planning branches.
+If rights / tenure are unknown and consequential, preserve branches rather than inventing a frictionless land market.
 
 ---
 
-## 10. Demand Matrix anti-checklist test
+## 13. Resilience｜reasoned redundancy
 
-Before accepting the matrix, ask:
+The lowest-cost network may create dangerous single points of failure.
 
-1. Could any demand be satisfied inside another building rather than creating a new building?
-2. Are several entries merely genre stereotypes?
-3. Does each high-priority demand have a real user and activity?
-4. Does magnitude justify a dedicated facility?
-5. Does maturity justify specialization now, or only later?
-6. Are flows and externalities changing placement?
-7. Would the same list appear unchanged in a completely different terrain / economy?
+Where consequence justifies it, resilience may support:
 
-If yes to the last question, the demand model is probably too generic.
+- secondary route / crossing;
+- multiple wells / water points;
+- distributed grain / fuel storage;
+- multiple local service centers;
+- partial local supply;
+- seasonal fallback mode.
+
+Ask:
+
+```text
+What failure would make this system nonfunctional?
+How severe is the consequence?
+Is a bounded fallback spatially justified?
+```
+
+Do not duplicate every facility “for redundancy”.
+
+---
+
+## 14. Demand / Metabolism anti-checklist test
+
+Before accepting the model, ask:
+
+1. Could any demand be embedded or shared rather than create a new building?
+2. Does each high-priority demand have real users / actors?
+3. Does magnitude justify its spatial scale?
+4. Does rhythm / peak alter the required space?
+5. Do stocks / buffers matter for survival or exchange?
+6. Are flows changing placement and route hierarchy?
+7. Are rights / access conditions ignored?
+8. Are externalities changing adjacency?
+9. Is a single point of failure being mistaken for elegant efficiency?
+10. Would the same model appear unchanged in a completely different terrain / economy / rights system?
+
+If yes to the last question, the model is probably too generic.
